@@ -13,14 +13,12 @@ use App\Http\Controllers\SculptureController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\FontController;
 use App\Http\Controllers\ColorController;
-use App\Http\Controllers\FinshingController;
+use App\Http\Controllers\FinishingController;
 
 Route::get('/', function () {
     return Inertia::render('Home', [
         'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'canRegister' => Route::has('register')
     ]);
 })->name('home');
 
@@ -99,13 +97,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/colors/{id}', [ColorController::class, 'delete'])->name('delete_color');
 
     /****************** Finishings' routes ******************/
-    Route::get('/finishings', [FinshingController::class, 'index'])->name('finishings');
-    Route::get('/finishings/create', [FinshingController::class, 'create'])->name('create_finishing');
-    Route::post('/finishings/create', [FinshingController::class, 'store'])->name('store_finishing');
-    Route::patch('/finishings/{id}', [FinshingController::class, 'edit'])->name('edit_finishing');
-    Route::delete('/finishings/multidel', [FinshingController::class, 'multiDelete'])->name('delete_finishings');
-    Route::delete('/finishings/{id}', [FinshingController::class, 'delete'])->name('delete_finishing');
-
+    Route::get('/finishings', [FinishingController::class, 'index'])->name('finishings');
+    Route::get('/finishings/create', [FinishingController::class, 'create'])->name('create_finishing');
+    Route::post('/finishings/create', [FinishingController::class, 'store'])->name('store_finishing');
+    Route::patch('/finishings/{id}', [FinishingController::class, 'edit'])->name('edit_finishing');
+    Route::delete('/finishings/multidel', [FinishingController::class, 'multiDelete'])->name('delete_finishings');
+    Route::delete('/finishings/{id}', [FinishingController::class, 'delete'])->name('delete_finishing');
 });
+
 // Auth routes
 require __DIR__.'/auth.php';

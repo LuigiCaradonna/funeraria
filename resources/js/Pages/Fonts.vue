@@ -1,7 +1,7 @@
 <script setup>
 import { ref, inject, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
-import { Head, useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/inertia-vue3';
 import Pagination from '../Components/Pagination.vue';
 import throttle from "lodash/throttle";
 
