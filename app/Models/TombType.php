@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Tomb;
 
 class TombType extends Model
 {
@@ -18,4 +19,12 @@ class TombType extends Model
         'name',
         'thickness',
     ];
+    
+    /**
+     * Relation with the tombs.
+     */
+    public function tombs()
+    {
+        return $this->hasMany(Tomb::class, 'id');
+    }
 }

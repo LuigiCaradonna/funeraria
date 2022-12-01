@@ -10,7 +10,7 @@ use Inertia\Inertia;
 class AccessoryController extends Controller
 {
     /**
-     * Shows the accessories list
+     * Shows the Accessories list
      * 
      * @param \Illuminate\Http\Request $request contains the eventual filters to customize the list
      * 
@@ -70,10 +70,10 @@ class AccessoryController extends Controller
     }
 
     /**
-     * Updates an accessory given its id
+     * Updates an Accessory given its id
      * 
-     * @param \Illuminate\Http\Request $request contains the data to update the accessory
-     * @param int $id id of the accessory to update
+     * @param \Illuminate\Http\Request $request contains the data to update the Accessory
+     * @param int $id id of the Accessory to update
      * 
      * @return \Illuminate\Http\RedirectResponse Call to the Accessories page
      */
@@ -104,9 +104,9 @@ class AccessoryController extends Controller
     }
 
     /**
-     * Deletes an accessory given its id
+     * Deletes an Accessory given its id
      * 
-     * @param int $id id of the accessory to delete
+     * @param int $id id of the Accessory to delete
      * 
      * @return \Illuminate\Http\RedirectResponse Call to the Accessories page
      */
@@ -129,9 +129,9 @@ class AccessoryController extends Controller
     }
     
     /**
-     * Deletes a set of accessories whose ids are conteined into the "ids" parameter coming from the request
+     * Deletes a set of Accessories whose ids are conteined into the "ids" parameter coming from the request
      * 
-     * @param \Illuminate\Http\Request $request containing the ids of the accessories to delete
+     * @param \Illuminate\Http\Request $request containing the ids of the Accessories to delete
      * 
      * @return \Illuminate\Http\RedirectResponse Call to the Accessories page
      */

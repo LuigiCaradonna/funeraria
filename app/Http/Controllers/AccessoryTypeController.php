@@ -9,7 +9,7 @@ use Inertia\Inertia;
 class AccessoryTypeController extends Controller
 {
     /**
-     * Shows the accessory types list
+     * Shows the AccessoryTypes list
      * 
      * @param \Illuminate\Http\Request $request contains the eventual filters to customize the list
      * 

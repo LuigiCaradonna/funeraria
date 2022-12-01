@@ -35,10 +35,18 @@ class Tomb extends Model
         'cross_id',     // cross
         'decoration_id',// other decorations
         'note',
-        'ordered_at',
-        'proofed_at',
-        'confirmed_at',
-        'done_at',
-        'delivered_at',
+        'ordered_at',   // order date
+        'proofed_at',   // date when the sketch has been sent
+        'confirmed_at', // date of the order's confirmation
+        'done_at',      // engraving date
+        'delivered_at', // delivery date
     ];
+    
+    /**
+     * Get the tomb type that owns the tomb.
+     */
+    public function tomb_type()
+    {
+        return $this->belongsTo(TombType::class, 'tomb_type_id');
+    }
 }

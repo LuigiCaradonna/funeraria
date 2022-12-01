@@ -20,7 +20,7 @@ class AccessoryType extends Model
     ];
     
     /**
-     * Get the accessories.
+     * Relation with the accessories.
      */
     public function accessories()
     {

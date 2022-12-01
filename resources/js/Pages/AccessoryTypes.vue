@@ -56,7 +56,7 @@ let submitCU = () => {
 let submitD = () => {
     swal.fire({
         title: 'Eliminazione multipla',
-        text: 'Stai per eliminare ' + formD.ids.length + ' accessori',
+        text: 'Stai per eliminare ' + formD.ids.length + ' tipi di accessori',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
