@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             FinishingSeeder::class,
             MaterialSeeder::class,
             DecorationSeeder::class,
+            FrameSeeder::class,
         ]);
     }
 }
