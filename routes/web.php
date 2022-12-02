@@ -14,6 +14,7 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\FontController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\FinishingController;
+use App\Http\Controllers\DecorationController;
 
 Route::get('/', function () {
     return Inertia::render('Home', [
@@ -103,6 +104,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/finishings/{id}', [FinishingController::class, 'edit'])->name('edit_finishing');
     Route::delete('/finishings/multidel', [FinishingController::class, 'multiDelete'])->name('delete_finishings');
     Route::delete('/finishings/{id}', [FinishingController::class, 'delete'])->name('delete_finishing');
+    
+    /****************** Decorations' routes ******************/
+    Route::get('/decorations', [DecorationController::class, 'index'])->name('decorations');
+    Route::get('/decorations/create', [DecorationController::class, 'create'])->name('create_decorations');
+    Route::post('/decorations/create', [DecorationController::class, 'store'])->name('store_decorations');
+    Route::patch('/decorations/{id}', [DecorationController::class, 'edit'])->name('edit_decorations');
+    Route::delete('/decorations/multidel', [DecorationController::class, 'multiDelete'])->name('delete_decorations');
+    Route::delete('/decorations/{id}', [DecorationController::class, 'delete'])->name('delete_decoration');
 });
 
 // Auth routes

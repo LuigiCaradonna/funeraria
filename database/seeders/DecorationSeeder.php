@@ -23,6 +23,6 @@ class DecorationSeeder extends Seeder
             ['name' => 'Bici']
         ];
 
-        DB::table('decoration')->insert($decoration);
+        DB::table('decorations')->insert($decoration);
     }
 }

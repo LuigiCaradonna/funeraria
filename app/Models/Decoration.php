@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Decoration extends Model
 {
     use HasFactory;
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = [
+        'name',
+    ];
 }
