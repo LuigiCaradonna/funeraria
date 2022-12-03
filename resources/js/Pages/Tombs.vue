@@ -92,6 +92,8 @@ function deleteTomb(a) {
 }
 
 function editTomb(a) {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = false;
     formCU.name = a.name;
     formCU.tomb_type_id = a.tomb_type_id;
@@ -99,6 +101,8 @@ function editTomb(a) {
 }
 
 function newTomb() {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = true;
     formCU.name = '';
     formCU.tomb_type_id = 1;

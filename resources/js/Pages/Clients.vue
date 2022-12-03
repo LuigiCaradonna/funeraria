@@ -116,6 +116,8 @@ function deleteClient(c) {
 
 // Populate the modal form with the selected Client's data
 function editClient(c) {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = false;
     formCU.name = c.name;
     formCU.address = c.address;
@@ -126,6 +128,8 @@ function editClient(c) {
 
 // Resets the modal form if a new Client must be created
 function newClient() {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = true;
     formCU.name = '';
     formCU.address = '';

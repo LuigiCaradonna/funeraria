@@ -16,6 +16,7 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\FinishingController;
 use App\Http\Controllers\DecorationController;
 use App\Http\Controllers\FrameController;
+use App\Http\Controllers\TombFrameController;
 
 Route::get('/', function () {
     return Inertia::render('Home', [
@@ -114,13 +115,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/decorations/multidel', [DecorationController::class, 'multiDelete'])->name('delete_decorations');
     Route::delete('/decorations/{id}', [DecorationController::class, 'delete'])->name('delete_decoration');
     
-    /****************** Decorations' routes ******************/
+    /****************** Frames' routes ******************/
     Route::get('/frames', [FrameController::class, 'index'])->name('frames');
     Route::get('/frames/create', [FrameController::class, 'create'])->name('create_frames');
     Route::post('/frames/create', [FrameController::class, 'store'])->name('store_frames');
     Route::patch('/frames/{id}', [FrameController::class, 'edit'])->name('edit_frames');
     Route::delete('/frames/multidel', [FrameController::class, 'multiDelete'])->name('delete_frames');
-    Route::delete('/frames/{id}', [FrameController::class, 'delete'])->name('delete_decoration');
+    Route::delete('/frames/{id}', [FrameController::class, 'delete'])->name('delete_frame');
+
+    /****************** TombFrames' routes ******************/
+    Route::get('/tomb_frames', [TombFrameController::class, 'index'])->name('tomb_frames');
+    Route::get('/tomb_frames/create', [TombFrameController::class, 'create'])->name('create_tomb_frames');
+    Route::post('/tomb_frames/create', [TombFrameController::class, 'store'])->name('store_tomb_frames');
+    Route::patch('/tomb_frames/{id}', [TombFrameController::class, 'edit'])->name('edit_tomb_frames');
+    Route::delete('/tomb_frames/multidel', [TombFrameController::class, 'multiDelete'])->name('delete_tomb_frames');
+    Route::delete('/tomb_frames/{id}', [TombFrameController::class, 'delete'])->name('delete_tomb_frame');
 });
 
 // Auth routes

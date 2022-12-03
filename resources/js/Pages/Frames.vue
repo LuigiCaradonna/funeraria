@@ -90,12 +90,16 @@ function deleteFrame(a) {
 }
 
 function editFrame(a) {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = false;
     formCU.name = a.name;
     formCU.id = a.id;
 }
 
 function newFrame() {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = true;
     formCU.name = '';
     formCU.id = 0;

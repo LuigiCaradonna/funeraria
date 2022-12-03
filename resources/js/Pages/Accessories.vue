@@ -92,6 +92,8 @@ function deleteAccessory(a) {
 }
 
 function editAccessory(a) {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = false;
     formCU.name = a.name;
     formCU.accessory_type_id = a.accessory_type_id;
@@ -99,6 +101,8 @@ function editAccessory(a) {
 }
 
 function newAccessory() {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = true;
     formCU.name = '';
     formCU.accessory_type_id = 1;

@@ -9,7 +9,7 @@ import throttle from "lodash/throttle";
 const swal = inject('$swal');
 
 let props = defineProps({
-    finishings: Object,
+    tomb_frames: Object,
     filters: Object
 });
 
@@ -19,7 +19,7 @@ let list_order = ref(true);
 let search = ref(props.filters.search);
 
 watch(search, throttle(function(value) {
-    Inertia.get('/finishings', {search: value, field: field_to_order, order: list_order}, {
+    Inertia.get('/tomb_frames', {search: value, field: field_to_order, order: list_order}, {
         preserveState: true,
         replace: true 
     });
@@ -38,14 +38,14 @@ let submitCU = () => {
     if (formCU.hasErrors) { formCU.clearErrors(); }
 
     if ( new_entry )
-        formCU.post('/finishings/create', {
+        formCU.post('/tomb_frames/create', {
             onSuccess: () => {
                 formCU.reset();
                 document.getElementById('btnDismissModal').click();
             },
         });
     else
-        formCU.patch('finishings/' + formCU.id, {
+        formCU.patch('tomb_frames/' + formCU.id, {
             onSuccess: () => {
                 formCU.reset();
                 document.getElementById('btnDismissModal').click();
@@ -56,7 +56,7 @@ let submitCU = () => {
 let submitD = () => {
     swal.fire({
         title: 'Eliminazione multipla',
-        text: 'Stai per eliminare ' + formD.ids.length + ' finiture',
+        text: 'Stai per eliminare ' + formD.ids.length + ' cornici',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -64,7 +64,7 @@ let submitD = () => {
         confirmButtonText: 'Elimina'
     }).then((result) => {
         if (result.isConfirmed) {
-            formD.delete('/finishings/multidel', {
+            formD.delete('/tomb_frames/multidel', {
             onSuccess: () => {
                 formD.reset();
             },
@@ -73,7 +73,7 @@ let submitD = () => {
     });
 }
 
-function deleteFinishing(a) {
+function deleteTombFrame(a) {
     swal.fire({
         title: 'Stai per eliminare',
         text: a.name,
@@ -84,12 +84,12 @@ function deleteFinishing(a) {
         confirmButtonText: 'Elimina'
     }).then((result) => {
         if (result.isConfirmed) {
-            Inertia.delete('finishings/' + a.id);
+            Inertia.delete('tomb_frames/' + a.id);
         }
     });
 }
 
-function editFinishing(a) {
+function editTombFrame(a) {
     if (formCU.hasErrors) { formCU.clearErrors(); }
 
     new_entry = false;
@@ -97,7 +97,7 @@ function editFinishing(a) {
     formCU.id = a.id;
 }
 
-function newFinishing() {
+function newTombFrame() {
     if (formCU.hasErrors) { formCU.clearErrors(); }
 
     new_entry = true;
@@ -114,7 +114,7 @@ function listOrder(field) {
         list_order = ! list_order;
     }
 
-    Inertia.get('/finishings', {search: search.value, field: field_to_order, order: list_order}, {
+    Inertia.get('/tomb_frames', {search: search.value, field: field_to_order, order: list_order}, {
         preserveState: true,
         replace: true 
     });
@@ -122,13 +122,13 @@ function listOrder(field) {
 </script>
 
 <template>
-    <Head title="Finiture" />
+    <Head title="Cornici lapidi" />
 
-    <h1 class="text-center">Finiture</h1>
+    <h1 class="text-center">Cornici lapidi</h1>
     <div class="d-flex justify-content-between">
         <div>
-            <button @click="newFinishing" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#finishingModal">
-            Nuova finitura
+            <button @click="newTombFrame" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tombFrameModal">
+            Nuova cornice
             </button>
             <button v-if="formD.ids.length > 0" @click="submitD" :disabled="formD.processing" type="button" class="btn btn-danger ms-2">
             Elimina selezionati
@@ -163,17 +163,17 @@ function listOrder(field) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="finishing in finishings.data" :key="finishings.id">
-                        <td><input type="checkbox" v-model="formD.ids" :value="finishing.id" /></td>
-                        <td>{{ finishing.name }}</td>
+                    <tr v-for="tomb_frame in tomb_frames.data" :key="tomb_frame.id">
+                        <td><input type="checkbox" v-model="formD.ids" :value="tomb_frame.id" /></td>
+                        <td>{{ tomb_frame.name }}</td>
                         <td>
                             <div class="d-flex justify-content-between">
-                                <span role="button" data-bs-toggle="modal" data-bs-target="#finishingModal" @click="editFinishing(finishing)">
+                                <span role="button" data-bs-toggle="modal" data-bs-target="#tombFrameModal" @click="editTombFrame(tomb_frame)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                         <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                                     </svg>
                                 </span>
-                                <span role="button" @click="deleteFinishing(finishing)">
+                                <span role="button" @click="deleteTombFrame(tomb_frame)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                         <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
                                     </svg>
@@ -186,13 +186,13 @@ function listOrder(field) {
         </form>
     </div>
 
-    <Pagination :links="finishings.links" v-if="finishings.links.length > 3"/>
+    <Pagination :links="tomb_frames.links" v-if="tomb_frames.links.length > 3"/>
 
-    <div class="modal fade" id="finishingModal" tabindex="-1" aria-labelledby="finishingModalLabel" aria-hidden="true">
+    <div class="modal fade" id="tombFrameModal" tabindex="-1" aria-labelledby="tombFrameModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="finishingModalLabel">Nuova finitura</h1>
+                    <h1 class="modal-title fs-5" id="tombFrameModalLabel">Nuova cornice</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -202,7 +202,7 @@ function listOrder(field) {
                             <input type="name" class="form-control" v-model="formCU.name" id="name">
                             <small v-if="formCU.errors.name" v-text="formCU.errors.name" id="nameHelp" class="text-danger"></small>
                         </div>
-                        <input type="hidden" v-model="formCU.id" id="finishingId" />
+                        <input type="hidden" v-model="formCU.id" id="tombFrameId" />
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">

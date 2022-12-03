@@ -90,12 +90,16 @@ function deleteDecoration(a) {
 }
 
 function editDecoration(a) {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = false;
     formCU.name = a.name;
     formCU.id = a.id;
 }
 
 function newDecoration() {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = true;
     formCU.name = '';
     formCU.id = 0;

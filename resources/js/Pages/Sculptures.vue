@@ -89,34 +89,31 @@ function deleteSculpture(a) {
     });
 }
 
-// Populate the modal form with the selected Sculpture's data
 function editSculpture(c) {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = false;
     formCU.name = c.name;
     formCU.id = c.id;
 }
 
-// Resets the modal form if a new Sculpture must be created
 function newSculpture() {
+    if (formCU.hasErrors) { formCU.clearErrors(); }
+
     new_entry = true;
     formCU.name = '';
     formCU.id = 0;
 }
 
-// Sets the options to order the Sculptures according to the required criteria and send a request to the server
 function listOrder(field) {
     if ( field_to_order != field ) {
-        // Set the field name
         field_to_order = field;
-        // Ordering direction to ASC
         list_order = true;
     }
     else {
-        // The field has already been selected, invert the ordering direction
         list_order = ! list_order;
     }
 
-    // Request a new list according to the ordering options
     Inertia.get('/sculptures', {search: search.value, field: field_to_order, order: list_order}, {
         preserveState: true,
         replace: true 

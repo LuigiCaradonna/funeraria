@@ -15,10 +15,14 @@ class FrameSeeder extends Seeder
     public function run()
     {
         $frames = [
-            ['name' => '3x2 a becco'],
-            ['name' => '4x2 a becco'],
-            ['name' => '3x2 a costa dritta'],
-            ['name' => '4x2 a costa dritta'],
+            ['name' => 'No Ikon'],
+            ['name' => 'Stondato no Ikon'],
+            ['name' => 'Stondato Ikon'],
+            ['name' => 'KS301'],
+            ['name' => 'KS311'],
+            ['name' => 'KS320'],
+            ['name' => 'KS380'],
+            ['name' => 'KS390'],
         ];
 
         DB::table('frames')->insert($frames);
