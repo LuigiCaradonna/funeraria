@@ -17,6 +17,7 @@ use App\Http\Controllers\FinishingController;
 use App\Http\Controllers\DecorationController;
 use App\Http\Controllers\FrameController;
 use App\Http\Controllers\TombFrameController;
+use App\Http\Controllers\PictureController;
 
 Route::get('/', function () {
     return Inertia::render('Home', [
@@ -130,6 +131,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/tomb_frames/{id}', [TombFrameController::class, 'edit'])->name('edit_tomb_frames');
     Route::delete('/tomb_frames/multidel', [TombFrameController::class, 'multiDelete'])->name('delete_tomb_frames');
     Route::delete('/tomb_frames/{id}', [TombFrameController::class, 'delete'])->name('delete_tomb_frame');
+    
+    /****************** Pictures' routes ******************/
+    Route::get('/pictures', [PictureController::class, 'index'])->name('pictures');
+    Route::get('/pictures/create', [PictureController::class, 'create'])->name('create_pictures');
+    Route::post('/pictures/create', [PictureController::class, 'store'])->name('store_pictures');
+    Route::patch('/pictures/{id}', [PictureController::class, 'edit'])->name('edit_pictures');
+    Route::delete('/pictures/multidel', [PictureController::class, 'multiDelete'])->name('delete_pictures');
+    Route::delete('/pictures/{id}', [PictureController::class, 'delete'])->name('delete_picture');
 });
 
 // Auth routes

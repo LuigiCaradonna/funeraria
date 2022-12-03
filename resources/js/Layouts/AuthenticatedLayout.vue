@@ -32,6 +32,7 @@ import NavLink from '@/Components/NavLink.vue';
                             <li><NavLink class="dropdown-item" :href="route('accessory_types')">Tipologie accessori</NavLink></li>
                             <li><NavLink class="dropdown-item" :href="route('accessories')">Accessori</NavLink></li>
                             <li><NavLink class="dropdown-item" :href="route('sculptures')">Sculture</NavLink></li>
+                            <li><NavLink class="dropdown-item" :href="route('pictures')">Foto</NavLink></li>
                             <li><NavLink class="dropdown-item" :href="route('frames')">Cornici</NavLink></li>
                             <li><NavLink class="dropdown-item" :href="route('decorations')">Decorazioni</NavLink></li>
                             <li><NavLink class="dropdown-item" :href="route('materials')">Materiali</NavLink></li>

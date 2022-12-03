@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             DecorationSeeder::class,
             FrameSeeder::class,
             TombFrameSeeder::class,
+            PictureSeeder::class,
         ]);
     }
 }
