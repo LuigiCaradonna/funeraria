@@ -15,7 +15,7 @@ use App\Http\Controllers\FontController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\FinishingController;
 use App\Http\Controllers\DecorationController;
-use App\Http\Controllers\FrameController;
+use App\Http\Controllers\OutlineController;
 use App\Http\Controllers\TombFrameController;
 use App\Http\Controllers\PictureController;
 
@@ -116,13 +116,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/decorations/multidel', [DecorationController::class, 'multiDelete'])->name('delete_decorations');
     Route::delete('/decorations/{id}', [DecorationController::class, 'delete'])->name('delete_decoration');
     
-    /****************** Frames' routes ******************/
-    Route::get('/frames', [FrameController::class, 'index'])->name('frames');
-    Route::get('/frames/create', [FrameController::class, 'create'])->name('create_frames');
-    Route::post('/frames/create', [FrameController::class, 'store'])->name('store_frames');
-    Route::patch('/frames/{id}', [FrameController::class, 'edit'])->name('edit_frames');
-    Route::delete('/frames/multidel', [FrameController::class, 'multiDelete'])->name('delete_frames');
-    Route::delete('/frames/{id}', [FrameController::class, 'delete'])->name('delete_frame');
+    /****************** Outlines' routes ******************/
+    Route::get('/outlines', [OutlineController::class, 'index'])->name('outlines');
+    Route::get('/outlines/create', [OutlineController::class, 'create'])->name('create_outlines');
+    Route::post('/outlines/create', [OutlineController::class, 'store'])->name('store_outlines');
+    Route::patch('/outlines/{id}', [OutlineController::class, 'edit'])->name('edit_outlines');
+    Route::delete('/outlines/multidel', [OutlineController::class, 'multiDelete'])->name('delete_outlines');
+    Route::delete('/outlines/{id}', [OutlineController::class, 'delete'])->name('delete_outline');
 
     /****************** TombFrames' routes ******************/
     Route::get('/tomb_frames', [TombFrameController::class, 'index'])->name('tomb_frames');

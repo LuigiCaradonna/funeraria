@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('frames', function (Blueprint $table) {
+        Schema::create('outlines', function (Blueprint $table) {
             $table->unsignedTinyInteger('id')->autoIncrement();
             $table->string('name');
             $table->timestamps();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('frames');
+        Schema::dropIfExists('outlines');
     }
 };

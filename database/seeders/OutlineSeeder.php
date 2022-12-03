@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class FrameSeeder extends Seeder
+class OutlineSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class FrameSeeder extends Seeder
      */
     public function run()
     {
-        $frames = [
+        $outlines = [
             ['name' => 'No Ikon'],
             ['name' => 'Stondato no Ikon'],
             ['name' => 'Stondato Ikon'],
@@ -25,6 +25,6 @@ class FrameSeeder extends Seeder
             ['name' => 'KS390'],
         ];
 
-        DB::table('frames')->insert($frames);
+        DB::table('outlines')->insert($outlines);
     }
 }
