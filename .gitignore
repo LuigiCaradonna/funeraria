@@ -5,8 +5,7 @@
 /storage/*.key
 /storage/framework/cache
 /storage/framework/sessions
-/storage/log
-/storage/cache
+/storage/logs
 /vendor
 .env
 .env.backup
