@@ -7,8 +7,10 @@ use Inertia\Inertia;
 use App\Http\Controllers\TombTypeController;
 use App\Http\Controllers\TombController;
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\AccessoryTypeController;
-use App\Http\Controllers\AccessoryController;
+use App\Http\Controllers\FlameController;
+use App\Http\Controllers\LampController;
+use App\Http\Controllers\VaseController;
+use App\Http\Controllers\CrossController;
 use App\Http\Controllers\SculptureController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\FontController;
@@ -52,21 +54,37 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/clients/multidel', [ClientController::class, 'multiDelete'])->name('delete_clients');
     Route::delete('/clients/{id}', [ClientController::class, 'delete'])->name('delete_client');
 
-    /****************** AccessoryTypes' routes ******************/
-    Route::get('/accessory_types', [AccessoryTypeController::class, 'index'])->name('accessory_types');
-    Route::get('/accessory_types/create', [AccessoryTypeController::class, 'create'])->name('create_accessory_type');
-    Route::post('/accessory_types/create', [AccessoryTypeController::class, 'store'])->name('store_accessory_type');
-    Route::patch('/accessory_types/{id}', [AccessoryTypeController::class, 'edit'])->name('edit_accessory_type');
-    Route::delete('/accessory_types/multidel', [AccessoryTypeController::class, 'multiDelete'])->name('delete_accessory_types');
-    Route::delete('/accessory_types/{id}', [AccessoryTypeController::class, 'delete'])->name('delete_accessory_type');
+    /****************** Flames' routes ******************/
+    Route::get('/flames', [FlameController::class, 'index'])->name('flames');
+    Route::get('/flames/create', [FlameController::class, 'create'])->name('create_flame');
+    Route::post('/flames/create', [FlameController::class, 'store'])->name('store_flame');
+    Route::patch('/flames/{id}', [FlameController::class, 'edit'])->name('edit_flame');
+    Route::delete('/flames/multidel', [FlameController::class, 'multiDelete'])->name('delete_flames');
+    Route::delete('/flames/{id}', [FlameController::class, 'delete'])->name('delete_flame');
 
-    /****************** Accessories' routes ******************/
-    Route::get('/accessories', [AccessoryController::class, 'index'])->name('accessories');
-    Route::get('/accessories/create', [AccessoryController::class, 'create'])->name('create_accessory');
-    Route::post('/accessories/create', [AccessoryController::class, 'store'])->name('store_accessory');
-    Route::patch('/accessories/{id}', [AccessoryController::class, 'edit'])->name('edit_accessory');
-    Route::delete('/accessories/multidel', [AccessoryController::class, 'multiDelete'])->name('delete_accessories');
-    Route::delete('/accessories/{id}', [AccessoryController::class, 'delete'])->name('delete_accessory');
+    /****************** Lamps' routes ******************/
+    Route::get('/lamps', [LampController::class, 'index'])->name('lamps');
+    Route::get('/lamps/create', [LampController::class, 'create'])->name('create_lamp');
+    Route::post('/lamps/create', [LampController::class, 'store'])->name('store_lamp');
+    Route::patch('/lamps/{id}', [LampController::class, 'edit'])->name('edit_lamp');
+    Route::delete('/lamps/multidel', [LampController::class, 'multiDelete'])->name('delete_lamps');
+    Route::delete('/lamps/{id}', [LampController::class, 'delete'])->name('delete_lamp');
+
+    /****************** Vases' routes ******************/
+    Route::get('/vases', [VaseController::class, 'index'])->name('vases');
+    Route::get('/vases/create', [VaseController::class, 'create'])->name('create_vase');
+    Route::post('/vases/create', [VaseController::class, 'store'])->name('store_vase');
+    Route::patch('/vases/{id}', [VaseController::class, 'edit'])->name('edit_vase');
+    Route::delete('/vases/multidel', [VaseController::class, 'multiDelete'])->name('delete_vases');
+    Route::delete('/vases/{id}', [VaseController::class, 'delete'])->name('delete_vase');
+
+    /****************** Crosses' routes ******************/
+    Route::get('/crosses', [CrossesController::class, 'index'])->name('crosses');
+    Route::get('/crosses/create', [CrossesController::class, 'create'])->name('create_cross');
+    Route::post('/crosses/create', [CrossesController::class, 'store'])->name('store_cross');
+    Route::patch('/crosses/{id}', [CrossesController::class, 'edit'])->name('edit_cross');
+    Route::delete('/crosses/multidel', [CrossesController::class, 'multiDelete'])->name('delete_crosses');
+    Route::delete('/crosses/{id}', [CrossesController::class, 'delete'])->name('delete_cross');
 
     /****************** Sculptures' routes ******************/
     Route::get('/sculptures', [SculptureController::class, 'index'])->name('sculptures');

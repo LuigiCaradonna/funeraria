@@ -15,6 +15,7 @@ class ColorSeeder extends Seeder
     public function run()
     {
         $colors = [
+            ['name' => ' - '],
             ['name' => 'Argento'],
             ['name' => 'Oro'],
             ['name' => 'Oro bronzo'],

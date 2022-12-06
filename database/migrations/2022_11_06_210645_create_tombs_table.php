@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedTinyInteger('client_id')->constrained();
             $table->string('name');
+            $table->text('additional_names');
             $table->unsignedDecimal('price',10,2)->nullable();
             $table->float('full_width')->nullable();
             $table->float('full_height')->nullable();
@@ -26,14 +27,14 @@ return new class extends Migration
             $table->unsignedTinyInteger('font_id')->constrained();
             $table->unsignedTinyInteger('color_id')->constrained();
             $table->unsignedSmallInteger('sculpture_id')->constrained();
-            $table->boolean('polished')->nullable(); // polished sculpture or not
-            $table->unsignedSmallInteger('vase_id')->constrained('accessory');         // vase
-            $table->unsignedSmallInteger('lamp_id')->constrained('accessory');         // lamp
-            $table->unsignedSmallInteger('flame_id')->constrained('accessory');        // flame
-            $table->unsignedSmallInteger('photo_id')->constrained('accessory');        // photo
-            $table->unsignedSmallInteger('frame_id')->constrained('accessory');        // frame
-            $table->unsignedSmallInteger('cross_id')->constrained('accessory');        // cross
-            $table->unsignedSmallInteger('decoration_id')->constrained('accessory');   // other decorations
+            $table->boolean('polished')->nullable();                    // polished sculpture or not
+            $table->unsignedSmallInteger('vase_id')->constrained();
+            $table->unsignedSmallInteger('lamp_id')->constrained();
+            $table->unsignedSmallInteger('flame_id')->constrained();
+            $table->unsignedSmallInteger('picture_id')->constrained();  // picture type (ceramica, cristallo...)
+            $table->unsignedSmallInteger('Outline_id')->constrained();  // Outline (righelli)
+            $table->unsignedSmallInteger('cross_id')->constrained();
+            $table->unsignedSmallInteger('decoration_id')->constrained();   // other decorations
             $table->text('note');
             $table->date('ordered_at');
             $table->date('proofed_at')->nullable();

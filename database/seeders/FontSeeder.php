@@ -15,6 +15,7 @@ class FontSeeder extends Seeder
     public function run()
     {
         $fonts = [
+            ['name' => ' - '],
             ['name' => 'Times New Roman'],
             ['name' => 'English 111 Presto'],
             ['name' => 'English 111 Vivace'],

@@ -15,6 +15,7 @@ class MaterialSeeder extends Seeder
     public function run()
     {
         $materials = [
+            ['name' => ' - '],
             ['name' => 'Rosé del Portogallo'],
             ['name' => 'Travertino Stuccato'],
             ['name' => 'Travertino Resinato'],

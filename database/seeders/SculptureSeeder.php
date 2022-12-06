@@ -15,6 +15,7 @@ class SculptureSeeder extends Seeder
     public function run()
     {
         $sculptures = [
+            ['name' => ' - '],
             ['name' => 'HB1042'],
             ['name' => 'HB1031'],
             ['name' => 'HB1023'],

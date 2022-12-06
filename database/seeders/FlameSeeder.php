@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class FinishingSeeder extends Seeder
+class FlameSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,13 @@ class FinishingSeeder extends Seeder
      */
     public function run()
     {
-        $finishings = [
+        $flames = [
             ['name' => ' - '],
-            ['name' => 'Toro'],
-            ['name' => 'Costa dritta']
+            ['name' => 'Classica'],
+            ['name' => 'Rosa semifrontale'],
+            ['name' => 'Rosa semifrontale iride']
         ];
 
-        DB::table('finishings')->insert($finishings);
+        DB::table('flames')->insert($flames);
     }
 }

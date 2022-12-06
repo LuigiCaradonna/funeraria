@@ -15,6 +15,7 @@ class OutlineSeeder extends Seeder
     public function run()
     {
         $outlines = [
+            ['name' => ' - '],
             ['name' => 'No Ikon'],
             ['name' => 'Stondato no Ikon'],
             ['name' => 'Stondato Ikon'],

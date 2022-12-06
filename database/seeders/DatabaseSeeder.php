@@ -14,12 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Client::factory(100)->create();
+        \App\Models\Client::factory(50)->create();
         
         $this->call([
             UserSeeder::class,
-            AccessoryTypeSeeder::class,
-            AccessorySeeder::class,
+            FlameSeeder::class,
+            LampSeeder::class,
+            VaseSeeder::class,
+            CrossSeeder::class,
             TombTypeSeeder::class,
             SculptureSeeder::class,
             ColorSeeder::class,

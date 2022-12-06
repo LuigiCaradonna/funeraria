@@ -9,8 +9,7 @@ import throttle from "lodash/throttle";
 const swal = inject('$swal');
 
 let props = defineProps({
-    accessories: Object,
-    accessorytypes: Array,
+    flames: Object,
     filters: Object
 });
 
@@ -20,7 +19,7 @@ let list_order = ref(true);
 let search = ref(props.filters.search);
 
 watch(search, throttle(function(value) {
-    Inertia.get('/accessories', {search: value, field: field_to_order, order: list_order}, {
+    Inertia.get('/flames', {search: value, field: field_to_order, order: list_order}, {
         preserveState: true,
         replace: true 
     });
@@ -28,8 +27,7 @@ watch(search, throttle(function(value) {
 
 let formCU = useForm({
     id: 0,
-    name: '', 
-    accessory_type_id: 1
+    name: ''
 });
 
 let formD = useForm({
@@ -40,14 +38,14 @@ let submitCU = () => {
     if (formCU.hasErrors) { formCU.clearErrors(); }
 
     if ( new_entry )
-        formCU.post('/accessories/create', {
+        formCU.post('/flames/create', {
             onSuccess: () => {
                 formCU.reset();
                 document.getElementById('btnDismissModal').click();
             },
         });
     else
-        formCU.patch('accessories/' + formCU.id, {
+        formCU.patch('flames/' + formCU.id, {
             onSuccess: () => {
                 formCU.reset();
                 document.getElementById('btnDismissModal').click();
@@ -58,7 +56,7 @@ let submitCU = () => {
 let submitD = () => {
     swal.fire({
         title: 'Eliminazione multipla',
-        text: 'Stai per eliminare ' + formD.ids.length + ' accessori',
+        text: 'Stai per eliminare ' + formD.ids.length + ' fiamme',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -66,7 +64,7 @@ let submitD = () => {
         confirmButtonText: 'Elimina'
     }).then((result) => {
         if (result.isConfirmed) {
-            formD.delete('/accessories/multidel', {
+            formD.delete('/flames/multidel', {
             onSuccess: () => {
                 formD.reset();
             },
@@ -75,7 +73,7 @@ let submitD = () => {
     });
 }
 
-function deleteAccessory(a) {
+function deleteFlame(a) {
     swal.fire({
         title: 'Stai per eliminare',
         text: a.name,
@@ -86,26 +84,24 @@ function deleteAccessory(a) {
         confirmButtonText: 'Elimina'
     }).then((result) => {
         if (result.isConfirmed) {
-            Inertia.delete('accessories/' + a.id);
+            Inertia.delete('flames/' + a.id);
         }
     });
 }
 
-function editAccessory(a) {
+function editFlame(a) {
     if (formCU.hasErrors) { formCU.clearErrors(); }
 
     new_entry = false;
     formCU.name = a.name;
-    formCU.accessory_type_id = a.accessory_type_id;
     formCU.id = a.id;
 }
 
-function newAccessory() {
+function newFlame() {
     if (formCU.hasErrors) { formCU.clearErrors(); }
 
     new_entry = true;
     formCU.name = '';
-    formCU.accessory_type_id = 1;
     formCU.id = 0;
 }
 
@@ -118,7 +114,7 @@ function listOrder(field) {
         list_order = ! list_order;
     }
 
-    Inertia.get('/accessories', {search: search.value, field: field_to_order, order: list_order}, {
+    Inertia.get('/flames', {search: search.value, field: field_to_order, order: list_order}, {
         preserveState: true,
         replace: true 
     });
@@ -126,13 +122,13 @@ function listOrder(field) {
 </script>
 
 <template>
-    <Head title="Accessori" />
+    <Head title="Fiamme" />
     
-    <h1 class="text-center">Accessori</h1>
+    <h1 class="text-center">Fiamme</h1>
     <div class="d-flex justify-content-between">
         <div>
-            <button @click="newAccessory" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#accessoryModal">
-            Nuovo accessorio
+            <button @click="newFlame" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#flameModal">
+            Nuova fiamma
             </button>
             <button v-if="formD.ids.length > 0" @click="submitD" :disabled="formD.processing" type="button" class="btn btn-danger ms-2">
             Elimina selezionati
@@ -163,23 +159,21 @@ function listOrder(field) {
                                 <path d="M3.5 3.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 12.293V3.5zm4 .5a.5.5 0 0 1 0-1h1a.5.5 0 0 1 0 1h-1zm0 3a.5.5 0 0 1 0-1h3a.5.5 0 0 1 0 1h-3zm0 3a.5.5 0 0 1 0-1h5a.5.5 0 0 1 0 1h-5zM7 12.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5z"/>
                             </svg>
                         </th>
-                        <th scope="col">Tipo </th>
                         <th scope="col">Azioni</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="accessory in accessories.data" :key="accessory.id">
-                        <td><input type="checkbox" v-model="formD.ids" :value="accessory.id" /></td>
-                        <td>{{ accessory.name }}</td>
-                        <td>{{ accessory.accessory_type.name }}</td>
+                    <tr v-for="flame in flames.data" :key="flame.id">
+                        <td><input type="checkbox" v-model="formD.ids" :value="flame.id" /></td>
+                        <td>{{ flame.name }}</td>
                         <td>
                             <div class="d-flex justify-content-between">
-                                <span role="button" data-bs-toggle="modal" data-bs-target="#accessoryModal" @click="editAccessory(accessory)">
+                                <span role="button" data-bs-toggle="modal" data-bs-target="#flameModal" @click="editFlame(flame)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                         <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                                     </svg>
                                 </span>
-                                <span role="button" @click="deleteAccessory(accessory)">
+                                <span role="button" @click="deleteFlame(flame)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                         <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
                                     </svg>
@@ -192,13 +186,13 @@ function listOrder(field) {
         </form>
     </div>
 
-    <Pagination :links="accessories.links" v-if="accessories.links.length > 3"/>
+    <Pagination :links="flames.links" v-if="flames.links.length > 3"/>
 
-    <div class="modal fade" id="accessoryModal" tabindex="-1" aria-labelledby="accessoryModalLabel" aria-hidden="true">
+    <div class="modal fade" id="flameModal" tabindex="-1" aria-labelledby="flameModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="accessoryModalLabel">Nuovo accessorio</h1>
+                    <h1 class="modal-title fs-5" id="flameModalLabel">Nuova fiamma</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -208,17 +202,7 @@ function listOrder(field) {
                             <input type="name" class="form-control" v-model="formCU.name" id="name">
                             <small v-if="formCU.errors.name" v-text="formCU.errors.name" id="nameHelp" class="text-danger"></small>
                         </div>
-                        <div class="mb-3">
-                            <label for="type" class="form-label">Tipo</label>
-                            <select v-model="formCU.accessory_type_id" id="type" class="form-control">
-                                <option v-for="accessorytype in accessorytypes" 
-                                    :key="accessorytype.id"
-                                    v-text="accessorytype.name"
-                                    :value="accessorytype.id"></option>
-                            </select>
-                            <small v-if="formCU.errors.type" v-text="formCU.errors.type" id="typeHelp" class="text-danger"></small>
-                        </div>
-                        <input type="hidden" v-model="formCU.id" id="accessoryId" />
+                        <input type="hidden" v-model="formCU.id" id="flameId" />
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">

@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('accessories', function (Blueprint $table) {
-            $table->unsignedSmallInteger('id')->autoIncrement();
-            $table->unsignedTinyInteger('accessory_type_id')->constrained();
+        Schema::create('vases', function (Blueprint $table) {
+            $table->unsignedTinyInteger('id')->autoIncrement();
             $table->string('name');
             $table->timestamps();
         });
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accessories');
+        Schema::dropIfExists('vases');
     }
 };

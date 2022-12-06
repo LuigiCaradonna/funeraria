@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class FinishingSeeder extends Seeder
+class VaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,13 @@ class FinishingSeeder extends Seeder
      */
     public function run()
     {
-        $finishings = [
+        $vases = [
             ['name' => ' - '],
-            ['name' => 'Toro'],
-            ['name' => 'Costa dritta']
+            ['name' => 'Calice'],
+            ['name' => 'Vaschetta'],
+            ['name' => 'Mezza tazza'],
         ];
 
-        DB::table('finishings')->insert($finishings);
+        DB::table('vases')->insert($vases);
     }
 }

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('accessory_types', function (Blueprint $table) {
+        Schema::create('crosses', function (Blueprint $table) {
             $table->unsignedTinyInteger('id')->autoIncrement();
             $table->string('name');
             $table->timestamps();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accessory_types');
+        Schema::dropIfExists('crosses');
     }
 };

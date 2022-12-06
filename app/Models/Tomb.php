@@ -12,11 +12,12 @@ class Tomb extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string, decimal, float, float, int, int, int, int, int, int, bool, int, int, int, int, int, int, int, string, date, date, date, date, date>
+     * @var array<int, string, string, decimal, float, float, int, int, int, int, int, int, bool, int, int, int, int, int, int, int, string, date, date, date, date, date>
      */
     protected $fillable = [
         'client_id',
         'name',
+        'additional_names', // JSON array with a list of the additional names on the tomb
         'price',
         'full_width',
         'full_height',
