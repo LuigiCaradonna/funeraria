@@ -1,5 +1,7 @@
 <?php
 
+// APP_KEY=base64:GYL6LxbwsCT9EthPNxbKXBMIVowzRGUb77D+p4/7k14=
+
 namespace App\Http\Controllers;
 
 use App\Models\Client;

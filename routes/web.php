@@ -79,12 +79,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/vases/{id}', [VaseController::class, 'delete'])->name('delete_vase');
 
     /****************** Crosses' routes ******************/
-    Route::get('/crosses', [CrossesController::class, 'index'])->name('crosses');
-    Route::get('/crosses/create', [CrossesController::class, 'create'])->name('create_cross');
-    Route::post('/crosses/create', [CrossesController::class, 'store'])->name('store_cross');
-    Route::patch('/crosses/{id}', [CrossesController::class, 'edit'])->name('edit_cross');
-    Route::delete('/crosses/multidel', [CrossesController::class, 'multiDelete'])->name('delete_crosses');
-    Route::delete('/crosses/{id}', [CrossesController::class, 'delete'])->name('delete_cross');
+    Route::get('/crosses', [CrossController::class, 'index'])->name('crosses');
+    Route::get('/crosses/create', [CrossController::class, 'create'])->name('create_cross');
+    Route::post('/crosses/create', [CrossController::class, 'store'])->name('store_cross');
+    Route::patch('/crosses/{id}', [CrossController::class, 'edit'])->name('edit_cross');
+    Route::delete('/crosses/multidel', [CrossController::class, 'multiDelete'])->name('delete_crosses');
+    Route::delete('/crosses/{id}', [CrossController::class, 'delete'])->name('delete_cross');
 
     /****************** Sculptures' routes ******************/
     Route::get('/sculptures', [SculptureController::class, 'index'])->name('sculptures');

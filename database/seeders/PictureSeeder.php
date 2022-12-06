@@ -15,6 +15,7 @@ class PictureSeeder extends Seeder
     public function run()
     {
         $pictures = [
+            ['name' => ' - '],
             ['name' => 'Ceramica applicata'],
             ['name' => 'Ceramica scavo'],
             ['name' => 'Cristallo applicato'],

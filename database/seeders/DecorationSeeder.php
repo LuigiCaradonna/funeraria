@@ -15,6 +15,7 @@ class DecorationSeeder extends Seeder
     public function run()
     {
         $decoration = [
+            ['name' => ' - '],
             ['name' => 'Angelo'],
             ['name' => 'Corona'],
             ['name' => 'Farfalla'],

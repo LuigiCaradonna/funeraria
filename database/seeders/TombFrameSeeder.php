@@ -15,6 +15,7 @@ class TombFrameSeeder extends Seeder
     public function run()
     {
         $frames = [
+            ['name' => ' - '],
             ['name' => '3x2 a becco'],
             ['name' => '4x2 a becco'],
             ['name' => '5x2 a becco'],
