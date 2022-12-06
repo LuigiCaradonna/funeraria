@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('tombs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('progressive');  // Progressive number
             $table->unsignedTinyInteger('client_id')->constrained();
             $table->string('name');
             $table->text('additional_names');
