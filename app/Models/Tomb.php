@@ -16,6 +16,7 @@ class Tomb extends Model
      */
     protected $fillable = [
         'client_id',
+        'progressive',
         'name',
         'additional_names', // JSON array with a list of the additional names on the tomb
         'price',

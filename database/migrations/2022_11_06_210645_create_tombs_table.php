@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('client_id')->constrained();
             $table->string('name');
             $table->text('additional_names');
-            $table->unsignedDecimal('price',10,2)->nullable();
+            $table->unsignedDecimal('price',8,2)->nullable();
             $table->float('full_width')->nullable();
             $table->float('full_height')->nullable();
             $table->unsignedTinyInteger('tomb_type_id')->constrained(); // 2+2 cassettone/base-tetto, 3 ...
@@ -29,11 +29,11 @@ return new class extends Migration
             $table->unsignedTinyInteger('color_id')->constrained();
             $table->unsignedSmallInteger('sculpture_id')->constrained();
             $table->boolean('polished')->nullable();                    // polished sculpture or not
-            $table->unsignedSmallInteger('vase_id')->constrained();
-            $table->unsignedSmallInteger('lamp_id')->constrained();
-            $table->unsignedSmallInteger('flame_id')->constrained();
-            $table->unsignedSmallInteger('picture_id')->constrained();  // picture type (ceramica, cristallo...)
-            $table->unsignedSmallInteger('Outline_id')->constrained();  // Outline (righelli)
+            $table->unsignedTinyInteger('vase_id')->constrained();
+            $table->unsignedTinyInteger('lamp_id')->constrained();
+            $table->unsignedTinyInteger('flame_id')->constrained();
+            $table->unsignedTinyInteger('picture_id')->constrained();  // picture type (ceramica, cristallo...)
+            $table->unsignedTinyInteger('Outline_id')->constrained();  // Outline (righelli)
             $table->unsignedSmallInteger('cross_id')->constrained();
             $table->unsignedSmallInteger('decoration_id')->constrained();   // other decorations
             $table->text('note');

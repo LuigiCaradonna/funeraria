@@ -158,20 +158,32 @@ function listOrder(field) {
                 <thead>
                     <tr>
                         <th scope="col"></th>
-                        <th scope="col" @click="listOrder('name')" class="sortable">Nome 
+                        <th scope="col">#</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col" @click="listOrder('name')" class="sortable">Defunto 
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-down-alt" viewBox="0 0 16 16">
                                 <path d="M3.5 3.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 12.293V3.5zm4 .5a.5.5 0 0 1 0-1h1a.5.5 0 0 1 0 1h-1zm0 3a.5.5 0 0 1 0-1h3a.5.5 0 0 1 0 1h-3zm0 3a.5.5 0 0 1 0-1h5a.5.5 0 0 1 0 1h-5zM7 12.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5z"/>
                             </svg>
                         </th>
-                        <th scope="col">Tipo </th>
+                        <th scope="col">Ordine</th>
+                        <th scope="col">Provino</th>
+                        <th scope="col">Conferma</th>
+                        <th scope="col">Incisione</th>
+                        <th scope="col">Consegna</th>
                         <th scope="col">Azioni</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="tomb in tombs.data" :key="tomb.id">
                         <td><input type="checkbox" v-model="formD.ids" :value="tomb.id" /></td>
+                        <td>{{ tomb.progressive }}</td>
+                        <td>{{ tomb.client }}</td>
                         <td>{{ tomb.name }}</td>
-                        <td>{{ tomb.tomb_type.name }}</td>
+                        <td>{{ tomb.ordered_at }}</td>
+                        <td>{{ tomb.proofed_at }}</td>
+                        <td>{{ tomb.confirmed_at }}</td>
+                        <td>{{ tomb.done_at }}</td>
+                        <td>{{ tomb.delivered_at }}</td>
                         <td>
                             <div class="d-flex justify-content-between">
                                 <span role="button" data-bs-toggle="modal" data-bs-target="#tombModal" @click="editTomb(tomb)">
