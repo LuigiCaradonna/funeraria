@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('flames', function (Blueprint $table) {
-            $table->unsignedSmallInteger('id')->autoIncrement();
+            $table->unsignedTinyInteger('id')->autoIncrement();
             $table->string('name');
             $table->timestamps();
         });

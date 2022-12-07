@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('crosses', function (Blueprint $table) {
-            $table->unsignedTinyInteger('id')->autoIncrement();
+            $table->unsignedSmallInteger('id')->autoIncrement();
             $table->string('name');
             $table->timestamps();
         });
