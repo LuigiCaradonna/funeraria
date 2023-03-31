@@ -2,10 +2,9 @@
 
 /********** CONSTRUCTOR **********/
 
-Config::Config(const QString& file_name, const QString& db_path) :
-    config_file(file_name), db_path(db_path)
+Config::Config()
 {
-    
+    this->checkConfigFile();
 }
 
 /********** DESTRUCTOR **********/
@@ -19,46 +18,56 @@ Config::~Config()
 
 void Config::checkConfigFile()
 {
-    // Open the JSON file
-    QFile file(this->config_file);
+    bool config_errors = false;
 
-    // If the file does not exist
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        // Initialize a new config file
-        this->initConfigFile();
-    }
-    else {
-        // Read the JSON data from the file
-        QByteArray jsonData = file.readAll();
+    // If the config file exists
+    if (QFile::exists(this->config_file)) 
+    {
+        // Create a QFile object
+        QFile file(this->config_file);
 
-        // Parse the JSON data into a JSON document
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+        // If the file can't be opened
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) 
+        {
+            this->resetConfigFile();
+        }
+        else 
+        {
+            QJsonObject jsonObject = this->getJsonObject(file);
 
-        // Get the JSON object from the JSON document
-        QJsonObject jsonObject = jsonDoc.object();
+            /****** CHECK FOR MISSING OR CORRUPTED DATA ******/
+            if (!jsonObject.contains("db_path") || jsonObject["db_path"] == "") 
+            {
+                config_errors = true;
+            }
+            // Check here any additional entry of the config file
+            /*************************************************/
 
-        /****** CHECK FOR MISSING OR CORRUPTED DATA ******/
-        if (!jsonObject.contains("db_path")) {
+            // Get the values from the JSON object
+            // this->db_path = jsonObject["db_path"].toString();
+
             // Close the file
             file.close();
-            // Initialize a new config file
-            this->initConfigFile();
+
+            if (config_errors)
+            {
+                this->resetConfigFile();
+                return;
+            }
+
+            // Load the config data contained into the config file
+            this->loadConfig();
         }
-        // Check here any additional entry of the config file
-        /*************************************************/
-
-        // Get the values from the JSON object
-        // this->db_path = jsonObject["db_path"].toString();
-
-        // Close the file
-        file.close();
+    }
+    else 
+    {
+        // The config file does not exist, create one
+        this->initConfigFile();
     }
 }
 
 void Config::initConfigFile()
 {
-    this->checkConfigFile();
-
     // Create a JSON object
     QJsonObject jsonObject;
 
@@ -68,9 +77,10 @@ void Config::initConfigFile()
     // Convert the JSON object to a JSON document
     QJsonDocument jsonDoc(jsonObject);
 
-    // Create a file to write the JSON data to
+    // Create a QFile object
     QFile file(this->config_file);
 
+    // Open the file to write the JSON data to
     file.open(QIODevice::WriteOnly | QIODevice::Text);
 
     // Write the JSON data to the file
@@ -78,14 +88,22 @@ void Config::initConfigFile()
 
     // Close the file
     file.close();
+
+    // Load the config data contained into the config file
+    this->loadConfig();
 }
 
-bool Config::updateConfigFile(const QString& key, const QString& value)
+void Config::updateConfigFile(const QString& key, const QString& value)
 {
     this->checkConfigFile(); 
 
-    // Open the JSON file
+    // Create a QFile object
     QFile file(this->config_file);
+
+    /*
+        It is not possible to call the method getJsonObject() here because
+        we need to manipulate the QJsonDocument jsonDoc which wouldn't be available.
+    */
 
     // Read the JSON data from the file
     QByteArray jsonData = file.readAll();
@@ -103,9 +121,15 @@ bool Config::updateConfigFile(const QString& key, const QString& value)
     file.close();
 
     // Open the file for writing
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
-        qWarning() << "Failed to open file";
-        return false;
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) 
+    {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setWindowTitle("Funeraria");
+        msgBox.setText("The config file could not be updated.");
+        msgBox.exec();
+
+        return;
     }
 
     // Convert the JSON object back to a JSON document and write it to the file
@@ -114,6 +138,60 @@ bool Config::updateConfigFile(const QString& key, const QString& value)
 
     // Close the file
     file.close();
+}
 
-    return true;
+void Config::resetConfigFile()
+{
+    // Create a QFile object
+    QFile file(this->config_file);
+
+    // Delete the existing config file
+    file.remove();
+
+    // Initialize a new config file
+    this->initConfigFile();
+}
+
+/********** PRIVATE FUNCTIONS **********/
+
+void Config::loadConfig()
+{
+    /* 
+        No need to check for the integrity of the config file
+        this method is called after a successful check, 
+        after a reset or after a fresh config file creation
+    */
+
+    // Create a QFile object
+    QFile file(this->config_file);
+
+    // If the file can't be opened
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        this->resetConfigFile();
+    }
+    else
+    {
+        QJsonObject jsonObject = this->getJsonObject(file);
+
+        // Get the values from the JSON object
+        this->db_path = jsonObject["db_path"].toString();
+
+        // Close the file
+        file.close();
+    }
+}
+
+QJsonObject Config::getJsonObject(QFile& file)
+{
+    // Read the JSON data from the file
+    QByteArray jsonData = file.readAll();
+
+    // Parse the JSON data into a JSON document
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+
+    // Get the JSON object from the JSON document
+    QJsonObject jsonObject = jsonDoc.object();
+
+    return jsonObject;
 }

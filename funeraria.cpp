@@ -1,16 +1,18 @@
 #include "funeraria.h"
 
+/********** CONSTRUCTOR **********/
+
 Funeraria::Funeraria(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
 
-    this->config = new Config(this->config_file, this->db_path);
+    this->config = new Config();
 
-    database = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
-    database.setDatabaseName(this->db_path);
+    db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
+    db.setDatabaseName(this->config->db_path);
 
-    if (!database.open()) {
+    if (!db.open()) {
         // TODO: Show a popup to select a db file, create a new db or close the program
         qDebug() << "Error: Unable to open database...";
     }
@@ -19,20 +21,12 @@ Funeraria::Funeraria(QWidget *parent)
     }
 }
 
+/********** DESTRUCTOR **********/
+
 Funeraria::~Funeraria()
 {
-    database.close();
-    QSqlDatabase::removeDatabase(database.connectionName());
+    db.close();
+    QSqlDatabase::removeDatabase(db.connectionName());
     delete this->config;
 }
 
-/********** INIT FUNCTIONS **********/
-
-void Funeraria::initOptions()
-{
-    // Initialize a new config file with the default values
-    this->config->initConfigFile();
-
-    // Now a new valid config file exists, call again this function to load the updated file
-    // this->initOptions();
-}

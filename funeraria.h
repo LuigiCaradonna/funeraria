@@ -28,21 +28,11 @@ public:
 
     /********** INIT FUNCTIONS **********/
 
-    /*
-     * Reads the config file and sets the corresponding options.
-     *
-     * @return void
-     */
-    void initOptions();
-
 
 private:
     Ui::FunerariaClass ui;
 
-    QSqlDatabase database;
-
-    QString db_path;
-    const QString config_file = "config.cfg";
+    QSqlDatabase db;
 
     // Configuration manager
     Config* config;

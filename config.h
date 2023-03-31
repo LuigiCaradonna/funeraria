@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QMessageBox>
 
 class Config
 {
@@ -16,11 +17,8 @@ public:
     /*
      * Constructs the Config object.
      *
-     * @param   const QString&      file_name   - Config file name
-     * @param   const QString&      db_path     - Database path
-     *
      */
-    Config(const QString& file_name, const QString& db_path);
+    Config();
 
     /********** DESTRUCTOR **********/
 
@@ -46,19 +44,38 @@ public:
     void initConfigFile();
 
     /*
+     * Resets the config file to the default values.
+     *
+     * @return  void
+     */
+    void resetConfigFile();
+
+    /*
      * Updates the config file.
      *
      * @param   const std::string&      key     - Name of the option to change.
      * @param   const std::string&      value   - Value to set.
      *
-     * @return  bool
+     * @return  void
      */
-    bool updateConfigFile(const QString& key, const QString& value);
+    void updateConfigFile(const QString& key, const QString& value);
+
+    // Path to the db file, updated by the loadConfig() method
+    QString db_path = "funeraria.db";
 
 private:
+    /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Loads the values contained into the config file.
+     *
+     * @return  void
+     */
+    void loadConfig();
+
+    QJsonObject getJsonObject(QFile& file);
+
     // Name of the configuration file
-    QString config_file;
-    // Path to the db file, used to init a new config file
-    QString db_path;
+    const QString config_file = "config.cfg";
 };
 
