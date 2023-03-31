@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_funeraria.h"
+#include "dbheader.h"
 
 class funeraria : public QMainWindow
 {
@@ -13,4 +14,6 @@ public:
 
 private:
     Ui::funerariaClass ui;
+
+    QSqlDatabase database;
 };
