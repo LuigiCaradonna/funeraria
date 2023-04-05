@@ -5,28 +5,48 @@
 Funeraria::Funeraria(QWidget *parent)
     : QMainWindow(parent)
 {
+    qDebug() << "###### FUNERARIA CONSTRUCTOR";
     ui.setupUi(this);
 
     this->config = new Config();
+    this->db = new DatabaseManager(this->config->db_path, this);
 
-    db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
-    db.setDatabaseName(this->config->db_path);
-
-    if (!db.open()) {
-        // TODO: Show a popup to select a db file, create a new db or close the program
-        qDebug() << "Error: Unable to open database...";
+    // The connection failed
+    if (!this->db->db_connected) {
+        qDebug() << "###### DB NOT CONNECTED";
+        // Close the application
+        this->closeWindow();
     }
     else {
-        qDebug() << "Database open successfully...";
+        qDebug() << "###### Request Config Update";
+        // Update the db path into the config file, the db manager could have had to 
+        // create a new db file or select a different one, and we do not know here
+        this->config->updateConfigFile("db_path", this->db->db_path);
     }
+
+    connect(ui.clientListView, SIGNAL(clicked(const QModelIndex & index)), this, SLOT(slotShowData(QModelIndex index)));
+
+    ui.clientListView->setModel(this->db->getClients());
+
+    ui.tableView->setModel(this->db->getClientsTable());
 }
 
 /********** DESTRUCTOR **********/
 
 Funeraria::~Funeraria()
 {
-    db.close();
-    QSqlDatabase::removeDatabase(db.connectionName());
     delete this->config;
+    delete this->db;
 }
 
+void Funeraria::slotShowData(QModelIndex index)
+{
+    QMessageBox::information(this, "Funeraria", QString::number(index.row()), QMessageBox::Ok);
+}
+
+/********** PRIVATE FUNCTIONS **********/
+
+void Funeraria::closeWindow()
+{
+    this->close();
+}

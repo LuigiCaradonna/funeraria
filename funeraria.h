@@ -2,8 +2,9 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_funeraria.h"
-#include "config.h"
-#include "dbheader.h"
+#include "Config.h"
+#include "DatabaseManager.h"
+#include "Helpers.h"
 
 class Funeraria : public QMainWindow
 {
@@ -26,14 +27,32 @@ public:
      */
     ~Funeraria();
 
-    /********** INIT FUNCTIONS **********/
+    /********** PUBLIC FUNCTIONS **********/
 
+protected slots:
+    /*
+     * This slot is called when a QListView item is clicked
+     *
+     * @param   QModelIndex    index
+     *
+     * @return void
+     */
+    void slotShowData(QModelIndex index);
 
 private:
     Ui::FunerariaClass ui;
 
-    QSqlDatabase db;
-
     // Configuration manager
     Config* config;
+    // Database manager
+    DatabaseManager* db;
+
+    /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Closes the main window.
+     *
+     * @return void
+     */
+    void closeWindow();
 };

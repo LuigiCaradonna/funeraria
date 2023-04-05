@@ -90,16 +90,17 @@
   <ItemGroup>
     <QtRcc Include="funeraria.qrc" />
     <QtUic Include="funeraria.ui" />
-    <QtMoc Include="funeraria.h" />
-    <ClCompile Include="config.cpp" />
-    <ClCompile Include="funeraria.cpp" />
-    <ClCompile Include="helpers.cpp" />
+    <QtMoc Include="Funeraria.h" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="DatabaseManager.cpp" />
+    <ClCompile Include="Funeraria.cpp" />
+    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="config.h" />
-    <ClInclude Include="dbheader.h" />
-    <ClInclude Include="helpers.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="DatabaseManager.h" />
+    <ClInclude Include="Helpers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

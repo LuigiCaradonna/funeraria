@@ -95,6 +95,7 @@ void Config::initConfigFile()
 
 void Config::updateConfigFile(const QString& key, const QString& value)
 {
+    qDebug() << "###### Updating Config File: key: " << key << " Value: " << value;
     this->checkConfigFile(); 
 
     // Create a QFile object
