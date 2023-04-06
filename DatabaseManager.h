@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QRegularExpression>
 #include "Helpers.h"
 
 class DatabaseManager
@@ -62,5 +63,12 @@ private:
     void solveFailedDatabase();
     bool createDatabase();
 
+    bool createClientsTable();
+    bool createMaterialsTable();
+    bool createFlamesTable();
+    bool createVasesTable();
+    bool createLampsTable();
+    bool createTombsTable();
+    void executeQueryFile(QFile& qf);
 };
 
