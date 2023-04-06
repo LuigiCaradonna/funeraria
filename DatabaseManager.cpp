@@ -23,9 +23,10 @@ QSqlQueryModel* DatabaseManager::getClients()
 {
     QSqlQueryModel* model = new QSqlQueryModel();
     QSqlQuery* queryList = new QSqlQuery(db);
-    queryList->prepare("select name from clients;");
+    queryList->prepare("select name from clients order by position asc;");
     queryList->exec();
     model->setQuery(*queryList);
+    delete(queryList);
 
     return model;
 }
@@ -37,6 +38,7 @@ QSqlQueryModel* DatabaseManager::getClientsTable()
     queryTable->prepare("select * from clients;");
     queryTable->exec();
     modelTable->setQuery(*queryTable);
+    delete(queryTable);
 
     return modelTable;
 }
@@ -47,7 +49,7 @@ void DatabaseManager::openDatabase()
 {
     if (!Helpers::fileExists(this->db_path.toStdString())) {
         this->db_connected = false;
-        this->solveFailedDatabase();
+        this->solveDatabaseConnectionFailure();
     }
     else {
         this->db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
@@ -55,7 +57,7 @@ void DatabaseManager::openDatabase()
 
         if (!this->db.open()) {
             this->db_connected = false;
-            this->solveFailedDatabase();
+            this->solveDatabaseConnectionFailure();
         }
         else {
             this->db_connected = true;
@@ -63,7 +65,7 @@ void DatabaseManager::openDatabase()
     }
 }
 
-void DatabaseManager::solveFailedDatabase()
+void DatabaseManager::solveDatabaseConnectionFailure()
 {
     QMessageBox::StandardButton reply;
 
@@ -75,10 +77,10 @@ void DatabaseManager::solveFailedDatabase()
 
     if (reply == QMessageBox::Yes) {
         // Create a new database
-        // If the database creation failed
+        // If the database creation fails
         if (!this->createDatabase()) {
             // Ask again what to do
-            this->solveFailedDatabase();
+            this->solveDatabaseConnectionFailure();
         }
     }
     else if (reply == QMessageBox::Open) {
@@ -89,12 +91,12 @@ void DatabaseManager::solveFailedDatabase()
         }
         else {
             // Ask again what to do
-            this->solveFailedDatabase();
+            this->solveDatabaseConnectionFailure();
         }
     }
     else {
-        // Close the program
-        this->parent->close();
+        // The user has decided not to solve the problem
+        this->db_connected = false;
     }
 }
 
@@ -112,13 +114,13 @@ bool DatabaseManager::createDatabase()
 
         if (!this->db.open()) {
             this->db_connected = false;
-            this->solveFailedDatabase();
+            this->solveDatabaseConnectionFailure();
         }
         else {
             this->db_connected = true;
             
-            // Create the tables
-            QString sqlFile = QFileDialog::getOpenFileName(this->parent, "Seleziona sql file", "./", "Database (*.sql)");
+            // Ask for the sql file to open
+            QString sqlFile = QFileDialog::getOpenFileName(this->parent, "Selezione file sql", "./", "Database (*.sql)");
 
             // If no file is selected or if the sql execution fails
             if (sqlFile.isEmpty() || !this->executeQueryFile(sqlFile)) {

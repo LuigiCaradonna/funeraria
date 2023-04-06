@@ -4,6 +4,7 @@
 #include "ui_funeraria.h"
 #include "Config.h"
 #include "DatabaseManager.h"
+#include "Client.h"
 #include "Helpers.h"
 
 class Funeraria : public QMainWindow

@@ -36,16 +36,13 @@ void Config::checkConfigFile()
             QJsonObject jsonObject = this->getJsonObject(file);
 
             /****** CHECK FOR MISSING OR CORRUPTED DATA ******/
-            if (!jsonObject.contains("db_path") || jsonObject["db_path"] == "") 
+            if (!jsonObject.contains("db_path") || jsonObject["db_path"].toString().isEmpty())
             {
                 config_errors = true;
             }
             // Check here any additional entry of the config file
             /*************************************************/
-
-            // Get the values from the JSON object
-            // this->db_path = jsonObject["db_path"].toString();
-
+            
             // Close the file
             file.close();
 
@@ -54,6 +51,8 @@ void Config::checkConfigFile()
                 this->resetConfigFile();
                 return;
             }
+
+            // The config file is valid
 
             // Load the config data contained into the config file
             this->loadConfig();
@@ -95,7 +94,6 @@ void Config::initConfigFile()
 
 void Config::updateConfigFile(const QString& key, const QString& value)
 {
-    qDebug() << "###### Updating Config File: key: " << key << " Value: " << value;
     this->checkConfigFile(); 
 
     // Create a QFile object

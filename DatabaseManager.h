@@ -46,7 +46,7 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     void openDatabase();
-    void solveFailedDatabase();
+    void solveDatabaseConnectionFailure();
     bool createDatabase();
 
     bool executeQueryFile(const QString& file_name);
