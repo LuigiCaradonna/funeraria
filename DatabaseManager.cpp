@@ -6,7 +6,6 @@ DatabaseManager::DatabaseManager(const QString& db_path, QWidget* parent)
 {
     this->parent = parent;
     this->db_path = db_path;
-    qDebug() << "###### " << this->db_path;
     this->openDatabase();
 }
 
@@ -46,10 +45,7 @@ QSqlQueryModel* DatabaseManager::getClientsTable()
 
 void DatabaseManager::openDatabase()
 {
-    qDebug() << "###### Opening DB";
-
     if (!Helpers::fileExists(this->db_path.toStdString())) {
-        qDebug() << "###### DB File Opening failed";
         this->db_connected = false;
         this->solveFailedDatabase();
     }
@@ -63,14 +59,12 @@ void DatabaseManager::openDatabase()
         }
         else {
             this->db_connected = true;
-            qDebug() << "###### DB SUCCESS";
         }
     }
 }
 
 void DatabaseManager::solveFailedDatabase()
 {
-    qDebug() << "###### Solving DB Failure";
     QMessageBox::StandardButton reply;
 
     reply = QMessageBox::critical(this->parent, "Funeraria",
@@ -88,9 +82,7 @@ void DatabaseManager::solveFailedDatabase()
         }
     }
     else if (reply == QMessageBox::Open) {
-        qDebug() << "###### Asking for a new DB file";
-        this->db_path = this->browseFile();
-        qDebug() << "###### New DB path: " << this->db_path;
+        this->db_path = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3");
 
         if (!this->db_path.isEmpty()) {
             this->openDatabase();
@@ -108,8 +100,7 @@ void DatabaseManager::solveFailedDatabase()
 
 bool DatabaseManager::createDatabase()
 {
-    qDebug() << "###### Creating a new DB";
-    this->db_path = this->saveDestination();
+    this->db_path = QFileDialog::getSaveFileName(this->parent, "Salva", "./", "Database (*.db *.sqlite *.sqlite3)");
 
     // If the user does not select any file
     if (this->db_path.isEmpty()) {
@@ -127,221 +118,88 @@ bool DatabaseManager::createDatabase()
             this->db_connected = true;
             
             // Create the tables
-            if (this->createClientsTable());
-            this->createFlamesTable();
-            this->createMaterialsTable();
-            this->createVasesTable();
-            this->createLampsTable();
-            this->createTombsTable();
-            qDebug() << "###### New DB Created";
+            QString sqlFile = QFileDialog::getOpenFileName(this->parent, "Seleziona sql file", "./", "Database (*.sql)");
+
+            // If no file is selected or if the sql execution fails
+            if (sqlFile.isEmpty() || !this->executeQueryFile(sqlFile)) {
+                this->db_connected = false;
+                this->db.close();
+            }
         }
     }
     
     return this->db_connected;
 }
 
-bool DatabaseManager::createClientsTable()
-{
-    QSqlQuery* queryList = new QSqlQuery(this->db);
-    queryList->prepare(
-        "CREATE TABLE 'clients' ("
-            "'id'			INTEGER,"
-            "'name'			TEXT NOT NULL,"
-            "'email'		TEXT,"
-            "'address'		TEXT,"
-            "'phone'		TEXT,"
-            "'active'		NUMERIC NOT NULL DEFAULT 1,"
-            "'created_at'	TEXT,"
-            "'edited_at'	TEXT,"
-            "PRIMARY KEY('id' AUTOINCREMENT)"
-        "); "
-    );
+bool DatabaseManager::executeQueryFile(const QString& file_name) {
+    QFile file(file_name);
 
-    return queryList->exec();
-}
-
-bool DatabaseManager::createMaterialsTable()
-{
-    QSqlQuery* queryList = new QSqlQuery(this->db);
-    queryList->prepare(
-        "CREATE TABLE 'materials' ("
-        "'id'			INTEGER,"
-        "'name'			TEXT NOT NULL,"
-        "'created_at'	TEXT,"
-        "'edited_at'	TEXT,"
-        "PRIMARY KEY('id' AUTOINCREMENT)"
-        "); "
-    );
-
-    return queryList->exec();
-}
-
-bool DatabaseManager::createFlamesTable()
-{
-    QSqlQuery* queryList = new QSqlQuery(this->db);
-    queryList->prepare(
-        "CREATE TABLE 'flames' ("
-            "'id'			INTEGER,"
-            "'name'			TEXT NOT NULL,"
-            "'created_at'	TEXT,"
-            "'edited_at'	TEXT,"
-            "PRIMARY KEY('id' AUTOINCREMENT)"
-        "); "
-    );
-
-    return queryList->exec();
-}
-
-bool DatabaseManager::createVasesTable()
-{
-    QSqlQuery* queryList = new QSqlQuery(this->db);
-    queryList->prepare(
-        "CREATE TABLE 'vases' ("
-            "'id'			INTEGER,"
-            "'name'			TEXT NOT NULL,"
-            "'created_at'	TEXT,"
-            "'edited_at'	TEXT,"
-            "PRIMARY KEY('id' AUTOINCREMENT)"
-        "); "
-    );
-
-    return queryList->exec();
-}
-
-bool DatabaseManager::createLampsTable()
-{
-    QSqlQuery* queryList = new QSqlQuery(this->db);
-    queryList->prepare(
-        "CREATE TABLE 'lamps' ("
-            "'id'			INTEGER,"
-            "'name'			TEXT NOT NULL,"
-            "'created_at'	TEXT,"
-            "'edited_at'	TEXT,"
-            "PRIMARY KEY('id' AUTOINCREMENT)"
-        "); "
-    );
-
-    return queryList->exec();
-}
-
-bool DatabaseManager::createTombsTable()
-{
-    QSqlQuery* queryList = new QSqlQuery(this->db);
-    queryList->prepare(
-        "CREATE TABLE 'tombs' ("
-            "'id'		    		INTEGER,"
-            "'progressive'	    	INTEGER NOT NULL,"
-            "'client_id'		    INTEGER NOT NULL,"
-            "'name'		    		TEXT NOT NULL,"
-            "'additional_names'	    TEXT,"
-            "'price'	    		REAL,"
-            "'material_id'	    	INTEGER,"
-            "'vase_id'			    INTEGER,"
-            "'lamp_id'	    		INTEGER,"
-            "'flame_id'		    	INTEGER,"
-            "'notes'			    TEXT,"
-            "'accessories_mounted'	NUMERIC NOT NULL,"
-            "'ordered_at'	    	TEXT NOT NULL,"
-            "'proofed_at'		    TEXT,"
-            "'confirmed_at'	    	TEXT,"
-            "'done_at'			    TEXT,"
-            "'delivered_at'		    TEXT,"
-            "'created_at'	    	TEXT,"
-            "'edited_at'		    TEXT,"
-            "FOREIGN KEY('client_id') REFERENCES 'clients'('id') ON UPDATE cascade,"
-            "FOREIGN KEY('material_id') REFERENCES 'materials'('id') ON UPDATE cascade,"
-            "FOREIGN KEY('vase_id') REFERENCES 'vases'('id') ON UPDATE cascade,"
-            "FOREIGN KEY('lamp_id') REFERENCES 'lamps'('id') ON UPDATE cascade,"
-            "FOREIGN KEY('flame_id') REFERENCES 'flames'('id') ON UPDATE cascade,"
-            "PRIMARY KEY('id' AUTOINCREMENT)"
-        ");"
-    );
-
-    return queryList->exec();
-}
-
-
-QString DatabaseManager::browseFile()
-{
-    qDebug() << "###### New DB file selection";
-    // Filter to show only PGR files
-    QString filter = "Database (*.db *.sqlite *.sqlite3)";
-
-    // Files selection
-    QString file = QFileDialog::getOpenFileName(this->parent, "Apri", "./", filter);
-
-    qDebug() << "###### Selected file: " << file;
-    return file;
-}
-
-QString DatabaseManager::saveDestination()
-{
-    // Filter to show only PGR files
-    QString filter = "Database (*.db *.sqlite *.sqlite3)";
-
-    // Get the folder and the file name to use to save the new file
-    QString file = QFileDialog::getSaveFileName(this->parent, "Salva", "./", filter);
-
-    return file;
-}
-
-void DatabaseManager::executeQueryFile(QFile& qf) {
-    //Read query file content
-    qf.open(QIODevice::ReadOnly);
-    QString queryStr(qf.readAll());
-    qf.close();
+    // Read the file content
+    file.open(QIODevice::ReadOnly);
+    QString query_string(file.readAll());
+    file.close();
 
     QSqlQuery* query = new QSqlQuery(this->db);
 
-    //Check if SQL Driver supports Transactions
+    // Check if SQL Driver supports Transactions
     if (this->db.driver()->hasFeature(QSqlDriver::Transactions)) {
-        //Replace comments and tabs and new lines with space
-        queryStr = queryStr.replace(QRegularExpression("(\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption), " ");
-        //Remove waste spaces
-        queryStr = queryStr.trimmed();
+        // Replace comments and tabs and new lines with space
+        query_string = query_string.replace(QRegularExpression("(\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption), " ");
+        // Remove not necessary spaces
+        query_string = query_string.trimmed();
 
-        //Extracting queries
-        QStringList qList = queryStr.split(';', Qt::SkipEmptyParts);
+        // Extracting queries
+        QStringList qList = query_string.split(';', Qt::SkipEmptyParts);
 
-        //Initialize regular expression for detecting special queries (`begin transaction` and `commit`).
-        //NOTE: I used new regular expression for Qt5 as recommended by Qt documentation.
+        // Detecting special queries (`begin transaction` and `commit`).
         QRegularExpression re_transaction("\\bbegin.transaction.*", QRegularExpression::CaseInsensitiveOption);
         QRegularExpression re_commit("\\bcommit.*", QRegularExpression::CaseInsensitiveOption);
 
-        //Check if query file is already wrapped with a transaction
+        // Check if the SQL file has a transaction set
         bool isStartedWithTransaction = re_transaction.match(qList.at(0)).hasMatch();
-        if (!isStartedWithTransaction)
-            this->db.transaction();     //<=== not wrapped with a transaction, so we wrap it with a transaction.
 
-        //Execute each individual queries
+        // If the SQL file did not had a transaction set
+        if (!isStartedWithTransaction)
+            this->db.transaction();
+
+        // Execute the queries
         foreach(const QString & s, qList) {
-            if (re_transaction.match(s).hasMatch())    //<== detecting special query
+            if (re_transaction.match(s).hasMatch())    // Special query detected
                 this->db.transaction();
-            else if (re_commit.match(s).hasMatch())    //<== detecting special query
+            else if (re_commit.match(s).hasMatch())    // Special query detected
                 this->db.commit();
             else {
-                query->exec(s);                        //<== execute normal query
+                query->exec(s);                        // Execute normal query
                 if (query->lastError().type() != QSqlError::NoError) {
-                    qDebug() << query->lastError().text();
-                    this->db.rollback();                    //<== rollback the transaction if there is any problem
+                    this->db.rollback();
+
+                    return false;
                 }
             }
         }
-        if (!isStartedWithTransaction)
-            this->db.commit();          //<== ... completing of wrapping with transaction
 
-        //Sql Driver doesn't supports transaction
+        // If the SQL file did not had a transaction set
+        if (!isStartedWithTransaction)
+            this->db.commit();
+
+        return true;
     }
     else {
-        //...so we need to remove special queries (`begin transaction` and `commit`)
-        queryStr = queryStr.replace(QRegularExpression("(\\bbegin.transaction.*;|\\bcommit.*;|\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption), " ");
-        queryStr = queryStr.trimmed();
+        // Sql Driver doesn't supports transaction
+        // Remove special queries (`begin transaction` and `commit`)
+        query_string = query_string.replace(QRegularExpression("(\\bbegin.transaction.*;|\\bcommit.*;|\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption), " ");
+        query_string = query_string.trimmed();
 
-        //Execute each individual queries
-        QStringList qList = queryStr.split(';', Qt::SkipEmptyParts);
+        // Execute each individual queries
+        QStringList qList = query_string.split(';', Qt::SkipEmptyParts);
+
         foreach(const QString & s, qList) {
             query->exec(s);
-            if (query->lastError().type() != QSqlError::NoError) qDebug() << query->lastError().text();
+            if (query->lastError().type() != QSqlError::NoError) {
+                return false;
+            };
         }
+
+        return true;
     }
 }

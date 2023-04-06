@@ -45,30 +45,10 @@ private:
 
     /********** PRIVATE FUNCTIONS **********/
 
-    /*
-     * Opens the file browser.
-     *
-     * @return void
-     */
-    QString browseFile();
-
-    /*
-     * Opens the file browser to select the folder where to save the new file.
-     *
-     * @return void
-     */
-    QString saveDestination();
-
     void openDatabase();
     void solveFailedDatabase();
     bool createDatabase();
 
-    bool createClientsTable();
-    bool createMaterialsTable();
-    bool createFlamesTable();
-    bool createVasesTable();
-    bool createLampsTable();
-    bool createTombsTable();
-    void executeQueryFile(QFile& qf);
+    bool executeQueryFile(const QString& file_name);
 };
 
