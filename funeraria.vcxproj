@@ -91,6 +91,7 @@
     <QtRcc Include="funeraria.qrc" />
     <QtUic Include="funeraria.ui" />
     <QtMoc Include="Funeraria.h" />
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="Funeraria.cpp" />
@@ -98,6 +99,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Client.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DatabaseManager.h" />
     <ClInclude Include="Helpers.h" />

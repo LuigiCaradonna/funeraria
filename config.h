@@ -8,6 +8,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QMessageBox>
+#include <QDir>
 
 class Config
 {
@@ -61,7 +62,7 @@ public:
     void updateConfigFile(const QString& key, const QString& value);
 
     // Path to the db file, updated by the loadConfig() method
-    QString db_path = "funeraria.db";
+    QString db_path = QDir::currentPath() + "/funeraria.db";
 
 private:
     /********** PRIVATE FUNCTIONS **********/
@@ -76,6 +77,6 @@ private:
     QJsonObject getJsonObject(QFile& file);
 
     // Name of the configuration file
-    const QString config_file = "config.cfg";
+    const QString config_file = QDir::currentPath() + "/config.cfg";
 };
 

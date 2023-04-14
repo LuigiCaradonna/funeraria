@@ -34,11 +34,11 @@ protected slots:
     /*
      * This slot is called when a QListView item is clicked
      *
-     * @param   QModelIndex    index
+     * @param   QListWidgetItem*    index
      *
      * @return void
      */
-    void slotShowData(QModelIndex index);
+    void slotShowData(QListWidgetItem* index);
 
 private:
     Ui::FunerariaClass ui;
@@ -47,6 +47,8 @@ private:
     Config* config;
     // Database manager
     DatabaseManager* db;
+    
+    Client* client;
 
     /********** PRIVATE FUNCTIONS **********/
 

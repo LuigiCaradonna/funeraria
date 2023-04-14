@@ -14,17 +14,19 @@
 class DatabaseManager
 {
 public:
-    bool db_connected;
-    QString db_path;
+    QSqlDatabase db;
+    bool connected;
+    QString path;
 
     /********** CONSTRUCTOR **********/
 
     /*
      * Constructs the DatabaseManager object.
      *
-     * @param	const QString&	db_path	- Path to the database file
+     * @param	const QString&	path	- Path to the database file
+     * @param	QWidget*        parent	- Pointer to the parent widget
      */
-    DatabaseManager(const QString& db_path, QWidget* parent = nullptr);
+    DatabaseManager(const QString& path, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -35,12 +37,8 @@ public:
 
     /********** PUBLIC FUNCTIONS **********/
 
-    QSqlQueryModel* getClients();
-
-    QSqlQueryModel* getClientsTable();
 
 private:
-    QSqlDatabase db;
     QWidget* parent;
 
     /********** PRIVATE FUNCTIONS **********/

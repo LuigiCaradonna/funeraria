@@ -21,18 +21,15 @@ void Config::checkConfigFile()
     bool config_errors = false;
 
     // If the config file exists
-    if (QFile::exists(this->config_file)) 
-    {
+    if (QFile::exists(this->config_file)) {
         // Create a QFile object
         QFile file(this->config_file);
 
         // If the file can't be opened
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) 
-        {
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             this->resetConfigFile();
         }
-        else 
-        {
+        else {
             QJsonObject jsonObject = this->getJsonObject(file);
 
             /****** CHECK FOR MISSING OR CORRUPTED DATA ******/
@@ -58,8 +55,7 @@ void Config::checkConfigFile()
             this->loadConfig();
         }
     }
-    else 
-    {
+    else {
         // The config file does not exist, create one
         this->initConfigFile();
     }
@@ -95,6 +91,10 @@ void Config::initConfigFile()
 void Config::updateConfigFile(const QString& key, const QString& value)
 {
     this->checkConfigFile(); 
+
+    if (!QFile::exists(this->config_file)) {
+        this->initConfigFile();
+    }
 
     // Create a QFile object
     QFile file(this->config_file);
@@ -141,11 +141,13 @@ void Config::updateConfigFile(const QString& key, const QString& value)
 
 void Config::resetConfigFile()
 {
-    // Create a QFile object
-    QFile file(this->config_file);
+    if (QFile::exists(this->config_file)) {
+        // Create a QFile object
+        QFile file(this->config_file);
 
-    // Delete the existing config file
-    file.remove();
+        // Delete the current config file if exists
+        file.remove();
+    }
 
     // Initialize a new config file
     this->initConfigFile();
@@ -160,6 +162,10 @@ void Config::loadConfig()
         this method is called after a successful check, 
         after a reset or after a fresh config file creation
     */
+
+    if (!QFile::exists(this->config_file)) {
+        this->resetConfigFile();
+    }
 
     // Create a QFile object
     QFile file(this->config_file);
