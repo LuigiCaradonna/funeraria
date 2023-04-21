@@ -8,36 +8,38 @@
 #include <QSqlTableModel>
 #include <QMessageBox>
 
-class Client
+class Flame
 {
 public:
     /********** CONSTRUCTOR **********/
 
     /*
-     * Constructs the Client object.
+     * Constructs the Flame object.
      *
      * @param	const QSqlDatabase&	db	- Reference to the database connection
      */
-    Client(const QSqlDatabase& db, QWidget* parent = nullptr);
+    Flame(const QSqlDatabase& db, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
     /*
-     * Destructs the Client object.
+     * Destructs the Flame object.
      */
-    ~Client();
+    ~Flame();
 
     /********** PUBLIC FUNCTIONS **********/
 
-    int getId(const QString& name);
+    /*
+     * Gets all the flames
+     * 
+     * @return  QList<QStringList> - A list containing the flames' id and name
+     */
+    QList<QStringList> get();
 
-    QStringList getNames();
-
-    QList<QMap<QString, QString>> getDetails();
-    QMap<QString, QString> getDetails(const QString& name);
+    bool update(QString id, QString value);
 
 private:
-    const QString table = "clients";
+    const QString table = "flames";
     const QSqlDatabase& db;
     QWidget* parent;
 };

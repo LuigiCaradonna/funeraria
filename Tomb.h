@@ -8,36 +8,38 @@
 #include <QSqlTableModel>
 #include <QMessageBox>
 
-class Client
+class Tomb
 {
 public:
     /********** CONSTRUCTOR **********/
 
     /*
-     * Constructs the Client object.
+     * Constructs the Tomb object.
      *
      * @param	const QSqlDatabase&	db	- Reference to the database connection
      */
-    Client(const QSqlDatabase& db, QWidget* parent = nullptr);
+    Tomb(const QSqlDatabase& db, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
     /*
-     * Destructs the Client object.
+     * Destructs the Tomb object.
      */
-    ~Client();
+    ~Tomb();
 
     /********** PUBLIC FUNCTIONS **********/
 
-    int getId(const QString& name);
+    /*
+     * Gets all the Tombs
+     *
+     * @return  QList<QStringList> - A list containing the Tombs' id and name
+     */
+    QList<QStringList> get(int client_id);
 
-    QStringList getNames();
-
-    QList<QMap<QString, QString>> getDetails();
-    QMap<QString, QString> getDetails(const QString& name);
+    bool update(QString id, QString value);
 
 private:
-    const QString table = "clients";
+    const QString table = "tombs";
     const QSqlDatabase& db;
     QWidget* parent;
 };

@@ -9,6 +9,28 @@ Client::~Client()
 {
 }
 
+int Client::getId(const QString& name)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT id FROM " + this->table + " WHERE name = :name;");
+    query.bindValue(":name", name);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Errore: " + query.lastError().text());
+        message.exec();
+
+        return 0;
+    }
+
+    if (query.next()) {
+        return query.value("id").toInt();
+    }
+
+    return 0;
+}
+
 QStringList Client::getNames()
 {
     QStringList names{};
@@ -16,7 +38,6 @@ QStringList Client::getNames()
     query.prepare("SELECT name FROM clients ORDER BY position ASC;");
 
     if (!query.exec()) {
-        // TODO: Remove the message box and use the string to output the message somewhere
         QMessageBox message;
         message.setIcon(QMessageBox::Critical);
         message.setText("Errore: " + query.lastError().text());
@@ -38,7 +59,6 @@ QList<QMap<QString, QString>> Client::getDetails()
     query.prepare("SELECT * FROM clients;");
 
     if (!query.exec()) {
-        // TODO: Remove the message box and use the string to output the message somewhere
         QMessageBox message;
         message.setIcon(QMessageBox::Critical);
         message.setText("Errore: " + query.lastError().text());
@@ -84,9 +104,8 @@ QMap<QString, QString> Client::getDetails(const QString& name)
         map["active"] = query.value("active").toString();
     }
     else {
-        // TODO: Remove the message box and use the string to output the message somewhere
         QMessageBox message;
-        message.setIcon(QMessageBox::Critical);
+        message.setIcon(QMessageBox::Warning);
         message.setText("Nessun record trovato");
         message.exec();
 

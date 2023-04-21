@@ -73,6 +73,24 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuAccessories">
+    <property name="title">
+     <string>Accessori</string>
+    </property>
+    <widget class="QMenu" name="menuFlames">
+     <property name="title">
+      <string>Fiamme</string>
+     </property>
+     <addaction name="actionFNew"/>
+     <addaction name="actionFList"/>
+    </widget>
+    <action name="_2"/>
+    <addaction name="actionVases"/>
+    <addaction name="actionLamps"/>
+    <addaction name="menuFlames"/>
+    <addaction name="_2"/>
+   </widget>
+   <addaction name="menuAccessories"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -83,6 +101,26 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionVases">
+   <property name="text">
+    <string>Vasi</string>
+   </property>
+  </action>
+  <action name="actionLamps">
+   <property name="text">
+    <string>Lampade</string>
+   </property>
+  </action>
+  <action name="actionFNew">
+   <property name="text">
+    <string>Nuova</string>
+   </property>
+  </action>
+  <action name="actionFList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
