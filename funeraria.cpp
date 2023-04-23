@@ -27,33 +27,44 @@ Funeraria::Funeraria(QWidget *parent)
     // this->lamp = new Lamp(this->db->db, this);
     this->flame = new Flame(this->db->db, this);
 
+    // List of clients' names
     QStringList cli = this->client->getNames();
 
+    // Add the clients' list to the left column
     this->ui.clientListView->addItems(cli);
 
-    /*
-    QStringList headers{"Nome", "Email", "Indirizzo", "Tel"};
-
-    QList< QMap<QString, QString>> clients = this->client->getDetails();
-    this->ui.tableView->setRowCount(clients.size());
-    this->ui.tableView->setColumnCount(4);
-    this->ui.tableView->setHorizontalHeaderLabels(headers);
-
-    for (int i = 0; i < clients.size(); i++) {
-        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(clients[i].value("name")));
-        this->ui.tableView->setItem(i, 1, new QTableWidgetItem(clients[i].value("email")));
-        this->ui.tableView->setItem(i, 2, new QTableWidgetItem(clients[i].value("address")));
-        this->ui.tableView->setItem(i, 3, new QTableWidgetItem(clients[i].value("phone")));
-    }
-    */
     // Set the event listeners
-    this->connect(this->ui.clientListView, &QListWidget::itemClicked, this, &Funeraria::slotShowData);
+    this->connect(this->ui.clientListView, &QListWidget::itemClicked, this, &Funeraria::slotClientOrders);
     // Signal emitted on table cell edit
-    this->connect(this->ui.tableView, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry(QTableWidgetItem*)));
+    this->connect(this->ui.tableView, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
+    // Signal emitted from the menu item actionCList
+    this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
+    // Signal emitted from the menu item actionCNew
+    this->connect(this->ui.actionCNew, SIGNAL(triggered()), this, SLOT(slotNewClient()));
 
-    // Bind the menu entries to the corresponding slot
-    this->connect(this->ui.actionFList, SIGNAL(triggered()), this, SLOT(slotFlames()));
-    this->connect(this->ui.actionFNew, SIGNAL(triggered()), this, SLOT(slotNewFlame()));
+    // Map the signal coming from the menu items to call the same function (slotShowItems) with the proper parameter
+    this->showItemsMapper = new QSignalMapper(this);
+    this->connect(this->ui.actionVList, SIGNAL(triggered()), showItemsMapper, SLOT(map()));
+    this->connect(this->ui.actionLList, SIGNAL(triggered()), showItemsMapper, SLOT(map()));
+    this->connect(this->ui.actionFList, SIGNAL(triggered()), showItemsMapper, SLOT(map()));
+    this->connect(this->ui.actionMList, SIGNAL(triggered()), showItemsMapper, SLOT(map()));
+    showItemsMapper->setMapping(this->ui.actionVList, "vase");
+    showItemsMapper->setMapping(this->ui.actionLList, "lamp");
+    showItemsMapper->setMapping(this->ui.actionFList, "flame");
+    showItemsMapper->setMapping(this->ui.actionMList, "material");
+    this->connect(showItemsMapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
+
+    // Map the signal coming from the menu items to call the same function (slotNewItem) with the proper parameter
+    this->newItemMapper = new QSignalMapper(this);
+    this->connect(this->ui.actionVNew, SIGNAL(triggered()), newItemMapper, SLOT(map()));
+    this->connect(this->ui.actionLNew, SIGNAL(triggered()), newItemMapper, SLOT(map()));
+    this->connect(this->ui.actionFNew, SIGNAL(triggered()), newItemMapper, SLOT(map()));
+    this->connect(this->ui.actionMNew, SIGNAL(triggered()), newItemMapper, SLOT(map()));
+    newItemMapper->setMapping(this->ui.actionVNew, "vase");
+    newItemMapper->setMapping(this->ui.actionLNew, "lamp");
+    newItemMapper->setMapping(this->ui.actionFNew, "flame");
+    newItemMapper->setMapping(this->ui.actionMNew, "material");
+    this->connect(newItemMapper, &QSignalMapper::mappedString, this, &Funeraria::slotNewItem);
 }
 
 /********** DESTRUCTOR **********/
@@ -67,30 +78,24 @@ Funeraria::~Funeraria()
     // delete this->vase;
     // delete this->lamp;
     delete this->flame;
+    delete this->showItemsMapper;
+    delete this->newItemMapper;
 }
 
 /********** SLOTS **********/
 
-void Funeraria::slotShowData(QListWidgetItem* index)
+void Funeraria::slotClientOrders(QListWidgetItem* index)
 {
     // Block the segnals while building the table
     const QSignalBlocker blocker(this->ui.tableView);
 
-    this->current_table = "clients";
+    this->current_table = "tomb";
 
     // Highlight the clicked item
     this->ui.clientListView->setCurrentItem(index);
     
-    // This gets the string value of the clicked item
-    // Qt::DisplayRole is required because data is of type QVariant
-    // QMap<QString, QString> cliente = this->client->getDetails(index->data(Qt::DisplayRole).toString());
-    // QMessageBox message;
-    // message.setIcon(QMessageBox::Critical);
-    // message.setText("Valore: " + cliente["name"]);
-    // message.exec();
-
     int client_id = this->client->getId(index->data(Qt::DisplayRole).toString());
-    // TODO: In base all'id del cliente, prendere tutte le sue lapidi
+    
     QList<QStringList> tombs = this->tomb->get(client_id);
 
     QStringList headers{ "Numero", "Nome", "Prezzo", "Pagata", "Note", "Accessori",
@@ -99,7 +104,7 @@ void Funeraria::slotShowData(QListWidgetItem* index)
     this->ui.tableView->setRowCount(tombs.size());
     this->ui.tableView->setColumnCount(11);
     // this->ui.tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    //this->ui.tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    // this->ui.tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableView->setHorizontalHeaderLabels(headers);
 
     for (int i = 0; i < tombs.size(); i++) {
@@ -118,59 +123,203 @@ void Funeraria::slotShowData(QListWidgetItem* index)
     }
 }
 
-void Funeraria::slotFlames()
+void Funeraria::slotShowClients()
 {
     // Block the segnals while building the table
     const QSignalBlocker blocker(this->ui.tableView);
 
-    this->current_table = "flames";
+    this->current_table = "client";
 
-    QList<QStringList> flames = this->flame->get();
+    QList<QMap<QString, QString>> clients = this->client->get();
 
-    QStringList headers{ "id", "Nome" };
+    QStringList headers{ "Ordine", "Nome", "Email", "Telefono", "", ""};
 
-    this->ui.tableView->setRowCount(flames.size());
-    this->ui.tableView->setColumnCount(2);
-    this->ui.tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    this->ui.tableView->setRowCount(clients.size());
+    this->ui.tableView->setColumnCount(6);
+    this->ui.tableView->setHorizontalHeaderLabels(headers);
+
+    for (int i = 0; i < clients.size(); i++) {
+        QPushButton* pb_details = new QPushButton(this->ui.tableView);
+        pb_details->setText("Dettagli");
+        QPushButton* pb_delete = new QPushButton(this->ui.tableView);
+        pb_delete->setText("Elimina");
+
+        QStringList emails_list = clients[i]["email"].split(u',');
+        QString emails = "";
+        for (int j = 0; j < emails_list.length(); j++) {
+            QString nl = "\n";
+            if (j == emails_list.length() - 1) {
+                nl = ""; // No new line after the last email address
+            }
+            emails += emails_list[j] + nl;
+        }
+
+        QStringList phones_list = clients[i]["phone"].split(u',');
+        QString phones = "";
+        for (int j = 0; j < phones_list.length(); j++) {
+            QString nl = "\n";
+            if (j == phones_list.length() - 1) {
+                nl = ""; // No new line after the last phone number
+            }
+            phones += phones_list[j] + nl;
+        }
+
+        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(clients[i]["position"])); // position
+        this->ui.tableView->setItem(i, 1, new QTableWidgetItem(clients[i]["name"])); // name
+        this->ui.tableView->setItem(i, 2, new QTableWidgetItem(emails)); // emails
+        this->ui.tableView->setItem(i, 3, new QTableWidgetItem(phones)); // phones
+        this->ui.tableView->setCellWidget(i, 4, pb_details); // Details button
+        this->ui.tableView->setCellWidget(i, 5, pb_delete); // Delete button
+
+        this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotClientDetails);
+        this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDelete);
+    }
+}
+
+void Funeraria::slotClientDetails()
+{
+    // Row index of the clicked button
+    int row = this->ui.tableView->currentRow();
+    // Set the name property of the Client object, to the name present in the clicked row
+    this->client->setName(this->ui.tableView->item(row, 1)->text());
+    this->client->setModal(true);
+    this->client->exec();
+
+    // Reload the table when the popup is closed, the user could have made some changes
+    this->slotShowClients();
+}
+
+void Funeraria::slotNewClient()
+{
+    // Block the segnals while building the table
+    const QSignalBlocker blocker(this->ui.tableView);
+
+    this->current_table = "client";
+}
+
+void Funeraria::slotShowItems(const QString& type)
+{
+    // Block the segnals while building the table
+    const QSignalBlocker blocker(this->ui.tableView);
+
+    this->current_table = type;
+
+    QList<QStringList> accessories;
+
+    if (type == "vase") {
+        // accessories = this->vase->get();
+    }
+    else if (type == "lamp") {
+        // accessories = this->lamps->get();
+    }
+    else if (type == "flame") {
+        accessories = this->flame->get();
+    }
+    else if (type == "material") {
+        // accessories = this->material->get();
+    }
+    else {
+        // The type requested is not valid
+        return;
+    }
+
+    QStringList headers{ "id", "Nome", "Azioni"};
+
+    this->ui.tableView->setRowCount(accessories.size());
+    this->ui.tableView->setColumnCount(3);
+    // this->ui.tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     //this->ui.tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableView->setHorizontalHeaderLabels(headers);
 
-    for (int i = 0; i < flames.size(); i++) {
-        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(flames[i][0])); // id
-        this->ui.tableView->setItem(i, 1, new QTableWidgetItem(flames[i][1])); // name
+    for (int i = 0; i < accessories.size(); i++) {
+        QPushButton* pb = new QPushButton(this->ui.tableView);
+        pb->setText("Elimina");
+        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(accessories[i][0])); // id
+        this->ui.tableView->setItem(i, 1, new QTableWidgetItem(accessories[i][1])); // name
+        this->ui.tableView->setCellWidget(i, 2, pb); // Delete button
+        this->connect(pb, &QPushButton::clicked, this, &Funeraria::slotDelete);
     }
 }
 
-void Funeraria::slotNewFlame()
-{
-    // TODO: creare un form popup per inserire i dati di una nuova fiamma
-    // this->tool_translation = new ToolTranslation(this->folder);
-    // this->tool_translation->show();
-}
-
-void Funeraria::slotUpdateEntry(QTableWidgetItem* item)
-{
+void Funeraria::slotDelete() {
     int row = this->ui.tableView->currentRow();
 
-    if (this->current_table == "tombs") {
+    QMessageBox::StandardButton reply;
+
+    reply = QMessageBox::critical(this, "Funeraria",
+        "Vuoi eliminare questo elemento?",
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        // Delete the accessory
+
+        if (this->current_table == "tomb") {
+
+        }
+        else if (this->current_table == "vase") {
+
+        }
+        else if (this->current_table == "lamp") {
+
+        }
+        else if (this->current_table == "flame") {
+            this->flame->remove(this->ui.tableView->item(row, 0)->text());
+        }
+        else if (this->current_table == "material") {
+
+        }
+        else if (this->current_table == "client") {
+
+        }
+
+        this->slotShowItems(this->current_table);
+    }
+}
+
+void Funeraria::slotNewItem(const QString& type)
+{
+    this->current_table = type;
+
+    if (type == "vase") {
+
+    }
+    else if (type == "lamp") {
+
+    }
+    else if (type == "flame") {
+        this->flame->setModal(true);
+        this->flame->exec();
+    }
+    else {
+        // The type requested is not valid
+        return;
+    }
+
+    this->slotShowItems(this->current_table);
+}
+
+void Funeraria::slotUpdateEntry()
+{
+    int row = this->ui.tableView->currentRow();
+    if (this->current_table == "client") {
+
+    }
+    else if (this->current_table == "tomb") {
         
     }
-    else if (this->current_table == "vases") {
+    else if (this->current_table == "vase") {
         
     }
-    else if (this->current_table == "lamps") {
+    else if (this->current_table == "lamp") {
         
     }
-    else if (this->current_table == "flames") {
+    else if (this->current_table == "flame") {
         this->flame->update(
             this->ui.tableView->item(row, 0)->text(), // id
             this->ui.tableView->item(row, 1)->text() // name
         );
     }
-    else if (this->current_table == "materials") {
-        
-    }
-    else if (this->current_table == "clients") {
+    else if (this->current_table == "material") {
         
     }
 }

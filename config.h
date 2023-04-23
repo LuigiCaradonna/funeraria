@@ -3,7 +3,6 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "Helpers.h"
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>

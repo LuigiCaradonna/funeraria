@@ -84,12 +84,40 @@
      <addaction name="actionFNew"/>
      <addaction name="actionFList"/>
     </widget>
-    <action name="_2"/>
-    <addaction name="actionVases"/>
-    <addaction name="actionLamps"/>
+    <widget class="QMenu" name="menuLampade">
+     <property name="title">
+      <string>Lampade</string>
+     </property>
+     <addaction name="actionLNew"/>
+     <addaction name="actionLList"/>
+    </widget>
+    <widget class="QMenu" name="menuVasi">
+     <property name="title">
+      <string>Vasi</string>
+     </property>
+     <addaction name="actionVNew"/>
+     <addaction name="actionVList"/>
+    </widget>
+    <widget class="QMenu" name="menuMateriali">
+     <property name="title">
+      <string>Materiali</string>
+     </property>
+     <addaction name="actionMNew"/>
+     <addaction name="actionMList"/>
+    </widget>
+    <addaction name="menuVasi"/>
+    <addaction name="menuLampade"/>
     <addaction name="menuFlames"/>
-    <addaction name="_2"/>
+    <addaction name="menuMateriali"/>
    </widget>
+   <widget class="QMenu" name="menuClienti">
+    <property name="title">
+     <string>Clienti</string>
+    </property>
+    <addaction name="actionCNew"/>
+    <addaction name="actionCList"/>
+   </widget>
+   <addaction name="menuClienti"/>
    <addaction name="menuAccessories"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -101,24 +129,84 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionVases">
-   <property name="text">
-    <string>Vasi</string>
-   </property>
-  </action>
-  <action name="actionLamps">
-   <property name="text">
-    <string>Lampade</string>
-   </property>
-  </action>
   <action name="actionFNew">
    <property name="text">
     <string>Nuova</string>
+   </property>
+   <property name="toolTip">
+    <string>Nuova fiamma</string>
    </property>
   </action>
   <action name="actionFList">
    <property name="text">
     <string>Elenco</string>
+   </property>
+   <property name="toolTip">
+    <string>Elenco fiamme</string>
+   </property>
+  </action>
+  <action name="actionLNew">
+   <property name="text">
+    <string>Nuova</string>
+   </property>
+   <property name="toolTip">
+    <string>Nuova lampada</string>
+   </property>
+  </action>
+  <action name="actionLList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+   <property name="toolTip">
+    <string>Elenco lampade</string>
+   </property>
+  </action>
+  <action name="actionVNew">
+   <property name="text">
+    <string>Nuovo</string>
+   </property>
+   <property name="toolTip">
+    <string>Nuovo vaso</string>
+   </property>
+  </action>
+  <action name="actionVList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+   <property name="toolTip">
+    <string>Elenco vasi</string>
+   </property>
+  </action>
+  <action name="actionMNew">
+   <property name="text">
+    <string>Nuovo</string>
+   </property>
+   <property name="toolTip">
+    <string>Nuovo materiale</string>
+   </property>
+  </action>
+  <action name="actionMList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+   <property name="toolTip">
+    <string>Elenco materiali</string>
+   </property>
+  </action>
+  <action name="actionCNew">
+   <property name="text">
+    <string>Nuovo</string>
+   </property>
+   <property name="toolTip">
+    <string>Nuovo cliente</string>
+   </property>
+  </action>
+  <action name="actionCList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+   <property name="toolTip">
+    <string>Elenco clienti</string>
    </property>
   </action>
  </widget>

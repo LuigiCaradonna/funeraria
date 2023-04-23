@@ -1,13 +1,13 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <QSignalMapper>
 #include "ui_funeraria.h"
 #include "Config.h"
 #include "DatabaseManager.h"
 #include "Client.h"
 #include "Tomb.h"
 #include "Flame.h"
-#include "Helpers.h"
 
 class Funeraria : public QMainWindow
 {
@@ -19,7 +19,7 @@ public:
     /*
      * Constructs the Funeraria object.
      *
-     * @param	QWidget*	parent	- Parent widget
+     * @param	QWidget* parent	- Parent widget
      */
     Funeraria(QWidget *parent = nullptr);
 
@@ -37,19 +37,61 @@ protected slots:
     /********** SLOTS **********/
 
     /*
-     * This slot is called when a QListView item is clicked
+     * Shows the selected client's orders
      *
-     * @param   QListWidgetItem*    index
+     * @param   QListWidgetItem* index
      *
      * @return void
      */
-    void slotShowData(QListWidgetItem* index);
+    void slotClientOrders(QListWidgetItem* index);
 
-    void slotFlames();
+    void slotClientDetails();
 
-    void slotNewFlame();
+    /*
+     * Shows the clients' list
+     *
+     * @return void
+     */
+    void slotShowClients();
 
-    void slotUpdateEntry(QTableWidgetItem* item);
+    /*
+     * Shows the dialog to insert a new client
+     *
+     * @return void
+     */
+    void slotNewClient();
+
+    /*
+     * Shows the accessories' list
+     * 
+     * @param   const QString& type - Name of the accessories type to show
+     *
+     * @return void
+     */
+    void slotShowItems(const QString& type);
+
+    /*
+     * Shows the dialog to insert a new accessory
+     *
+     * @param   const QString& type - Name of the accessories type to add
+     *
+     * @return void
+     */
+    void slotNewItem(const QString& type);
+
+    /*
+     * Persists into the database the change made to a table cell
+     * 
+     * @return void
+     */
+    void slotUpdateEntry();
+
+    /*
+     * Deletes the selected item from the database
+     *
+     * @return void
+     */
+    void slotDelete();
 
 private:
     Ui::FunerariaClass ui;
@@ -67,6 +109,9 @@ private:
     // Vase* vase;
     // Lamp* lamp;
     Flame* flame;
+
+    QSignalMapper* showItemsMapper;
+    QSignalMapper* newItemMapper;
 
     /********** PRIVATE FUNCTIONS **********/
 

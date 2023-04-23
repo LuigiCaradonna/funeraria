@@ -88,24 +88,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Tomb.cpp" />
     <QtRcc Include="funeraria.qrc" />
+    <QtUic Include="Client.ui" />
     <QtUic Include="funeraria.ui" />
     <QtMoc Include="Funeraria.h" />
-    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="Flame.cpp" />
     <ClCompile Include="Funeraria.cpp" />
-    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="NewAccessory.ui" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Client.h" />
+    <QtMoc Include="Client.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DatabaseManager.h" />
-    <ClInclude Include="Flame.h" />
-    <ClInclude Include="Helpers.h" />
+    <QtMoc Include="Flame.h" />
     <ClInclude Include="Tomb.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

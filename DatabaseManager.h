@@ -9,7 +9,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QRegularExpression>
-#include "Helpers.h"
 
 class DatabaseManager
 {
