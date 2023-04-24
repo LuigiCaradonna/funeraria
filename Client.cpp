@@ -1,16 +1,22 @@
 #include "Client.h"
 
+/********** CONSTRUCTOR **********/
+
 Client::Client(const QSqlDatabase& db, QWidget* parent)
     : db(db), parent(parent)
 {
 	this->ui.setupUi(this);
 
-    this->connect(this->ui.btnSave, &QPushButton::clicked, this, &Client::slotUpdate);
+    this->connect(this->ui.btnSave, &QPushButton::clicked, this, &Client::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &Client::slotCloseDialog);
 }
 
+/********** DESTRUCTOR **********/
+
 Client::~Client()
 {}
+
+/********** PUBLIC FUNCTIONS **********/
 
 int Client::getId(const QString& name)
 {
@@ -23,11 +29,8 @@ int Client::getId(const QString& name)
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
-
-        return 0;
     }
-
-    if (query.next()) {
+    else if (query.next()) {
         return query.value("id").toInt();
     }
 
@@ -115,11 +118,6 @@ QMap<QString, QString> Client::getDetails(const QString& name)
         map["edited_at"] = query.value("edited_at").toString();
     }
     else {
-        QMessageBox message;
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Nessun record trovato");
-        message.exec();
-
         return map;
     }
 
@@ -132,17 +130,158 @@ void Client::setName(const QString& name)
     this->updateForm();
 }
 
+void Client::remove(const int& id)
+{
+    // TODO:: check for positions rearranging
+
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("DELETE FROM " + this->table + " WHERE id = :id;");
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+}
+
+/********** PROTECTED SLOTS **********/
+
+void Client::slotSave()
+{
+    // An id set to 0 means that we are creating a new client
+    if (this->ui.id->text() == "0") {
+        this->create(
+            this->ui.position->text().trimmed(),
+            this->ui.name->text().trimmed(),
+            this->ui.email->toPlainText(),
+            this->ui.address->text().trimmed(),
+            this->ui.phone->toPlainText(),
+            "1"
+        );
+    }
+    else {
+        QString active;
+        if (this->ui.active->isChecked()) {
+            active = "1";
+        }
+        else {
+            active = "0";
+        }
+
+        this->update(
+            this->ui.id->text(),
+            this->ui.position->text().trimmed(),
+            this->ui.name->text().trimmed(),
+            this->ui.email->toPlainText(),
+            this->ui.address->text().trimmed(),
+            this->ui.phone->toPlainText(),
+            active
+        );
+    }
+
+    this->close();
+}
+
+void Client::slotCloseDialog()
+{
+    this->close();
+}
+
+/********** PRIVATE FUNCTIONS **********/
+
+void Client::create(
+    const QString& position, 
+    const QString& name, 
+    const QString& emails, 
+    const QString& address, 
+    const QString& phones, 
+    const QString& active
+)
+{
+    // TODO:: check for positions rearranging
+
+    QString created_at = QDate::currentDate().toString("yyyy-MM-dd");
+
+    QString sep = ",";
+    QString formatted_emails = "";
+    QString formatted_phones = "";
+    QStringList emails_list = emails.split(QRegularExpression("\n|\r\n|\r"));
+    QStringList phones_list = phones.split(QRegularExpression("\n|\r\n|\r"));
+
+    for (int i = 0; i < emails_list.length(); i++) {
+        sep = ",";
+        if (i == emails_list.length() - 1) {
+            sep = ""; // No separator after the last email address
+        }
+        formatted_emails += emails_list[i] + sep;
+    }
+
+    for (int i = 0; i < phones_list.length(); i++) {
+        sep = ",";
+        if (i == phones_list.length() - 1) {
+            sep = ""; // No separator after the last phone number
+        }
+        formatted_phones += phones_list[i] + sep;
+    }
+
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("INSERT INTO " + this->table + ""
+        " (position, name, email, address, phone, active, created_at, edited_at)"
+        " VALUES (:position, :name, :emails, :address, :phones, :active, :created_at, :edited_at)");
+    query.bindValue(":position", position);
+    query.bindValue(":name", name);
+    query.bindValue(":emails", formatted_emails);
+    query.bindValue(":address", address);
+    query.bindValue(":phones", formatted_phones);
+    query.bindValue(":active", active);
+    query.bindValue(":created_at", created_at);
+    query.bindValue(":edited_at", created_at);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+}
+
 void Client::update(
     const QString& id, 
     const QString& position, 
     const QString& name, 
-    const QString& email, 
+    const QString& emails,
     const QString& address, 
-    const QString& phone, 
+    const QString& phones,
     const QString& active
 )
 {
+    // TODO:: check for positions rearranging
+
     QString edited_at = QDate::currentDate().toString("yyyy-MM-dd");
+
+    QString sep = ",";
+    QString formatted_emails = "";
+    QString formatted_phones = "";
+    QStringList emails_list = emails.split(QRegularExpression("\n|\r\n|\r"));
+    QStringList phones_list = phones.split(QRegularExpression("\n|\r\n|\r"));
+
+    for (int i = 0; i < emails_list.length(); i++) {
+        sep = ",";
+        if (i == emails_list.length() - 1) {
+            sep = ""; // No separator after the last email address
+        }
+        formatted_emails += emails_list[i] + sep;
+    }
+
+    for (int i = 0; i < phones_list.length(); i++) {
+        sep = ",";
+        if (i == phones_list.length() - 1) {
+            sep = ""; // No separator after the last phone number
+        }
+        formatted_phones += phones_list[i] + sep;
+    }
 
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("UPDATE "  + this->table + ""
@@ -151,9 +290,9 @@ void Client::update(
         " WHERE id = :id;");
     query.bindValue(":position", position);
     query.bindValue(":name", name);
-    query.bindValue(":emails", email);
+    query.bindValue(":emails", formatted_emails);
     query.bindValue(":address", address);
-    query.bindValue(":phones", phone);
+    query.bindValue(":phones", formatted_phones);
     query.bindValue(":active", active);
     query.bindValue(":edited_at", edited_at);
     query.bindValue(":id", id);
@@ -200,60 +339,34 @@ void Client::updateForm()
 
         this->ui.active->setChecked(client["active"] == "1");
     }
-}
-
-void Client::slotUpdate()
-{
-    QString sep = ",";
-    QString active;
-    QString emails = "";
-    QString phones = "";
-    QStringList emails_list = this->ui.email->toPlainText().split(QRegularExpression("\n|\r\n|\r"));
-    QStringList phones_list = this->ui.phone->toPlainText().split(QRegularExpression("\n|\r\n|\r"));
-
-    qDebug() << this->ui.email->toPlainText();
-    qDebug() << this->ui.phone->toPlainText();
-    qDebug() << phones_list.length();
-
-    if (this->ui.active->isChecked()) {
-        active = "1";
-    }
     else {
-        active = "0";
+        // Client not found means we are asking to insert a new one
+        
+        // Reset the form fields
+        this->ui.id->setText("0");
+        this->ui.position->setText(QString::number(this->getLastPosition() + 1));
+        this->ui.name->setText("");
+        this->ui.email->setText("");
+        this->ui.address->setText("");
+        this->ui.phone->setText("");
+        this->ui.active->setChecked(true);
     }
-
-    for (int i = 0; i < emails_list.length(); i++) {
-        sep = ",";
-        if (i == emails_list.length() - 1) {
-            sep = ""; // No separator after the last email address
-        }
-        emails += emails_list[i] + sep;
-    }
-
-    for (int i = 0; i < phones_list.length(); i++) {
-        sep = ",";
-        if (i == phones_list.length() - 1) {
-            sep = ""; // No separator after the last phone number
-        }
-        phones += phones_list[i] + sep;
-    }
-
-    qDebug() << phones;
-
-    this->update(
-        this->ui.id->text(),
-        this->ui.position->text().trimmed(),
-        this->ui.name->text().trimmed(),
-        emails,
-        this->ui.address->text().trimmed(),
-        phones,
-        active
-    );
-
-    this->close();
 }
 
-void Client::slotCloseDialog()
+int Client::getLastPosition()
 {
-    this->close();
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT MAX(position) as position FROM " + this->table);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+    else if (query.next()) {
+        return query.value("position").toInt();
+    }
+
+    return 0;
 }

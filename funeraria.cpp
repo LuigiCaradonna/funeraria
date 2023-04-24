@@ -180,7 +180,7 @@ void Funeraria::slotClientDetails()
 {
     // Row index of the clicked button
     int row = this->ui.tableView->currentRow();
-    // Set the name property of the Client object, to the name present in the clicked row
+    // Set the name property of the Client object to the name present in the clicked row
     this->client->setName(this->ui.tableView->item(row, 1)->text());
     this->client->setModal(true);
     this->client->exec();
@@ -191,10 +191,15 @@ void Funeraria::slotClientDetails()
 
 void Funeraria::slotNewClient()
 {
-    // Block the segnals while building the table
-    const QSignalBlocker blocker(this->ui.tableView);
-
     this->current_table = "client";
+
+    // Set the name property of the Client object to an empty string
+    this->client->setName("");
+    this->client->setModal(true);
+    this->client->exec();
+
+    // Reload the table when the popup is closed, the user could have made some changes
+    this->slotShowClients();
 }
 
 void Funeraria::slotShowItems(const QString& type)
@@ -269,7 +274,9 @@ void Funeraria::slotDelete() {
 
         }
         else if (this->current_table == "client") {
-
+            this->client->remove(this->client->getId(this->ui.tableView->item(row, 1)->text()));
+            this->slotShowClients();
+            return;
         }
 
         this->slotShowItems(this->current_table);

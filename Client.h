@@ -77,28 +77,24 @@ public:
     void setName(const QString& name);
 
     /*
-     * Updates the client's data
+     * Deletes a client from the database
+     *
+     * @param   const int& id - Client's id
      *
      * @return  void
      */
-    void update(
-        const QString& id,
-        const QString& position,
-        const QString& name,
-        const QString& email,
-        const QString& address,
-        const QString& phone,
-        const QString& active
-    );
+    void remove(const int& id);
 
 protected slots:
 
+    /********** PROTECTED SLOTS **********/
+
     /*
-     * Updates the client's data, responds to the dialog window
+     * Saves the client's data, responds to the dialog window's save button
      *
      * @return  void
      */
-    void slotUpdate();
+    void slotSave();
 
     /*
      * Closes the dialog window
@@ -114,10 +110,63 @@ private:
     QWidget* parent;
     QString name;
 
+    /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Creates a new client entry
+     * 
+     * @param const QString& position   -   Client's ordering position
+     * @param const QString& name       -   Client's name
+     * @param const QString& emails     -   Client's email(s)
+     * @param const QString& address    -   Client's address
+     * @param const QString& phones     -   Client's phone number(s)
+     * @param const QString& active     -   Client's active status (0/1)
+     *
+     * @return  void
+     */
+    void create(
+        const QString& position,
+        const QString& name,
+        const QString& email,
+        const QString& address,
+        const QString& phone,
+        const QString& active
+    );
+
+    /*
+     * Updates the client's data
+     *
+     * @param const QString& id         -   Client's id
+     * @param const QString& position   -   Client's ordering position
+     * @param const QString& name       -   Client's name
+     * @param const QString& emails     -   Client's email(s)
+     * @param const QString& address    -   Client's address
+     * @param const QString& phones     -   Client's phone number(s)
+     * @param const QString& active     -   Client's active status (0/1)
+     *
+     * @return  void
+     */
+    void update(
+        const QString& id,
+        const QString& position,
+        const QString& name,
+        const QString& email,
+        const QString& address,
+        const QString& phone,
+        const QString& active
+    );
+
     /*
      * Updates the content of the QDialog according to the current client selected
      *
      * @return  void
      */
     void updateForm();
+
+    /*
+     * Gets the last position in use
+     *
+     * @return  int - The last position in use
+     */
+    int getLastPosition();
 };
