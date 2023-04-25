@@ -7,7 +7,7 @@
 #include "DatabaseManager.h"
 #include "Client.h"
 #include "Tomb.h"
-#include "Flame.h"
+#include "Accessory.h"
 
 class Funeraria : public QMainWindow
 {
@@ -45,6 +45,11 @@ protected slots:
      */
     void slotClientOrders(QListWidgetItem* index);
 
+    /*
+     * Shows a dialog window containing the selected client's details
+     *
+     * @return void
+     */
     void slotClientDetails();
 
     /*
@@ -106,9 +111,10 @@ private:
     
     Client* client;
     Tomb* tomb;
-    // Vase* vase;
-    // Lamp* lamp;
-    Flame* flame;
+    Accessory* vase;
+    Accessory* lamp;
+    Accessory* flame;
+    Accessory* material;
 
     QSignalMapper* showItemsMapper;
     QSignalMapper* newItemMapper;

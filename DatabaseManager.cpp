@@ -43,15 +43,18 @@ void DatabaseManager::openDatabase()
 
 void DatabaseManager::solveDatabaseConnectionFailure()
 {
-    QMessageBox::StandardButton reply;
-
-    reply = QMessageBox::critical(this->parent, "Funeraria",
-        "Non e' stato possibile accedere al database.\n"
+    QMessageBox message;
+    QPushButton* newBtn = message.addButton("Nuovo", QMessageBox::ActionRole);
+    QPushButton* openBtn = message.addButton("Apri", QMessageBox::ActionRole);
+    QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Warning);
+    message.setText("Non e' stato possibile accedere al database.\n"
         "Vuoi crearne uno nuovo?\n"
-        "In alternativa puoi aprire un file differente.",
-        QMessageBox::Yes | QMessageBox::No | QMessageBox::Open);
+        "In alternativa puoi aprire un file differente.");
+    message.exec();
 
-    if (reply == QMessageBox::Yes) {
+    if (message.clickedButton() == (QAbstractButton*)newBtn) {
         // Create a new database
         // If the database creation fails
         if (!this->createDatabase()) {
@@ -59,7 +62,7 @@ void DatabaseManager::solveDatabaseConnectionFailure()
             this->solveDatabaseConnectionFailure();
         }
     }
-    else if (reply == QMessageBox::Open) {
+    else if (message.clickedButton() == (QAbstractButton*)openBtn) {
         this->path = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3");
 
         if (!this->path.isEmpty()) {
@@ -162,8 +165,9 @@ bool DatabaseManager::executeQueryFile(const QString& file_name) {
                     this->db.rollback();
 
                     QMessageBox message;
+                    message.setWindowTitle("Funeraria");
                     message.setIcon(QMessageBox::Critical);
-                    message.setText("Errore: " + query.lastError().text());
+                    message.setText(query.lastError().text());
                     message.exec();
 
                     return false;

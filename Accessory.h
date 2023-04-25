@@ -7,7 +7,7 @@
 #include <QDate>
 #include "ui_NewAccessory.h"
 
-class Flame : public QDialog
+class Accessory : public QDialog
 {
     Q_OBJECT
 
@@ -15,42 +15,42 @@ public:
     /********** CONSTRUCTOR **********/
 
     /*
-     * Constructs the Flame object.
+     * Constructs the accessory object.
      *
      * @param	QSqlDatabase*	db	- Pointer to the database connection
      */
-    Flame(QSqlDatabase* db, QWidget* parent = nullptr);
+    Accessory(QSqlDatabase* db, const QString& table, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
     /*
-     * Destructs the Flame object.
+     * Destructs the accessory object.
      */
-    ~Flame();
+    ~Accessory();
 
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Gets all the flames
-     * 
-     * @return  QList<QStringList> - A list containing the flames' id and name
+     * Gets all the accessories
+     *
+     * @return  QList<QStringList> - A list containing the accessories' id and name
      */
     QList<QStringList> get();
 
     /*
-     * Updates a flame into the database
-     * 
-     * @param const QString& id     - Id of the flame to update
-     * @param const QString& name   - Name of the flame
+     * Updates a accessory into the database
+     *
+     * @param const QString& id     - Id of the accessory to update
+     * @param const QString& name   - Name of the accessory
      *
      * @return  void
      */
     void update(const QString& id, const QString& name);
 
     /*
-     * Removes a flame from the database
+     * Removes a accessory from the database
      *
-     * @param const QString& id - Id of the flame to remove
+     * @param const QString& id - Id of the accessory to remove
      *
      * @return  void
      */
@@ -59,11 +59,11 @@ public:
 protected slots:
 
     /*
-     * Gets the data from the dialog window and stores a new flame into the database
+     * Gets the data from the dialog window and stores a new accessory into the database
      *
      * @return  void
      */
-    void slotAddFlame();
+    void slotAddAccessory();
 
     /*
      * Closes the dialog window
@@ -74,7 +74,7 @@ protected slots:
 
 private:
     Ui::Dialog ui;
-    const QString table = "flames";
+    const QString table;
     QSqlDatabase* db;
     QWidget* parent;
 };

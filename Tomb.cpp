@@ -24,8 +24,9 @@ QList<QStringList> Tomb::get(int client_id)
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Errore: " + query.lastError().text());
+        message.setText(query.lastError().text());
         message.exec();
     }
 
@@ -59,8 +60,9 @@ bool Tomb::update(QString id, QString value)
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Errore: " + query.lastError().text());
+        message.setText(query.lastError().text());
         message.exec();
 
         return false;

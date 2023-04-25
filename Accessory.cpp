@@ -1,40 +1,41 @@
-#include "Flame.h"
+#include "Accessory.h"
 
-Flame::Flame(QSqlDatabase* db, QWidget* parent)
-	: db(db), parent(parent)
+Accessory::Accessory(QSqlDatabase* db, const QString& table, QWidget* parent)
+    : db(db), table(table), parent(parent)
 {
     this->ui.setupUi(this);
 
-    this->connect(this->ui.okButton, &QPushButton::clicked, this, &Flame::slotAddFlame);
-    this->connect(this->ui.cancelButton, &QPushButton::clicked, this, &Flame::slotCloseDialog);
+    this->connect(this->ui.okButton, &QPushButton::clicked, this, &Accessory::slotAddAccessory);
+    this->connect(this->ui.cancelButton, &QPushButton::clicked, this, &Accessory::slotCloseDialog);
 }
 
-Flame::~Flame()
+Accessory::~Accessory()
 {
 }
 
-QList<QStringList> Flame::get()
+QList<QStringList> Accessory::get()
 {
-    QList<QStringList> flames;
+    QList<QStringList> accessories;
     QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("SELECT id, name FROM " + this->table);
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
     }
 
     while (query.next()) {
-        QStringList names{ query.value("id").toString(), query.value("name").toString()};
-        flames.append(names);
+        QStringList names{ query.value("id").toString(), query.value("name").toString() };
+        accessories.append(names);
     }
 
-    return flames;
+    return accessories;
 }
 
-void Flame::update(const QString& id, const QString& name)
+void Accessory::update(const QString& id, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
@@ -46,13 +47,14 @@ void Flame::update(const QString& id, const QString& name)
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
     }
 }
 
-void Flame::remove(const QString& id)
+void Accessory::remove(const QString& id)
 {
     QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE id = :id; ");
@@ -60,13 +62,14 @@ void Flame::remove(const QString& id)
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
     }
 }
 
-void Flame::slotAddFlame() 
+void Accessory::slotAddAccessory()
 {
     if (this->ui.accessoryName->text().trimmed() == "") {
         QMessageBox message;
@@ -97,14 +100,14 @@ void Flame::slotAddFlame()
     }
 
     // Insert successful
-    
+
     // Reset the input field
     this->ui.accessoryName->setText("");
     // Close the dialog
     this->close();
 }
 
-void Flame::slotCloseDialog()
+void Accessory::slotCloseDialog()
 {
     this->close();
 }

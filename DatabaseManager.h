@@ -34,18 +34,39 @@ public:
      */
     ~DatabaseManager();
 
-    /********** PUBLIC FUNCTIONS **********/
-
-
 private:
     QWidget* parent;
 
     /********** PRIVATE FUNCTIONS **********/
 
+    /*
+     * Opens a database connection
+     * 
+     * @return void
+     */
     void openDatabase();
+
+    /*
+     * Gives options to solve eventual problems with the database opening
+     *
+     * @return void
+     */
     void solveDatabaseConnectionFailure();
+
+    /*
+     * Creates a new database
+     *
+     * @return boolena true if the operation succeeds, false otherwise
+     */
     bool createDatabase();
 
+    /*
+     * Opens and executes the queries contained into the provided sql file
+     * 
+     * @param const QString& file_name - Path to the file to open
+     *
+     * @return boolena true if the operation succeeds, false otherwise
+     */
     bool executeQueryFile(const QString& file_name);
 };
 

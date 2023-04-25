@@ -26,6 +26,7 @@ int Client::getId(const QString& name)
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
@@ -45,6 +46,7 @@ QStringList Client::getNames()
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
@@ -66,6 +68,7 @@ QList<QMap<QString, QString>> Client::get()
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
@@ -99,6 +102,7 @@ QMap<QString, QString> Client::getDetails(const QString& name)
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
@@ -134,6 +138,7 @@ void Client::remove(const int& id)
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
@@ -148,6 +153,7 @@ void Client::slotSave()
     QRegularExpressionMatch match = re.match(this->ui.position->text().trimmed());
     if (!match.hasMatch() || this->ui.position->text().trimmed().toInt() < 1) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
         message.setText("La posizione deve essere un numero intero maggiore di zero.");
         message.exec();
@@ -256,6 +262,7 @@ bool Client::create(
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
@@ -322,6 +329,7 @@ bool Client::update(
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
@@ -394,6 +402,7 @@ int Client::getLastPosition()
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
@@ -407,12 +416,14 @@ int Client::getLastPosition()
 
 bool Client::rearrangePositions(const int& id, const QString& name, const int& new_position)
 {
+    // Last position currently in use
     int last_position = this->getLastPosition();
 
     // If the new position was greater than last_position+1 it would leave a hole between two positions
     if (new_position > last_position + 1) {
         QMessageBox message;
-        message.setIcon(QMessageBox::Critical);
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
         message.setText("La posizione per questo cliente non può essere superiore a " + QString::number(last_position + 1));
         message.exec();
 
@@ -477,6 +488,7 @@ bool Client::shiftPositionsUp(const int& from, const int& last_position)
 
         if (!query.exec()) {
             QMessageBox message;
+            message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
             message.setText(query.lastError().text());
             message.exec();
@@ -498,6 +510,7 @@ bool Client::shiftPositionsDown(const int& from, const int& last_position)
 
         if (!query.exec()) {
             QMessageBox message;
+            message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
             message.setText(query.lastError().text());
             message.exec();
@@ -517,6 +530,7 @@ bool Client::setTempPosition(const int& client_id)
 
     if (!query.exec()) {
         QMessageBox message;
+        message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();

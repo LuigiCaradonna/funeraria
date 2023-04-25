@@ -23,9 +23,10 @@ Funeraria::Funeraria(QWidget *parent)
 
     this->client = new Client(&this->db->db, this);
     this->tomb = new Tomb(&this->db->db, this);
-    // this->vase = new Vase(&this->db->db, this);
-    // this->lamp = new Lamp(&this->db->db, this);
-    this->flame = new Flame(&this->db->db, this);
+    this->vase = new Accessory(&this->db->db, "vases", this);
+    this->lamp = new Accessory(&this->db->db, "lamps", this);
+    this->flame = new Accessory(&this->db->db, "flames", this);
+    this->material = new Accessory(&this->db->db, "materials", this);
 
     // List of clients' names
     QStringList cli = this->client->getNames();
@@ -75,9 +76,10 @@ Funeraria::~Funeraria()
     delete this->db;
     delete this->client;
     delete this->tomb;
-    // delete this->vase;
-    // delete this->lamp;
+    delete this->vase;
+    delete this->lamp;
     delete this->flame;
+    delete this->material;
     delete this->showItemsMapper;
     delete this->newItemMapper;
 }
@@ -212,16 +214,16 @@ void Funeraria::slotShowItems(const QString& type)
     QList<QStringList> accessories;
 
     if (type == "vase") {
-        // accessories = this->vase->get();
+        accessories = this->vase->get();
     }
     else if (type == "lamp") {
-        // accessories = this->lamps->get();
+        accessories = this->lamp->get();
     }
     else if (type == "flame") {
         accessories = this->flame->get();
     }
     else if (type == "material") {
-        // accessories = this->material->get();
+        accessories = this->material->get();
     }
     else {
         // The type requested is not valid
@@ -249,29 +251,31 @@ void Funeraria::slotShowItems(const QString& type)
 void Funeraria::slotDelete() {
     int row = this->ui.tableView->currentRow();
 
-    QMessageBox::StandardButton reply;
+    QMessageBox message;
+    QPushButton* proceedBtn = message.addButton("Elimina", QMessageBox::ActionRole);
+    QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Warning);
+    message.setText("Vuoi eliminare questo elemento?");
+    message.exec();
 
-    reply = QMessageBox::critical(this, "Funeraria",
-        "Vuoi eliminare questo elemento?",
-        QMessageBox::Yes | QMessageBox::No);
-
-    if (reply == QMessageBox::Yes) {
-        // Delete the accessory
+    if (message.clickedButton() == proceedBtn) {
+        // Delete the item
 
         if (this->current_table == "tomb") {
 
         }
         else if (this->current_table == "vase") {
-
+            this->vase->remove(this->ui.tableView->item(row, 0)->text());
         }
         else if (this->current_table == "lamp") {
-
+            this->lamp->remove(this->ui.tableView->item(row, 0)->text());
         }
         else if (this->current_table == "flame") {
             this->flame->remove(this->ui.tableView->item(row, 0)->text());
         }
         else if (this->current_table == "material") {
-
+            this->material->remove(this->ui.tableView->item(row, 0)->text());
         }
         else if (this->current_table == "client") {
             this->client->remove(this->client->getId(this->ui.tableView->item(row, 1)->text()));
@@ -288,14 +292,20 @@ void Funeraria::slotNewItem(const QString& type)
     this->current_table = type;
 
     if (type == "vase") {
-
+        this->vase->setModal(true);
+        this->vase->exec();
     }
     else if (type == "lamp") {
-
+        this->lamp->setModal(true);
+        this->lamp->exec();
     }
     else if (type == "flame") {
         this->flame->setModal(true);
         this->flame->exec();
+    }
+    else if (type == "material") {
+        this->material->setModal(true);
+        this->material->exec();
     }
     else {
         // The type requested is not valid
@@ -308,17 +318,20 @@ void Funeraria::slotNewItem(const QString& type)
 void Funeraria::slotUpdateEntry()
 {
     int row = this->ui.tableView->currentRow();
-    if (this->current_table == "client") {
-
-    }
-    else if (this->current_table == "tomb") {
+    if (this->current_table == "tomb") {
         
     }
     else if (this->current_table == "vase") {
-        
+        this->vase->update(
+            this->ui.tableView->item(row, 0)->text(), // id
+            this->ui.tableView->item(row, 1)->text() // name
+        );
     }
     else if (this->current_table == "lamp") {
-        
+        this->lamp->update(
+            this->ui.tableView->item(row, 0)->text(), // id
+            this->ui.tableView->item(row, 1)->text() // name
+        );
     }
     else if (this->current_table == "flame") {
         this->flame->update(
@@ -327,7 +340,10 @@ void Funeraria::slotUpdateEntry()
         );
     }
     else if (this->current_table == "material") {
-        
+        this->material->update(
+            this->ui.tableView->item(row, 0)->text(), // id
+            this->ui.tableView->item(row, 1)->text() // name
+        );
     }
 }
 

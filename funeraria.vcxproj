@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Accessory.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Tomb.cpp" />
     <QtRcc Include="funeraria.qrc" />
@@ -96,16 +97,15 @@
     <QtMoc Include="Funeraria.h" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
-    <ClCompile Include="Flame.cpp" />
     <ClCompile Include="Funeraria.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="NewAccessory.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Client.h" />
+    <QtMoc Include="Accessory.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DatabaseManager.h" />
-    <QtMoc Include="Flame.h" />
     <ClInclude Include="Tomb.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

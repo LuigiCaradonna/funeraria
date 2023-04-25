@@ -46,13 +46,13 @@
     <ClCompile Include="DatabaseManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Flame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tomb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Accessory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,10 +68,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Flame.h">
+    <QtMoc Include="Client.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Client.h">
+    <QtMoc Include="Accessory.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
