@@ -22,9 +22,9 @@ public:
     /*
      * Constructs the Client object.
      *
-     * @param	const QSqlDatabase&	db	- Reference to the database connection
+     * @param	QSqlDatabase*	db	- Pointer to the database connection
      */
-    Client(const QSqlDatabase& db, QWidget* parent = nullptr);
+    Client(QSqlDatabase* db, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -106,7 +106,7 @@ protected slots:
 private:
 	Ui::ClientClass ui;
     const QString table = "clients";
-    const QSqlDatabase& db;
+    QSqlDatabase* db;
     QWidget* parent;
     QString name;
 
@@ -115,45 +115,45 @@ private:
     /*
      * Creates a new client entry
      * 
-     * @param const QString& position   -   Client's ordering position
+     * @param const int& position       -   Client's ordering position
      * @param const QString& name       -   Client's name
      * @param const QString& emails     -   Client's email(s)
      * @param const QString& address    -   Client's address
      * @param const QString& phones     -   Client's phone number(s)
-     * @param const QString& active     -   Client's active status (0/1)
+     * @param const int& active         -   Client's active status (0/1)
      *
-     * @return  void
+     * @return  boolean true if the creation succeeds, false otherwise
      */
-    void create(
-        const QString& position,
+    bool create(
+        const int& position,
         const QString& name,
         const QString& email,
         const QString& address,
         const QString& phone,
-        const QString& active
+        const int& active
     );
 
     /*
      * Updates the client's data
      *
-     * @param const QString& id         -   Client's id
-     * @param const QString& position   -   Client's ordering position
+     * @param const int& id             -   Client's id
+     * @param const int& position       -   Client's ordering position
      * @param const QString& name       -   Client's name
      * @param const QString& emails     -   Client's email(s)
      * @param const QString& address    -   Client's address
      * @param const QString& phones     -   Client's phone number(s)
-     * @param const QString& active     -   Client's active status (0/1)
+     * @param const int& active         -   Client's active status (0/1)
      *
-     * @return  void
+     * @return  boolean true if the update succeeds, false otherwise
      */
-    void update(
-        const QString& id,
-        const QString& position,
+    bool update(
+        const int& id,
+        const int& position,
         const QString& name,
         const QString& email,
         const QString& address,
         const QString& phone,
-        const QString& active
+        const int& active
     );
 
     /*
@@ -169,4 +169,44 @@ private:
      * @return  int - The last position in use
      */
     int getLastPosition();
+
+    /*
+     * Given a client's id, name and wanted position, rearranges all the clients' position if necessary
+     *
+     * @param const int&     id         -   Client's id
+     * @param const QString& name       -   Client's name
+     * @param const int&     position   -   Client's ordering position
+     * 
+     * @return  boolean true if the operation succeeds, false otherwise
+     */
+    bool rearrangePositions(const int& id, const QString& name, const int& new_position);
+
+    /*
+     * Shifts up the positions by one 
+     *
+     * @param const int&    from            -   Position where to start
+     * @param const int&    last_position   -   Last position in use
+     *
+     * @return  boolean true if the operation succeeds, false otherwise
+     */
+    bool shiftPositionsUp(const int& from, const int& last_position);
+
+    /*
+     * Shifts down the positions by one
+     *
+     * @param const int&    from            -   Position where to start
+     * @param const int&    last_position   -   Last position in use
+     *
+     * @return  boolean true if the operation succeeds, false otherwise
+     */
+    bool shiftPositionsDown(const int& from, const int& last_position);
+
+    /*
+     * Sets the given client's position to a not valid value to allow positions rearranging
+     *
+     * @param const int&    client_id    -   Client's id
+     *
+     * @return  boolean true if the operation succeeds, false otherwise
+     */
+    bool setTempPosition(const int& client_id);
 };

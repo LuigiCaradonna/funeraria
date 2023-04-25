@@ -17,9 +17,9 @@ public:
     /*
      * Constructs the Flame object.
      *
-     * @param	const QSqlDatabase&	db	- Reference to the database connection
+     * @param	QSqlDatabase*	db	- Pointer to the database connection
      */
-    Flame(const QSqlDatabase& db, QWidget* parent = nullptr);
+    Flame(QSqlDatabase* db, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -75,7 +75,7 @@ protected slots:
 private:
     Ui::Dialog ui;
     const QString table = "flames";
-    const QSqlDatabase& db;
+    QSqlDatabase* db;
     QWidget* parent;
 };
 

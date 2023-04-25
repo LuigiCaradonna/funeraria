@@ -2,7 +2,7 @@
 
 /********** CONSTRUCTOR **********/
 
-Client::Client(const QSqlDatabase& db, QWidget* parent)
+Client::Client(QSqlDatabase* db, QWidget* parent)
     : db(db), parent(parent)
 {
 	this->ui.setupUi(this);
@@ -20,7 +20,7 @@ Client::~Client()
 
 int Client::getId(const QString& name)
 {
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("SELECT id FROM " + this->table + " WHERE name = :name;");
     query.bindValue(":name", name);
 
@@ -40,7 +40,7 @@ int Client::getId(const QString& name)
 QStringList Client::getNames()
 {
     QStringList names{};
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("SELECT name FROM " + this->table + " ORDER BY position ASC;");
 
     if (!query.exec()) {
@@ -61,7 +61,7 @@ QList<QMap<QString, QString>> Client::get()
 {
     QList<QMap<QString, QString>> list{};
 
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("SELECT * FROM " + this->table);
 
     if (!query.exec()) {
@@ -93,7 +93,7 @@ QList<QMap<QString, QString>> Client::get()
 QMap<QString, QString> Client::getDetails(const QString& name)
 {
     QMap<QString, QString> map;
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("SELECT * FROM " + this->table + " WHERE name = :name;");
     query.bindValue(":name", name);
 
@@ -102,11 +102,8 @@ QMap<QString, QString> Client::getDetails(const QString& name)
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
-
-        return map;
     }
-
-    if (query.next()) {
+    else if (query.next()) {
         map["id"] = query.value("id").toString();
         map["position"] = query.value("position").toString();
         map["name"] = query.value("name").toString();
@@ -116,9 +113,6 @@ QMap<QString, QString> Client::getDetails(const QString& name)
         map["active"] = query.value("active").toString();
         map["created_at"] = query.value("created_at").toString();
         map["edited_at"] = query.value("edited_at").toString();
-    }
-    else {
-        return map;
     }
 
     return map;
@@ -134,7 +128,7 @@ void Client::remove(const int& id)
 {
     // TODO:: check for positions rearranging
 
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE id = :id;");
     query.bindValue(":id", id);
 
@@ -150,38 +144,55 @@ void Client::remove(const int& id)
 
 void Client::slotSave()
 {
-    // An id set to 0 means that we are creating a new client
-    if (this->ui.id->text() == "0") {
-        this->create(
-            this->ui.position->text().trimmed(),
-            this->ui.name->text().trimmed(),
-            this->ui.email->toPlainText(),
-            this->ui.address->text().trimmed(),
-            this->ui.phone->toPlainText(),
-            "1"
-        );
+    QRegularExpression re("\\d+");
+    QRegularExpressionMatch match = re.match(this->ui.position->text().trimmed());
+    if (!match.hasMatch() || this->ui.position->text().trimmed().toInt() < 1) {
+        QMessageBox message;
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La posizione deve essere un numero intero maggiore di zero.");
+        message.exec();
+
+        return;
+    }
+
+    int active;
+    if (this->ui.active->isChecked()) {
+        active = 1;
     }
     else {
-        QString active;
-        if (this->ui.active->isChecked()) {
-            active = "1";
-        }
-        else {
-            active = "0";
-        }
-
-        this->update(
-            this->ui.id->text(),
-            this->ui.position->text().trimmed(),
-            this->ui.name->text().trimmed(),
-            this->ui.email->toPlainText(),
-            this->ui.address->text().trimmed(),
-            this->ui.phone->toPlainText(),
-            active
-        );
+        active = 0;
     }
 
-    this->close();
+    // An id set to 0 means that we are creating a new client
+    if (this->ui.id->text().toInt() == 0) {
+        if (this->create(
+                this->ui.position->text().trimmed().toInt(),
+                this->ui.name->text().trimmed(),
+                this->ui.email->toPlainText().trimmed(),
+                this->ui.address->text().trimmed(),
+                this->ui.phone->toPlainText().trimmed(),
+                active
+            )
+        ) {
+            // Close the dialog on success
+            this->close();
+        }
+    }
+    else {
+        if (this->update(
+                this->ui.id->text().toInt(),
+                this->ui.position->text().trimmed().toInt(),
+                this->ui.name->text().trimmed(),
+                this->ui.email->toPlainText().trimmed(),
+                this->ui.address->text().trimmed(),
+                this->ui.phone->toPlainText().trimmed(),
+                active
+            )
+        ) {
+            // Close the dialog on success
+            this->close();
+        }
+    }
 }
 
 void Client::slotCloseDialog()
@@ -191,16 +202,20 @@ void Client::slotCloseDialog()
 
 /********** PRIVATE FUNCTIONS **********/
 
-void Client::create(
-    const QString& position, 
+bool Client::create(
+    const int& position, 
     const QString& name, 
     const QString& emails, 
     const QString& address, 
     const QString& phones, 
-    const QString& active
+    const int& active
 )
 {
-    // TODO:: check for positions rearranging
+    // Make space for this new client if necessary
+    if (!this->rearrangePositions(0, name, position)) {
+        // Stop the insertion if the rearranging fails
+        return false;
+    }
 
     QString created_at = QDate::currentDate().toString("yyyy-MM-dd");
 
@@ -226,7 +241,7 @@ void Client::create(
         formatted_phones += phones_list[i] + sep;
     }
 
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("INSERT INTO " + this->table + ""
         " (position, name, email, address, phone, active, created_at, edited_at)"
         " VALUES (:position, :name, :emails, :address, :phones, :active, :created_at, :edited_at)");
@@ -244,20 +259,28 @@ void Client::create(
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
+
+        return false;
     }
+
+    return true;
 }
 
-void Client::update(
-    const QString& id, 
-    const QString& position, 
+bool Client::update(
+    const int& id, 
+    const int& position, 
     const QString& name, 
     const QString& emails,
     const QString& address, 
     const QString& phones,
-    const QString& active
+    const int& active
 )
 {
-    // TODO:: check for positions rearranging
+    // Make space for this new client if necessary
+    if (!this->rearrangePositions(id, name, position)) {
+        // Stop the insertion if the rearranging fails
+        return false;
+    }
 
     QString edited_at = QDate::currentDate().toString("yyyy-MM-dd");
 
@@ -283,7 +306,7 @@ void Client::update(
         formatted_phones += phones_list[i] + sep;
     }
 
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("UPDATE "  + this->table + ""
         " SET position = :position, name = :name, email = :emails, address = :address," 
         " phone = :phones, active = :active, edited_at = :edited_at "
@@ -302,11 +325,16 @@ void Client::update(
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
+
+        return false;
     }
+
+    return true;
 }
 
 void Client::updateForm()
 {
+    // Get the selected client's data
     QMap<QString, QString> client = this->getDetails(this->name);
 
     if (!client.isEmpty()) {
@@ -330,14 +358,17 @@ void Client::updateForm()
             phones += phones_list[j] + nl;
         }
 
+        // Fill the form fields with the selected client's data
         this->ui.id->setText(client["id"]);
         this->ui.position->setText(client["position"]);
         this->ui.name->setText(client["name"]);
         this->ui.email->setText(emails);
         this->ui.address->setText(client["address"]);
         this->ui.phone->setText(phones);
-
         this->ui.active->setChecked(client["active"] == "1");
+
+        // Set the save button text
+        this->ui.btnSave->setText("Aggiorna");
     }
     else {
         // Client not found means we are asking to insert a new one
@@ -350,12 +381,15 @@ void Client::updateForm()
         this->ui.address->setText("");
         this->ui.phone->setText("");
         this->ui.active->setChecked(true);
+
+        // Set the save button text
+        this->ui.btnSave->setText("Crea");
     }
 }
 
 int Client::getLastPosition()
 {
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("SELECT MAX(position) as position FROM " + this->table);
 
     if (!query.exec()) {
@@ -369,4 +403,126 @@ int Client::getLastPosition()
     }
 
     return 0;
+}
+
+bool Client::rearrangePositions(const int& id, const QString& name, const int& new_position)
+{
+    int last_position = this->getLastPosition();
+
+    // If the new position was greater than last_position+1 it would leave a hole between two positions
+    if (new_position > last_position + 1) {
+        QMessageBox message;
+        message.setIcon(QMessageBox::Critical);
+        message.setText("La posizione per questo cliente non può essere superiore a " + QString::number(last_position + 1));
+        message.exec();
+
+        return false;
+    }
+
+    // If the new position is not after the curent last
+    if (new_position <= last_position) {
+        // If the client's id is not 0, this is an existing client, we also need to check for position change
+        if (id != 0) {
+            QMap<QString, QString> old_client_data = this->getDetails(name);
+
+            // If the client's position has changed
+            if (new_position != old_client_data["position"].toInt()) {
+                // Begin a transaction
+                this->db->transaction();
+
+                // Set the client's position to a temporary not valid number
+                if (!this->setTempPosition(id)) {
+                    this->db->rollback();
+                    return false;
+                }
+
+                // Shift up the positions following the removed one 
+                if (!this->shiftPositionsUp(old_client_data["position"].toInt(), last_position)) {
+                    this->db->rollback();
+                    return false;
+                }
+
+                // The last position has decreased by one
+                last_position -= 1;
+
+                // Shift down the clients' positions to make room at the correct place
+                if (!this->shiftPositionsDown(new_position, last_position)) {
+                    this->db->rollback();
+                    return false;
+                }
+
+                // The las_position is changed again, but we will not use it anymore, no need to update it.
+
+                this->db->commit();
+            }
+        }
+        else {
+            // The creation of a new client always requires position shifting if it doesn't go after the last
+            if (!this->shiftPositionsDown(new_position, last_position)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool Client::shiftPositionsUp(const int& from, const int& last_position)
+{
+    // Update one by one all the clients with a position higher than "from"
+    for (int i = from + 1; i <= last_position; i++) {
+        QSqlQuery query = QSqlQuery(*this->db);
+        query.prepare("UPDATE " + this->table + " SET position = position-1 WHERE position = :position");
+        query.bindValue(":position", i);
+
+        if (!query.exec()) {
+            QMessageBox message;
+            message.setIcon(QMessageBox::Critical);
+            message.setText(query.lastError().text());
+            message.exec();
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Client::shiftPositionsDown(const int& from, const int& last_position)
+{
+    // Update one by one all the clients with a position higher than "from" starting from the last
+    for (int i = last_position; i >= from; i--) {
+        QSqlQuery query = QSqlQuery(*this->db);
+        query.prepare("UPDATE " + this->table + " SET position = position+1 WHERE position = :position");
+        query.bindValue(":position", i);
+
+        if (!query.exec()) {
+            QMessageBox message;
+            message.setIcon(QMessageBox::Critical);
+            message.setText(query.lastError().text());
+            message.exec();
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Client::setTempPosition(const int& client_id)
+{
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare("UPDATE " + this->table + " SET position = -1 WHERE id = :id");
+    query.bindValue(":id", client_id);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+
+        return false;
+    }
+
+    return true;
 }

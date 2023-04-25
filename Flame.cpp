@@ -1,6 +1,6 @@
 #include "Flame.h"
 
-Flame::Flame(const QSqlDatabase& db, QWidget* parent)
+Flame::Flame(QSqlDatabase* db, QWidget* parent)
 	: db(db), parent(parent)
 {
     this->ui.setupUi(this);
@@ -16,7 +16,7 @@ Flame::~Flame()
 QList<QStringList> Flame::get()
 {
     QList<QStringList> flames;
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("SELECT id, name FROM " + this->table);
 
     if (!query.exec()) {
@@ -38,7 +38,7 @@ void Flame::update(const QString& id, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("UPDATE " + this->table + " SET name = :name, edited_at = :edited_at WHERE id = :id; ");
     query.bindValue(":name", name.trimmed());
     query.bindValue(":edited_at", date);
@@ -54,7 +54,7 @@ void Flame::update(const QString& id, const QString& name)
 
 void Flame::remove(const QString& id)
 {
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE id = :id; ");
     query.bindValue(":id", id);
 
@@ -80,7 +80,7 @@ void Flame::slotAddFlame()
 
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("INSERT INTO " + this->table + " (name, created_at, edited_at) VALUES (:name, :created_at, :edited_at);");
     query.bindValue(":name", this->ui.accessoryName->text().trimmed());
     query.bindValue(":created_at", date);

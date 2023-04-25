@@ -1,6 +1,6 @@
 #include "Tomb.h"
 
-Tomb::Tomb(const QSqlDatabase& db, QWidget* parent)
+Tomb::Tomb(QSqlDatabase* db, QWidget* parent)
     : db(db), parent(parent)
 {
 }
@@ -12,7 +12,7 @@ Tomb::~Tomb()
 QList<QStringList> Tomb::get(int client_id)
 {
     QList<QStringList> tombs;
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare(
         "SELECT "
         "progressive, name, price, paid, notes, accessories_mounted,"
@@ -52,7 +52,7 @@ QList<QStringList> Tomb::get(int client_id)
 
 bool Tomb::update(QString id, QString value)
 {
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("UPDATE " + this->table + " SET name = :name WHERE id = :id; ");
     query.bindValue(":name", value);
     query.bindValue(":id", id);

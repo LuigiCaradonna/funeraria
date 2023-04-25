@@ -21,11 +21,11 @@ Funeraria::Funeraria(QWidget *parent)
         this->config->updateConfigFile("db_path", this->db->path);
     }
 
-    this->client = new Client(this->db->db, this);
-    this->tomb = new Tomb(this->db->db, this);
-    // this->vase = new Vase(this->db->db, this);
-    // this->lamp = new Lamp(this->db->db, this);
-    this->flame = new Flame(this->db->db, this);
+    this->client = new Client(&this->db->db, this);
+    this->tomb = new Tomb(&this->db->db, this);
+    // this->vase = new Vase(&this->db->db, this);
+    // this->lamp = new Lamp(&this->db->db, this);
+    this->flame = new Flame(&this->db->db, this);
 
     // List of clients' names
     QStringList cli = this->client->getNames();
