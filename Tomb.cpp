@@ -9,18 +9,29 @@ Tomb::~Tomb()
 {
 }
 
-QList<QStringList> Tomb::get(int client_id)
+QList<QStringList> Tomb::get(int client_id, int year)
 {
     QList<QStringList> tombs;
     QSqlQuery query = QSqlQuery(*this->db);
-    query.prepare(
-        "SELECT "
+
+    QString query_string = "SELECT "
         "progressive, name, price, paid, notes, accessories_mounted,"
         "ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at "
-        "FROM " + this->table + " WHERE client_id = :client_id ORDER BY ordered_at DESC"
-    );
+        "FROM " + this->table + " WHERE client_id = :client_id ";
+
+    if (year != 0) {
+        query_string += " AND ordered_at LIKE :year ";
+    }
+
+    query_string += " ORDER BY ordered_at DESC";
+
+    query.prepare(query_string);
 
     query.bindValue(":client_id", client_id);
+
+    if (year != 0) {
+        query.bindValue(":year", QString(QString::number(year)+"%"));
+    }
 
     if (!query.exec()) {
         QMessageBox message;
@@ -31,7 +42,7 @@ QList<QStringList> Tomb::get(int client_id)
     }
 
     while (query.next()) {
-        QStringList tomb{ 
+        QStringList tomb{
             query.value("progressive").toString(),
             query.value("name").toString(),
             query.value("price").toString(),
@@ -42,7 +53,7 @@ QList<QStringList> Tomb::get(int client_id)
             query.value("proofed_at").toString(),
             query.value("confirmed_at").toString(),
             query.value("engraved_at").toString(),
-            query.value("delivered_at").toString() 
+            query.value("delivered_at").toString()
         };
 
         tombs.append(tomb);

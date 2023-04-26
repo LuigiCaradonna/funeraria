@@ -1,15 +1,16 @@
 #pragma once
-#include <QMainWindow>
-#include <QMap>
-#include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
-#include <QSqlTableModel>
+#include <QDialog>
 #include <QMessageBox>
+#include <QDate>
+#include "ui_Tomb.h"
 
-class Tomb
+class Tomb : public QDialog
 {
+    Q_OBJECT
+
 public:
     /********** CONSTRUCTOR **********/
 
@@ -31,16 +32,19 @@ public:
 
     /*
      * Gets all the Tombs
+     * 
+     * @param int client_id - Client's id
+     * @param int year      - Year of the tombs to get, 0 for all the years
      *
      * @return  QList<QStringList> - A list containing the Tombs' id and name
      */
-    QList<QStringList> get(int client_id);
+    QList<QStringList> get(int client_id, int year);
 
     bool update(QString id, QString value);
 
 private:
+    Ui::TombClass ui;
     const QString table = "tombs";
     QSqlDatabase* db;
     QWidget* parent;
 };
-

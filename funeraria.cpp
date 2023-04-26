@@ -30,12 +30,19 @@ Funeraria::Funeraria(QWidget *parent)
 
     // List of clients' names
     QStringList cli = this->client->getNames();
+    // Add the clients to the combo box
+    this->ui.cbClient->addItems(cli);
 
-    // Add the clients' list to the left column
-    this->ui.clientListView->addItems(cli);
+    // Populate the years combo box
+    this->ui.cbYear->addItem("Tutti");
+    QString this_year = QDate::currentDate().toString("yyyy");
+    for (int i = this_year.toInt(); i >= 2020; i--) {
+        this->ui.cbYear->addItem(QString::number(i));
+    }
 
     // Set the event listeners
-    this->connect(this->ui.clientListView, &QListWidget::itemClicked, this, &Funeraria::slotClientOrders);
+    this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
+    // this->connect(this->ui.clientListView, &QListWidget::itemClicked, this, &Funeraria::slotClientOrders);
     // Signal emitted on table cell edit
     this->connect(this->ui.tableView, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
     // Signal emitted from the menu item actionCList
@@ -86,19 +93,24 @@ Funeraria::~Funeraria()
 
 /********** SLOTS **********/
 
-void Funeraria::slotClientOrders(QListWidgetItem* index)
+void Funeraria::slotClientOrders()
 {
     // Block the segnals while building the table
     const QSignalBlocker blocker(this->ui.tableView);
 
     this->current_table = "tomb";
 
-    // Highlight the clicked item
-    this->ui.clientListView->setCurrentItem(index);
+    int client_id = this->client->getId(this->ui.cbClient->currentText());
+    int year;
+
+    if (this->ui.cbYear->currentText() == "Tutti") {
+        year = 0;
+    }
+    else {
+        year = this->ui.cbYear->currentText().toInt();
+    }
     
-    int client_id = this->client->getId(index->data(Qt::DisplayRole).toString());
-    
-    QList<QStringList> tombs = this->tomb->get(client_id);
+    QList<QStringList> tombs = this->tomb->get(client_id, year);
 
     QStringList headers{ "Numero", "Nome", "Prezzo", "Pagata", "Note", "Accessori",
         "Ordine", "Provino", "Conferma", "Incisione", "Consegna"};

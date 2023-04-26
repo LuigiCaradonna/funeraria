@@ -100,13 +100,14 @@
     <ClCompile Include="Funeraria.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="NewAccessory.ui" />
+    <QtUic Include="Tomb.ui" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="Tomb.h" />
     <QtMoc Include="Client.h" />
     <QtMoc Include="Accessory.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DatabaseManager.h" />
-    <ClInclude Include="Tomb.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

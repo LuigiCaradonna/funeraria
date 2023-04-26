@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QSignalMapper>
+#include <QDate>
 #include "ui_funeraria.h"
 #include "Config.h"
 #include "DatabaseManager.h"
@@ -39,11 +40,9 @@ protected slots:
     /*
      * Shows the selected client's orders
      *
-     * @param   QListWidgetItem* index
-     *
      * @return void
      */
-    void slotClientOrders(QListWidgetItem* index);
+    void slotClientOrders();
 
     /*
      * Shows a dialog window containing the selected client's details

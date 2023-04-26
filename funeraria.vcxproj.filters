@@ -46,13 +46,13 @@
     <ClCompile Include="DatabaseManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tomb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Accessory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tomb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,9 +63,6 @@
     <ClInclude Include="DatabaseManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tomb.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Client.h">
@@ -74,12 +71,18 @@
     <QtMoc Include="Accessory.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Tomb.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="NewAccessory.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="Client.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Tomb.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
