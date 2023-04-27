@@ -17,10 +17,10 @@ QList<QStringList> Tomb::get(int client_id, int year)
     QString query_string = "SELECT "
         "progressive, name, price, paid, notes, accessories_mounted,"
         "ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at "
-        "FROM " + this->table + " WHERE client_id = :client_id ";
+        "FROM " + this->table + " WHERE client_id = :client_id";
 
     if (year != 0) {
-        query_string += " AND ordered_at LIKE :year ";
+        query_string += " AND ordered_at LIKE '" + QString::number(year) + "%'";
     }
 
     query_string += " ORDER BY ordered_at DESC";
@@ -28,10 +28,6 @@ QList<QStringList> Tomb::get(int client_id, int year)
     query.prepare(query_string);
 
     query.bindValue(":client_id", client_id);
-
-    if (year != 0) {
-        query.bindValue(":year", QString(QString::number(year)+"%"));
-    }
 
     if (!query.exec()) {
         QMessageBox message;

@@ -31,6 +31,7 @@ Funeraria::Funeraria(QWidget *parent)
     // List of clients' names
     QStringList cli = this->client->getNames();
     // Add the clients to the combo box
+    this->ui.cbClient->addItem(this->client_placeholder);
     this->ui.cbClient->addItems(cli);
 
     // Populate the years combo box
@@ -42,7 +43,7 @@ Funeraria::Funeraria(QWidget *parent)
 
     // Set the event listeners
     this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
-    // this->connect(this->ui.clientListView, &QListWidget::itemClicked, this, &Funeraria::slotClientOrders);
+    this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotClientOrders);
     // Signal emitted on table cell edit
     this->connect(this->ui.tableView, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
     // Signal emitted from the menu item actionCList
@@ -95,6 +96,10 @@ Funeraria::~Funeraria()
 
 void Funeraria::slotClientOrders()
 {
+    if (this->ui.cbClient->currentText() == this->client_placeholder) {
+        return;
+    }
+
     // Block the segnals while building the table
     const QSignalBlocker blocker(this->ui.tableView);
 

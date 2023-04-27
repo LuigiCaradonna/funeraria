@@ -107,6 +107,9 @@ private:
 
     // Contains the name of the current table shown
     QString current_table = "";
+
+    // Placeholder for the clients' combo box
+    QString client_placeholder = "Cliente";
     
     Client* client;
     Tomb* tomb;
