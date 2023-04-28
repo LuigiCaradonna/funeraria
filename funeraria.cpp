@@ -43,7 +43,7 @@ Funeraria::Funeraria(QWidget *parent)
 
     // Set the event listeners
     this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
-    this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotClientOrders);
+    this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
     // Signal emitted on table cell edit
     this->connect(this->ui.tableView, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
     // Signal emitted from the menu item actionCList
@@ -93,6 +93,14 @@ Funeraria::~Funeraria()
 }
 
 /********** SLOTS **********/
+void Funeraria::slotFilterClientOrders()
+{
+    if (this->ui.cbClient->currentText() == this->client_placeholder || this->current_table != "tomb") {
+        return;
+    }
+
+    this->slotClientOrders();
+}
 
 void Funeraria::slotClientOrders()
 {
@@ -107,6 +115,7 @@ void Funeraria::slotClientOrders()
 
     int client_id = this->client->getId(this->ui.cbClient->currentText());
     int year;
+    QString filter = this->ui.leDeceased->text().trimmed();
 
     if (this->ui.cbYear->currentText() == "Tutti") {
         year = 0;
@@ -115,18 +124,21 @@ void Funeraria::slotClientOrders()
         year = this->ui.cbYear->currentText().toInt();
     }
     
-    QList<QStringList> tombs = this->tomb->get(client_id, year);
+    QList<QStringList> tombs = this->tomb->get(client_id, year, filter);
 
     QStringList headers{ "Numero", "Nome", "Prezzo", "Pagata", "Note", "Accessori",
-        "Ordine", "Provino", "Conferma", "Incisione", "Consegna"};
+        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni"};
 
     this->ui.tableView->setRowCount(tombs.size());
-    this->ui.tableView->setColumnCount(11);
+    this->ui.tableView->setColumnCount(12);
     // this->ui.tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     // this->ui.tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableView->setHorizontalHeaderLabels(headers);
 
     for (int i = 0; i < tombs.size(); i++) {
+        QPushButton* pb_details = new QPushButton(this->ui.tableView);
+        pb_details->setText("Dettagli");
+
         // this->ui.tableView->setItem(i, 0, new QTableWidgetItem(tombs[i][0])); // id
         this->ui.tableView->setItem(i, 0, new QTableWidgetItem(tombs[i][0])); // Numero
         this->ui.tableView->setItem(i, 1, new QTableWidgetItem(tombs[i][1])); // Nome
@@ -139,7 +151,23 @@ void Funeraria::slotClientOrders()
         this->ui.tableView->setItem(i, 8, new QTableWidgetItem(tombs[i][8])); // Conferma
         this->ui.tableView->setItem(i, 9, new QTableWidgetItem(tombs[i][9])); // Incisione
         this->ui.tableView->setItem(i, 10, new QTableWidgetItem(tombs[i][10])); // Consegna
+        this->ui.tableView->setCellWidget(i, 11, pb_details); // Details button
+
+        this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
     }
+}
+
+void Funeraria::slotTombDetails()
+{
+    // Row index of the clicked button
+    int row = this->ui.tableView->currentRow();
+    // Set the progressive property of the Tomb object to the progressive number present in the clicked row
+    this->tomb->setProgressive(this->ui.tableView->item(row, 0)->text().toInt());
+    this->tomb->setModal(true);
+    this->tomb->exec();
+
+    // Reload the table when the popup is closed, the user could have made some changes
+    this->slotClientOrders();
 }
 
 void Funeraria::slotShowClients()

@@ -175,7 +175,7 @@ private:
      *
      * @param const int&     id         -   Client's id
      * @param const QString& name       -   Client's name
-     * @param const int&     position   -   Client's ordering position
+     * @param const int&     position   -   Client's ordering position to set. -1 when a client must be deleted
      * 
      * @return  boolean true if the operation succeeds, false otherwise
      */
@@ -208,5 +208,5 @@ private:
      *
      * @return  boolean true if the operation succeeds, false otherwise
      */
-    bool setTempPosition(const int& client_id);
+    bool setInvalidPosition(const int& client_id);
 };

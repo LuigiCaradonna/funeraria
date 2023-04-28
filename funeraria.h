@@ -38,6 +38,13 @@ protected slots:
     /********** SLOTS **********/
 
     /*
+     * Updates the selected client's orders list shown applying the filter (deceased name string)
+     *
+     * @return void
+     */
+    void slotFilterClientOrders();
+
+    /*
      * Shows the selected client's orders
      *
      * @return void
@@ -45,11 +52,11 @@ protected slots:
     void slotClientOrders();
 
     /*
-     * Shows a dialog window containing the selected client's details
+     * Shows a dialog window containing the selected tomb's details
      *
      * @return void
      */
-    void slotClientDetails();
+    void slotTombDetails();
 
     /*
      * Shows the clients' list
@@ -57,6 +64,13 @@ protected slots:
      * @return void
      */
     void slotShowClients();
+
+    /*
+     * Shows a dialog window containing the selected client's details
+     *
+     * @return void
+     */
+    void slotClientDetails();
 
     /*
      * Shows the dialog to insert a new client

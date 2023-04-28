@@ -130,7 +130,15 @@ void Client::setName(const QString& name)
 
 void Client::remove(const int& id)
 {
-    // TODO:: check for positions rearranging
+    // Begin a transaction
+    this->db->transaction();
+
+    // rearrangePosition() will intercept the intent to remove a client (-1) 
+    // and will take care of set an invalid position to this client to prevent collisions
+    if (!this->rearrangePositions(id, name, -1)) {
+        this->db->rollback();
+        return;
+    }
 
     QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE id = :id;");
@@ -142,7 +150,12 @@ void Client::remove(const int& id)
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
+
+        this->db->rollback();
+        return;
     }
+
+    this->db->commit();
 }
 
 /********** PROTECTED SLOTS **********/
@@ -217,8 +230,12 @@ bool Client::create(
     const int& active
 )
 {
+    this->db->transaction();
+
     // Make space for this new client if necessary
     if (!this->rearrangePositions(0, name, position)) {
+        this->db->rollback();
+
         // Stop the insertion if the rearranging fails
         return false;
     }
@@ -267,9 +284,11 @@ bool Client::create(
         message.setText(query.lastError().text());
         message.exec();
 
+        this->db->rollback();
         return false;
     }
 
+    this->db->commit();
     return true;
 }
 
@@ -283,8 +302,12 @@ bool Client::update(
     const int& active
 )
 {
+    this->db->transaction();
+
     // Make space for this new client if necessary
     if (!this->rearrangePositions(id, name, position)) {
+        this->db->rollback();
+
         // Stop the insertion if the rearranging fails
         return false;
     }
@@ -334,9 +357,11 @@ bool Client::update(
         message.setText(query.lastError().text());
         message.exec();
 
+        this->db->rollback();
         return false;
     }
 
+    this->db->commit();
     return true;
 }
 
@@ -419,6 +444,22 @@ bool Client::rearrangePositions(const int& id, const QString& name, const int& n
     // Last position currently in use
     int last_position = this->getLastPosition();
 
+    // A client is being removed
+    if (new_position == -1) {
+        QMap<QString, QString> old_client_data = this->getDetails(name);
+
+        // Set the client's position to a not valid number
+        if (!this->setInvalidPosition(id)) {
+            return false;
+        }
+
+        if (!this->shiftPositionsUp(old_client_data["position"].toInt(), last_position)) {
+            return false;
+        }
+
+        return true;
+    }
+
     // If the new position was greater than last_position+1 it would leave a hole between two positions
     if (new_position > last_position + 1) {
         QMessageBox message;
@@ -438,18 +479,14 @@ bool Client::rearrangePositions(const int& id, const QString& name, const int& n
 
             // If the client's position has changed
             if (new_position != old_client_data["position"].toInt()) {
-                // Begin a transaction
-                this->db->transaction();
 
                 // Set the client's position to a temporary not valid number
-                if (!this->setTempPosition(id)) {
-                    this->db->rollback();
+                if (!this->setInvalidPosition(id)) {
                     return false;
                 }
 
                 // Shift up the positions following the removed one 
                 if (!this->shiftPositionsUp(old_client_data["position"].toInt(), last_position)) {
-                    this->db->rollback();
                     return false;
                 }
 
@@ -458,13 +495,10 @@ bool Client::rearrangePositions(const int& id, const QString& name, const int& n
 
                 // Shift down the clients' positions to make room at the correct place
                 if (!this->shiftPositionsDown(new_position, last_position)) {
-                    this->db->rollback();
                     return false;
                 }
 
                 // The las_position is changed again, but we will not use it anymore, no need to update it.
-
-                this->db->commit();
             }
         }
         else {
@@ -522,7 +556,7 @@ bool Client::shiftPositionsDown(const int& from, const int& last_position)
     return true;
 }
 
-bool Client::setTempPosition(const int& client_id)
+bool Client::setInvalidPosition(const int& client_id)
 {
     QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("UPDATE " + this->table + " SET position = -1 WHERE id = :id");
