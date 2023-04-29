@@ -17,7 +17,7 @@ QList<QStringList> Accessory::get()
 {
     QList<QStringList> accessories;
     QSqlQuery query = QSqlQuery(*this->db);
-    query.prepare("SELECT id, name FROM " + this->table);
+    query.prepare("SELECT code, name FROM " + this->table);
 
     if (!query.exec()) {
         QMessageBox message;
@@ -28,22 +28,23 @@ QList<QStringList> Accessory::get()
     }
 
     while (query.next()) {
-        QStringList names{ query.value("id").toString(), query.value("name").toString() };
-        accessories.append(names);
+        QStringList name{ query.value("code").toString(), query.value("name").toString() };
+        accessories.append(name);
     }
 
     return accessories;
 }
 
-void Accessory::update(const QString& id, const QString& name)
+void Accessory::update(const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
     QSqlQuery query = QSqlQuery(*this->db);
-    query.prepare("UPDATE " + this->table + " SET name = :name, edited_at = :edited_at WHERE id = :id; ");
+    query.prepare("UPDATE " + this->table + " SET code = :code, name = :name, edited_at = :edited_at WHERE code = :codew; ");
+    query.bindValue(":code", code.trimmed());
     query.bindValue(":name", name.trimmed());
     query.bindValue(":edited_at", date);
-    query.bindValue(":id", id);
+    query.bindValue(":codew", code.trimmed());
 
     if (!query.exec()) {
         QMessageBox message;
@@ -54,11 +55,11 @@ void Accessory::update(const QString& id, const QString& name)
     }
 }
 
-void Accessory::remove(const QString& id)
+void Accessory::remove(const QString& code)
 {
     QSqlQuery query = QSqlQuery(*this->db);
-    query.prepare("DELETE FROM " + this->table + " WHERE id = :id; ");
-    query.bindValue(":id", id);
+    query.prepare("DELETE FROM " + this->table + " WHERE code = :code; ");
+    query.bindValue(":code", code);
 
     if (!query.exec()) {
         QMessageBox message;
@@ -71,7 +72,17 @@ void Accessory::remove(const QString& id)
 
 void Accessory::slotAddAccessory()
 {
-    if (this->ui.accessoryName->text().trimmed() == "") {
+    if (this->ui.leCode->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il codice è obbligatorio");
+        message.exec();
+
+        return;
+    }
+
+    if (this->ui.leName->text().trimmed() == "") {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
@@ -84,8 +95,9 @@ void Accessory::slotAddAccessory()
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
     QSqlQuery query = QSqlQuery(*this->db);
-    query.prepare("INSERT INTO " + this->table + " (name, created_at, edited_at) VALUES (:name, :created_at, :edited_at);");
-    query.bindValue(":name", this->ui.accessoryName->text().trimmed());
+    query.prepare("INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES (:name, :created_at, :edited_at);");
+    query.bindValue(":code", this->ui.leCode->text().trimmed());
+    query.bindValue(":name", this->ui.leName->text().trimmed());
     query.bindValue(":created_at", date);
     query.bindValue(":edited_at", date);
 
@@ -101,8 +113,9 @@ void Accessory::slotAddAccessory()
 
     // Insert successful
 
-    // Reset the input field
-    this->ui.accessoryName->setText("");
+    // Reset the input fields
+    this->ui.leCode->setText("");
+    this->ui.leName->setText("");
     // Close the dialog
     this->close();
 }

@@ -7,6 +7,16 @@ Funeraria::Funeraria(QWidget *parent)
 {
     this->ui.setupUi(this);
 
+    // Set the font for the table
+    QFont font("Segoe", 12);
+    this->ui.tableView->setFont(font);
+
+    /*
+    QFontMetrics fm(font);
+    int pixelsWide = fm.horizontalAdvance("What's the advance width of this text?");
+    int pixelsHigh = fm.height();
+    */
+
     this->config = new Config();
     this->db = new DatabaseManager(this->config->db_path, this);
 
@@ -113,6 +123,9 @@ void Funeraria::slotClientOrders()
 
     this->current_table = "tomb";
 
+    // Reset the table's content
+    this->ui.tableView->clear();
+
     int client_id = this->client->getId(this->ui.cbClient->currentText());
     int year;
     QString filter = this->ui.leDeceased->text().trimmed();
@@ -176,6 +189,9 @@ void Funeraria::slotShowClients()
     const QSignalBlocker blocker(this->ui.tableView);
 
     this->current_table = "client";
+
+    // Reset the table's content
+    this->ui.tableView->clear();
 
     QList<QMap<QString, QString>> clients = this->client->get();
 
@@ -256,6 +272,9 @@ void Funeraria::slotShowItems(const QString& type)
 
     this->current_table = type;
 
+    // Reset the table's content
+    this->ui.tableView->clear();
+
     QList<QStringList> accessories;
 
     if (type == "vase") {
@@ -275,7 +294,7 @@ void Funeraria::slotShowItems(const QString& type)
         return;
     }
 
-    QStringList headers{ "id", "Nome", "Azioni"};
+    QStringList headers{ "Codice", "Nome", "Azioni"};
 
     this->ui.tableView->setRowCount(accessories.size());
     this->ui.tableView->setColumnCount(3);
@@ -286,7 +305,7 @@ void Funeraria::slotShowItems(const QString& type)
     for (int i = 0; i < accessories.size(); i++) {
         QPushButton* pb = new QPushButton(this->ui.tableView);
         pb->setText("Elimina");
-        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(accessories[i][0])); // id
+        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(accessories[i][0])); // code
         this->ui.tableView->setItem(i, 1, new QTableWidgetItem(accessories[i][1])); // name
         this->ui.tableView->setCellWidget(i, 2, pb); // Delete button
         this->connect(pb, &QPushButton::clicked, this, &Funeraria::slotDelete);

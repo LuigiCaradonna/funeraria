@@ -76,7 +76,7 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="NewAccessory.ui">
+    <QtUic Include="Accessory.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="Client.ui">

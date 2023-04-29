@@ -5,7 +5,7 @@
 #include <QDialog>
 #include <QMessageBox>
 #include <QDate>
-#include "ui_NewAccessory.h"
+#include "ui_Accessory.h"
 
 class Accessory : public QDialog
 {

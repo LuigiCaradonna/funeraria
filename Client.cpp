@@ -163,8 +163,8 @@ void Client::remove(const int& id)
 void Client::slotSave()
 {
     QRegularExpression re("\\d+");
-    QRegularExpressionMatch match = re.match(this->ui.position->text().trimmed());
-    if (!match.hasMatch() || this->ui.position->text().trimmed().toInt() < 1) {
+    QRegularExpressionMatch match = re.match(this->ui.lePosition->text().trimmed());
+    if (!match.hasMatch() || this->ui.lePosition->text().trimmed().toInt() < 1) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
@@ -175,7 +175,7 @@ void Client::slotSave()
     }
 
     int active;
-    if (this->ui.active->isChecked()) {
+    if (this->ui.cbActive->isChecked()) {
         active = 1;
     }
     else {
@@ -183,13 +183,13 @@ void Client::slotSave()
     }
 
     // An id set to 0 means that we are creating a new client
-    if (this->ui.id->text().toInt() == 0) {
+    if (this->ui.leId->text().toInt() == 0) {
         if (this->create(
-                this->ui.position->text().trimmed().toInt(),
-                this->ui.name->text().trimmed(),
-                this->ui.email->toPlainText().trimmed(),
-                this->ui.address->text().trimmed(),
-                this->ui.phone->toPlainText().trimmed(),
+                this->ui.lePosition->text().trimmed().toInt(),
+                this->ui.leName->text().trimmed(),
+                this->ui.teEmail->toPlainText().trimmed(),
+                this->ui.leAddress->text().trimmed(),
+                this->ui.tePhone->toPlainText().trimmed(),
                 active
             )
         ) {
@@ -199,12 +199,12 @@ void Client::slotSave()
     }
     else {
         if (this->update(
-                this->ui.id->text().toInt(),
-                this->ui.position->text().trimmed().toInt(),
-                this->ui.name->text().trimmed(),
-                this->ui.email->toPlainText().trimmed(),
-                this->ui.address->text().trimmed(),
-                this->ui.phone->toPlainText().trimmed(),
+                this->ui.leId->text().toInt(),
+                this->ui.lePosition->text().trimmed().toInt(),
+                this->ui.leName->text().trimmed(),
+                this->ui.teEmail->toPlainText().trimmed(),
+                this->ui.leAddress->text().trimmed(),
+                this->ui.tePhone->toPlainText().trimmed(),
                 active
             )
         ) {
@@ -392,13 +392,13 @@ void Client::updateForm()
         }
 
         // Fill the form fields with the selected client's data
-        this->ui.id->setText(client["id"]);
-        this->ui.position->setText(client["position"]);
-        this->ui.name->setText(client["name"]);
-        this->ui.email->setText(emails);
-        this->ui.address->setText(client["address"]);
-        this->ui.phone->setText(phones);
-        this->ui.active->setChecked(client["active"] == "1");
+        this->ui.leId->setText(client["id"]);
+        this->ui.lePosition->setText(client["position"]);
+        this->ui.leName->setText(client["name"]);
+        this->ui.teEmail->setText(emails);
+        this->ui.leAddress->setText(client["address"]);
+        this->ui.tePhone->setText(phones);
+        this->ui.cbActive->setChecked(client["active"] == "1");
 
         // Set the save button text
         this->ui.btnSave->setText("Aggiorna");
@@ -407,13 +407,13 @@ void Client::updateForm()
         // Client not found means we are asking to insert a new one
         
         // Reset the form fields
-        this->ui.id->setText("0");
-        this->ui.position->setText(QString::number(this->getLastPosition() + 1));
-        this->ui.name->setText("");
-        this->ui.email->setText("");
-        this->ui.address->setText("");
-        this->ui.phone->setText("");
-        this->ui.active->setChecked(true);
+        this->ui.leId->setText("0");
+        this->ui.lePosition->setText(QString::number(this->getLastPosition() + 1));
+        this->ui.leName->setText("");
+        this->ui.teEmail->setText("");
+        this->ui.leAddress->setText("");
+        this->ui.tePhone->setText("");
+        this->ui.cbActive->setChecked(true);
 
         // Set the save button text
         this->ui.btnSave->setText("Crea");

@@ -10,8 +10,20 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>410</height>
+    <height>440</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>440</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>440</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Cliente</string>
@@ -23,17 +35,17 @@
    <item row="0" column="0">
     <layout class="QFormLayout" name="formLayout">
      <item row="0" column="0">
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel" name="lblId">
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="font">
@@ -47,17 +59,17 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="lblPosition">
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="font">
@@ -74,17 +86,17 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="position">
+      <widget class="QLineEdit" name="lePosition">
        <property name="minimumSize">
         <size>
          <width>50</width>
-         <height>0</height>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>50</width>
-         <height>16777215</height>
+         <height>30</height>
         </size>
        </property>
        <property name="font">
@@ -95,17 +107,17 @@
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="lblName">
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="font">
@@ -119,7 +131,19 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="name">
+      <widget class="QLineEdit" name="leName">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <pointsize>12</pointsize>
@@ -128,7 +152,19 @@
       </widget>
      </item>
      <item row="3" column="0">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="lblEmail">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <pointsize>12</pointsize>
@@ -143,7 +179,19 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QTextEdit" name="email">
+      <widget class="QTextEdit" name="teEmail">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>100</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <pointsize>12</pointsize>
@@ -155,7 +203,19 @@
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="lblPhone">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <pointsize>12</pointsize>
@@ -170,7 +230,19 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QTextEdit" name="phone">
+      <widget class="QTextEdit" name="tePhone">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>100</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <pointsize>12</pointsize>
@@ -182,17 +254,17 @@
       </widget>
      </item>
      <item row="5" column="0">
-      <widget class="QLabel" name="label_5">
+      <widget class="QLabel" name="lblAddress">
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="font">
@@ -206,7 +278,19 @@
       </widget>
      </item>
      <item row="5" column="1">
-      <widget class="QLineEdit" name="address">
+      <widget class="QLineEdit" name="leAddress">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <pointsize>12</pointsize>
@@ -215,17 +299,17 @@
       </widget>
      </item>
      <item row="6" column="0">
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel" name="lblActive">
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="font">
@@ -239,17 +323,17 @@
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="QCheckBox" name="active">
+      <widget class="QCheckBox" name="cbActive">
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>27</height>
+         <height>30</height>
         </size>
        </property>
        <property name="text">
@@ -258,7 +342,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="id">
+      <widget class="QLineEdit" name="leId">
        <property name="enabled">
         <bool>false</bool>
        </property>

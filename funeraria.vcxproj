@@ -99,7 +99,7 @@
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="Funeraria.cpp" />
     <ClCompile Include="main.cpp" />
-    <QtUic Include="NewAccessory.ui" />
+    <QtUic Include="Accessory.ui" />
     <QtUic Include="Tomb.ui" />
   </ItemGroup>
   <ItemGroup>
