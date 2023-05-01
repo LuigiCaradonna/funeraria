@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <QDate>
 #include "ui_Tomb.h"
+#include "Client.h"
+#include "Accessory.h"
 
 class Tomb : public QDialog
 {
@@ -18,6 +20,7 @@ public:
      * Constructs the Tomb object.
      *
      * @param	QSqlDatabase*	db	- Pointer to the database connection
+     * @param	QWidget*        parent	- Parent widget
      */
     Tomb(QSqlDatabase* db, QWidget* parent = nullptr);
 
@@ -37,20 +40,18 @@ public:
      * @param int year                  - Year of the tombs to get, 0 for all the years
      * @param const QString& filter     - Deceased name to use to refine the result
      *
-     * @return  QList<QStringList> - A list containing the Tombs' id and name
+     * @return  QList<QMap<QString, QString>> - A list containing the Tombs' id and name
      */
-    QList<QStringList> get(int client_id, int year, const QString& filter);
+    QList<QMap<QString, QString>> getList(int client_id, int year, const QString& filter);
 
     /*
-     * Gets the given tomb's datails
+     * Gets the given tomb's datails joined to the related tables
      *
      * @param   int - Tomb's progressive number
      *
-     * @return  QMap<QString, QString> - A map containing the tomb's data
+     * @return  QMap<QString, QString> - A map containing the tomb's  datails joined to the related tables
      */
     QMap<QString, QString> getDetails(int progressive);
-
-    bool update(QString id, QString value);
 
     /*
      * Sets the tomb's progressive property and updates the content of the QDialog according
@@ -70,17 +71,56 @@ public:
      */
     void remove(const int& progressive);
 
+protected slots:
+
+    /********** PROTECTED SLOTS **********/
+
+    /*
+     * Changes the enabled state for the generally disabled fields
+     *
+     * @return  void
+     */
+    void slotSwitchEnableState();
+
+    /*
+     * Updates a tomb's data
+     *
+     * @param   int - Tomb's progressive number
+     *
+     * @return  boolean true on success, false otherwise
+     */
+    bool slotUpdate(int progressive);
+
+    /*
+     * Closes the dialog window
+     *
+     * @return  void
+     */
+    void slotCloseDialog();
+
 private:
     Ui::TombClass ui;
     const QString table = "tombs";
     QSqlDatabase* db;
     QWidget* parent;
     int progressive;
+    Client* client;
+    Accessory* vase;
+    Accessory* lamp;
+    Accessory* flame;
+    Accessory* material;
 
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Updates the content of the QDialog according to the current tomb selected
+     * Gets the last progressive number in use
+     *
+     * @return  int - The last progressive number in use
+     */
+    int getLastProgresive();
+
+    /*
+     * Updates the content of the dialog according to the current tomb selected
      *
      * @return  void
      */

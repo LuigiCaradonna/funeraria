@@ -269,8 +269,15 @@
     <addaction name="actionCNew"/>
     <addaction name="actionCList"/>
    </widget>
+   <widget class="QMenu" name="menuLapidi">
+    <property name="title">
+     <string>Lapidi</string>
+    </property>
+    <addaction name="actionTNew"/>
+   </widget>
    <addaction name="menuClienti"/>
    <addaction name="menuAccessories"/>
+   <addaction name="menuLapidi"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -359,6 +366,11 @@
    </property>
    <property name="toolTip">
     <string>Elenco clienti</string>
+   </property>
+  </action>
+  <action name="actionTNew">
+   <property name="text">
+    <string>Nuova</string>
    </property>
   </action>
  </widget>

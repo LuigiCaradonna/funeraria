@@ -8,7 +8,7 @@ Funeraria::Funeraria(QWidget *parent)
     this->ui.setupUi(this);
 
     // Set the font for the table
-    QFont font("Segoe", 12);
+    QFont font("Calibri", 12);
     this->ui.tableView->setFont(font);
 
     /*
@@ -39,10 +39,10 @@ Funeraria::Funeraria(QWidget *parent)
     this->material = new Accessory(&this->db->db, "materials", this);
 
     // List of clients' names
-    QStringList cli = this->client->getNames();
+    QStringList clients = this->client->getNames();
     // Add the clients to the combo box
     this->ui.cbClient->addItem(this->client_placeholder);
-    this->ui.cbClient->addItems(cli);
+    this->ui.cbClient->addItems(clients);
 
     // Populate the years combo box
     this->ui.cbYear->addItem("Tutti");
@@ -60,6 +60,8 @@ Funeraria::Funeraria(QWidget *parent)
     this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
     // Signal emitted from the menu item actionCNew
     this->connect(this->ui.actionCNew, SIGNAL(triggered()), this, SLOT(slotNewClient()));
+    // Signal emitted from the menu item actionTNew
+    this->connect(this->ui.actionTNew, SIGNAL(triggered()), this, SLOT(slotNewTomb()));
 
     // Map the signal coming from the menu items to call the same function (slotShowItems) with the proper parameter
     this->showItemsMapper = new QSignalMapper(this);
@@ -137,7 +139,7 @@ void Funeraria::slotClientOrders()
         year = this->ui.cbYear->currentText().toInt();
     }
     
-    QList<QStringList> tombs = this->tomb->get(client_id, year, filter);
+    QList<QMap<QString, QString>> tombs = this->tomb->getList(client_id, year, filter);
 
     QStringList headers{ "Numero", "Nome", "Prezzo", "Pagata", "Note", "Accessori",
         "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni"};
@@ -152,18 +154,17 @@ void Funeraria::slotClientOrders()
         QPushButton* pb_details = new QPushButton(this->ui.tableView);
         pb_details->setText("Dettagli");
 
-        // this->ui.tableView->setItem(i, 0, new QTableWidgetItem(tombs[i][0])); // id
-        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(tombs[i][0])); // Numero
-        this->ui.tableView->setItem(i, 1, new QTableWidgetItem(tombs[i][1])); // Nome
-        this->ui.tableView->setItem(i, 2, new QTableWidgetItem(tombs[i][2])); // Prezzo
-        this->ui.tableView->setItem(i, 3, new QTableWidgetItem(tombs[i][3])); // Pagata
-        this->ui.tableView->setItem(i, 4, new QTableWidgetItem(tombs[i][4])); // Note
-        this->ui.tableView->setItem(i, 5, new QTableWidgetItem(tombs[i][5])); // Accessori
-        this->ui.tableView->setItem(i, 6, new QTableWidgetItem(tombs[i][6])); // Ordine
-        this->ui.tableView->setItem(i, 7, new QTableWidgetItem(tombs[i][7])); // Provino
-        this->ui.tableView->setItem(i, 8, new QTableWidgetItem(tombs[i][8])); // Conferma
-        this->ui.tableView->setItem(i, 9, new QTableWidgetItem(tombs[i][9])); // Incisione
-        this->ui.tableView->setItem(i, 10, new QTableWidgetItem(tombs[i][10])); // Consegna
+        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(tombs[i]["progressive"]));
+        this->ui.tableView->setItem(i, 1, new QTableWidgetItem(tombs[i]["name"]));
+        this->ui.tableView->setItem(i, 2, new QTableWidgetItem(tombs[i]["price"]));
+        this->ui.tableView->setItem(i, 3, new QTableWidgetItem(tombs[i]["paid"]));
+        this->ui.tableView->setItem(i, 4, new QTableWidgetItem(tombs[i]["notes"]));
+        this->ui.tableView->setItem(i, 5, new QTableWidgetItem(tombs[i]["accessories_mounted"]));
+        this->ui.tableView->setItem(i, 6, new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["ordered_at"])));
+        this->ui.tableView->setItem(i, 7, new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["ordered_at"])));
+        this->ui.tableView->setItem(i, 8, new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["ordered_at"])));
+        this->ui.tableView->setItem(i, 9, new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["ordered_at"])));
+        this->ui.tableView->setItem(i, 10, new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["ordered_at"])));
         this->ui.tableView->setCellWidget(i, 11, pb_details); // Details button
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
@@ -176,6 +177,19 @@ void Funeraria::slotTombDetails()
     int row = this->ui.tableView->currentRow();
     // Set the progressive property of the Tomb object to the progressive number present in the clicked row
     this->tomb->setProgressive(this->ui.tableView->item(row, 0)->text().toInt());
+    this->tomb->setModal(true);
+    this->tomb->exec();
+
+    // Reload the table when the popup is closed, the user could have made some changes
+    this->slotClientOrders();
+}
+
+void Funeraria::slotNewTomb()
+{
+    this->current_table = "tomb";
+
+    // Set the name property of the Client object to an empty string
+    this->tomb->setProgressive(0);
     this->tomb->setModal(true);
     this->tomb->exec();
 
@@ -275,8 +289,9 @@ void Funeraria::slotShowItems(const QString& type)
     // Reset the table's content
     this->ui.tableView->clear();
 
-    QList<QStringList> accessories;
+    QList<QMap<QString, QString>> accessories;
 
+    // Get the the list of the required accessories
     if (type == "vase") {
         accessories = this->vase->get();
     }
@@ -305,8 +320,8 @@ void Funeraria::slotShowItems(const QString& type)
     for (int i = 0; i < accessories.size(); i++) {
         QPushButton* pb = new QPushButton(this->ui.tableView);
         pb->setText("Elimina");
-        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(accessories[i][0])); // code
-        this->ui.tableView->setItem(i, 1, new QTableWidgetItem(accessories[i][1])); // name
+        this->ui.tableView->setItem(i, 0, new QTableWidgetItem(accessories[i]["code"]));
+        this->ui.tableView->setItem(i, 1, new QTableWidgetItem(accessories[i]["name"]));
         this->ui.tableView->setCellWidget(i, 2, pb); // Delete button
         this->connect(pb, &QPushButton::clicked, this, &Funeraria::slotDelete);
     }
@@ -387,25 +402,25 @@ void Funeraria::slotUpdateEntry()
     }
     else if (this->current_table == "vase") {
         this->vase->update(
-            this->ui.tableView->item(row, 0)->text(), // id
+            this->ui.tableView->item(row, 0)->text(), // code
             this->ui.tableView->item(row, 1)->text() // name
         );
     }
     else if (this->current_table == "lamp") {
         this->lamp->update(
-            this->ui.tableView->item(row, 0)->text(), // id
+            this->ui.tableView->item(row, 0)->text(), // code
             this->ui.tableView->item(row, 1)->text() // name
         );
     }
     else if (this->current_table == "flame") {
         this->flame->update(
-            this->ui.tableView->item(row, 0)->text(), // id
+            this->ui.tableView->item(row, 0)->text(), // code
             this->ui.tableView->item(row, 1)->text() // name
         );
     }
     else if (this->current_table == "material") {
         this->material->update(
-            this->ui.tableView->item(row, 0)->text(), // id
+            this->ui.tableView->item(row, 0)->text(), // code
             this->ui.tableView->item(row, 1)->text() // name
         );
     }

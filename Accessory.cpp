@@ -13,9 +13,9 @@ Accessory::~Accessory()
 {
 }
 
-QList<QStringList> Accessory::get()
+QList<QMap<QString, QString>> Accessory::get()
 {
-    QList<QStringList> accessories;
+    QList<QMap<QString, QString>> accessories;
     QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("SELECT code, name FROM " + this->table);
 
@@ -28,8 +28,33 @@ QList<QStringList> Accessory::get()
     }
 
     while (query.next()) {
-        QStringList name{ query.value("code").toString(), query.value("name").toString() };
-        accessories.append(name);
+        QMap<QString, QString> row;
+
+        row["code"] = query.value("code").toString();
+        row["name"] = query.value("name").toString();
+
+        accessories.append(row);
+    }
+
+    return accessories;
+}
+
+QStringList Accessory::getNames()
+{
+    QStringList accessories;
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare("SELECT name FROM " + this->table);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        accessories.append(query.value("name").toString());
     }
 
     return accessories;
@@ -95,7 +120,7 @@ void Accessory::slotAddAccessory()
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
     QSqlQuery query = QSqlQuery(*this->db);
-    query.prepare("INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES (:name, :created_at, :edited_at);");
+    query.prepare("INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES (:code, :name, :created_at, :edited_at);");
     query.bindValue(":code", this->ui.leCode->text().trimmed());
     query.bindValue(":name", this->ui.leName->text().trimmed());
     query.bindValue(":created_at", date);

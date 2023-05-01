@@ -9,6 +9,7 @@
 #include "Client.h"
 #include "Tomb.h"
 #include "Accessory.h"
+#include "Helpers.h"
 
 class Funeraria : public QMainWindow
 {
@@ -57,6 +58,13 @@ protected slots:
      * @return void
      */
     void slotTombDetails();
+
+    /*
+     * Shows the dialog to insert a new tomb
+     *
+     * @return void
+     */
+    void slotNewTomb();
 
     /*
      * Shows the clients' list

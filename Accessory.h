@@ -18,6 +18,8 @@ public:
      * Constructs the accessory object.
      *
      * @param	QSqlDatabase*	db	- Pointer to the database connection
+     * @param	const QString&	table	- Database table to use
+     * @param	QWidget*        parent	- Parent widget
      */
     Accessory(QSqlDatabase* db, const QString& table, QWidget* parent = nullptr);
 
@@ -31,11 +33,18 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Gets all the accessories
+     * Gets all the accessories' data
      *
-     * @return  QList<QStringList> - A list containing the accessories' id and name
+     * @return  QList<QMap<QString, QString>> - A list containing the accessories' data
      */
-    QList<QStringList> get();
+    QList<QMap<QString, QString>> get();
+
+    /*
+     * Gets all the accessories' names
+     *
+     * @return  QStringList - A list containing the accessories' names
+     */
+    QStringList getNames();
 
     /*
      * Updates a accessory into the database
