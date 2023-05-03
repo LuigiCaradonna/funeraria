@@ -156,6 +156,12 @@ void Client::remove(const int& id)
     }
 
     this->db->commit();
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("Eliminazione eseguita.");
+    message.exec();
 }
 
 /********** PROTECTED SLOTS **********/
@@ -289,6 +295,13 @@ bool Client::create(
     }
 
     this->db->commit();
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("Cliente creato.");
+    message.exec();
+
     return true;
 }
 
@@ -362,6 +375,13 @@ bool Client::update(
     }
 
     this->db->commit();
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("Cliente modificato.");
+    message.exec();
+
     return true;
 }
 

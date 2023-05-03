@@ -15,7 +15,7 @@ Tomb::Tomb(QSqlDatabase* db, QWidget* parent)
     this->flame = new Accessory(this->db, "flames", this);
 
     this->connect(this->ui.chbAllowEdit, &QCheckBox::stateChanged, this, &Tomb::slotSwitchEnableState);
-    this->connect(this->ui.btnSave, &QPushButton::clicked, this, &Tomb::slotCloseDialog);
+    this->connect(this->ui.btnSave, &QPushButton::clicked, this, &Tomb::slotUpdate);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &Tomb::slotCloseDialog);
 }
 
@@ -34,11 +34,11 @@ Tomb::~Tomb()
 
 QList<QMap<QString, QString>> Tomb::getList(int client_id, int year, const QString& filter)
 {
+    QString order = "DESC";
     QList<QMap<QString, QString>> list;
     QSqlQuery query = QSqlQuery(*this->db);
 
-    QString query_string = "SELECT * "
-        "FROM " + this->table + " WHERE client_id = :client_id";
+    QString query_string = "SELECT * FROM " + this->table + " WHERE client_id = :client_id";
 
     if (filter.trimmed() != "") {
         query_string += " AND name LIKE '" + filter + "%'";
@@ -46,9 +46,13 @@ QList<QMap<QString, QString>> Tomb::getList(int client_id, int year, const QStri
 
     if (year != 0) {
         query_string += " AND ordered_at LIKE '" + QString::number(year) + "%'";
+        // When looking for a spedific year, show from the older to the newer, there if a few to scroll
+        // while looking for all the orders of the specific client, shows the list from the newer which is
+        // generally where we want to look in that situation
+        order = "ASC";
     }
 
-    query_string += " ORDER BY ordered_at ASC";
+    query_string += " ORDER BY ordered_at " + order;
 
     query.prepare(query_string);
 
@@ -157,7 +161,201 @@ void Tomb::setProgressive(int progressive)
     this->updateForm();
 }
 
-void Tomb::remove(const int& progressive)
+/********** PROTECTED SLOTS **********/
+
+void Tomb::slotSwitchEnableState()
+{
+    this->ui.leProgressive->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.cbClient->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.cbMaterial->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.cbVase->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.cbLamp->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.cbFlame->setEnabled(this->ui.chbAllowEdit->isChecked());
+}
+
+void Tomb::slotUpdate()
+{
+    if (this->update(
+        this->progressive,
+        this->ui.leProgressive->text().toInt(),
+        this->client->getId(this->ui.cbClient->currentText()),
+        this->ui.leName->text(),
+        this->ui.leAdditionalNames->text(),
+        this->ui.lePrice->text().toDouble(),
+        this->ui.chbPaid->isChecked(),
+        this->material->getCode(this->ui.cbMaterial->currentText()),
+        this->vase->getCode(this->ui.cbVase->currentText()),
+        this->lamp->getCode(this->ui.cbLamp->currentText()),
+        this->flame->getCode(this->ui.cbFlame->currentText()),
+        this->ui.ptNote->toPlainText(),
+        this->ui.chbAccessoriesMounted->isChecked(),
+        this->ui.leOrderedAt->text(),
+        this->ui.leProofedAt->text(),
+        this->ui.leConfirmedAt->text(),
+        this->ui.leEngravedAt->text(),
+        this->ui.leDeliveredAt->text()
+        )
+    ) {
+        this->close();
+    }
+}
+
+void Tomb::slotCloseDialog()
+{
+    this->close();
+}
+
+/********** PRIVATE FUNCTIONS **********/
+
+bool Tomb::update(
+    const int& old_progressive,
+    const int& progressive,
+    const int& client_id,
+    const QString& name,
+    const QString& additional_names,
+    const double& price,
+    const bool& paid,
+    const QString& material_code,
+    const QString& vase_code,
+    const QString& lamp_code,
+    const QString& flame_code,
+    const QString& notes,
+    const bool& accessories_mounted,
+    const QString& ordered_at,
+    const QString& proofed_at,
+    const QString& confirmed_at,
+    const QString& engraved_at,
+    const QString& delivered_at
+)
+{
+    int current_last = this->getLastProgresive();
+
+    /************************ Validate the form fields *************************/
+    if (progressive > current_last + 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il numero della lapide non può essere maggiore di " + QString::number(current_last + 1));
+        message.exec();
+        return false;
+    }
+
+    if (client_id == 0) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il cliente selezionato non è valido");
+        message.exec();
+        return false;
+    }
+
+    if (name.trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il nome del defunto è obbligatorio");
+        message.exec();
+        return false;
+    }
+
+    if (ordered_at.trimmed() == "" || !Helpers::isValidItaDate(ordered_at.trimmed())) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La data dell'ordine non è valida");
+        message.exec();
+        return false;
+    }
+
+    if (proofed_at.trimmed() != "" && !Helpers::isValidItaDate(proofed_at.trimmed())) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La data del provino non è valida");
+        message.exec();
+        return false;
+    }
+
+    if (confirmed_at.trimmed() != "" && !Helpers::isValidItaDate(confirmed_at.trimmed())) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La data della conferma non è valida");
+        message.exec();
+        return false;
+    }
+
+    if (engraved_at.trimmed() != "" && !Helpers::isValidItaDate(engraved_at.trimmed())) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La data dell'incisione non è valida");
+        message.exec();
+        return false;
+    }
+
+    if (delivered_at.trimmed() != "" && !Helpers::isValidItaDate(delivered_at.trimmed())) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La data della consegna non è valida");
+        message.exec();
+        return false;
+    }
+    /*************************************************/
+
+    // Validation passed
+
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare(
+        "UPDATE " + this->table + " "
+        "SET progressive = :progressive, client_id = :client_id, name = :name, additional_names = :additional_names, "
+        "price = :price, paid = :paid, material_code = :material_code, vase_code = :vase_code, lamp_code = :lamp_code, "
+        "flame_code = :flame_code, notes = :notes, accessories_mounted = :accessories_mounted, ordered_at = :ordered_at, "
+        "proofed_at = :proofed_at, confirmed_at = :confirmed_at, engraved_at = :engraved_at, delivered_at = :delivered_at, "
+        "edited_at = :edited_at "
+        "WHERE progressive = :old_progressive;"
+    );
+    query.bindValue(":progressive", progressive);
+    query.bindValue(":client_id", client_id);
+    query.bindValue(":name", name);
+    query.bindValue(":additional_names", additional_names);
+    query.bindValue(":price", price);
+    query.bindValue(":paid", paid);
+    query.bindValue(":material_code", material_code);
+    query.bindValue(":vase_code", vase_code);
+    query.bindValue(":lamp_code", lamp_code);
+    query.bindValue(":flame_code", flame_code);
+    query.bindValue(":notes", notes);
+    query.bindValue(":accessories_mounted", accessories_mounted);
+    query.bindValue(":ordered_at", ordered_at);
+    query.bindValue(":proofed_at", proofed_at);
+    query.bindValue(":confirmed_at", confirmed_at);
+    query.bindValue(":engraved_at", engraved_at);
+    query.bindValue(":delivered_at", delivered_at);
+    query.bindValue(":edited_at", QDate::currentDate().toString("yyyy-MM-dd"));
+    query.bindValue(":old_progressive", old_progressive);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+
+        return false;
+    }
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("Dati aggiornati.");
+    message.exec();
+
+    return true;
+}
+
+void Tomb::remove(int progressive)
 {
     QSqlQuery query = QSqlQuery(*this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE progressive = :progressive;");
@@ -171,30 +369,6 @@ void Tomb::remove(const int& progressive)
         message.exec();
     }
 }
-
-/********** PROTECTED SLOTS **********/
-
-void Tomb::slotSwitchEnableState()
-{
-    this->ui.leProgressive->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbClient->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbMaterial->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbVase->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbLamp->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbFlame->setEnabled(this->ui.chbAllowEdit->isChecked());
-}
-
-bool Tomb::slotUpdate(int progressive)
-{
-    return true;
-}
-
-void Tomb::slotCloseDialog()
-{
-    this->close();
-}
-
-/********** PRIVATE FUNCTIONS **********/
 
 int Tomb::getLastProgresive() {
     QSqlQuery query = QSqlQuery(*this->db);
@@ -306,11 +480,11 @@ void Tomb::updateForm()
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
         this->ui.chbAccessoriesMounted->setChecked(tomb["accessories_mounted"] == "1");
-        this->ui.leOrderedAt->setText(tomb["ordered_at"]);
-        this->ui.leProofedAt->setText(tomb["proofed_at"]);
-        this->ui.leConfirmedAt->setText(tomb["confirmed_at"]);
-        this->ui.leEngravedAt->setText(tomb["engraved_at"]);
-        this->ui.leDeliveredAt->setText(tomb["delivered_at"]);
+        this->ui.leOrderedAt->setText(Helpers::dateSqlToIta(tomb["ordered_at"]));
+        this->ui.leProofedAt->setText(Helpers::dateSqlToIta(tomb["proofed_at"]));
+        this->ui.leConfirmedAt->setText(Helpers::dateSqlToIta(tomb["confirmed_at"]));
+        this->ui.leEngravedAt->setText(Helpers::dateSqlToIta(tomb["engraved_at"]));
+        this->ui.leDeliveredAt->setText(Helpers::dateSqlToIta(tomb["delivered_at"]));
 
         // Disable the fields which should not generally be edited
         this->ui.leProgressive->setEnabled(false);
@@ -331,10 +505,9 @@ void Tomb::updateForm()
     }
     else {
         // Tomb not found means we are asking to insert a new one
-        int last_progressive = this->getLastProgresive();
 
         // Reset the form fields
-        this->ui.leProgressive->setText(QString::number(last_progressive + 1));
+        this->ui.leProgressive->setText(QString::number(this->getLastProgresive() + 1));
         this->ui.cbClient->addItems(client_names);
         this->ui.leName->setText("");
         this->ui.leAdditionalNames->setText("");
@@ -345,7 +518,7 @@ void Tomb::updateForm()
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
         this->ui.chbAccessoriesMounted->setChecked(false);
-        this->ui.leOrderedAt->setText("");
+        this->ui.leOrderedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
         this->ui.leProofedAt->setText("");
         this->ui.leConfirmedAt->setText("");
         this->ui.leEngravedAt->setText("");

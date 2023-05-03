@@ -1,5 +1,7 @@
 #include "Accessory.h"
 
+/********** CONSTRUCTOR **********/
+
 Accessory::Accessory(QSqlDatabase* db, const QString& table, QWidget* parent)
     : db(db), table(table), parent(parent)
 {
@@ -9,9 +11,13 @@ Accessory::Accessory(QSqlDatabase* db, const QString& table, QWidget* parent)
     this->connect(this->ui.cancelButton, &QPushButton::clicked, this, &Accessory::slotCloseDialog);
 }
 
+/********** DESTRUCTOR **********/
+
 Accessory::~Accessory()
 {
 }
+
+/********** PUBLIC FUNCTIONS **********/
 
 QList<QMap<QString, QString>> Accessory::get()
 {
@@ -39,6 +45,27 @@ QList<QMap<QString, QString>> Accessory::get()
     return accessories;
 }
 
+QString Accessory::getCode(const QString& name)
+{
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare("SELECT code FROM " + this->table + " WHERE name = :name");
+    query.bindValue(":name", name);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+
+    if (query.next()) {
+        return query.value("code").toString();
+    }
+
+    return "";
+}
+
 QStringList Accessory::getNames()
 {
     QStringList accessories;
@@ -60,6 +87,27 @@ QStringList Accessory::getNames()
     return accessories;
 }
 
+void Accessory::remove(const QString& code)
+{
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare("DELETE FROM " + this->table + " WHERE code = :code; ");
+    query.bindValue(":code", code);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("Eliminazione eseguita.");
+    message.exec();
+}
+
 void Accessory::update(const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
@@ -78,22 +126,15 @@ void Accessory::update(const QString& code, const QString& name)
         message.setText(query.lastError().text());
         message.exec();
     }
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("Modifica eseguita.");
+    message.exec();
 }
 
-void Accessory::remove(const QString& code)
-{
-    QSqlQuery query = QSqlQuery(*this->db);
-    query.prepare("DELETE FROM " + this->table + " WHERE code = :code; ");
-    query.bindValue(":code", code);
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
-        message.exec();
-    }
-}
+/********** PRIVATE SLOTS **********/
 
 void Accessory::slotAddAccessory()
 {
@@ -137,6 +178,12 @@ void Accessory::slotAddAccessory()
     }
 
     // Insert successful
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("Inserimento eseguito.");
+    message.exec();
 
     // Reset the input fields
     this->ui.leCode->setText("");

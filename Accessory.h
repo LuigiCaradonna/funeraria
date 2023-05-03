@@ -42,30 +42,41 @@ public:
     /*
      * Gets all the accessories' names
      *
+     * @param const QString& name   - The accessory's name
+     * 
+     * @return  QString - The accessory's code id found, empty string otherwise
+     */
+    QString getCode(const QString& name);
+
+    /*
+     * Gets all the accessories' names
+     *
      * @return  QStringList - A list containing the accessories' names
      */
     QStringList getNames();
 
     /*
-     * Updates a accessory into the database
-     *
-     * @param const QString& id     - Id of the accessory to update
-     * @param const QString& name   - Name of the accessory
-     *
-     * @return  void
-     */
-    void update(const QString& id, const QString& name);
-
-    /*
      * Removes a accessory from the database
      *
-     * @param const QString& id - Id of the accessory to remove
+     * @param const QString& code - Accessory's code
      *
      * @return  void
      */
-    void remove(const QString& id);
+    void remove(const QString& code);
+
+    /*
+     * Updates an accessory into the database
+     *
+     * @param const QString& code   - Accessory's code
+     * @param const QString& name   - Accessory's name
+     *
+     * @return  void
+     */
+    void update(const QString& code, const QString& name);
 
 protected slots:
+
+    /********** PRIVATE SLOTS **********/
 
     /*
      * Gets the data from the dialog window and stores a new accessory into the database
