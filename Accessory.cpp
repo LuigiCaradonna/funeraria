@@ -7,8 +7,21 @@ Accessory::Accessory(QSqlDatabase* db, const QString& table, QWidget* parent)
 {
     this->ui.setupUi(this);
 
-    this->connect(this->ui.okButton, &QPushButton::clicked, this, &Accessory::slotAddAccessory);
-    this->connect(this->ui.cancelButton, &QPushButton::clicked, this, &Accessory::slotCloseDialog);
+    if (table == "material") {
+        this->setWindowTitle("Inserimento materiale");
+    }
+    else if (table == "vase") {
+        this->setWindowTitle("Inserimento vaso");
+    }
+    else if (table == "lamp") {
+        this->setWindowTitle("Inserimento lume");
+    }
+    else if (table == "flame") {
+        this->setWindowTitle("Inserimento fiamma");
+    }
+
+    this->connect(this->ui.btnOk, &QPushButton::clicked, this, &Accessory::slotAddAccessory);
+    this->connect(this->ui.btnCancel, &QPushButton::clicked, this, &Accessory::slotCloseDialog);
 }
 
 /********** DESTRUCTOR **********/

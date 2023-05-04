@@ -391,6 +391,8 @@ void Client::updateForm()
     QMap<QString, QString> client = this->getDetails(this->name);
 
     if (!client.isEmpty()) {
+        this->setWindowTitle("Modifica cliente");
+
         QStringList emails_list = client["email"].split(u',');
         QString emails = "";
         for (int j = 0; j < emails_list.length(); j++) {
@@ -425,6 +427,7 @@ void Client::updateForm()
     }
     else {
         // Client not found means we are asking to insert a new one
+        this->setWindowTitle("Inserisci cliente");
         
         // Reset the form fields
         this->ui.leId->setText("0");

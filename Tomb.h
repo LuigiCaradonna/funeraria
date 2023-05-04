@@ -75,11 +75,11 @@ protected slots:
     void slotSwitchEnableState();
 
     /*
-     * Updates a tomb's data
+     * Saves a tomb's data
      *
      * @return  void
      */
-    void slotUpdate();
+    void slotSave();
 
     /*
      * Closes the dialog window
@@ -91,6 +91,8 @@ protected slots:
 private:
     Ui::TombClass ui;
     const QString table = "tombs";
+    const QString btnCreateText = "Crea";
+    const QString btnUpdateText = "Aggiorna";
     QSqlDatabase* db;
     QWidget* parent;
     int progressive;
@@ -101,6 +103,49 @@ private:
     Accessory* material;
 
     /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Updates a tomb into the database
+     *
+     * @param const int& progressive            - Tomb's progressive number
+     * @param const int& client_id              - Client's id
+     * @param const QString& name               - Deceased's name
+     * @param const QString& additional_names   - Additional names
+     * @param const double& price               - Price
+     * @param const bool& paid                  - Paid or not
+     * @param const QString& material_code      - Material's code
+     * @param const QString& vase_code          - Vase's code
+     * @param const QString& lamp_code          - Lamp's code
+     * @param const QString& flame_code         - Flame's code
+     * @param const QString& notes              - Notes
+     * @param const bool& accessories_mounted   - Accessories mounted or not
+     * @param const QString& ordered_at         - Order date
+     * @param const QString& proofed_at         - Proof date
+     * @param const QString& confirmed_at       - Confirmation date
+     * @param const QString& engraved_at        - Engraving date
+     * @param const QString& delivered_at       - Delivery date
+     *
+     * @return  boolean true on success, false otherwise
+     */
+    bool store(
+        const int& progressive,
+        const int& client_id,
+        const QString& name,
+        const QString& additional_names,
+        const double& price,
+        const bool& paid,
+        const QString& material_code,
+        const QString& vase_code,
+        const QString& lamp_code,
+        const QString& flame_code,
+        const QString& notes,
+        const bool& accessories_mounted,
+        const QString& ordered_at,
+        const QString& proofed_at,
+        const QString& confirmed_at,
+        const QString& engraved_at,
+        const QString& delivered_at
+    );
 
     /*
      * Updates a tomb into the database
@@ -150,11 +195,11 @@ private:
     /*
      * Deletes a tomb from the database
      *
-     * @param   int progressive - Tomb's progressive number
+     * @param   const int& progressive - Tomb's progressive number
      *
      * @return  void
      */
-    void remove(int progressive);
+    void remove(const int& progressive);
 
     /*
      * Gets the last progressive number in use
@@ -169,4 +214,11 @@ private:
      * @return  void
      */
     void updateForm();
+
+    /*
+     * Checks if the given progressive number is in use
+     *
+     * @return  boolean true if the progressive number in use or if the query fails, false otherwise
+     */
+    bool isProgressiveInUse(const int& progressive);
 };

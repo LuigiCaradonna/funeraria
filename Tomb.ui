@@ -1008,6 +1008,28 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>leProgressive</tabstop>
+  <tabstop>cbClient</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leAdditionalNames</tabstop>
+  <tabstop>lePrice</tabstop>
+  <tabstop>chbPaid</tabstop>
+  <tabstop>cbMaterial</tabstop>
+  <tabstop>cbVase</tabstop>
+  <tabstop>cbLamp</tabstop>
+  <tabstop>cbFlame</tabstop>
+  <tabstop>chbAccessoriesMounted</tabstop>
+  <tabstop>ptNote</tabstop>
+  <tabstop>leOrderedAt</tabstop>
+  <tabstop>leProofedAt</tabstop>
+  <tabstop>leConfirmedAt</tabstop>
+  <tabstop>leEngravedAt</tabstop>
+  <tabstop>leDeliveredAt</tabstop>
+  <tabstop>chbAllowEdit</tabstop>
+  <tabstop>btnSave</tabstop>
+  <tabstop>btnClose</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
