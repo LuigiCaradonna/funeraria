@@ -68,8 +68,7 @@ QList<QMap<QString, QString>> Tomb::getList(int client_id, int year, const QStri
 
     while (query.next()) {
         QMap<QString, QString> tomb;
-        // Because of a progressive numbers' conflict, one has been set as negative
-        tomb["progressive"] = QString::number(abs(query.value("progressive").toInt()));
+        tomb["progressive"] = QString::number(query.value("progressive").toInt());
         tomb["client_id"] = query.value("client_id").toString();
         tomb["name"] = query.value("name").toString();
         tomb["additional_names"] = query.value("additional_names").toString();
@@ -125,8 +124,7 @@ QMap<QString, QString> Tomb::getDetails(int progressive)
         message.exec();
     }
     else if (query.next()) {
-        // Because of a progressive numbers' conflict, one has been set as negative
-        tomb["progressive"] = QString::number(abs(query.value("progressive").toInt()));
+        tomb["progressive"] = QString::number(query.value("progressive").toInt());
         tomb["client_id"] = query.value("client_id").toString();
         tomb["client"] = query.value("client_name").toString();
         tomb["name"] = query.value("name").toString();
@@ -695,6 +693,9 @@ void Tomb::updateForm()
         this->ui.cbVase->setCurrentIndex(vase_index);
         this->ui.cbLamp->setCurrentIndex(lamp_index);
         this->ui.cbFlame->setCurrentIndex(flame_index);
+
+        // Set the "Allow edit" checkbox enabled
+        this->ui.chbAllowEdit->setEnabled(true);
 
         // Set the save button text
         this->ui.btnSave->setText(this->btnUpdateText);
