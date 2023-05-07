@@ -131,7 +131,7 @@ private:
     QString current_table = "";
 
     // Placeholder for the clients' combo box
-    QString client_placeholder = "Cliente";
+    QString client_placeholder = "Tutti";
     
     Client* client;
     Tomb* tomb;

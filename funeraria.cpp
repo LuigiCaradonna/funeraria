@@ -107,7 +107,7 @@ Funeraria::~Funeraria()
 /********** SLOTS **********/
 void Funeraria::slotFilterClientOrders()
 {
-    if (this->ui.cbClient->currentText() == this->client_placeholder || this->current_table != "tomb") {
+    if (this->current_table != "tomb") {
         return;
     }
 
