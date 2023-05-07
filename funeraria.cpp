@@ -116,10 +116,6 @@ void Funeraria::slotFilterClientOrders()
 
 void Funeraria::slotClientOrders()
 {
-    if (this->ui.cbClient->currentText() == this->client_placeholder) {
-        return;
-    }
-
     // Block the segnals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 

@@ -37,13 +37,13 @@ public:
     /*
      * Gets all the Tombs
      * 
-     * @param int client_id             - Client's id
-     * @param int year                  - Year of the tombs to get, 0 for all the years
+     * @param const int& client_id      - Client's id
+     * @param const int& year           - Year of the tombs to get, 0 for all the years
      * @param const QString& filter     - Deceased name to use to refine the result
      *
      * @return  QList<QMap<QString, QString>> - A list containing the Tombs' id and name
      */
-    QList<QMap<QString, QString>> getList(int client_id, int year, const QString& filter);
+    QList<QMap<QString, QString>> getList(const int& client_id, const int& year, const QString& filter);
 
     /*
      * Gets the given tomb's datails joined to the related tables
@@ -52,7 +52,7 @@ public:
      *
      * @return  QMap<QString, QString> - A map containing the tomb's  datails joined to the related tables
      */
-    QMap<QString, QString> getDetails(int progressive);
+    QMap<QString, QString> getDetails(const int& progressive);
 
     /*
      * Sets the tomb's progressive property and updates the content of the QDialog according
@@ -61,7 +61,7 @@ public:
      *
      * @return  void
      */
-    void setProgressive(int progressive);
+    void setProgressive(const int& progressive);
 
 protected slots:
 
@@ -73,6 +73,13 @@ protected slots:
      * @return  void
      */
     void slotSwitchEnableState();
+
+    /*
+     * Shows a dialog containing the progressive numbers, smaller than the max, not in use
+     *
+     * @return  void
+     */
+    void slotAvailableProgressives();
 
     /*
      * Saves a tomb's data

@@ -15,6 +15,7 @@ Tomb::Tomb(QSqlDatabase* db, QWidget* parent)
     this->flame = new Accessory(this->db, "flames", this);
 
     this->connect(this->ui.chbAllowEdit, &QCheckBox::stateChanged, this, &Tomb::slotSwitchEnableState);
+    this->connect(this->ui.btnAvailableProgressives, &QPushButton::clicked, this, &Tomb::slotAvailableProgressives);
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &Tomb::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &Tomb::slotCloseDialog);
 }
@@ -32,13 +33,19 @@ Tomb::~Tomb()
 
 /********** PUBLIC FUNCTIONS **********/
 
-QList<QMap<QString, QString>> Tomb::getList(int client_id, int year, const QString& filter)
+QList<QMap<QString, QString>> Tomb::getList(const int& client_id, const int& year, const QString& filter)
 {
     QString order = "DESC";
     QList<QMap<QString, QString>> list;
     QSqlQuery query = QSqlQuery(*this->db);
 
-    QString query_string = "SELECT * FROM " + this->table + " WHERE client_id = :client_id";
+    qDebug() << client_id;
+
+    QString query_string = "SELECT * FROM " + this->table + " WHERE 1 = 1";
+
+    if (client_id > 0) {
+        query_string += " AND client_id = " + QString::number(client_id) ;
+    }
 
     if (filter.trimmed() != "") {
         query_string += " AND name LIKE '" + filter + "%'";
@@ -56,14 +63,13 @@ QList<QMap<QString, QString>> Tomb::getList(int client_id, int year, const QStri
 
     query.prepare(query_string);
 
-    query.bindValue(":client_id", client_id);
-
     if (!query.exec()) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
+        return list;
     }
 
     while (query.next()) {
@@ -94,7 +100,7 @@ QList<QMap<QString, QString>> Tomb::getList(int client_id, int year, const QStri
     return list;
 }
 
-QMap<QString, QString> Tomb::getDetails(int progressive)
+QMap<QString, QString> Tomb::getDetails(const int& progressive)
 {
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(*this->db);
@@ -153,7 +159,7 @@ QMap<QString, QString> Tomb::getDetails(int progressive)
     return tomb;
 }
 
-void Tomb::setProgressive(int progressive)
+void Tomb::setProgressive(const int& progressive)
 {
     this->progressive = progressive;
     this->updateForm();
@@ -171,54 +177,107 @@ void Tomb::slotSwitchEnableState()
     this->ui.cbFlame->setEnabled(this->ui.chbAllowEdit->isChecked());
 }
 
+void Tomb::slotAvailableProgressives()
+{
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare("SELECT progressive FROM " + this->table + " ORDER BY progressive ASC");
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+        return;
+    }
+    
+    QList<int> progressive;
+
+    while (query.next()) {
+        progressive.append(query.value("progressive").toInt());
+    }
+
+    int min = progressive[0];
+    int max = progressive[progressive.size() - 1];
+
+    if (static_cast<long long>(max) - min + 1 == progressive.size()) {
+        // No holes in the progressives' list, only the one after the last is available
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Numeri disponibili: " + QString::number(this->getLastProgresive() + 1));
+        message.exec();
+        return;
+    }
+
+    QString holes = "";
+
+    // There are holes in the progressives' list, need to spot them
+    for (int i = 1; i < progressive.size(); i++) {
+        int num_expected = min + i;
+
+        if (!progressive.contains(num_expected)) {
+            holes += "\n" + QString::number(num_expected);
+        }
+    }
+
+    holes += "\n" + QString::number(this->getLastProgresive() + 1);
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("Numeri disponibili: " + holes);
+    message.exec();
+}
+
 void Tomb::slotSave()
 {
     if (this->ui.btnSave->text() == this->btnCreateText) {
         if (this->store(
-            this->ui.leProgressive->text().toInt(),
-            this->client->getId(this->ui.cbClient->currentText()),
-            this->ui.leName->text(),
-            this->ui.leAdditionalNames->text(),
-            this->ui.lePrice->text().toDouble(),
-            this->ui.chbPaid->isChecked(),
-            this->material->getCode(this->ui.cbMaterial->currentText()),
-            this->vase->getCode(this->ui.cbVase->currentText()),
-            this->lamp->getCode(this->ui.cbLamp->currentText()),
-            this->flame->getCode(this->ui.cbFlame->currentText()),
-            this->ui.ptNote->toPlainText(),
-            this->ui.chbAccessoriesMounted->isChecked(),
-            this->ui.leOrderedAt->text(),
-            this->ui.leProofedAt->text(),
-            this->ui.leConfirmedAt->text(),
-            this->ui.leEngravedAt->text(),
-            this->ui.leDeliveredAt->text()
-        )
-            ) {
+                this->ui.leProgressive->text().toInt(),
+                this->client->getId(this->ui.cbClient->currentText()),
+                this->ui.leName->text(),
+                this->ui.leAdditionalNames->text(),
+                this->ui.lePrice->text().toDouble(),
+                this->ui.chbPaid->isChecked(),
+                this->material->getCode(this->ui.cbMaterial->currentText()),
+                this->vase->getCode(this->ui.cbVase->currentText()),
+                this->lamp->getCode(this->ui.cbLamp->currentText()),
+                this->flame->getCode(this->ui.cbFlame->currentText()),
+                this->ui.ptNote->toPlainText(),
+                this->ui.chbAccessoriesMounted->isChecked(),
+                this->ui.leOrderedAt->text(),
+                this->ui.leProofedAt->text(),
+                this->ui.leConfirmedAt->text(),
+                this->ui.leEngravedAt->text(),
+                this->ui.leDeliveredAt->text()
+            )
+        ) {
             this->close();
         }
     }
     else if (this->ui.btnSave->text() == this->btnUpdateText) {
         if (this->update(
-            this->progressive,
-            this->ui.leProgressive->text().toInt(),
-            this->client->getId(this->ui.cbClient->currentText()),
-            this->ui.leName->text(),
-            this->ui.leAdditionalNames->text(),
-            this->ui.lePrice->text().toDouble(),
-            this->ui.chbPaid->isChecked(),
-            this->material->getCode(this->ui.cbMaterial->currentText()),
-            this->vase->getCode(this->ui.cbVase->currentText()),
-            this->lamp->getCode(this->ui.cbLamp->currentText()),
-            this->flame->getCode(this->ui.cbFlame->currentText()),
-            this->ui.ptNote->toPlainText(),
-            this->ui.chbAccessoriesMounted->isChecked(),
-            this->ui.leOrderedAt->text(),
-            this->ui.leProofedAt->text(),
-            this->ui.leConfirmedAt->text(),
-            this->ui.leEngravedAt->text(),
-            this->ui.leDeliveredAt->text()
-        )
-            ) {
+                this->progressive,
+                this->ui.leProgressive->text().toInt(),
+                this->client->getId(this->ui.cbClient->currentText()),
+                this->ui.leName->text(),
+                this->ui.leAdditionalNames->text(),
+                this->ui.lePrice->text().toDouble(),
+                this->ui.chbPaid->isChecked(),
+                this->material->getCode(this->ui.cbMaterial->currentText()),
+                this->vase->getCode(this->ui.cbVase->currentText()),
+                this->lamp->getCode(this->ui.cbLamp->currentText()),
+                this->flame->getCode(this->ui.cbFlame->currentText()),
+                this->ui.ptNote->toPlainText(),
+                this->ui.chbAccessoriesMounted->isChecked(),
+                this->ui.leOrderedAt->text(),
+                this->ui.leProofedAt->text(),
+                this->ui.leConfirmedAt->text(),
+                this->ui.leEngravedAt->text(),
+                this->ui.leDeliveredAt->text()
+            )
+        ) {
             this->close();
         }
     }
@@ -375,7 +434,6 @@ bool Tomb::store(
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
-
         return false;
     }
 
@@ -534,7 +592,6 @@ bool Tomb::update(
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
-
         return false;
     }
 
@@ -543,7 +600,6 @@ bool Tomb::update(
     message.setIcon(QMessageBox::Information);
     message.setText("Dati aggiornati");
     message.exec();
-
     return true;
 }
 
@@ -606,10 +662,11 @@ void Tomb::updateForm()
     if (!tomb.isEmpty()) {
         this->setWindowTitle("Modifica lapide");
 
-        /*********** Get the index of the accessories to select for the comboboxes *************/
+        /*********** Get the index to select for the comboboxes *************/
         for (int i = 0; i < clients.size(); i++) {
             if (clients[i]["id"] == tomb["client_id"]) {
                 client_index = i;
+                break;
             }
         }
 
@@ -741,7 +798,6 @@ bool Tomb::isProgressiveInUse(const int& progressive)
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
-
         return true;
     }
     else if (query.next()) {
