@@ -189,6 +189,53 @@ void Funeraria::slotClientOrders()
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
     }
+
+    // Delete the push buttons
+    for (int i = 0; i < tombs.size(); i++) {
+        QPushButton* pb_details = qobject_cast<QPushButton*>(this->ui.tableWidget->cellWidget(i, 11));
+        delete pb_details;
+        pb_details = nullptr;
+    }
+
+    // Delete the table items
+    for (int i = 0; i < tombs.size(); i++) {
+        QTableWidgetItem* progressive = this->ui.tableWidget->item(i, 0);
+        QTableWidgetItem* name = this->ui.tableWidget->item(i, 1);
+        QTableWidgetItem* price = this->ui.tableWidget->item(i, 2);
+        QTableWidgetItem* paid = this->ui.tableWidget->item(i, 3);
+        QTableWidgetItem* notes = this->ui.tableWidget->item(i, 4);
+        QTableWidgetItem* accessories_mounted = this->ui.tableWidget->item(i, 5);
+        QTableWidgetItem* ordered_at = this->ui.tableWidget->item(i, 6);
+        QTableWidgetItem* proofed_at = this->ui.tableWidget->item(i, 7);
+        QTableWidgetItem* confirmed_at = this->ui.tableWidget->item(i, 8);
+        QTableWidgetItem* engraved_at = this->ui.tableWidget->item(i, 9);
+        QTableWidgetItem* delivered_at = this->ui.tableWidget->item(i, 10);
+
+        delete progressive;
+        delete name;
+        delete price;
+        delete paid;
+        delete notes;
+        delete accessories_mounted;
+        delete ordered_at;
+        delete proofed_at;
+        delete confirmed_at;
+        delete engraved_at;
+        delete delivered_at;
+
+        progressive = nullptr;
+        name = nullptr;
+        price = nullptr;
+        paid = nullptr;
+        notes = nullptr;
+        accessories_mounted = nullptr;
+        ordered_at = nullptr;
+        proofed_at = nullptr;
+        confirmed_at = nullptr;
+        engraved_at = nullptr;
+        delivered_at = nullptr;
+    }
+
 }
 
 void Funeraria::slotTombDetails()
