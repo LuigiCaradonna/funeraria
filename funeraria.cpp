@@ -119,7 +119,7 @@ void Funeraria::slotFilterClientOrders()
 
 void Funeraria::slotClientOrders()
 {
-    // Block the segnals while building the table
+    // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
     this->current_table = "tomb";
