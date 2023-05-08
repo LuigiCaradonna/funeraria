@@ -39,8 +39,6 @@ QList<QMap<QString, QString>> Tomb::getList(const int& client_id, const int& yea
     QList<QMap<QString, QString>> list;
     QSqlQuery query = QSqlQuery(*this->db);
 
-    qDebug() << client_id;
-
     QString query_string = "SELECT * FROM " + this->table + " WHERE 1 = 1";
 
     if (client_id > 0) {

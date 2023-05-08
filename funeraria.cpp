@@ -92,6 +92,9 @@ Funeraria::Funeraria(QWidget *parent)
 
 Funeraria::~Funeraria()
 {
+    // Delete the table content
+    this->clearTable();
+
     delete this->config;
     delete this->db;
     delete this->client;
@@ -122,7 +125,7 @@ void Funeraria::slotClientOrders()
     this->current_table = "tomb";
 
     // Reset the table's content
-    this->ui.tableWidget->clear();
+    this->clearTable();
 
     int client_id = this->client->getId(this->ui.cbClient->currentText());
     int year;
@@ -141,7 +144,7 @@ void Funeraria::slotClientOrders()
         "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni"};
 
     this->ui.tableWidget->setRowCount(tombs.size());
-    this->ui.tableWidget->setColumnCount(12);
+    this->ui.tableWidget->setColumnCount(headers.size());
     // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
@@ -152,7 +155,7 @@ void Funeraria::slotClientOrders()
 
         // Generate the cells' content and set them as not editable
         QTableWidgetItem* progressive = new QTableWidgetItem(tombs[i]["progressive"]);
-        progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        //progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* name = new QTableWidgetItem(tombs[i]["name"]);
         name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* price = new QTableWidgetItem(tombs[i]["price"]);
@@ -189,53 +192,6 @@ void Funeraria::slotClientOrders()
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
     }
-
-    // Delete the push buttons
-    for (int i = 0; i < tombs.size(); i++) {
-        QPushButton* pb_details = qobject_cast<QPushButton*>(this->ui.tableWidget->cellWidget(i, 11));
-        delete pb_details;
-        pb_details = nullptr;
-    }
-
-    // Delete the table items
-    for (int i = 0; i < tombs.size(); i++) {
-        QTableWidgetItem* progressive = this->ui.tableWidget->item(i, 0);
-        QTableWidgetItem* name = this->ui.tableWidget->item(i, 1);
-        QTableWidgetItem* price = this->ui.tableWidget->item(i, 2);
-        QTableWidgetItem* paid = this->ui.tableWidget->item(i, 3);
-        QTableWidgetItem* notes = this->ui.tableWidget->item(i, 4);
-        QTableWidgetItem* accessories_mounted = this->ui.tableWidget->item(i, 5);
-        QTableWidgetItem* ordered_at = this->ui.tableWidget->item(i, 6);
-        QTableWidgetItem* proofed_at = this->ui.tableWidget->item(i, 7);
-        QTableWidgetItem* confirmed_at = this->ui.tableWidget->item(i, 8);
-        QTableWidgetItem* engraved_at = this->ui.tableWidget->item(i, 9);
-        QTableWidgetItem* delivered_at = this->ui.tableWidget->item(i, 10);
-
-        delete progressive;
-        delete name;
-        delete price;
-        delete paid;
-        delete notes;
-        delete accessories_mounted;
-        delete ordered_at;
-        delete proofed_at;
-        delete confirmed_at;
-        delete engraved_at;
-        delete delivered_at;
-
-        progressive = nullptr;
-        name = nullptr;
-        price = nullptr;
-        paid = nullptr;
-        notes = nullptr;
-        accessories_mounted = nullptr;
-        ordered_at = nullptr;
-        proofed_at = nullptr;
-        confirmed_at = nullptr;
-        engraved_at = nullptr;
-        delivered_at = nullptr;
-    }
-
 }
 
 void Funeraria::slotTombDetails()
@@ -494,6 +450,30 @@ void Funeraria::slotUpdateEntry()
 }
 
 /********** PRIVATE FUNCTIONS **********/
+
+void Funeraria::clearTable()
+{
+    for (int i = 0; i < this->ui.tableWidget->rowCount(); i++) {
+        for (int j = 0; j < this->ui.tableWidget->columnCount(); j++) {
+            if (j == this->ui.tableWidget->columnCount() - 1) {
+                QPushButton* pbutton = qobject_cast<QPushButton*>(this->ui.tableWidget->cellWidget(i, j));
+                if (pbutton) {
+                    pbutton->disconnect(); // Disconnect any connections
+                    pbutton->setParent(nullptr); // Reparent the button
+                    delete pbutton;
+                    pbutton = nullptr;
+                }
+            }
+            else {
+                QTableWidgetItem* item = this->ui.tableWidget->item(i, j);
+                delete item;
+                item = nullptr;
+            }
+        }
+    }
+
+    this->ui.tableWidget->clear();
+}
 
 void Funeraria::closeWindow()
 {

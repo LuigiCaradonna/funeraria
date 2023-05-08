@@ -146,6 +146,13 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
+     * Clears the table content and deletes all the created pointers.
+     *
+     * @return void
+     */
+    void clearTable();
+
+    /*
      * Closes the main window.
      *
      * @return void
