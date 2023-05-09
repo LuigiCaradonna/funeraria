@@ -57,7 +57,7 @@ QList<QMap<QString, QString>> Tomb::getList(const int& client_id, const int& yea
         order = "ASC";
     }
 
-    query_string += " ORDER BY ordered_at " + order;
+    query_string += " ORDER BY progressive " + order;
 
     query.prepare(query_string);
 
@@ -115,8 +115,7 @@ QMap<QString, QString> Tomb::getDetails(const int& progressive)
         "join vases ON tombs.vase_code = vases.code "
         "join lamps ON tombs.lamp_code = lamps.code "
         "join flames ON tombs.flame_code = flames.code "
-        "WHERE tombs.progressive = :progressive " 
-        "ORDER BY ordered_at ASC;");
+        "WHERE tombs.progressive = :progressive;");
 
     query.bindValue(":progressive", progressive);
 
@@ -729,11 +728,11 @@ void Tomb::updateForm()
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
         this->ui.chbAccessoriesMounted->setChecked(tomb["accessories_mounted"] == "1");
-        this->ui.leOrderedAt->setText(QDate::fromString(tomb["ordered_at"], "yyyy-MM-dd").toString("dd/MM/yyyy"));
-        this->ui.leProofedAt->setText(QDate::fromString(tomb["proofed_at"], "yyyy-MM-dd").toString("dd/MM/yyyy"));
-        this->ui.leConfirmedAt->setText(QDate::fromString(tomb["confirmed_at"], "yyyy-MM-dd").toString("dd/MM/yyyy"));
-        this->ui.leEngravedAt->setText(QDate::fromString(tomb["engraved_at"], "yyyy-MM-dd").toString("dd/MM/yyyy"));
-        this->ui.leDeliveredAt->setText(QDate::fromString(tomb["delivered_at"], "yyyy-MM-dd").toString("dd/MM/yyyy"));
+        this->ui.leOrderedAt->setText(Helpers::dateSqlToIta(tomb["ordered_at"]));
+        this->ui.leProofedAt->setText(Helpers::dateSqlToIta(tomb["proofed_at"]));
+        this->ui.leConfirmedAt->setText(Helpers::dateSqlToIta(tomb["confirmed_at"]));
+        this->ui.leEngravedAt->setText(Helpers::dateSqlToIta(tomb["engraved_at"]));
+        this->ui.leDeliveredAt->setText(Helpers::dateSqlToIta(tomb["delivered_at"]));
 
         // Disable the fields which should not generally be edited
         this->ui.leProgressive->setEnabled(false);
