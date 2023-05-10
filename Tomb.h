@@ -63,6 +63,13 @@ public:
      */
     void setProgressive(const int& progressive);
 
+    /*
+     * Gets the accessories needed by the tombs not yet mounted
+     *
+     * @return  QList<QMap<QString, QString>>   a list of the accessories' name, type and quantity
+     */
+    QList<QMap<QString, QString>> accessorieToMount();
+
 protected slots:
 
     /********** PROTECTED SLOTS **********/

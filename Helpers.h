@@ -8,7 +8,7 @@ class Helpers
 {
 public:
     /*
-     * Converts a date string format as yyyy-mm-dd to dd/mm/yyyy.
+     * Converts a date string formatted as yyyy-mm-dd to dd/mm/yyyy.
      *
      * @param   const QString&  dateSql - The date in Sql format
      *

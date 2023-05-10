@@ -54,6 +54,8 @@ Funeraria::Funeraria(QWidget *parent)
     // Set the event listeners
     this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
     this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
+    this->connect(this->ui.btnAccessories, &QPushButton::clicked, this, &Funeraria::slotAccessoriesToMount);
+
     // Signal emitted on table cell edit
     this->connect(this->ui.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
     // Signal emitted from the menu item actionCList
@@ -166,15 +168,25 @@ void Funeraria::slotClientOrders()
         notes->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* accessories_mounted = new QTableWidgetItem(tombs[i]["accessories_mounted"]);
         accessories_mounted->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* ordered_at = new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["ordered_at"]));
+        QString order_date = Helpers::dateSqlToIta(tombs[i]["ordered_at"]);
+        if (order_date == "") order_date = "-";
+        QTableWidgetItem* ordered_at = new QTableWidgetItem(order_date);
         ordered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* proofed_at = new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["proofed_at"]));
+        QString proof_date = Helpers::dateSqlToIta(tombs[i]["proofed_at"]);
+        if (proof_date == "") proof_date = "-";
+        QTableWidgetItem* proofed_at = new QTableWidgetItem(proof_date);
         proofed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* confirmed_at = new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["confirmed_at"]));
+        QString confirm_date = Helpers::dateSqlToIta(tombs[i]["confirmed_at"]);
+        if (confirm_date == "") confirm_date = "-";
+        QTableWidgetItem* confirmed_at = new QTableWidgetItem(confirm_date);
         confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* engraved_at = new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["engraved_at"]));
+        QString engrave_date = Helpers::dateSqlToIta(tombs[i]["engraved_at"]);
+        if (engrave_date == "") engrave_date = "-";
+        QTableWidgetItem* engraved_at = new QTableWidgetItem(engrave_date);
         engraved_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* delivered_at = new QTableWidgetItem(Helpers::dateSqlToIta(tombs[i]["delivered_at"]));
+        QString deliver_date = Helpers::dateSqlToIta(tombs[i]["delivered_at"]);
+        if (deliver_date == "") deliver_date = "-";
+        QTableWidgetItem* delivered_at = new QTableWidgetItem(deliver_date);
         delivered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
         this->ui.tableWidget->setItem(i, 0, progressive);
@@ -228,14 +240,14 @@ void Funeraria::slotShowClients()
     this->current_table = "client";
 
     // Reset the table's content
-    this->ui.tableWidget->clear();
+    this->clearTable();
 
     QList<QMap<QString, QString>> clients = this->client->get();
 
     QStringList headers{ "Ordine", "Nome", "Email", "Telefono", "", ""};
 
     this->ui.tableWidget->setRowCount(clients.size());
-    this->ui.tableWidget->setColumnCount(6);
+    this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     for (int i = 0; i < clients.size(); i++) {
@@ -335,7 +347,7 @@ void Funeraria::slotShowItems(const QString& type)
     QStringList headers{ "Codice", "Nome", "Azioni"};
 
     this->ui.tableWidget->setRowCount(accessories.size());
-    this->ui.tableWidget->setColumnCount(3);
+    this->ui.tableWidget->setColumnCount(headers.size());
     // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     //this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
@@ -347,45 +359,6 @@ void Funeraria::slotShowItems(const QString& type)
         this->ui.tableWidget->setItem(i, 1, new QTableWidgetItem(accessories[i]["name"]));
         this->ui.tableWidget->setCellWidget(i, 2, pb); // Delete button
         this->connect(pb, &QPushButton::clicked, this, &Funeraria::slotDelete);
-    }
-}
-
-void Funeraria::slotDelete() {
-    int row = this->ui.tableWidget->currentRow();
-
-    QMessageBox message;
-    QPushButton* proceedBtn = message.addButton("Elimina", QMessageBox::ActionRole);
-    QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
-    message.setWindowTitle("Funeraria");
-    message.setIcon(QMessageBox::Warning);
-    message.setText("Vuoi eliminare questo elemento?");
-    message.exec();
-
-    if (message.clickedButton() == proceedBtn) {
-        // Delete the item
-
-        if (this->current_table == "tomb") {
-
-        }
-        else if (this->current_table == "vase") {
-            this->vase->remove(this->ui.tableWidget->item(row, 0)->text());
-        }
-        else if (this->current_table == "lamp") {
-            this->lamp->remove(this->ui.tableWidget->item(row, 0)->text());
-        }
-        else if (this->current_table == "flame") {
-            this->flame->remove(this->ui.tableWidget->item(row, 0)->text());
-        }
-        else if (this->current_table == "material") {
-            this->material->remove(this->ui.tableWidget->item(row, 0)->text());
-        }
-        else if (this->current_table == "client") {
-            this->client->remove(this->client->getId(this->ui.tableWidget->item(row, 1)->text()));
-            this->slotShowClients();
-            return;
-        }
-
-        this->slotShowItems(this->current_table);
     }
 }
 
@@ -449,6 +422,83 @@ void Funeraria::slotUpdateEntry()
     }
 }
 
+void Funeraria::slotDelete() {
+    int row = this->ui.tableWidget->currentRow();
+
+    QMessageBox message;
+    QPushButton* proceedBtn = message.addButton("Elimina", QMessageBox::ActionRole);
+    QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Warning);
+    message.setText("Vuoi eliminare questo elemento?");
+    message.exec();
+
+    if (message.clickedButton() == proceedBtn) {
+        // Delete the item
+
+        if (this->current_table == "tomb") {
+
+        }
+        else if (this->current_table == "vase") {
+            this->vase->remove(this->ui.tableWidget->item(row, 0)->text());
+        }
+        else if (this->current_table == "lamp") {
+            this->lamp->remove(this->ui.tableWidget->item(row, 0)->text());
+        }
+        else if (this->current_table == "flame") {
+            this->flame->remove(this->ui.tableWidget->item(row, 0)->text());
+        }
+        else if (this->current_table == "material") {
+            this->material->remove(this->ui.tableWidget->item(row, 0)->text());
+        }
+        else if (this->current_table == "client") {
+            this->client->remove(this->client->getId(this->ui.tableWidget->item(row, 1)->text()));
+            this->slotShowClients();
+            return;
+        }
+
+        this->slotShowItems(this->current_table);
+    }
+}
+
+void Funeraria::slotAccessoriesToMount()
+{
+    QList<QMap<QString, QString>> accessories = this->tomb->accessorieToMount();
+
+    if (accessories.size() > 0) {
+        // Block the segnals while building the table
+        const QSignalBlocker blocker(this->ui.tableWidget);
+
+        this->current_table = "accessories";
+
+        // Reset the table's content
+        this->clearTable();
+
+        QStringList headers{ "Vasi", "Lampade", "Fiamme" };
+
+        this->ui.tableWidget->setRowCount(accessories.size());
+        this->ui.tableWidget->setColumnCount(headers.size());
+        // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        //this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+        qDebug() << QString::number(accessories.size());
+
+        for (int i = 0; i < accessories.size(); i++) {
+            this->ui.tableWidget->setItem(i, 0, new QTableWidgetItem(accessories[i]["vase"]));
+            this->ui.tableWidget->setItem(i, 1, new QTableWidgetItem(accessories[i]["lamp"]));
+            this->ui.tableWidget->setItem(i, 2, new QTableWidgetItem(accessories[i]["flame"]));
+        }
+    }
+    else {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Non risultano lapidi con accessori da montare.");
+        message.exec();
+    }
+}
+
 /********** PRIVATE FUNCTIONS **********/
 
 void Funeraria::clearTable()
@@ -462,6 +512,11 @@ void Funeraria::clearTable()
                     pbutton->setParent(nullptr); // Reparent the button
                     delete pbutton;
                     pbutton = nullptr;
+                }
+                else {
+                    QTableWidgetItem* item = this->ui.tableWidget->item(i, j);
+                    delete item;
+                    item = nullptr;
                 }
             }
             else {

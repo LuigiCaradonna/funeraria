@@ -111,10 +111,10 @@ QMap<QString, QString> Tomb::getDetails(const int& progressive)
         "tombs.delivered_at, tombs.created_at, tombs.edited_at "
         "FROM " + this->table + " "
         "JOIN clients ON tombs.client_id = clients.id "
-        "join materials ON tombs.material_code = materials.code "
-        "join vases ON tombs.vase_code = vases.code "
-        "join lamps ON tombs.lamp_code = lamps.code "
-        "join flames ON tombs.flame_code = flames.code "
+        "JOIN materials ON tombs.material_code = materials.code "
+        "JOIN vases ON tombs.vase_code = vases.code "
+        "JOIN lamps ON tombs.lamp_code = lamps.code "
+        "JOIN flames ON tombs.flame_code = flames.code "
         "WHERE tombs.progressive = :progressive;");
 
     query.bindValue(":progressive", progressive);
@@ -123,7 +123,7 @@ QMap<QString, QString> Tomb::getDetails(const int& progressive)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("getDetails: " + query.lastError().text());
+        message.setText(query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -160,6 +160,39 @@ void Tomb::setProgressive(const int& progressive)
 {
     this->progressive = progressive;
     this->updateForm();
+}
+
+QList<QMap<QString, QString>> Tomb::accessorieToMount()
+{
+    QList<QMap<QString, QString>> accessories;
+    QMap<QString, QString> tomb;
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare("SELECT vases.name AS vase_name, lamps.name AS lamp_name, flames.name AS flame_name "
+        "FROM " + this->table + " "
+        "JOIN materials ON tombs.material_code = materials.code "
+        "JOIN vases ON tombs.vase_code = vases.code "
+        "JOIN lamps ON tombs.lamp_code = lamps.code "
+        "JOIN flames ON tombs.flame_code = flames.code "
+        "WHERE tombs.accessories_mounted = 0 AND tombs.engraved_at IS NOT NULL;"
+    );
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+    else {
+        while (query.next()) {
+            tomb["vase"] = query.value("vase_name").toString();
+            tomb["lamp"] = query.value("lamp_name").toString();
+            tomb["flame"] = query.value("flame_name").toString();
+            accessories.append(tomb);
+        }
+    }
+
+    return accessories;
 }
 
 /********** PROTECTED SLOTS **********/
@@ -505,16 +538,21 @@ bool Tomb::update(
         return false;
     }
 
+    // About the dates when updating a tomb, check for the "-" character which is set when a NULL is found
+    // in the database when retrieving the dates (NULLs related to the data loss in the past)
+
     if (ordered_at.trimmed() == "" || !Helpers::isValidItaDate(ordered_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data dell'ordine non è valida");
-        message.exec();
-        return false;
+        if (ordered_at.trimmed() != "-") {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data dell'ordine non è valida");
+            message.exec();
+            return false;
+        }
     }
 
-    if (proofed_at.trimmed() != "" && !Helpers::isValidItaDate(proofed_at.trimmed())) {
+    if (proofed_at.trimmed() != "" && proofed_at.trimmed() != "-" && !Helpers::isValidItaDate(proofed_at.trimmed())) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
@@ -523,7 +561,7 @@ bool Tomb::update(
         return false;
     }
 
-    if (confirmed_at.trimmed() != "" && !Helpers::isValidItaDate(confirmed_at.trimmed())) {
+    if (confirmed_at.trimmed() != "" && confirmed_at.trimmed() != "-" && !Helpers::isValidItaDate(confirmed_at.trimmed())) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
@@ -532,7 +570,7 @@ bool Tomb::update(
         return false;
     }
 
-    if (engraved_at.trimmed() != "" && !Helpers::isValidItaDate(engraved_at.trimmed())) {
+    if (engraved_at.trimmed() != "" && engraved_at.trimmed() != "-" && !Helpers::isValidItaDate(engraved_at.trimmed())) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
@@ -541,7 +579,7 @@ bool Tomb::update(
         return false;
     }
 
-    if (delivered_at.trimmed() != "" && !Helpers::isValidItaDate(delivered_at.trimmed())) {
+    if (delivered_at.trimmed() != "" && delivered_at.trimmed() != "-" && !Helpers::isValidItaDate(delivered_at.trimmed())) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
@@ -728,6 +766,7 @@ void Tomb::updateForm()
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
         this->ui.chbAccessoriesMounted->setChecked(tomb["accessories_mounted"] == "1");
+        this->ui.ptNote->setPlainText(tomb["notes"]);
         this->ui.leOrderedAt->setText(Helpers::dateSqlToIta(tomb["ordered_at"]));
         this->ui.leProofedAt->setText(Helpers::dateSqlToIta(tomb["proofed_at"]));
         this->ui.leConfirmedAt->setText(Helpers::dateSqlToIta(tomb["confirmed_at"]));

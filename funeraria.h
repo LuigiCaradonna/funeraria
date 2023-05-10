@@ -119,6 +119,13 @@ protected slots:
      */
     void slotDelete();
 
+    /*
+     * Shows the accessories needed by the tombs not yet mounted
+     *
+     * @return void
+     */
+    void slotAccessoriesToMount();
+
 private:
     Ui::FunerariaClass ui;
 

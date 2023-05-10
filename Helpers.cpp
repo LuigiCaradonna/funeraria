@@ -3,11 +3,18 @@
 QString Helpers::dateSqlToIta(const QString& dateSql)
 {
     // Some of the dates are set to NULL because they went lost
-    if (dateSql == "NULL") {
-        return " - ";
+    if (dateSql == "NULL" || dateSql == "") {
+        return "-";
     }
 
-    return QDate::fromString(dateSql, "yyyy-MM-dd").toString("dd/MM/yyyy");
+    QString date = QDate::fromString(dateSql, "yyyy-MM-dd").toString("dd/MM/yyyy");
+
+    // If the date provided was not valid
+    if (date == "") {
+        return "-";
+    }
+
+    return date;
 }
 
 bool Helpers::isValidItaDate(const QString& date)
