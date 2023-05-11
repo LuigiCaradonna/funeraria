@@ -88,7 +88,7 @@
         </font>
        </property>
        <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
+        <enum>Qt::StrongFocus</enum>
        </property>
       </widget>
      </item>
@@ -195,6 +195,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>leCode</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>btnOk</tabstop>
+  <tabstop>btnCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -204,8 +210,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>278</x>
-     <y>253</y>
+     <x>509</x>
+     <y>126</y>
     </hint>
     <hint type="destinationlabel">
      <x>96</x>
@@ -220,8 +226,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>369</x>
-     <y>253</y>
+     <x>590</x>
+     <y>126</y>
     </hint>
     <hint type="destinationlabel">
      <x>179</x>
