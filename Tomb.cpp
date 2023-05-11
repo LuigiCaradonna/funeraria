@@ -694,6 +694,14 @@ void Tomb::updateForm()
     QList<QString> lamp_names = this->lamp->getNames();
     QList<QString> flame_names = this->flame->getNames();
 
+
+    // Clear the combo boxes
+    this->ui.cbClient->clear();
+    this->ui.cbMaterial->clear();
+    this->ui.cbVase->clear();
+    this->ui.cbLamp->clear();
+    this->ui.cbFlame->clear();
+
     if (!tomb.isEmpty()) {
         this->setWindowTitle("Modifica lapide");
 
@@ -797,6 +805,14 @@ void Tomb::updateForm()
         // Tomb not found means we are asking to insert a new one
         this->setWindowTitle("Crea nuova");
 
+        this->ui.leProgressive->setEnabled(true);
+        this->ui.cbClient->setEnabled(true);
+        this->ui.cbMaterial->setEnabled(true);
+        this->ui.cbVase->setEnabled(true);
+        this->ui.cbLamp->setEnabled(true);
+        this->ui.cbFlame->setEnabled(true);
+
+
         // Reset the form fields
         this->ui.leProgressive->setText(QString::number(this->getLastProgresive() + 1));
         this->ui.cbClient->addItems(client_names);
@@ -809,6 +825,7 @@ void Tomb::updateForm()
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
         this->ui.chbAccessoriesMounted->setChecked(false);
+        this->ui.ptNote->setPlainText("");
         this->ui.leOrderedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
         this->ui.leProofedAt->setText("");
         this->ui.leConfirmedAt->setText("");

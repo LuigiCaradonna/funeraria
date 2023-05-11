@@ -505,6 +505,7 @@ void Funeraria::clearTable()
 {
     for (int i = 0; i < this->ui.tableWidget->rowCount(); i++) {
         for (int j = 0; j < this->ui.tableWidget->columnCount(); j++) {
+            // Usually the last column holds a button
             if (j == this->ui.tableWidget->columnCount() - 1) {
                 QPushButton* pbutton = qobject_cast<QPushButton*>(this->ui.tableWidget->cellWidget(i, j));
                 if (pbutton) {
