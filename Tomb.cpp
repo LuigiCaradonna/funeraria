@@ -694,7 +694,6 @@ void Tomb::updateForm()
     QList<QString> lamp_names = this->lamp->getNames();
     QList<QString> flame_names = this->flame->getNames();
 
-
     // Clear the combo boxes
     this->ui.cbClient->clear();
     this->ui.cbMaterial->clear();
