@@ -63,7 +63,7 @@ void DatabaseManager::solveDatabaseConnectionFailure()
         }
     }
     else if (message.clickedButton() == (QAbstractButton*)openBtn) {
-        this->path = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3");
+        this->path = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3)");
 
         if (!this->path.isEmpty()) {
             this->openDatabase();
