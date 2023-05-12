@@ -474,7 +474,7 @@ void Funeraria::slotAccessoriesToMount()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Vasi", "Lampade", "Fiamme" };
+        QStringList headers{ "Defunto", "Vasi", "Lampade", "Fiamme" };
 
         this->ui.tableWidget->setRowCount(accessories.size());
         this->ui.tableWidget->setColumnCount(headers.size());
@@ -482,12 +482,11 @@ void Funeraria::slotAccessoriesToMount()
         //this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
         this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-        qDebug() << QString::number(accessories.size());
-
         for (int i = 0; i < accessories.size(); i++) {
-            this->ui.tableWidget->setItem(i, 0, new QTableWidgetItem(accessories[i]["vase"]));
-            this->ui.tableWidget->setItem(i, 1, new QTableWidgetItem(accessories[i]["lamp"]));
-            this->ui.tableWidget->setItem(i, 2, new QTableWidgetItem(accessories[i]["flame"]));
+            this->ui.tableWidget->setItem(i, 0, new QTableWidgetItem(accessories[i]["deceased"]));
+            this->ui.tableWidget->setItem(i, 1, new QTableWidgetItem(accessories[i]["vase"]));
+            this->ui.tableWidget->setItem(i, 2, new QTableWidgetItem(accessories[i]["lamp"]));
+            this->ui.tableWidget->setItem(i, 3, new QTableWidgetItem(accessories[i]["flame"]));
         }
     }
     else {
