@@ -276,12 +276,24 @@ void Funeraria::slotShowClients()
             phones += phones_list[j] + nl;
         }
 
-        this->ui.tableWidget->setItem(i, 0, new QTableWidgetItem(clients[i]["position"])); // position
-        this->ui.tableWidget->setItem(i, 1, new QTableWidgetItem(clients[i]["name"])); // name
-        this->ui.tableWidget->setItem(i, 2, new QTableWidgetItem(emails)); // emails
-        this->ui.tableWidget->setItem(i, 3, new QTableWidgetItem(phones)); // phones
-        this->ui.tableWidget->setCellWidget(i, 4, pb_details); // Details button
-        this->ui.tableWidget->setCellWidget(i, 5, pb_delete); // Delete button
+        QTableWidgetItem* position_widget = new QTableWidgetItem(clients[i]["position"]);
+        // Set the field as not editable
+        position_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* name_widget = new QTableWidgetItem(clients[i]["name"]);
+        // Set the field as not editable
+        name_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* emails_widget = new QTableWidgetItem(emails);
+        // Set the field as not editable
+        emails_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* phones_widget = new QTableWidgetItem(phones);
+        // Set the field as not editable
+        phones_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        this->ui.tableWidget->setItem(i, 0, position_widget);
+        this->ui.tableWidget->setItem(i, 1, name_widget);
+        this->ui.tableWidget->setItem(i, 2, emails_widget);
+        this->ui.tableWidget->setItem(i, 3, phones_widget);
+        this->ui.tableWidget->setCellWidget(i, 4, pb_details);
+        this->ui.tableWidget->setCellWidget(i, 5, pb_delete);
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotClientDetails);
         this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDelete);
@@ -353,10 +365,16 @@ void Funeraria::slotShowItems(const QString& type)
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     for (int i = 0; i < accessories.size(); i++) {
+        QTableWidgetItem* code = new QTableWidgetItem(accessories[i]["code"]);
+        // Set the field as not editable
+        code->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* name = new QTableWidgetItem(accessories[i]["name"]);
+        // Set the field as not editable
+        name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QPushButton* pb = new QPushButton(this->ui.tableWidget);
         pb->setText("Elimina");
-        this->ui.tableWidget->setItem(i, 0, new QTableWidgetItem(accessories[i]["code"]));
-        this->ui.tableWidget->setItem(i, 1, new QTableWidgetItem(accessories[i]["name"]));
+        this->ui.tableWidget->setItem(i, 0, code);
+        this->ui.tableWidget->setItem(i, 1, name);
         this->ui.tableWidget->setCellWidget(i, 2, pb); // Delete button
         this->connect(pb, &QPushButton::clicked, this, &Funeraria::slotDelete);
     }
@@ -483,10 +501,22 @@ void Funeraria::slotAccessoriesToMount()
         this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
         for (int i = 0; i < accessories.size(); i++) {
-            this->ui.tableWidget->setItem(i, 0, new QTableWidgetItem(accessories[i]["deceased"]));
-            this->ui.tableWidget->setItem(i, 1, new QTableWidgetItem(accessories[i]["vase"]));
-            this->ui.tableWidget->setItem(i, 2, new QTableWidgetItem(accessories[i]["lamp"]));
-            this->ui.tableWidget->setItem(i, 3, new QTableWidgetItem(accessories[i]["flame"]));
+            QTableWidgetItem* deceased = new QTableWidgetItem(accessories[i]["deceased"]);
+            // Set the field as not editable
+            deceased->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* vase = new QTableWidgetItem(accessories[i]["vase"]);
+            // Set the field as not editable
+            vase->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* lamp = new QTableWidgetItem(accessories[i]["lamp"]);
+            // Set the field as not editable
+            lamp->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* flame = new QTableWidgetItem(accessories[i]["flame"]);
+            // Set the field as not editable
+            flame->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            this->ui.tableWidget->setItem(i, 0, deceased);
+            this->ui.tableWidget->setItem(i, 1, vase);
+            this->ui.tableWidget->setItem(i, 2, lamp);
+            this->ui.tableWidget->setItem(i, 3, flame);
         }
     }
     else {
