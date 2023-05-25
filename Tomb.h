@@ -70,6 +70,13 @@ public:
      */
     QList<QMap<QString, QString>> accessorieToMount();
 
+    /*
+     * Gets the list of the tombs not yet paid
+     *
+     * @return  QList<QMap<QString, QString>>   the list of the tombs not yet paid
+     */
+    QList<QMap<QString, QString>> tombsToPay();
+
 protected slots:
 
     /********** PROTECTED SLOTS **********/

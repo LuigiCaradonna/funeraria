@@ -54,16 +54,15 @@ Funeraria::Funeraria(QWidget *parent)
     // Set the event listeners
     this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
     this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
-    this->connect(this->ui.btnAccessories, &QPushButton::clicked, this, &Funeraria::slotAccessoriesToMount);
 
     // Signal emitted on table cell edit
     this->connect(this->ui.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
-    // Signal emitted from the menu item actionCList
+    // Signal emitted from the menu items
     this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
-    // Signal emitted from the menu item actionCNew
     this->connect(this->ui.actionCNew, SIGNAL(triggered()), this, SLOT(slotNewClient()));
-    // Signal emitted from the menu item actionTNew
     this->connect(this->ui.actionTNew, SIGNAL(triggered()), this, SLOT(slotNewTomb()));
+    this->connect(this->ui.actionMAccessories, SIGNAL(triggered()), this, SLOT(slotAccessoriesToMount()));
+    this->connect(this->ui.actionTPay, SIGNAL(triggered()), this, SLOT(slotTombsNotPaid()));
 
     // Map the signal coming from the menu items to call the same function (slotNewItem) with the proper parameter
     this->newItemMapper = new QSignalMapper(this);
@@ -234,7 +233,7 @@ void Funeraria::slotNewTomb()
 
 void Funeraria::slotShowClients()
 {
-    // Block the segnals while building the table
+    // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
     this->current_table = "client";
@@ -328,7 +327,7 @@ void Funeraria::slotNewClient()
 
 void Funeraria::slotShowItems(const QString& type)
 {
-    // Block the segnals while building the table
+    // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
     this->current_table = type;
@@ -484,7 +483,7 @@ void Funeraria::slotAccessoriesToMount()
     QList<QMap<QString, QString>> accessories = this->tomb->accessorieToMount();
 
     if (accessories.size() > 0) {
-        // Block the segnals while building the table
+        // Block the signals while building the table
         const QSignalBlocker blocker(this->ui.tableWidget);
 
         this->current_table = "accessories";
@@ -524,6 +523,49 @@ void Funeraria::slotAccessoriesToMount()
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Information);
         message.setText("Non risultano lapidi con accessori da montare.");
+        message.exec();
+    }
+}
+
+void Funeraria::slotTombsNotPaid()
+{
+    QList<QMap<QString, QString>> tombs = this->tomb->tombsToPay();
+
+    if (tombs.size() > 0) {
+        // Block the signals while building the table
+        const QSignalBlocker blocker(this->ui.tableWidget);
+
+        this->current_table = "tombs";
+
+        // Reset the table's content
+        this->clearTable();
+
+        QStringList headers{ "Defunto", "Prezzo", "Cliente" };
+
+        this->ui.tableWidget->setRowCount(tombs.size());
+        this->ui.tableWidget->setColumnCount(headers.size());
+        this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+        for (int i = 0; i < tombs.size(); i++) {
+            QTableWidgetItem* deceased = new QTableWidgetItem(tombs[i]["deceased"]);
+            // Set the field as not editable
+            deceased->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* price = new QTableWidgetItem(tombs[i]["price"]);
+            // Set the field as not editable
+            price->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* client = new QTableWidgetItem(tombs[i]["client"]);
+            // Set the field as not editable
+            client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            this->ui.tableWidget->setItem(i, 0, deceased);
+            this->ui.tableWidget->setItem(i, 1, price);
+            this->ui.tableWidget->setItem(i, 2, client);
+        }
+    }
+    else {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Non risultano lapidi da pagare.");
         message.exec();
     }
 }

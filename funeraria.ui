@@ -190,43 +190,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btnAccessories">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Accessori da montare</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item>
@@ -299,9 +262,17 @@
     </property>
     <addaction name="actionTNew"/>
    </widget>
+   <widget class="QMenu" name="menuReport">
+    <property name="title">
+     <string>Report</string>
+    </property>
+    <addaction name="actionMAccessories"/>
+    <addaction name="actionTPay"/>
+   </widget>
    <addaction name="menuClienti"/>
    <addaction name="menuAccessories"/>
    <addaction name="menuLapidi"/>
+   <addaction name="menuReport"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -395,6 +366,16 @@
   <action name="actionTNew">
    <property name="text">
     <string>Nuova</string>
+   </property>
+  </action>
+  <action name="actionMAccessories">
+   <property name="text">
+    <string>Accessori da montare</string>
+   </property>
+  </action>
+  <action name="actionTPay">
+   <property name="text">
+    <string>Lapidi da saldare</string>
    </property>
   </action>
  </widget>

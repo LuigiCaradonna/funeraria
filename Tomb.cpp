@@ -196,6 +196,36 @@ QList<QMap<QString, QString>> Tomb::accessorieToMount()
     return accessories;
 }
 
+QList<QMap<QString, QString>> Tomb::tombsToPay()
+{
+    QList<QMap<QString, QString>> tombs;
+    QMap<QString, QString> tomb;
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare("SELECT tombs.name AS name, tombs.price AS price, clients.name AS client_name "
+        "FROM " + this->table + " "
+        "JOIN clients ON tombs.client_id = clients.id "
+        "WHERE tombs.paid = 0 AND tombs.price <> 0;"
+    );
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+    else {
+        while (query.next()) {
+            tomb["deceased"] = query.value("name").toString();
+            tomb["price"] = query.value("price").toString();
+            tomb["client"] = query.value("client_name").toString();
+            tombs.append(tomb);
+        }
+    }
+
+    return tombs;
+}
+
 /********** PROTECTED SLOTS **********/
 
 void Tomb::slotSwitchEnableState()

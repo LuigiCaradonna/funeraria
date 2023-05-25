@@ -126,6 +126,13 @@ protected slots:
      */
     void slotAccessoriesToMount();
 
+    /*
+     * Shows the tombs not yet paid
+     *
+     * @return void
+     */
+    void slotTombsNotPaid();
+
 private:
     Ui::FunerariaClass ui;
 
