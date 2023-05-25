@@ -789,12 +789,15 @@ void Tomb::updateForm()
         this->ui.cbLamp->setEnabled(false);
         this->ui.cbFlame->setEnabled(false);
 
+        // Set the item to show inside the combo boxes
         this->ui.cbClient->setCurrentIndex(client_index);
         this->ui.cbMaterial->setCurrentIndex(material_index);
         this->ui.cbVase->setCurrentIndex(vase_index);
         this->ui.cbLamp->setCurrentIndex(lamp_index);
         this->ui.cbFlame->setCurrentIndex(flame_index);
 
+        // Set the "Allow edit" checkbox unchecked
+        this->ui.chbAllowEdit->setChecked(false);
         // Set the "Allow edit" checkbox enabled
         this->ui.chbAllowEdit->setEnabled(true);
 
@@ -827,7 +830,7 @@ void Tomb::updateForm()
         this->ui.chbAccessoriesMounted->setChecked(false);
         this->ui.ptNote->setPlainText("");
         this->ui.leOrderedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
-        this->ui.leProofedAt->setText("");
+        this->ui.leProofedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
         this->ui.leConfirmedAt->setText("");
         this->ui.leEngravedAt->setText("");
         this->ui.leDeliveredAt->setText("");
