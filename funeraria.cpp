@@ -150,6 +150,19 @@ void Funeraria::slotClientOrders()
     // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
+    this->ui.tableWidget->setColumnWidth(0, 60);
+    this->ui.tableWidget->setColumnWidth(1, 250);
+    this->ui.tableWidget->setColumnWidth(2, 60);
+    this->ui.tableWidget->setColumnWidth(3, 60);
+    this->ui.tableWidget->setColumnWidth(4, 650);
+    this->ui.tableWidget->setColumnWidth(5, 80);
+    this->ui.tableWidget->setColumnWidth(6, 90);
+    this->ui.tableWidget->setColumnWidth(7, 90);
+    this->ui.tableWidget->setColumnWidth(8, 90);
+    this->ui.tableWidget->setColumnWidth(9, 90);
+    this->ui.tableWidget->setColumnWidth(10, 90);
+    this->ui.tableWidget->setColumnWidth(11, 90);
+
     for (int i = 0; i < tombs.size(); i++) {
         QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
         pb_details->setText("Dettagli");
@@ -248,6 +261,13 @@ void Funeraria::slotShowClients()
     this->ui.tableWidget->setRowCount(clients.size());
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+    this->ui.tableWidget->setColumnWidth(0, 60);
+    this->ui.tableWidget->setColumnWidth(1, 300);
+    this->ui.tableWidget->setColumnWidth(2, 300);
+    this->ui.tableWidget->setColumnWidth(3, 300);
+    this->ui.tableWidget->setColumnWidth(4, 90);
+    this->ui.tableWidget->setColumnWidth(5, 90);
 
     for (int i = 0; i < clients.size(); i++) {
         QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
@@ -362,6 +382,10 @@ void Funeraria::slotShowItems(const QString& type)
     // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     //this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+    this->ui.tableWidget->setColumnWidth(0, 70);
+    this->ui.tableWidget->setColumnWidth(1, 300);
+    this->ui.tableWidget->setColumnWidth(2, 90);
 
     for (int i = 0; i < accessories.size(); i++) {
         QTableWidgetItem* code = new QTableWidgetItem(accessories[i]["code"]);
@@ -496,8 +520,13 @@ void Funeraria::slotAccessoriesToMount()
         this->ui.tableWidget->setRowCount(accessories.size());
         this->ui.tableWidget->setColumnCount(headers.size());
         // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-        //this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
         this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+        this->ui.tableWidget->setColumnWidth(0, 250);
+        this->ui.tableWidget->setColumnWidth(1, 300);
+        this->ui.tableWidget->setColumnWidth(2, 300);
+        this->ui.tableWidget->setColumnWidth(3, 300);
 
         for (int i = 0; i < accessories.size(); i++) {
             QTableWidgetItem* deceased = new QTableWidgetItem(accessories[i]["deceased"]);
@@ -535,7 +564,7 @@ void Funeraria::slotTombsNotPaid()
         // Block the signals while building the table
         const QSignalBlocker blocker(this->ui.tableWidget);
 
-        this->current_table = "tombs";
+        this->current_table = "tomb";
 
         // Reset the table's content
         this->clearTable();
@@ -545,6 +574,10 @@ void Funeraria::slotTombsNotPaid()
         this->ui.tableWidget->setRowCount(tombs.size());
         this->ui.tableWidget->setColumnCount(headers.size());
         this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+        this->ui.tableWidget->setColumnWidth(0, 250);
+        this->ui.tableWidget->setColumnWidth(1, 90);
+        this->ui.tableWidget->setColumnWidth(2, 200);
 
         for (int i = 0; i < tombs.size(); i++) {
             QTableWidgetItem* deceased = new QTableWidgetItem(tombs[i]["deceased"]);
