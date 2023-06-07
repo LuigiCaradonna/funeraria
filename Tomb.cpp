@@ -737,7 +737,7 @@ void Tomb::updateForm()
 
         /*********** Get the index to select for the comboboxes *************/
         for (int i = 0; i < clients.size(); i++) {
-            if (clients[i]["id"] == tomb["client_id"]) {
+            if (client_names[i] == tomb["client"]) {
                 client_index = i;
                 break;
             }
