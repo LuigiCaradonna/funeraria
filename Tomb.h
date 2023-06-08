@@ -64,6 +64,13 @@ public:
     void setProgressive(const int& progressive);
 
     /*
+     * Gets the list of the tombs which can be engraved
+     *
+     * @return  QList<QMap<QString, QString>>   the list of the tombs which can be engraved
+     */
+    QList<QMap<QString, QString>> tombsToEngrave();
+
+    /*
      * Gets the accessories needed by the tombs not yet mounted
      *
      * @return  QList<QMap<QString, QString>>   a list of the accessories' name, type and quantity

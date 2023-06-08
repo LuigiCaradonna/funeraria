@@ -61,6 +61,7 @@ Funeraria::Funeraria(QWidget *parent)
     this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
     this->connect(this->ui.actionCNew, SIGNAL(triggered()), this, SLOT(slotNewClient()));
     this->connect(this->ui.actionTNew, SIGNAL(triggered()), this, SLOT(slotNewTomb()));
+    this->connect(this->ui.actionTEngrave, SIGNAL(triggered()), this, SLOT(slotTombsToEngrave()));
     this->connect(this->ui.actionMAccessories, SIGNAL(triggered()), this, SLOT(slotAccessoriesToMount()));
     this->connect(this->ui.actionTPay, SIGNAL(triggered()), this, SLOT(slotTombsNotPaid()));
 
@@ -499,6 +500,48 @@ void Funeraria::slotDelete() {
         }
 
         this->slotShowItems(this->current_table);
+    }
+}
+
+void Funeraria::slotTombsToEngrave()
+{
+    QList<QMap<QString, QString>> tombs = this->tomb->tombsToEngrave();
+
+    if (tombs.size() > 0) {
+        // Block the signals while building the table
+        const QSignalBlocker blocker(this->ui.tableWidget);
+
+        this->current_table = "tomb";
+
+        // Reset the table's content
+        this->clearTable();
+
+        QStringList headers{ "Defunto", "Cliente" };
+
+        this->ui.tableWidget->setRowCount(tombs.size());
+        this->ui.tableWidget->setColumnCount(headers.size());
+        this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+        this->ui.tableWidget->setColumnWidth(0, 250);
+        this->ui.tableWidget->setColumnWidth(1, 200);
+
+        for (int i = 0; i < tombs.size(); i++) {
+            QTableWidgetItem* deceased = new QTableWidgetItem(tombs[i]["deceased"]);
+            // Set the field as not editable
+            deceased->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* client = new QTableWidgetItem(tombs[i]["client"]);
+            // Set the field as not editable
+            client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            this->ui.tableWidget->setItem(i, 0, deceased);
+            this->ui.tableWidget->setItem(i, 1, client);
+        }
+    }
+    else {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Non risultano lapidi da incidere.");
+        message.exec();
     }
 }
 

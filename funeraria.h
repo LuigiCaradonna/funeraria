@@ -120,6 +120,13 @@ protected slots:
     void slotDelete();
 
     /*
+     * Shows the tombs needed which can be engraved
+     *
+     * @return void
+     */
+    void slotTombsToEngrave();
+
+    /*
      * Shows the accessories needed by the tombs not yet mounted
      *
      * @return void

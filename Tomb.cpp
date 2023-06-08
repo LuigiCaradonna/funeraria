@@ -162,6 +162,35 @@ void Tomb::setProgressive(const int& progressive)
     this->updateForm();
 }
 
+QList<QMap<QString, QString>> Tomb::tombsToEngrave()
+{
+    QList<QMap<QString, QString>> tombs;
+    QMap<QString, QString> tomb;
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare("SELECT tombs.name AS name, clients.name AS client_name "
+        "FROM " + this->table + " "
+        "JOIN clients ON tombs.client_id = clients.id "
+        "WHERE (tombs.confirmed_at != '' AND tombs.confirmed_at IS NOT NULL) AND (tombs.engraved_at == '' OR tombs.engraved_at IS NULL);"
+    );
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+    else {
+        while (query.next()) {
+            tomb["deceased"] = query.value("name").toString();
+            tomb["client"] = query.value("client_name").toString();
+            tombs.append(tomb);
+        }
+    }
+
+    return tombs;
+}
+
 QList<QMap<QString, QString>> Tomb::accessorieToMount()
 {
     QList<QMap<QString, QString>> accessories;
