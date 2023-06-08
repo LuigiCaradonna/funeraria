@@ -266,6 +266,7 @@
     <property name="title">
      <string>Report</string>
     </property>
+    <addaction name="actionTEngrave"/>
     <addaction name="actionMAccessories"/>
     <addaction name="actionTPay"/>
    </widget>
@@ -376,6 +377,11 @@
   <action name="actionTPay">
    <property name="text">
     <string>Lapidi da saldare</string>
+   </property>
+  </action>
+  <action name="actionTEngrave">
+   <property name="text">
+    <string>Lapidi da incidere</string>
    </property>
   </action>
  </widget>
