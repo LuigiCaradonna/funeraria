@@ -515,7 +515,7 @@ void Funeraria::slotAccessoriesToMount()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Defunto", "Vasi", "Lampade", "Fiamme" };
+        QStringList headers{ "Defunto", "Vasi", "Lampade", "Fiamme", "Cliente"};
 
         this->ui.tableWidget->setRowCount(accessories.size());
         this->ui.tableWidget->setColumnCount(headers.size());
@@ -527,6 +527,7 @@ void Funeraria::slotAccessoriesToMount()
         this->ui.tableWidget->setColumnWidth(1, 300);
         this->ui.tableWidget->setColumnWidth(2, 300);
         this->ui.tableWidget->setColumnWidth(3, 300);
+        this->ui.tableWidget->setColumnWidth(4, 300);
 
         for (int i = 0; i < accessories.size(); i++) {
             QTableWidgetItem* deceased = new QTableWidgetItem(accessories[i]["deceased"]);
@@ -541,10 +542,14 @@ void Funeraria::slotAccessoriesToMount()
             QTableWidgetItem* flame = new QTableWidgetItem(accessories[i]["flame"]);
             // Set the field as not editable
             flame->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* client = new QTableWidgetItem(accessories[i]["client"]);
+            // Set the field as not editable
+            client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             this->ui.tableWidget->setItem(i, 0, deceased);
             this->ui.tableWidget->setItem(i, 1, vase);
             this->ui.tableWidget->setItem(i, 2, lamp);
             this->ui.tableWidget->setItem(i, 3, flame);
+            this->ui.tableWidget->setItem(i, 4, client);
         }
     }
     else {
