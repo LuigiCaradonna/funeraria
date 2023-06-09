@@ -164,13 +164,14 @@ void Funeraria::slotClientOrders()
     this->ui.tableWidget->setColumnWidth(10, 90);
     this->ui.tableWidget->setColumnWidth(11, 90);
 
+    int row_number = 1;
     for (int i = 0; i < tombs.size(); i++) {
         QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
         pb_details->setText("Dettagli");
 
         // Generate the cells' content and set them as not editable
         QTableWidgetItem* progressive = new QTableWidgetItem(tombs[i]["progressive"]);
-        //progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* name = new QTableWidgetItem(tombs[i]["name"]);
         name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* price = new QTableWidgetItem(tombs[i]["price"]);
@@ -181,26 +182,54 @@ void Funeraria::slotClientOrders()
         notes->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* accessories_mounted = new QTableWidgetItem(tombs[i]["accessories_mounted"]);
         accessories_mounted->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QString order_date = Helpers::dateSqlToIta(tombs[i]["ordered_at"]);
-        if (order_date == "") order_date = "-";
         QTableWidgetItem* ordered_at = new QTableWidgetItem(order_date);
         ordered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QString proof_date = Helpers::dateSqlToIta(tombs[i]["proofed_at"]);
-        if (proof_date == "") proof_date = "-";
         QTableWidgetItem* proofed_at = new QTableWidgetItem(proof_date);
         proofed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QString confirm_date = Helpers::dateSqlToIta(tombs[i]["confirmed_at"]);
-        if (confirm_date == "") confirm_date = "-";
         QTableWidgetItem* confirmed_at = new QTableWidgetItem(confirm_date);
         confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QString engrave_date = Helpers::dateSqlToIta(tombs[i]["engraved_at"]);
-        if (engrave_date == "") engrave_date = "-";
         QTableWidgetItem* engraved_at = new QTableWidgetItem(engrave_date);
         engraved_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QString deliver_date = Helpers::dateSqlToIta(tombs[i]["delivered_at"]);
-        if (deliver_date == "") deliver_date = "-";
         QTableWidgetItem* delivered_at = new QTableWidgetItem(deliver_date);
         delivered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        if (row_number % 2 == 0) {
+            this->row_bg = this->row_even;
+        }
+        else {
+            this->row_bg = this->row_odd;
+        }
+
+        if (deliver_date != "") {
+            this->row_bg = this->tomb_delivered;
+        }
+        else if (confirm_date != "" && engrave_date == "") {
+            this->row_bg = this->tomb_to_engrave;
+        }
+
+        // TODO: ridefinire il confronto tra le date, quello alfabetico non va bene
+
+        progressive->setBackground(QBrush(row_bg));
+        name->setBackground(QBrush(row_bg));
+        price->setBackground(QBrush(row_bg));
+        paid->setBackground(QBrush(row_bg));
+        notes->setBackground(QBrush(row_bg));
+        accessories_mounted->setBackground(QBrush(row_bg));
+        ordered_at->setBackground(QBrush(row_bg));
+        proofed_at->setBackground(QBrush(row_bg));
+        confirmed_at->setBackground(QBrush(row_bg));
+        engraved_at->setBackground(QBrush(row_bg));
+        delivered_at->setBackground(QBrush(row_bg));
 
         this->ui.tableWidget->setItem(i, 0, progressive);
         this->ui.tableWidget->setItem(i, 1, name);
@@ -216,6 +245,8 @@ void Funeraria::slotClientOrders()
         this->ui.tableWidget->setCellWidget(i, 11, pb_details); // Details button
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
+
+        row_number++;
     }
 }
 
@@ -270,6 +301,7 @@ void Funeraria::slotShowClients()
     this->ui.tableWidget->setColumnWidth(4, 90);
     this->ui.tableWidget->setColumnWidth(5, 90);
 
+    int row_number = 1;
     for (int i = 0; i < clients.size(); i++) {
         QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
         pb_details->setText("Dettagli");
@@ -308,6 +340,19 @@ void Funeraria::slotShowClients()
         QTableWidgetItem* phones_widget = new QTableWidgetItem(phones);
         // Set the field as not editable
         phones_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        if (row_number % 2 == 0) {
+            this->row_bg = this->row_even;
+        }
+        else {
+            this->row_bg = this->row_odd;
+        }
+
+        position_widget->setBackground(QBrush(row_bg));
+        name_widget->setBackground(QBrush(row_bg));
+        emails_widget->setBackground(QBrush(row_bg));
+        phones_widget->setBackground(QBrush(row_bg));
+
         this->ui.tableWidget->setItem(i, 0, position_widget);
         this->ui.tableWidget->setItem(i, 1, name_widget);
         this->ui.tableWidget->setItem(i, 2, emails_widget);
@@ -317,6 +362,8 @@ void Funeraria::slotShowClients()
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotClientDetails);
         this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDelete);
+
+        row_number++;
     }
 }
 
@@ -388,6 +435,7 @@ void Funeraria::slotShowItems(const QString& type)
     this->ui.tableWidget->setColumnWidth(1, 300);
     this->ui.tableWidget->setColumnWidth(2, 90);
 
+    int row_number = 1;
     for (int i = 0; i < accessories.size(); i++) {
         QTableWidgetItem* code = new QTableWidgetItem(accessories[i]["code"]);
         // Set the field as not editable
@@ -397,10 +445,23 @@ void Funeraria::slotShowItems(const QString& type)
         name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QPushButton* pb = new QPushButton(this->ui.tableWidget);
         pb->setText("Elimina");
+
+        if (row_number % 2 == 0) {
+            this->row_bg = this->row_even;
+        }
+        else {
+            this->row_bg = this->row_odd;
+        }
+
+        code->setBackground(QBrush(row_bg));
+        name->setBackground(QBrush(row_bg));
+
         this->ui.tableWidget->setItem(i, 0, code);
         this->ui.tableWidget->setItem(i, 1, name);
         this->ui.tableWidget->setCellWidget(i, 2, pb); // Delete button
         this->connect(pb, &QPushButton::clicked, this, &Funeraria::slotDelete);
+
+        row_number++;
     }
 }
 
@@ -525,6 +586,7 @@ void Funeraria::slotTombsToEngrave()
         this->ui.tableWidget->setColumnWidth(0, 250);
         this->ui.tableWidget->setColumnWidth(1, 200);
 
+        int row_number = 1;
         for (int i = 0; i < tombs.size(); i++) {
             QTableWidgetItem* deceased = new QTableWidgetItem(tombs[i]["deceased"]);
             // Set the field as not editable
@@ -532,8 +594,21 @@ void Funeraria::slotTombsToEngrave()
             QTableWidgetItem* client = new QTableWidgetItem(tombs[i]["client"]);
             // Set the field as not editable
             client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+            if (row_number % 2 == 0) {
+                this->row_bg = this->row_even;
+            }
+            else {
+                this->row_bg = this->row_odd;
+            }
+
+            deceased->setBackground(QBrush(row_bg));
+            client->setBackground(QBrush(row_bg));
+
             this->ui.tableWidget->setItem(i, 0, deceased);
             this->ui.tableWidget->setItem(i, 1, client);
+
+            row_number++;
         }
     }
     else {
@@ -572,6 +647,7 @@ void Funeraria::slotAccessoriesToMount()
         this->ui.tableWidget->setColumnWidth(3, 300);
         this->ui.tableWidget->setColumnWidth(4, 300);
 
+        int row_number = 1;
         for (int i = 0; i < accessories.size(); i++) {
             QTableWidgetItem* deceased = new QTableWidgetItem(accessories[i]["deceased"]);
             // Set the field as not editable
@@ -588,11 +664,27 @@ void Funeraria::slotAccessoriesToMount()
             QTableWidgetItem* client = new QTableWidgetItem(accessories[i]["client"]);
             // Set the field as not editable
             client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+            if (row_number % 2 == 0) {
+                this->row_bg = this->row_even;
+            }
+            else {
+                this->row_bg = this->row_odd;
+            }
+
+            deceased->setBackground(QBrush(row_bg));
+            vase->setBackground(QBrush(row_bg));
+            lamp->setBackground(QBrush(row_bg));
+            flame->setBackground(QBrush(row_bg));
+            client->setBackground(QBrush(row_bg));
+
             this->ui.tableWidget->setItem(i, 0, deceased);
             this->ui.tableWidget->setItem(i, 1, vase);
             this->ui.tableWidget->setItem(i, 2, lamp);
             this->ui.tableWidget->setItem(i, 3, flame);
             this->ui.tableWidget->setItem(i, 4, client);
+
+            row_number++;
         }
     }
     else {
@@ -627,6 +719,7 @@ void Funeraria::slotTombsNotPaid()
         this->ui.tableWidget->setColumnWidth(1, 90);
         this->ui.tableWidget->setColumnWidth(2, 200);
 
+        int row_number = 1;
         for (int i = 0; i < tombs.size(); i++) {
             QTableWidgetItem* deceased = new QTableWidgetItem(tombs[i]["deceased"]);
             // Set the field as not editable
@@ -637,9 +730,23 @@ void Funeraria::slotTombsNotPaid()
             QTableWidgetItem* client = new QTableWidgetItem(tombs[i]["client"]);
             // Set the field as not editable
             client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+            if (row_number % 2 == 0) {
+                this->row_bg = this->row_even;
+            }
+            else {
+                this->row_bg = this->row_odd;
+            }
+
+            deceased->setBackground(QBrush(row_bg));
+            price->setBackground(QBrush(row_bg));
+            client->setBackground(QBrush(row_bg));
+
             this->ui.tableWidget->setItem(i, 0, deceased);
             this->ui.tableWidget->setItem(i, 1, price);
             this->ui.tableWidget->setItem(i, 2, client);
+
+            row_number++;
         }
     }
     else {

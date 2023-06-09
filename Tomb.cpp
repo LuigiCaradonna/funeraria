@@ -235,7 +235,7 @@ QList<QMap<QString, QString>> Tomb::tombsToPay()
     query.prepare("SELECT tombs.name AS name, tombs.price AS price, clients.name AS client_name "
         "FROM " + this->table + " "
         "JOIN clients ON tombs.client_id = clients.id "
-        "WHERE tombs.paid = 0 AND tombs.price <> 0;"
+        "WHERE tombs.delivered_at != '' AND tombs.delivered_at IS NOT NULL AND tombs.paid = 0 AND tombs.price != 0;"
     );
 
     if (!query.exec()) {
@@ -382,6 +382,162 @@ void Tomb::slotCloseDialog()
 
 /********** PRIVATE FUNCTIONS **********/
 
+bool Tomb::checkDates(const QString& order, const QString& proof, const QString& confirmation, const QString& engraving, const QString& delivery)
+{
+    if (order.trimmed() == "" || !Helpers::isValidItaDate(order.trimmed())) {
+        if (order.trimmed() != "-") {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data dell'ordine non è valida");
+            message.exec();
+            return false;
+        }
+    }
+
+    // If the proof date is set
+    if (proof.trimmed() != "" && proof.trimmed() != "-") {
+        if (!Helpers::isValidItaDate(proof.trimmed())) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data del provino non è valida");
+            message.exec();
+            return false;
+        }
+
+        // The proof date must not preced the order
+        if (proof.trimmed().compare(order.trimmed()) < 0) {
+            QMessageBox message;
+            QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
+            QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
+
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data del provino è antecedente a quella dell'ordine");
+            message.exec();
+
+            if (message.clickedButton() == (QAbstractButton*)abortBtn) {
+                return false;
+            }
+        }
+    }
+
+    // If the confirmation date is set
+    if (confirmation.trimmed() != "" && confirmation.trimmed() != "-") {
+        // The proof date must be set to set the confirmation date
+        if (proof.trimmed() == "" || proof.trimmed() == "-") {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data del provino non è impostata");
+            message.exec();
+            return false;
+        }
+
+        if (!Helpers::isValidItaDate(confirmation.trimmed())) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data della conferma non è valida");
+            message.exec();
+            return false;
+        }
+
+        // The confirmation date must not preced the proof
+        if (confirmation.trimmed().compare(proof.trimmed()) < 0) {
+            QMessageBox message;
+            QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
+            QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
+
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data della conferma è antecedente a quella del provino");
+            message.exec();
+
+            if (message.clickedButton() == (QAbstractButton*)abortBtn) {
+                return false;
+            }
+        }
+    }
+
+    // If the engraving date is set
+    if (engraving.trimmed() != "" && engraving.trimmed() != "-") {
+        // The confirmation date must be set to set the engraving date
+        if (confirmation.trimmed() == "" || confirmation.trimmed() == "-") {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data della conferma non è impostata");
+            message.exec();
+            return false;
+        }
+
+        if (!Helpers::isValidItaDate(engraving.trimmed())) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data dell'incisione non è valida");
+            message.exec();
+            return false;
+        }
+
+        // The engraving date must not preced the confirmation
+        if (engraving.trimmed().compare(confirmation.trimmed()) < 0) {
+            QMessageBox message;
+            QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
+            QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
+
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data dell'incisione è antecedente a quella della conferma");
+            message.exec();
+
+            if (message.clickedButton() == (QAbstractButton*)abortBtn) {
+                return false;
+            }
+        }
+    }
+
+    // If the delivery date is set
+    if (delivery.trimmed() != "" && delivery.trimmed() != "-") {
+        // The engraving date must be set to set delivery date
+        if (engraving.trimmed() == "" || engraving.trimmed() == "-") {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data dell'incisione non è impostata");
+            message.exec();
+            return false;
+        }
+
+        if (!Helpers::isValidItaDate(delivery.trimmed())) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data della consegna non è valida");
+            message.exec();
+            return false;
+        }
+
+        // The delivery date must not preced the engraving
+        if (delivery.trimmed().compare(engraving.trimmed()) < 0) {
+            QMessageBox message;
+            QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
+            QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
+
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("La data della consegna è antecedente a quella dell'incisione");
+            message.exec();
+
+            if (message.clickedButton() == (QAbstractButton*)abortBtn) {
+                return false;
+            }
+        }
+    }
+}
+
 bool Tomb::store(
     const int& progressive,
     const int& client_id,
@@ -442,50 +598,13 @@ bool Tomb::store(
         return false;
     }
 
-    if (ordered_at.trimmed() == "" || !Helpers::isValidItaDate(ordered_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data dell'ordine non è valida");
-        message.exec();
+    // About the dates when updating a tomb, check for the "-" character which is set when a NULL is found
+    // in the database when retrieving the dates (NULLs related to the data loss in the past)
+
+    if (!this->checkDates(ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at)) {
         return false;
     }
 
-    if (proofed_at.trimmed() != "" && !Helpers::isValidItaDate(proofed_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data del provino non è valida");
-        message.exec();
-        return false;
-    }
-
-    if (confirmed_at.trimmed() != "" && !Helpers::isValidItaDate(confirmed_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data della conferma non è valida");
-        message.exec();
-        return false;
-    }
-
-    if (engraved_at.trimmed() != "" && !Helpers::isValidItaDate(engraved_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data dell'incisione non è valida");
-        message.exec();
-        return false;
-    }
-
-    if (delivered_at.trimmed() != "" && !Helpers::isValidItaDate(delivered_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data della consegna non è valida");
-        message.exec();
-        return false;
-    }
     /*************************************************/
 
     // Validation passed
@@ -603,52 +722,10 @@ bool Tomb::update(
     // About the dates when updating a tomb, check for the "-" character which is set when a NULL is found
     // in the database when retrieving the dates (NULLs related to the data loss in the past)
 
-    if (ordered_at.trimmed() == "" || !Helpers::isValidItaDate(ordered_at.trimmed())) {
-        if (ordered_at.trimmed() != "-") {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Warning);
-            message.setText("La data dell'ordine non è valida");
-            message.exec();
-            return false;
-        }
-    }
-
-    if (proofed_at.trimmed() != "" && proofed_at.trimmed() != "-" && !Helpers::isValidItaDate(proofed_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data del provino non è valida");
-        message.exec();
+    if (!this->checkDates(ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at)) {
         return false;
     }
 
-    if (confirmed_at.trimmed() != "" && confirmed_at.trimmed() != "-" && !Helpers::isValidItaDate(confirmed_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data della conferma non è valida");
-        message.exec();
-        return false;
-    }
-
-    if (engraved_at.trimmed() != "" && engraved_at.trimmed() != "-" && !Helpers::isValidItaDate(engraved_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data dell'incisione non è valida");
-        message.exec();
-        return false;
-    }
-
-    if (delivered_at.trimmed() != "" && delivered_at.trimmed() != "-" && !Helpers::isValidItaDate(delivered_at.trimmed())) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La data della consegna non è valida");
-        message.exec();
-        return false;
-    }
     /*************************************************/
 
     // Validation passed

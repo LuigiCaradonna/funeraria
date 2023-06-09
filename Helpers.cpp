@@ -4,14 +4,14 @@ QString Helpers::dateSqlToIta(const QString& dateSql)
 {
     // Some of the dates are set to NULL because they went lost
     if (dateSql == "NULL" || dateSql == "") {
-        return "-";
+        return "";
     }
 
     QString date = QDate::fromString(dateSql, "yyyy-MM-dd").toString("dd/MM/yyyy");
 
     // If the date provided was not valid
     if (date == "") {
-        return "-";
+        return "";
     }
 
     return date;
