@@ -217,8 +217,6 @@ void Funeraria::slotClientOrders()
             this->row_bg = this->tomb_to_engrave;
         }
 
-        // TODO: ridefinire il confronto tra le date, quello alfabetico non va bene
-
         progressive->setBackground(QBrush(row_bg));
         name->setBackground(QBrush(row_bg));
         price->setBackground(QBrush(row_bg));
