@@ -24,4 +24,13 @@ public:
      * @return  bollean true if the date is valid, false otherwise.
      */
     static bool isValidItaDate(const QString& date);
+
+    /*
+     * Compares two dates having the format dd/mm/yyyy.
+     *
+     * @param   const QString&  date - The date to check
+     *
+     * @return  int -1, 0 or 1 if the first date is earlier, same or later than the second respectively.
+     */
+    static int compareItaDates(const QString& first_date, const QString& second_date);
 };

@@ -33,3 +33,13 @@ bool Helpers::isValidItaDate(const QString& date)
 
     return true;
 }
+
+int Helpers::compareItaDates(const QString& first_date, const QString& second_date)
+{
+    QDate date1 = QDate::fromString(first_date, "dd/MM/yyyy");
+    QDate date2 = QDate::fromString(second_date, "dd/MM/yyyy");
+
+    if (date1 < date2) return -1;
+    else if (date1 > date2) return 1;
+    else return 0;
+}

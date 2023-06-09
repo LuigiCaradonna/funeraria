@@ -407,7 +407,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
         }
 
         // The proof date must not preced the order
-        if (proof.trimmed().compare(order.trimmed()) < 0) {
+        if (Helpers::compareItaDates(proof.trimmed(), order.trimmed()) < 0) {
             QMessageBox message;
             QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
             QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
@@ -445,7 +445,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
         }
 
         // The confirmation date must not preced the proof
-        if (confirmation.trimmed().compare(proof.trimmed()) < 0) {
+        if (Helpers::compareItaDates(confirmation.trimmed(), proof.trimmed()) < 0) {
             QMessageBox message;
             QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
             QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
@@ -483,7 +483,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
         }
 
         // The engraving date must not preced the confirmation
-        if (engraving.trimmed().compare(confirmation.trimmed()) < 0) {
+        if (Helpers::compareItaDates(engraving.trimmed(), confirmation.trimmed()) < 0) {
             QMessageBox message;
             QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
             QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
@@ -521,7 +521,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
         }
 
         // The delivery date must not preced the engraving
-        if (delivery.trimmed().compare(engraving.trimmed()) < 0) {
+        if (Helpers::compareItaDates(delivery.trimmed(), engraving.trimmed()) < 0) {
             QMessageBox message;
             QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
             QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
@@ -536,6 +536,8 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             }
         }
     }
+
+    return true;
 }
 
 bool Tomb::store(
