@@ -631,7 +631,7 @@ void Funeraria::slotAccessoriesToMount()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Defunto", "Vasi", "Lampade", "Fiamme", "Cliente"};
+        QStringList headers{ "Defunto", "Materiali", "Vasi", "Lampade", "Fiamme", "Cliente"};
 
         this->ui.tableWidget->setRowCount(accessories.size());
         this->ui.tableWidget->setColumnCount(headers.size());
@@ -641,15 +641,19 @@ void Funeraria::slotAccessoriesToMount()
 
         this->ui.tableWidget->setColumnWidth(0, 250);
         this->ui.tableWidget->setColumnWidth(1, 300);
-        this->ui.tableWidget->setColumnWidth(2, 300);
-        this->ui.tableWidget->setColumnWidth(3, 300);
-        this->ui.tableWidget->setColumnWidth(4, 300);
+        this->ui.tableWidget->setColumnWidth(2, 200);
+        this->ui.tableWidget->setColumnWidth(3, 200);
+        this->ui.tableWidget->setColumnWidth(4, 200);
+        this->ui.tableWidget->setColumnWidth(5, 300);
 
         int row_number = 1;
         for (int i = 0; i < accessories.size(); i++) {
             QTableWidgetItem* deceased = new QTableWidgetItem(accessories[i]["deceased"]);
             // Set the field as not editable
             deceased->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* material = new QTableWidgetItem(accessories[i]["material"]);
+            // Set the field as not editable
+            material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             QTableWidgetItem* vase = new QTableWidgetItem(accessories[i]["vase"]);
             // Set the field as not editable
             vase->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -671,16 +675,18 @@ void Funeraria::slotAccessoriesToMount()
             }
 
             deceased->setBackground(QBrush(row_bg));
+            material->setBackground(QBrush(row_bg));
             vase->setBackground(QBrush(row_bg));
             lamp->setBackground(QBrush(row_bg));
             flame->setBackground(QBrush(row_bg));
             client->setBackground(QBrush(row_bg));
 
             this->ui.tableWidget->setItem(i, 0, deceased);
-            this->ui.tableWidget->setItem(i, 1, vase);
-            this->ui.tableWidget->setItem(i, 2, lamp);
-            this->ui.tableWidget->setItem(i, 3, flame);
-            this->ui.tableWidget->setItem(i, 4, client);
+            this->ui.tableWidget->setItem(i, 1, material);
+            this->ui.tableWidget->setItem(i, 2, vase);
+            this->ui.tableWidget->setItem(i, 3, lamp);
+            this->ui.tableWidget->setItem(i, 4, flame);
+            this->ui.tableWidget->setItem(i, 5, client);
 
             row_number++;
         }

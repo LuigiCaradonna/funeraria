@@ -196,7 +196,8 @@ QList<QMap<QString, QString>> Tomb::accessoriesToMount()
     QList<QMap<QString, QString>> accessories;
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(*this->db);
-    query.prepare("SELECT tombs.name AS name, clients.name AS client_name, vases.name AS vase_name, lamps.name AS lamp_name, flames.name AS flame_name "
+    query.prepare("SELECT tombs.name AS name, clients.name AS client_name, vases.name AS vase_name, "
+        "lamps.name AS lamp_name, flames.name AS flame_name, materials.name AS material_name "
         "FROM " + this->table + " "
         "JOIN materials ON tombs.material_code = materials.code "
         "JOIN vases ON tombs.vase_code = vases.code "
@@ -218,6 +219,7 @@ QList<QMap<QString, QString>> Tomb::accessoriesToMount()
     else {
         while (query.next()) {
             tomb["deceased"] = query.value("name").toString();
+            tomb["material"] = query.value("material_name").toString();
             tomb["vase"] = query.value("vase_name").toString();
             tomb["lamp"] = query.value("lamp_name").toString();
             tomb["flame"] = query.value("flame_name").toString();
