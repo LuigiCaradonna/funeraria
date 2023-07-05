@@ -75,7 +75,7 @@ public:
      *
      * @return  QList<QMap<QString, QString>>   a list of the accessories' name, type and quantity
      */
-    QList<QMap<QString, QString>> accessorieToMount();
+    QList<QMap<QString, QString>> accessoriesToMount();
 
     /*
      * Gets the list of the tombs not yet paid

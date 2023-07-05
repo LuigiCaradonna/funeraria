@@ -191,7 +191,7 @@ QList<QMap<QString, QString>> Tomb::tombsToEngrave()
     return tombs;
 }
 
-QList<QMap<QString, QString>> Tomb::accessorieToMount()
+QList<QMap<QString, QString>> Tomb::accessoriesToMount()
 {
     QList<QMap<QString, QString>> accessories;
     QMap<QString, QString> tomb;
@@ -205,7 +205,7 @@ QList<QMap<QString, QString>> Tomb::accessorieToMount()
         "JOIN clients ON tombs.client_id = clients.id "
         "WHERE tombs.accessories_mounted = 0 AND (tombs.engraved_at != '' "
         "AND tombs.engraved_at IS NOT NULL) "
-        "AND (tombs.vase_code != 'NV' AND tombs.lamp_code != 'NL' AND tombs.flame_code != 'NF');"
+        "AND (tombs.vase_code != 'NV' OR tombs.lamp_code != 'NL' OR tombs.flame_code != 'NF');"
     );
 
     if (!query.exec()) {

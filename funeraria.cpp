@@ -620,7 +620,7 @@ void Funeraria::slotTombsToEngrave()
 
 void Funeraria::slotAccessoriesToMount()
 {
-    QList<QMap<QString, QString>> accessories = this->tomb->accessorieToMount();
+    QList<QMap<QString, QString>> accessories = this->tomb->accessoriesToMount();
 
     if (accessories.size() > 0) {
         // Block the signals while building the table
