@@ -575,20 +575,28 @@ void Funeraria::slotTombsToEngrave()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Defunto", "Cliente" };
+        QStringList headers{ "Numero", "Defunto", "Materiale", "Cliente" };
 
         this->ui.tableWidget->setRowCount(tombs.size());
         this->ui.tableWidget->setColumnCount(headers.size());
         this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-        this->ui.tableWidget->setColumnWidth(0, 250);
-        this->ui.tableWidget->setColumnWidth(1, 200);
+        this->ui.tableWidget->setColumnWidth(0, 90);
+        this->ui.tableWidget->setColumnWidth(1, 250);
+        this->ui.tableWidget->setColumnWidth(2, 250);
+        this->ui.tableWidget->setColumnWidth(3, 200);
 
         int row_number = 1;
         for (int i = 0; i < tombs.size(); i++) {
+            QTableWidgetItem* progressive = new QTableWidgetItem(tombs[i]["progressive"]);
+            // Set the field as not editable
+            progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             QTableWidgetItem* deceased = new QTableWidgetItem(tombs[i]["deceased"]);
             // Set the field as not editable
             deceased->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* material = new QTableWidgetItem(tombs[i]["material"]);
+            // Set the field as not editable
+            material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             QTableWidgetItem* client = new QTableWidgetItem(tombs[i]["client"]);
             // Set the field as not editable
             client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -600,11 +608,15 @@ void Funeraria::slotTombsToEngrave()
                 this->row_bg = this->row_odd;
             }
 
+            progressive->setBackground(QBrush(row_bg));
             deceased->setBackground(QBrush(row_bg));
+            material->setBackground(QBrush(row_bg));
             client->setBackground(QBrush(row_bg));
 
-            this->ui.tableWidget->setItem(i, 0, deceased);
-            this->ui.tableWidget->setItem(i, 1, client);
+            this->ui.tableWidget->setItem(i, 0, progressive);
+            this->ui.tableWidget->setItem(i, 1, deceased);
+            this->ui.tableWidget->setItem(i, 2, material);
+            this->ui.tableWidget->setItem(i, 3, client);
 
             row_number++;
         }
