@@ -21,10 +21,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -105,11 +107,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Helpers.h" />
+    <ClInclude Include="resource.h" />
     <QtMoc Include="Tomb.h" />
     <QtMoc Include="Client.h" />
     <QtMoc Include="Accessory.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DatabaseManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="funeraria.ico" />
+    <Image Include="funeraria.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="funeraria.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
