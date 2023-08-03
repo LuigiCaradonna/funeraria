@@ -270,8 +270,11 @@ void Funeraria::slotNewTomb()
     this->tomb->setModal(true);
     this->tomb->exec();
 
-    // Reload the table when the popup is closed, the user could have made some changes
-    this->slotClientOrders();
+    // If the table shows any tomb
+    if (this->ui.tableWidget->rowCount() > 0) {
+        // Reload the table when the popup is closed, the user could have made some changes
+        this->slotClientOrders();
+    }
 }
 
 void Funeraria::slotShowClients()
