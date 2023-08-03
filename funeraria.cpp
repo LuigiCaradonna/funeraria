@@ -7,6 +7,9 @@ Funeraria::Funeraria(QWidget *parent)
 {
     this->ui.setupUi(this);
 
+    // Sets an icon for the window
+    this->setWindowIcon(QIcon("funeraria.png"));
+
     // Set the font for the table
     QFont font("Calibri", 12);
     this->ui.tableWidget->setFont(font);
