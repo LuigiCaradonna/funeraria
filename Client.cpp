@@ -7,6 +7,9 @@ Client::Client(QSqlDatabase* db, QWidget* parent)
 {
 	this->ui.setupUi(this);
 
+    // Sets an icon for the window
+    this->setWindowIcon(QIcon("funeraria.png"));
+
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &Client::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &Client::slotCloseDialog);
 }

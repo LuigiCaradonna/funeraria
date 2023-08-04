@@ -7,6 +7,9 @@ Tomb::Tomb(QSqlDatabase* db, QWidget* parent)
 {
     this->ui.setupUi(this);
 
+    // Sets an icon for the window
+    this->setWindowIcon(QIcon("funeraria.png"));
+
     this->progressive = 0;
     this->client = new Client(this->db, this);
     this->material = new Accessory(this->db, "materials", this);

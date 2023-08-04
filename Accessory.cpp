@@ -7,6 +7,9 @@ Accessory::Accessory(QSqlDatabase* db, const QString& table, QWidget* parent)
 {
     this->ui.setupUi(this);
 
+    // Sets an icon for the window
+    this->setWindowIcon(QIcon("funeraria.png"));
+
     if (table == "material") {
         this->setWindowTitle("Inserimento materiale");
     }
