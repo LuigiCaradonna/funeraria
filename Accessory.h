@@ -51,6 +51,15 @@ public:
     /*
      * Gets all the accessories' names
      *
+     * @param const QString& name   - The accessory's name
+     *
+     * @return  QString - The accessory's code id
+     */
+    QString getNameFromId(const QString& code);
+
+    /*
+     * Gets all the accessories' names
+     *
      * @return  QStringList - A list containing the accessories' names
      */
     QStringList getNames();

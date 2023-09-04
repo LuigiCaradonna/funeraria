@@ -82,6 +82,28 @@ QString Accessory::getCode(const QString& name)
     return "";
 }
 
+QString Accessory::getNameFromId(const QString& code)
+{
+    QString name;
+    QSqlQuery query = QSqlQuery(*this->db);
+    query.prepare("SELECT name FROM " + this->table + " WHERE code = :code");
+    query.bindValue(":code", code);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+
+    if (query.next()) {
+       return query.value("name").toString();
+    }
+
+    return "";
+}
+
 QStringList Accessory::getNames()
 {
     QStringList accessories;

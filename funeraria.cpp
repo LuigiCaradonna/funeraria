@@ -145,7 +145,7 @@ void Funeraria::slotClientOrders()
     
     QList<QMap<QString, QString>> tombs = this->tomb->getList(client_id, year, filter);
 
-    QStringList headers{ "Numero", "Defunto", "Prezzo", "Pagata", "Note", "Accessori",
+    QStringList headers{ "Numero", "Defunto", "Materiale", "Prezzo", "Pagata", "Note", "Accessori",
         "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni"};
 
     this->ui.tableWidget->setRowCount(tombs.size());
@@ -155,17 +155,18 @@ void Funeraria::slotClientOrders()
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     this->ui.tableWidget->setColumnWidth(0, 60);
-    this->ui.tableWidget->setColumnWidth(1, 250);
-    this->ui.tableWidget->setColumnWidth(2, 60);
+    this->ui.tableWidget->setColumnWidth(1, 230);
+    this->ui.tableWidget->setColumnWidth(2, 150);
     this->ui.tableWidget->setColumnWidth(3, 60);
-    this->ui.tableWidget->setColumnWidth(4, 650);
-    this->ui.tableWidget->setColumnWidth(5, 80);
-    this->ui.tableWidget->setColumnWidth(6, 90);
+    this->ui.tableWidget->setColumnWidth(4, 60);
+    this->ui.tableWidget->setColumnWidth(5, 650);
+    this->ui.tableWidget->setColumnWidth(6, 80);
     this->ui.tableWidget->setColumnWidth(7, 90);
     this->ui.tableWidget->setColumnWidth(8, 90);
     this->ui.tableWidget->setColumnWidth(9, 90);
     this->ui.tableWidget->setColumnWidth(10, 90);
     this->ui.tableWidget->setColumnWidth(11, 90);
+    this->ui.tableWidget->setColumnWidth(12, 90);
 
     int row_number = 1;
     for (int i = 0; i < tombs.size(); i++) {
@@ -177,6 +178,8 @@ void Funeraria::slotClientOrders()
         progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* name = new QTableWidgetItem(tombs[i]["name"]);
         name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* material = new QTableWidgetItem(this->material->getNameFromId(tombs[i]["material"]));
+        material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* price = new QTableWidgetItem(tombs[i]["price"]);
         price->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* paid = new QTableWidgetItem(tombs[i]["paid"]);
@@ -222,6 +225,7 @@ void Funeraria::slotClientOrders()
 
         progressive->setBackground(QBrush(row_bg));
         name->setBackground(QBrush(row_bg));
+        material->setBackground(QBrush(row_bg));
         price->setBackground(QBrush(row_bg));
         paid->setBackground(QBrush(row_bg));
         notes->setBackground(QBrush(row_bg));
@@ -234,16 +238,17 @@ void Funeraria::slotClientOrders()
 
         this->ui.tableWidget->setItem(i, 0, progressive);
         this->ui.tableWidget->setItem(i, 1, name);
-        this->ui.tableWidget->setItem(i, 2, price);
-        this->ui.tableWidget->setItem(i, 3, paid);
-        this->ui.tableWidget->setItem(i, 4, notes);
-        this->ui.tableWidget->setItem(i, 5, accessories_mounted);
-        this->ui.tableWidget->setItem(i, 6, ordered_at);
-        this->ui.tableWidget->setItem(i, 7, proofed_at);
-        this->ui.tableWidget->setItem(i, 8, confirmed_at);
-        this->ui.tableWidget->setItem(i, 9, engraved_at);
-        this->ui.tableWidget->setItem(i, 10, delivered_at);
-        this->ui.tableWidget->setCellWidget(i, 11, pb_details); // Details button
+        this->ui.tableWidget->setItem(i, 2, material);
+        this->ui.tableWidget->setItem(i, 3, price);
+        this->ui.tableWidget->setItem(i, 4, paid);
+        this->ui.tableWidget->setItem(i, 5, notes);
+        this->ui.tableWidget->setItem(i, 6, accessories_mounted);
+        this->ui.tableWidget->setItem(i, 7, ordered_at);
+        this->ui.tableWidget->setItem(i, 8, proofed_at);
+        this->ui.tableWidget->setItem(i, 9, confirmed_at);
+        this->ui.tableWidget->setItem(i, 10, engraved_at);
+        this->ui.tableWidget->setItem(i, 11, delivered_at);
+        this->ui.tableWidget->setCellWidget(i, 12, pb_details); // Details button
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
 

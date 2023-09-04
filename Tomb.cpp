@@ -78,6 +78,7 @@ QList<QMap<QString, QString>> Tomb::getList(const int& client_id, const int& yea
         tomb["progressive"] = QString::number(query.value("progressive").toInt());
         tomb["client_id"] = query.value("client_id").toString();
         tomb["name"] = query.value("name").toString();
+        tomb["material"] = query.value("material_code").toString();
         tomb["additional_names"] = query.value("additional_names").toString();
         tomb["price"] = query.value("price").toString();
         tomb["paid"] = query.value("paid").toString();
