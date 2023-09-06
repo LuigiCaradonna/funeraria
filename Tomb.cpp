@@ -21,6 +21,20 @@ Tomb::Tomb(QSqlDatabase* db, QWidget* parent)
     this->connect(this->ui.btnAvailableProgressives, &QPushButton::clicked, this, &Tomb::slotAvailableProgressives);
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &Tomb::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &Tomb::slotCloseDialog);
+
+    // Map the signal coming from the clicked button to call the same function (slotSetCurrentDate) with the proper parameter
+    this->currentDateMapper = new QSignalMapper(this);
+    this->connect(this->ui.btnOrderedAt, SIGNAL(clicked()), currentDateMapper, SLOT(map()));
+    this->connect(this->ui.btnProofedAt, SIGNAL(clicked()), currentDateMapper, SLOT(map()));
+    this->connect(this->ui.btnConfirmedAt, SIGNAL(clicked()), currentDateMapper, SLOT(map()));
+    this->connect(this->ui.btnEngravedAt, SIGNAL(clicked()), currentDateMapper, SLOT(map()));
+    this->connect(this->ui.btnDeliveredAt, SIGNAL(clicked()), currentDateMapper, SLOT(map()));
+    currentDateMapper->setMapping(this->ui.btnOrderedAt, "order");
+    currentDateMapper->setMapping(this->ui.btnProofedAt, "proof");
+    currentDateMapper->setMapping(this->ui.btnConfirmedAt, "confirm");
+    currentDateMapper->setMapping(this->ui.btnEngravedAt, "engrave");
+    currentDateMapper->setMapping(this->ui.btnDeliveredAt, "deliver");
+    this->connect(currentDateMapper, &QSignalMapper::mappedString, this, &Tomb::slotSetCurrentDate);
 }
 
 /********** DESTRUCTOR **********/
@@ -331,6 +345,27 @@ void Tomb::slotAvailableProgressives()
     message.setIcon(QMessageBox::Information);
     message.setText("Numeri disponibili: " + holes);
     message.exec();
+}
+
+void Tomb::slotSetCurrentDate(const QString& field)
+{
+    QString today = QDate::currentDate().toString("dd/MM/yyyy");
+
+    if (field == "order") {
+        this->ui.leOrderedAt->setText(today);
+    }
+    else if (field == "proof") {
+        this->ui.leProofedAt->setText(today);
+    }
+    else if (field == "confirm") {
+        this->ui.leConfirmedAt->setText(today);
+    }
+    else if (field == "engrave") {
+        this->ui.leEngravedAt->setText(today);
+    }
+    else if (field == "deliver") {
+        this->ui.leDeliveredAt->setText(today);
+    }
 }
 
 void Tomb::slotSave()

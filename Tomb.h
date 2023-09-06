@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <QMessageBox>
 #include <QDate>
+#include <QSignalMapper>
 #include "ui_Tomb.h"
 #include "Client.h"
 #include "Accessory.h"
@@ -103,6 +104,15 @@ protected slots:
     void slotAvailableProgressives();
 
     /*
+     * Sets the current date to the proper input field
+     * 
+     * @param const QString& - Name of the field where to set the current date
+     *
+     * @return  void
+     */
+    void slotSetCurrentDate(const QString& field);
+
+    /*
      * Saves a tomb's data
      *
      * @return  void
@@ -130,6 +140,7 @@ private:
     Accessory* flame;
     Accessory* material;
 
+    QSignalMapper* currentDateMapper;
     /********** PRIVATE FUNCTIONS **********/
 
     /*
