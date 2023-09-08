@@ -54,6 +54,9 @@ Funeraria::Funeraria(QWidget *parent)
         this->ui.cbYear->addItem(QString::number(i));
     }
 
+    // Set the current index to the current year (index 0 is "Tutti")
+    this->ui.cbYear->setCurrentIndex(1);
+
     // Set the event listeners
     this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
     this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
@@ -154,19 +157,19 @@ void Funeraria::slotClientOrders()
     // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 60);
-    this->ui.tableWidget->setColumnWidth(1, 230);
-    this->ui.tableWidget->setColumnWidth(2, 150);
-    this->ui.tableWidget->setColumnWidth(3, 60);
-    this->ui.tableWidget->setColumnWidth(4, 60);
-    this->ui.tableWidget->setColumnWidth(5, 650);
-    this->ui.tableWidget->setColumnWidth(6, 80);
-    this->ui.tableWidget->setColumnWidth(7, 90);
-    this->ui.tableWidget->setColumnWidth(8, 90);
-    this->ui.tableWidget->setColumnWidth(9, 90);
-    this->ui.tableWidget->setColumnWidth(10, 90);
-    this->ui.tableWidget->setColumnWidth(11, 90);
-    this->ui.tableWidget->setColumnWidth(12, 90);
+    this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
+    this->ui.tableWidget->setColumnWidth(1, 230);   // Name
+    this->ui.tableWidget->setColumnWidth(2, 150);   // Material
+    this->ui.tableWidget->setColumnWidth(3, 60);    // Price
+    this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
+    this->ui.tableWidget->setColumnWidth(5, 650);   // Notes
+    this->ui.tableWidget->setColumnWidth(6, 80);    // Accessories mounted
+    this->ui.tableWidget->setColumnWidth(7, 90);    // Ordered at
+    this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
+    this->ui.tableWidget->setColumnWidth(9, 90);    // Confirmed at
+    this->ui.tableWidget->setColumnWidth(10, 90);   // Engraved at
+    this->ui.tableWidget->setColumnWidth(11, 90);   // Delivered at
+    this->ui.tableWidget->setColumnWidth(12, 90);   // Buttons
 
     int row_number = 1;
     for (int i = 0; i < tombs.size(); i++) {
