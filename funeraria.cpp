@@ -185,11 +185,11 @@ void Funeraria::slotClientOrders()
         material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* price = new QTableWidgetItem(tombs[i]["price"]);
         price->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* paid = new QTableWidgetItem(tombs[i]["paid"]);
+        QTableWidgetItem* paid = new QTableWidgetItem("");
         paid->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         QTableWidgetItem* notes = new QTableWidgetItem(tombs[i]["notes"]);
         notes->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* accessories_mounted = new QTableWidgetItem(tombs[i]["accessories_mounted"]);
+        QTableWidgetItem* accessories_mounted = new QTableWidgetItem("");
         accessories_mounted->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
         QString order_date = Helpers::dateSqlToIta(tombs[i]["ordered_at"]);
@@ -226,18 +226,29 @@ void Funeraria::slotClientOrders()
             this->row_bg = this->tomb_to_engrave;
         }
 
-        progressive->setBackground(QBrush(row_bg));
-        name->setBackground(QBrush(row_bg));
-        material->setBackground(QBrush(row_bg));
-        price->setBackground(QBrush(row_bg));
-        paid->setBackground(QBrush(row_bg));
-        notes->setBackground(QBrush(row_bg));
-        accessories_mounted->setBackground(QBrush(row_bg));
-        ordered_at->setBackground(QBrush(row_bg));
-        proofed_at->setBackground(QBrush(row_bg));
-        confirmed_at->setBackground(QBrush(row_bg));
-        engraved_at->setBackground(QBrush(row_bg));
-        delivered_at->setBackground(QBrush(row_bg));
+        this->paid_cell = this->row_bg;
+        this->mounted_cell = this->row_bg;
+
+        if (tombs[i]["paid"] == "0" && deliver_date != "" && tombs[i]["price"] != "0") {
+            this->paid_cell = this->warning_bg;
+        }
+
+        if (tombs[i]["accessories_mounted"] == "0" && engrave_date != "") {
+            this->mounted_cell = this->warning_bg;
+        }
+
+        progressive->setBackground(QBrush(this->row_bg));
+        name->setBackground(QBrush(this->row_bg));
+        material->setBackground(QBrush(this->row_bg));
+        price->setBackground(QBrush(this->row_bg));
+        paid->setBackground(QBrush(this->paid_cell));
+        notes->setBackground(QBrush(this->row_bg));
+        accessories_mounted->setBackground(QBrush(this->mounted_cell));
+        ordered_at->setBackground(QBrush(this->row_bg));
+        proofed_at->setBackground(QBrush(this->row_bg));
+        confirmed_at->setBackground(QBrush(this->row_bg));
+        engraved_at->setBackground(QBrush(this->row_bg));
+        delivered_at->setBackground(QBrush(this->row_bg));
 
         this->ui.tableWidget->setItem(i, 0, progressive);
         this->ui.tableWidget->setItem(i, 1, name);

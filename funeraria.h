@@ -165,11 +165,14 @@ private:
     QSignalMapper* newItemMapper;
 
     // Table rows' colors
+    QColor paid_cell = QColor(255, 255, 255);
+    QColor mounted_cell = QColor(255, 255, 255);
     QColor row_bg = QColor(255, 255, 255);
     QColor row_even = QColor(255, 255, 255);
     QColor row_odd = QColor(235, 235, 235);
     QColor tomb_delivered = QColor(200, 230, 200);
     QColor tomb_to_engrave = QColor(180, 225, 235);
+    QColor warning_bg = QColor(250, 200, 70);
 
     /********** PRIVATE FUNCTIONS **********/
 
