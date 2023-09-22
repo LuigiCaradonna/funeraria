@@ -63,7 +63,7 @@ QList<QMap<QString, QString>> Tomb::getList(const int& client_id, const int& yea
     }
 
     if (filter.trimmed() != "") {
-        query_string += " AND name LIKE \"" + filter + "%\"";
+        query_string += " AND name LIKE \"%" + filter + "%\"";
     }
 
     if (year != 0) {
