@@ -474,6 +474,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
+.vs
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -495,6 +496,7 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/windows,visualstudio,c++,qtcreator
 
 # Personal directories
+.git
 [Dd]ocs
 *.sql
 *.db
