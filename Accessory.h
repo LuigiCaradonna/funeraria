@@ -5,9 +5,8 @@
 #include <QDialog>
 #include <QMessageBox>
 #include <QDate>
-#include "ui_Accessory.h"
 
-class Accessory : public QDialog
+class Accessory : QObject
 {
     Q_OBJECT
 
@@ -17,11 +16,10 @@ public:
     /*
      * Constructs the accessory object.
      *
-     * @param	QSqlDatabase*	db	- Pointer to the database connection
+     * @param	QSqlDatabase*	db	    - Pointer to the database connection
      * @param	const QString&	table	- Database table to use
-     * @param	QWidget*        parent	- Parent widget
      */
-    Accessory(QSqlDatabase* db, const QString& table, QWidget* parent = nullptr);
+    Accessory(QSqlDatabase* db, const QString& table);
 
     /********** DESTRUCTOR **********/
 
@@ -43,7 +41,7 @@ public:
      * Gets all the accessories' names
      *
      * @param const QString& name   - The accessory's name
-     * 
+     *
      * @return  QString - The accessory's code id found, empty string otherwise
      */
     QString getCode(const QString& name);
@@ -65,13 +63,14 @@ public:
     QStringList getNames();
 
     /*
-     * Removes a accessory from the database
+     * Adds an accessory into the database
      *
-     * @param const QString& code - Accessory's code
+     * @param const QString& code   - Accessory's code
+     * @param const QString& name   - Accessory's name
      *
-     * @return  void
+     * @return  QString - Empty on success, failure cause on failure
      */
-    void remove(const QString& code);
+    QString add(const QString& code, const QString& name);
 
     /*
      * Updates an accessory into the database
@@ -79,32 +78,21 @@ public:
      * @param const QString& code   - Accessory's code
      * @param const QString& name   - Accessory's name
      *
-     * @return  void
+     * @return  QString - Empty on success, failure cause on failure
      */
-    void update(const QString& code, const QString& name);
-
-protected slots:
-
-    /********** PRIVATE SLOTS **********/
+    QString update(const QString& code, const QString& name);
 
     /*
-     * Gets the data from the dialog window and stores a new accessory into the database
+     * Removes a accessory from the database
      *
-     * @return  void
-     */
-    void slotAddAccessory();
-
-    /*
-     * Closes the dialog window
+     * @param const QString& code - Accessory's code
      *
-     * @return  void
+     * @return  QString - Empty on success, failure cause on failure
      */
-    void slotCloseDialog();
+    QString remove(const QString& code);
 
 private:
-    Ui::Dialog ui;
     const QString table;
     QSqlDatabase* db;
-    QWidget* parent;
 };
 

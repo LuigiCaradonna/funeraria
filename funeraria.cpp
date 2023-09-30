@@ -2,7 +2,7 @@
 
 /********** CONSTRUCTOR **********/
 
-Funeraria::Funeraria(QWidget *parent)
+Funeraria::Funeraria(QWidget* parent)
     : QMainWindow(parent)
 {
     this->ui.setupUi(this);
@@ -36,10 +36,10 @@ Funeraria::Funeraria(QWidget *parent)
 
     this->client = new Client(&this->db->db, this);
     this->tomb = new Tomb(&this->db->db, this);
-    this->vase = new Accessory(&this->db->db, "vases", this);
-    this->lamp = new Accessory(&this->db->db, "lamps", this);
-    this->flame = new Accessory(&this->db->db, "flames", this);
-    this->material = new Accessory(&this->db->db, "materials", this);
+    this->vase = new Accessory(&this->db->db, "vases");
+    this->lamp = new Accessory(&this->db->db, "lamps");
+    this->flame = new Accessory(&this->db->db, "flames");
+    this->material = new Accessory(&this->db->db, "materials");
 
     // List of clients' names
     QStringList clients = this->client->getNames();
@@ -106,11 +106,11 @@ Funeraria::~Funeraria()
     delete this->config;
     delete this->db;
     delete this->client;
-    delete this->material;
     delete this->tomb;
     delete this->vase;
     delete this->lamp;
     delete this->flame;
+    delete this->material;
     delete this->showItemsMapper;
     delete this->newItemMapper;
 }
@@ -145,11 +145,11 @@ void Funeraria::slotClientOrders()
     else {
         year = this->ui.cbYear->currentText().toInt();
     }
-    
+
     QList<QMap<QString, QString>> tombs = this->tomb->getList(client_id, year, filter);
 
     QStringList headers{ "Numero", "Defunto", "Materiale", "Prezzo", "Pagata", "Note", "Accessori",
-        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni"};
+        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni" };
 
     this->ui.tableWidget->setRowCount(tombs.size());
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -311,7 +311,7 @@ void Funeraria::slotShowClients()
 
     QList<QMap<QString, QString>> clients = this->client->get();
 
-    QStringList headers{ "Ordine", "Nome", "Email", "Telefono", "", ""};
+    QStringList headers{ "Ordine", "Nome", "Email", "Telefono", "", "" };
 
     this->ui.tableWidget->setRowCount(clients.size());
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -446,7 +446,7 @@ void Funeraria::slotShowItems(const QString& type)
         return;
     }
 
-    QStringList headers{ "Codice", "Nome", "Azioni"};
+    QStringList headers{ "Codice", "Nome", "Azioni" };
 
     this->ui.tableWidget->setRowCount(accessories.size());
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -493,20 +493,32 @@ void Funeraria::slotNewItem(const QString& type)
     this->current_table = type;
 
     if (type == "vase") {
-        this->vase->setModal(true);
-        this->vase->exec();
+        AccessoryUi* vaseUi = new AccessoryUi(&this->db->db, "vases", this);
+        vaseUi->setModal(true);
+        vaseUi->exec();
+
+        delete vaseUi;
     }
     else if (type == "lamp") {
-        this->lamp->setModal(true);
-        this->lamp->exec();
+        AccessoryUi* lampUi = new AccessoryUi(&this->db->db, "lamp", this);
+        lampUi->setModal(true);
+        lampUi->exec();
+
+        delete lampUi;
     }
     else if (type == "flame") {
-        this->flame->setModal(true);
-        this->flame->exec();
+        AccessoryUi* flameUi = new AccessoryUi(&this->db->db, "flame", this);
+        flameUi->setModal(true);
+        flameUi->exec();
+
+        delete flameUi;
     }
     else if (type == "material") {
-        this->material->setModal(true);
-        this->material->exec();
+        AccessoryUi* materialUi = new AccessoryUi(&this->db->db, "material", this);
+        materialUi->setModal(true);
+        materialUi->exec();
+
+        delete materialUi;
     }
     else {
         // The type requested is not valid
@@ -520,7 +532,7 @@ void Funeraria::slotUpdateEntry()
 {
     int row = this->ui.tableWidget->currentRow();
     if (this->current_table == "tomb") {
-        
+
     }
     else if (this->current_table == "vase") {
         this->vase->update(
@@ -668,7 +680,7 @@ void Funeraria::slotAccessoriesToMount()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Defunto", "Materiali", "Vasi", "Lampade", "Fiamme", "Cliente"};
+        QStringList headers{ "Defunto", "Materiali", "Vasi", "Lampade", "Fiamme", "Cliente" };
 
         this->ui.tableWidget->setRowCount(accessories.size());
         this->ui.tableWidget->setColumnCount(headers.size());

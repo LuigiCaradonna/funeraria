@@ -12,10 +12,10 @@ Tomb::Tomb(QSqlDatabase* db, QWidget* parent)
 
     this->progressive = 0;
     this->client = new Client(this->db, this);
-    this->material = new Accessory(this->db, "materials", this);
-    this->vase = new Accessory(this->db, "vases", this);
-    this->lamp = new Accessory(this->db, "lamps", this);
-    this->flame = new Accessory(this->db, "flames", this);
+    this->material = new Accessory(this->db, "materials");
+    this->vase = new Accessory(this->db, "vases");
+    this->lamp = new Accessory(this->db, "lamps");
+    this->flame = new Accessory(this->db, "flames");
 
     this->connect(this->ui.chbAllowEdit, &QCheckBox::stateChanged, this, &Tomb::slotSwitchEnableState);
     this->connect(this->ui.btnAvailableProgressives, &QPushButton::clicked, this, &Tomb::slotAvailableProgressives);

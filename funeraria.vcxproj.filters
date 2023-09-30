@@ -58,6 +58,9 @@
     <ClCompile Include="Helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AccessoryUi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h">
@@ -81,6 +84,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Tomb.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AccessoryUi.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

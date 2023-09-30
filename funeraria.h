@@ -8,7 +8,7 @@
 #include "DatabaseManager.h"
 #include "Client.h"
 #include "Tomb.h"
-#include "Accessory.h"
+#include "AccessoryUi.h"
 #include "Helpers.h"
 
 class Funeraria : public QMainWindow
@@ -23,7 +23,7 @@ public:
      *
      * @param	QWidget* parent	- Parent widget
      */
-    Funeraria(QWidget *parent = nullptr);
+    Funeraria(QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -89,7 +89,7 @@ protected slots:
 
     /*
      * Shows the accessories' list
-     * 
+     *
      * @param   const QString& type - Name of the accessories type to show
      *
      * @return void
@@ -107,7 +107,7 @@ protected slots:
 
     /*
      * Persists into the database the change made to a table cell
-     * 
+     *
      * @return void
      */
     void slotUpdateEntry();
@@ -153,7 +153,7 @@ private:
 
     // Placeholder for the clients' combo box
     QString client_placeholder = "Tutti";
-    
+
     Client* client;
     Tomb* tomb;
     Accessory* vase;
