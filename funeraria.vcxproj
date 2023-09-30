@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Accessory.cpp" />
+    <ClCompile Include="AccessoryUi.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="Tomb.cpp" />
@@ -106,6 +107,7 @@
     <QtUic Include="Tomb.ui" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="AccessoryUi.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="Tomb.h" />
