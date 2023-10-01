@@ -7,8 +7,10 @@
 #include "Config.h"
 #include "DatabaseManager.h"
 #include "Client.h"
+#include "TombUi.h"
 #include "Tomb.h"
 #include "AccessoryUi.h"
+#include "Accessory.h"
 #include "Helpers.h"
 
 class Funeraria : public QMainWindow
@@ -155,7 +157,7 @@ private:
     QString client_placeholder = "Tutti";
 
     Client* client;
-    Tomb* tomb;
+    TombUi* tombUi;
     Accessory* vase;
     Accessory* lamp;
     Accessory* flame;

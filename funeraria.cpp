@@ -35,7 +35,7 @@ Funeraria::Funeraria(QWidget* parent)
     }
 
     this->client = new Client(&this->db->db, this);
-    this->tomb = new Tomb(&this->db->db, this);
+    this->tombUi = new TombUi(&this->db->db, this);
     this->vase = new Accessory(&this->db->db, "vases");
     this->lamp = new Accessory(&this->db->db, "lamps");
     this->flame = new Accessory(&this->db->db, "flames");
@@ -106,7 +106,7 @@ Funeraria::~Funeraria()
     delete this->config;
     delete this->db;
     delete this->client;
-    delete this->tomb;
+    delete this->tombUi;
     delete this->vase;
     delete this->lamp;
     delete this->flame;
@@ -130,6 +130,8 @@ void Funeraria::slotClientOrders()
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
+    Tomb* tomb = new Tomb(&this->db->db);
+
     this->current_table = "tomb";
 
     // Reset the table's content
@@ -146,7 +148,7 @@ void Funeraria::slotClientOrders()
         year = this->ui.cbYear->currentText().toInt();
     }
 
-    QList<QMap<QString, QString>> tombs = this->tomb->getList(client_id, year, filter);
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, filter);
 
     QStringList headers{ "Numero", "Defunto", "Materiale", "Prezzo", "Pagata", "Note", "Accessori",
         "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni" };
@@ -268,6 +270,8 @@ void Funeraria::slotClientOrders()
 
         row_number++;
     }
+
+    delete tomb;
 }
 
 void Funeraria::slotTombDetails()
@@ -275,9 +279,9 @@ void Funeraria::slotTombDetails()
     // Row index of the clicked button
     int row = this->ui.tableWidget->currentRow();
     // Set the progressive property of the Tomb object to the progressive number present in the clicked row
-    this->tomb->setProgressive(this->ui.tableWidget->item(row, 0)->text().toInt());
-    this->tomb->setModal(true);
-    this->tomb->exec();
+    this->tombUi->setProgressive(this->ui.tableWidget->item(row, 0)->text().toInt());
+    this->tombUi->setModal(true);
+    this->tombUi->exec();
 
     // Reload the table when the popup is closed, the user could have made some changes
     this->slotClientOrders();
@@ -288,9 +292,9 @@ void Funeraria::slotNewTomb()
     this->current_table = "tomb";
 
     // Set the name property of the Client object to an empty string
-    this->tomb->setProgressive(0);
-    this->tomb->setModal(true);
-    this->tomb->exec();
+    this->tombUi->setProgressive(0);
+    this->tombUi->setModal(true);
+    this->tombUi->exec();
 
     // If the table shows any tomb
     if (this->ui.tableWidget->rowCount() > 0) {
@@ -601,7 +605,9 @@ void Funeraria::slotDelete() {
 
 void Funeraria::slotTombsToEngrave()
 {
-    QList<QMap<QString, QString>> tombs = this->tomb->tombsToEngrave();
+    Tomb* tomb = new Tomb(&this->db->db);
+
+    QList<QMap<QString, QString>> tombs = tomb->tombsToEngrave();
 
     if (tombs.size() > 0) {
         // Block the signals while building the table
@@ -665,11 +671,15 @@ void Funeraria::slotTombsToEngrave()
         message.setText("Non risultano lapidi da incidere.");
         message.exec();
     }
+
+    delete tomb;
 }
 
 void Funeraria::slotAccessoriesToMount()
 {
-    QList<QMap<QString, QString>> accessories = this->tomb->accessoriesToMount();
+    Tomb* tomb = new Tomb(&this->db->db);
+
+    QList<QMap<QString, QString>> accessories = tomb->accessoriesToMount();
 
     if (accessories.size() > 0) {
         // Block the signals while building the table
@@ -747,11 +757,15 @@ void Funeraria::slotAccessoriesToMount()
         message.setText("Non risultano lapidi con accessori da montare.");
         message.exec();
     }
+
+    delete tomb;
 }
 
 void Funeraria::slotTombsNotPaid()
 {
-    QList<QMap<QString, QString>> tombs = this->tomb->tombsToPay();
+    Tomb* tomb = new Tomb(&this->db->db);
+
+    QList<QMap<QString, QString>> tombs = tomb->tombsToPay();
 
     if (tombs.size() > 0) {
         // Block the signals while building the table
@@ -809,6 +823,8 @@ void Funeraria::slotTombsNotPaid()
         message.setText("Non risultano lapidi da pagare.");
         message.exec();
     }
+
+    delete tomb;
 }
 
 /********** PRIVATE FUNCTIONS **********/

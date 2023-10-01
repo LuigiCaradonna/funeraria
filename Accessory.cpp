@@ -107,7 +107,7 @@ QStringList Accessory::getNames()
     return accessories;
 }
 
-QString Accessory::add(const QString& code, const QString& name)
+QString Accessory::store(const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 

@@ -95,6 +95,7 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="Tomb.cpp" />
+    <ClCompile Include="TombUi.cpp" />
     <QtRcc Include="funeraria.qrc" />
     <QtUic Include="Client.ui" />
     <QtUic Include="funeraria.ui" />
@@ -107,6 +108,7 @@
     <QtUic Include="Tomb.ui" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="TombUi.h" />
     <QtMoc Include="AccessoryUi.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="resource.h" />

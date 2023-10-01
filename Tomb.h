@@ -2,16 +2,11 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
-#include <QDialog>
 #include <QMessageBox>
 #include <QDate>
-#include <QSignalMapper>
-#include "ui_Tomb.h"
-#include "Client.h"
-#include "Accessory.h"
 #include "Helpers.h"
 
-class Tomb : public QDialog
+class Tomb : public QObject
 {
     Q_OBJECT
 
@@ -22,9 +17,8 @@ public:
      * Constructs the Tomb object.
      *
      * @param	QSqlDatabase*	db	- Pointer to the database connection
-     * @param	QWidget*        parent	- Parent widget
      */
-    Tomb(QSqlDatabase* db, QWidget* parent = nullptr);
+    Tomb(QSqlDatabase* db);
 
     /********** DESTRUCTOR **********/
 
@@ -42,7 +36,7 @@ public:
      * @param const int& year           - Year of the tombs to get, 0 for all the years
      * @param const QString& filter     - Deceased name to use to refine the result
      *
-     * @return  QList<QMap<QString, QString>> - A list containing the Tombs' id and name
+     * @return  QList<QMap<QString, QString>> - A list containing the Tombs' details
      */
     QList<QMap<QString, QString>> getList(const int& client_id, const int& year, const QString& filter);
 
@@ -54,15 +48,6 @@ public:
      * @return  QMap<QString, QString> - A map containing the tomb's  datails joined to the related tables
      */
     QMap<QString, QString> getDetails(const int& progressive);
-
-    /*
-     * Sets the tomb's progressive property and updates the content of the QDialog according
-     *
-     * @param   int progressive - Tomb's progressive number
-     *
-     * @return  void
-     */
-    void setProgressive(const int& progressive);
 
     /*
      * Gets the list of the tombs which can be engraved
@@ -84,64 +69,6 @@ public:
      * @return  QList<QMap<QString, QString>>   the list of the tombs not yet paid
      */
     QList<QMap<QString, QString>> tombsToPay();
-
-protected slots:
-
-    /********** PROTECTED SLOTS **********/
-
-    /*
-     * Changes the enabled state for the generally disabled fields
-     *
-     * @return  void
-     */
-    void slotSwitchEnableState();
-
-    /*
-     * Shows a dialog containing the progressive numbers, smaller than the max, not in use
-     *
-     * @return  void
-     */
-    void slotAvailableProgressives();
-
-    /*
-     * Sets the current date to the proper input field
-     * 
-     * @param const QString& - Name of the field where to set the current date
-     *
-     * @return  void
-     */
-    void slotSetCurrentDate(const QString& field);
-
-    /*
-     * Saves a tomb's data
-     *
-     * @return  void
-     */
-    void slotSave();
-
-    /*
-     * Closes the dialog window
-     *
-     * @return  void
-     */
-    void slotCloseDialog();
-
-private:
-    Ui::TombClass ui;
-    const QString table = "tombs";
-    const QString btnCreateText = "Crea";
-    const QString btnUpdateText = "Aggiorna";
-    QSqlDatabase* db;
-    QWidget* parent;
-    int progressive;
-    Client* client;
-    Accessory* vase;
-    Accessory* lamp;
-    Accessory* flame;
-    Accessory* material;
-
-    QSignalMapper* currentDateMapper;
-    /********** PRIVATE FUNCTIONS **********/
 
     /*
      * Checks if the dates inserted into the form are congruent
@@ -261,16 +188,14 @@ private:
     int getLastProgresive();
 
     /*
-     * Updates the content of the dialog according to the current tomb selected
-     *
-     * @return  void
-     */
-    void updateForm();
-
-    /*
      * Checks if the given progressive number is in use
      *
      * @return  boolean true if the progressive number in use or if the query fails, false otherwise
      */
     bool isProgressiveInUse(const int& progressive);
+
+private:
+    const QString table = "tombs";
+    QSqlDatabase* db;
+
 };

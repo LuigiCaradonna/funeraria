@@ -2,7 +2,6 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
-#include <QDialog>
 #include <QMessageBox>
 #include <QDate>
 
@@ -70,7 +69,7 @@ public:
      *
      * @return  QString - Empty on success, failure cause on failure
      */
-    QString add(const QString& code, const QString& name);
+    QString store(const QString& code, const QString& name);
 
     /*
      * Updates an accessory into the database

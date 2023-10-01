@@ -61,7 +61,7 @@ void AccessoryUi::slotAddAccessoryUi()
 
     Accessory* new_accessory = new Accessory(this->db, this->table);
 
-    QString result = new_accessory->add(this->ui.leCode->text().trimmed(), this->ui.leName->text().trimmed());
+    QString result = new_accessory->store(this->ui.leCode->text().trimmed(), this->ui.leName->text().trimmed());
 
     delete new_accessory;
 
