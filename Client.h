@@ -22,9 +22,9 @@ public:
     /*
      * Constructs the Client object.
      *
-     * @param	QSqlDatabase*	db	- Pointer to the database connection
+     * @param	const QSqlDatabase*	db	- Reference to the database connection
      */
-    Client(QSqlDatabase* db, QWidget* parent = nullptr);
+    Client(const QSqlDatabase& db, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -106,7 +106,7 @@ protected slots:
 private:
 	Ui::ClientClass ui;
     const QString table = "clients";
-    QSqlDatabase* db;
+    QSqlDatabase db;
     QWidget* parent;
     QString name;
 

@@ -18,7 +18,7 @@ public:
      * @param	QSqlDatabase*	db	    - Pointer to the database connection
      * @param	const QString&	table	- Database table to use
      */
-    Accessory(QSqlDatabase* db, const QString& table);
+    Accessory(const QSqlDatabase& db, const QString& table);
 
     /********** DESTRUCTOR **********/
 
@@ -92,6 +92,6 @@ public:
 
 private:
     const QString table;
-    QSqlDatabase* db;
+    QSqlDatabase db;
 };
 

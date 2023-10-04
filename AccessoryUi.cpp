@@ -2,7 +2,7 @@
 
 /********** CONSTRUCTOR **********/
 
-AccessoryUi::AccessoryUi(QSqlDatabase* db, const QString& table, QWidget* parent)
+AccessoryUi::AccessoryUi(const QSqlDatabase& db, const QString& table, QWidget* parent)
     : db(db), table(table), parent(parent)
 {
     this->ui.setupUi(this);
@@ -30,10 +30,7 @@ AccessoryUi::AccessoryUi(QSqlDatabase* db, const QString& table, QWidget* parent
 /********** DESTRUCTOR **********/
 
 AccessoryUi::~AccessoryUi()
-{
-    delete this->db;
-    delete this->parent;
-}
+{ }
 
 /********** PRIVATE SLOTS **********/
 
@@ -77,7 +74,7 @@ void AccessoryUi::slotAddAccessoryUi()
 
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES (:code, :name, :created_at, :edited_at);");
     query.bindValue(":code", this->ui.leCode->text().trimmed());
     query.bindValue(":name", this->ui.leName->text().trimmed());

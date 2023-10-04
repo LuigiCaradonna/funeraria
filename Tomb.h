@@ -16,9 +16,9 @@ public:
     /*
      * Constructs the Tomb object.
      *
-     * @param	QSqlDatabase*	db	- Pointer to the database connection
+     * @param	const QSqlDatabase*	db	- Reference to the database connection
      */
-    Tomb(QSqlDatabase* db);
+    Tomb(const QSqlDatabase& db);
 
     /********** DESTRUCTOR **********/
 
@@ -196,6 +196,6 @@ public:
 
 private:
     const QString table = "tombs";
-    QSqlDatabase* db;
+    QSqlDatabase db;
 
 };

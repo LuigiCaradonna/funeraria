@@ -2,7 +2,7 @@
 
 /********** CONSTRUCTOR **********/
 
-Client::Client(QSqlDatabase* db, QWidget* parent)
+Client::Client(const QSqlDatabase& db, QWidget* parent)
     : db(db), parent(parent)
 {
 	this->ui.setupUi(this);
@@ -23,7 +23,7 @@ Client::~Client()
 
 int Client::getId(const QString& name)
 {
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT id FROM " + this->table + " WHERE name = :name;");
     query.bindValue(":name", name);
 
@@ -44,7 +44,7 @@ int Client::getId(const QString& name)
 QStringList Client::getNames()
 {
     QStringList names{};
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT name FROM " + this->table + " ORDER BY position ASC;");
 
     if (!query.exec()) {
@@ -66,7 +66,7 @@ QList<QMap<QString, QString>> Client::get()
 {
     QList<QMap<QString, QString>> list{};
 
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT * FROM " + this->table);
 
     if (!query.exec()) {
@@ -99,7 +99,7 @@ QList<QMap<QString, QString>> Client::get()
 QMap<QString, QString> Client::getDetails(const QString& name)
 {
     QMap<QString, QString> map;
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT * FROM " + this->table + " WHERE name = :name;");
     query.bindValue(":name", name);
 
@@ -134,16 +134,16 @@ void Client::setName(const QString& name)
 void Client::remove(const int& id)
 {
     // Begin a transaction
-    this->db->transaction();
+    this->db.transaction();
 
     // rearrangePosition() will intercept the intent to remove a client (-1) 
     // and will take care of set an invalid position to this client to prevent collisions
     if (!this->rearrangePositions(id, name, -1)) {
-        this->db->rollback();
+        this->db.rollback();
         return;
     }
 
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE id = :id;");
     query.bindValue(":id", id);
 
@@ -154,11 +154,11 @@ void Client::remove(const int& id)
         message.setText(query.lastError().text());
         message.exec();
 
-        this->db->rollback();
+        this->db.rollback();
         return;
     }
 
-    this->db->commit();
+    this->db.commit();
 
     QMessageBox message;
     message.setWindowTitle("Funeraria");
@@ -239,11 +239,11 @@ bool Client::create(
     const int& active
 )
 {
-    this->db->transaction();
+    this->db.transaction();
 
     // Make space for this new client if necessary
     if (!this->rearrangePositions(0, name, position)) {
-        this->db->rollback();
+        this->db.rollback();
 
         // Stop the insertion if the rearranging fails
         return false;
@@ -273,7 +273,7 @@ bool Client::create(
         formatted_phones += phones_list[i] + sep;
     }
 
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("INSERT INTO " + this->table + ""
         " (position, name, email, address, phone, active, created_at, edited_at)"
         " VALUES (:position, :name, :emails, :address, :phones, :active, :created_at, :edited_at)");
@@ -293,11 +293,11 @@ bool Client::create(
         message.setText(query.lastError().text());
         message.exec();
 
-        this->db->rollback();
+        this->db.rollback();
         return false;
     }
 
-    this->db->commit();
+    this->db.commit();
 
     QMessageBox message;
     message.setWindowTitle("Funeraria");
@@ -318,11 +318,11 @@ bool Client::update(
     const int& active
 )
 {
-    this->db->transaction();
+    this->db.transaction();
 
     // Make space for this new client if necessary
     if (!this->rearrangePositions(id, name, position)) {
-        this->db->rollback();
+        this->db.rollback();
 
         // Stop the insertion if the rearranging fails
         return false;
@@ -352,7 +352,7 @@ bool Client::update(
         formatted_phones += phones_list[i] + sep;
     }
 
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("UPDATE "  + this->table + ""
         " SET position = :position, name = :name, email = :emails, address = :address," 
         " phone = :phones, active = :active, edited_at = :edited_at "
@@ -373,11 +373,11 @@ bool Client::update(
         message.setText(query.lastError().text());
         message.exec();
 
-        this->db->rollback();
+        this->db.rollback();
         return false;
     }
 
-    this->db->commit();
+    this->db.commit();
 
     QMessageBox message;
     message.setWindowTitle("Funeraria");
@@ -448,7 +448,7 @@ void Client::updateForm()
 
 int Client::getLastPosition()
 {
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT MAX(position) as position FROM " + this->table);
 
     if (!query.exec()) {
@@ -542,7 +542,7 @@ bool Client::shiftPositionsUp(const int& from, const int& last_position)
 {
     // Update one by one all the clients with a position higher than "from"
     for (int i = from + 1; i <= last_position; i++) {
-        QSqlQuery query = QSqlQuery(*this->db);
+        QSqlQuery query = QSqlQuery(this->db);
         query.prepare("UPDATE " + this->table + " SET position = position-1 WHERE position = :position");
         query.bindValue(":position", i);
 
@@ -564,7 +564,7 @@ bool Client::shiftPositionsDown(const int& from, const int& last_position)
 {
     // Update one by one all the clients with a position higher than "from" starting from the last
     for (int i = last_position; i >= from; i--) {
-        QSqlQuery query = QSqlQuery(*this->db);
+        QSqlQuery query = QSqlQuery(this->db);
         query.prepare("UPDATE " + this->table + " SET position = position+1 WHERE position = :position");
         query.bindValue(":position", i);
 
@@ -584,7 +584,7 @@ bool Client::shiftPositionsDown(const int& from, const int& last_position)
 
 bool Client::setInvalidPosition(const int& client_id)
 {
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("UPDATE " + this->table + " SET position = -1 WHERE id = :id");
     query.bindValue(":id", client_id);
 

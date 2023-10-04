@@ -34,12 +34,12 @@ Funeraria::Funeraria(QWidget* parent)
         this->config->updateConfigFile("db_path", this->db->path);
     }
 
-    this->client = new Client(&this->db->db, this);
-    this->tombUi = new TombUi(&this->db->db, this);
-    this->vase = new Accessory(&this->db->db, "vases");
-    this->lamp = new Accessory(&this->db->db, "lamps");
-    this->flame = new Accessory(&this->db->db, "flames");
-    this->material = new Accessory(&this->db->db, "materials");
+    this->client = new Client(this->db->db, this);
+    this->tombUi = new TombUi(this->db->db, this);
+    this->vase = new Accessory(this->db->db, "vases");
+    this->lamp = new Accessory(this->db->db, "lamps");
+    this->flame = new Accessory(this->db->db, "flames");
+    this->material = new Accessory(this->db->db, "materials");
 
     // List of clients' names
     QStringList clients = this->client->getNames();
@@ -130,7 +130,7 @@ void Funeraria::slotClientOrders()
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
-    Tomb* tomb = new Tomb(&this->db->db);
+    Tomb* tomb = new Tomb(this->db->db);
 
     this->current_table = "tomb";
 
@@ -497,28 +497,28 @@ void Funeraria::slotNewItem(const QString& type)
     this->current_table = type;
 
     if (type == "vase") {
-        AccessoryUi* vaseUi = new AccessoryUi(&this->db->db, "vases", this);
+        AccessoryUi* vaseUi = new AccessoryUi(this->db->db, "vases", this);
         vaseUi->setModal(true);
         vaseUi->exec();
 
         delete vaseUi;
     }
     else if (type == "lamp") {
-        AccessoryUi* lampUi = new AccessoryUi(&this->db->db, "lamp", this);
+        AccessoryUi* lampUi = new AccessoryUi(this->db->db, "lamp", this);
         lampUi->setModal(true);
         lampUi->exec();
 
         delete lampUi;
     }
     else if (type == "flame") {
-        AccessoryUi* flameUi = new AccessoryUi(&this->db->db, "flame", this);
+        AccessoryUi* flameUi = new AccessoryUi(this->db->db, "flame", this);
         flameUi->setModal(true);
         flameUi->exec();
 
         delete flameUi;
     }
     else if (type == "material") {
-        AccessoryUi* materialUi = new AccessoryUi(&this->db->db, "material", this);
+        AccessoryUi* materialUi = new AccessoryUi(this->db->db, "material", this);
         materialUi->setModal(true);
         materialUi->exec();
 
@@ -605,7 +605,7 @@ void Funeraria::slotDelete() {
 
 void Funeraria::slotTombsToEngrave()
 {
-    Tomb* tomb = new Tomb(&this->db->db);
+    Tomb* tomb = new Tomb(this->db->db);
 
     QList<QMap<QString, QString>> tombs = tomb->tombsToEngrave();
 
@@ -677,7 +677,7 @@ void Funeraria::slotTombsToEngrave()
 
 void Funeraria::slotAccessoriesToMount()
 {
-    Tomb* tomb = new Tomb(&this->db->db);
+    Tomb* tomb = new Tomb(this->db->db);
 
     QList<QMap<QString, QString>> accessories = tomb->accessoriesToMount();
 
@@ -763,7 +763,7 @@ void Funeraria::slotAccessoriesToMount()
 
 void Funeraria::slotTombsNotPaid()
 {
-    Tomb* tomb = new Tomb(&this->db->db);
+    Tomb* tomb = new Tomb(this->db->db);
 
     QList<QMap<QString, QString>> tombs = tomb->tombsToPay();
 

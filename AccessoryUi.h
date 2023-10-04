@@ -18,11 +18,11 @@ public:
     /*
      * Constructs the accessory object.
      *
-     * @param	QSqlDatabase*	db	- Pointer to the database connection
-     * @param	const QString&	table	- Database table to use
-     * @param	QWidget*        parent	- Parent widget
+     * @param	const QSqlDatabase& db	    - Reference to the database connection
+     * @param	const QString&	    table	- Database table to use
+     * @param	QWidget*            parent	- Parent widget
      */
-    AccessoryUi(QSqlDatabase* db, const QString& table, QWidget* parent = nullptr);
+    AccessoryUi(const QSqlDatabase& db, const QString& table, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -52,7 +52,7 @@ protected slots:
 private:
     Ui::Dialog ui;
     const QString table;
-    QSqlDatabase* db;
+    QSqlDatabase db;
     QWidget* parent;
 };
 

@@ -2,7 +2,7 @@
 
 /********** CONSTRUCTOR **********/
 
-TombUi::TombUi(QSqlDatabase* db, QWidget* parent)
+TombUi::TombUi(const QSqlDatabase& db, QWidget* parent)
     : db(db), parent(parent)
 {
     this->ui.setupUi(this);
@@ -52,6 +52,8 @@ TombUi::~TombUi()
 void TombUi::setProgressive(const int& progressive)
 {
     this->progressive = progressive;
+    qDebug() << this->progressive;
+    this->updateForm();
 }
 
 /********** PROTECTED SLOTS **********/

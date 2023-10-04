@@ -22,10 +22,10 @@ public:
     /*
      * Constructs the Tomb object.
      *
-     * @param	QSqlDatabase*	db	- Pointer to the database connection
-     * @param	QWidget*        parent	- Parent widget
+     * @param	const QSqlDatabase*	db	    - Refrence to the database connection
+     * @param	QWidget*            parent	- Parent widget
      */
-    TombUi(QSqlDatabase* db, QWidget* parent = nullptr);
+    TombUi(const QSqlDatabase& db, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -84,7 +84,7 @@ private:
     const QString table = "tombs";
     const QString btnCreateText = "Crea";
     const QString btnUpdateText = "Aggiorna";
-    QSqlDatabase* db;
+    QSqlDatabase db;
     QWidget* parent;
     int progressive;
     Client* client;

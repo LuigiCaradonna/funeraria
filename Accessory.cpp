@@ -2,25 +2,21 @@
 
 /********** CONSTRUCTOR **********/
 
-Accessory::Accessory(QSqlDatabase* db, const QString& table)
+Accessory::Accessory(const QSqlDatabase& db, const QString& table)
     : db(db), table(table)
-{
-
-}
+{}
 
 /********** DESTRUCTOR **********/
 
 Accessory::~Accessory()
-{
-    delete this->db;
-}
+{}
 
 /********** PUBLIC FUNCTIONS **********/
 
 QList<QMap<QString, QString>> Accessory::get()
 {
     QList<QMap<QString, QString>> accessories;
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT code, name FROM " + this->table);
 
     if (!query.exec()) {
@@ -45,7 +41,7 @@ QList<QMap<QString, QString>> Accessory::get()
 
 QString Accessory::getCode(const QString& name)
 {
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT code FROM " + this->table + " WHERE name = :name");
     query.bindValue(":name", name);
 
@@ -67,7 +63,7 @@ QString Accessory::getCode(const QString& name)
 QString Accessory::getNameFromId(const QString& code)
 {
     QString name;
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT name FROM " + this->table + " WHERE code = :code");
     query.bindValue(":code", code);
 
@@ -89,7 +85,7 @@ QString Accessory::getNameFromId(const QString& code)
 QStringList Accessory::getNames()
 {
     QStringList accessories;
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT name FROM " + this->table);
 
     if (!query.exec()) {
@@ -111,7 +107,7 @@ QString Accessory::store(const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES (:code, :name, :created_at, :edited_at);");
     query.bindValue(":code", code.trimmed());
     query.bindValue(":name", name.trimmed());
@@ -131,7 +127,7 @@ QString Accessory::update(const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("UPDATE " + this->table + " SET code = :code, name = :name, edited_at = :edited_at WHERE code = :codew; ");
     query.bindValue(":code", code.trimmed());
     query.bindValue(":name", name.trimmed());
@@ -149,7 +145,7 @@ QString Accessory::update(const QString& code, const QString& name)
 
 QString Accessory::remove(const QString& code)
 {
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE code = :code; ");
     query.bindValue(":code", code);
 

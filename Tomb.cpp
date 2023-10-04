@@ -2,17 +2,14 @@
 
 /********** CONSTRUCTOR **********/
 
-Tomb::Tomb(QSqlDatabase* db)
+Tomb::Tomb(const QSqlDatabase& db)
     : db(db)
-{
-}
+{}
 
 /********** DESTRUCTOR **********/
 
 Tomb::~Tomb()
-{
-    delete this->db;
-}
+{}
 
 /********** PUBLIC FUNCTIONS **********/
 
@@ -20,7 +17,7 @@ QList<QMap<QString, QString>> Tomb::getList(const int& client_id, const int& yea
 {
     QString order = "DESC";
     QList<QMap<QString, QString>> list;
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
 
     QString query_string = "SELECT * FROM " + this->table + " WHERE 1 = 1";
 
@@ -85,7 +82,7 @@ QList<QMap<QString, QString>> Tomb::getList(const int& client_id, const int& yea
 QMap<QString, QString> Tomb::getDetails(const int& progressive)
 {
     QMap<QString, QString> tomb;
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT "
         "tombs.progressive, tombs.client_id, clients.name AS client_name, tombs.name, tombs.additional_names,"
         "tombs.price, tombs.paid, tombs.material_code, materials.name AS material_name, tombs.vase_code, "
@@ -144,7 +141,7 @@ QList<QMap<QString, QString>> Tomb::tombsToEngrave()
 {
     QList<QMap<QString, QString>> tombs;
     QMap<QString, QString> tomb;
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT tombs.progressive AS progressive, tombs.name AS name, clients.name AS client_name, materials.name AS material "
         "FROM " + this->table + " "
         "JOIN clients ON tombs.client_id = clients.id "
@@ -176,7 +173,7 @@ QList<QMap<QString, QString>> Tomb::accessoriesToMount()
 {
     QList<QMap<QString, QString>> accessories;
     QMap<QString, QString> tomb;
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT tombs.name AS name, clients.name AS client_name, vases.name AS vase_name, "
         "lamps.name AS lamp_name, flames.name AS flame_name, materials.name AS material_name "
         "FROM " + this->table + " "
@@ -216,7 +213,7 @@ QList<QMap<QString, QString>> Tomb::tombsToPay()
 {
     QList<QMap<QString, QString>> tombs;
     QMap<QString, QString> tomb;
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT tombs.name AS name, tombs.price AS price, clients.name AS client_name "
         "FROM " + this->table + " "
         "JOIN clients ON tombs.client_id = clients.id "
@@ -473,7 +470,7 @@ bool Tomb::store(
 
     // Validation passed
 
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare(
         "INSERT INTO " + this->table + " "
         "(progressive, client_id, name, additional_names, price, paid, material_code, vase_code, lamp_code, "
@@ -594,7 +591,7 @@ bool Tomb::update(
 
     // Validation passed
 
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare(
         "UPDATE " + this->table + " "
         "SET progressive = :progressive, client_id = :client_id, name = :name, additional_names = :additional_names, "
@@ -643,7 +640,7 @@ bool Tomb::update(
 
 void Tomb::remove(const int& progressive)
 {
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE progressive = :progressive;");
     query.bindValue(":progressive", progressive);
 
@@ -657,7 +654,7 @@ void Tomb::remove(const int& progressive)
 }
 
 int Tomb::getLastProgresive() {
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT MAX(progressive) as progressive FROM " + this->table);
 
     if (!query.exec()) {
@@ -676,7 +673,7 @@ int Tomb::getLastProgresive() {
 
 bool Tomb::isProgressiveInUse(const int& progressive)
 {
-    QSqlQuery query = QSqlQuery(*this->db);
+    QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT progressive FROM " + this->table + " WHERE progressive = :progressive");
     query.bindValue(":progressive", progressive);
 
