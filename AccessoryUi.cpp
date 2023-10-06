@@ -66,26 +66,6 @@ void AccessoryUi::slotAddAccessoryUi()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(result);
-        message.exec();
-
-        return;
-    }
-
-    QString date = QDate::currentDate().toString("yyyy-MM-dd");
-
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES (:code, :name, :created_at, :edited_at);");
-    query.bindValue(":code", this->ui.leCode->text().trimmed());
-    query.bindValue(":name", this->ui.leName->text().trimmed());
-    query.bindValue(":created_at", date);
-    query.bindValue(":edited_at", date);
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
         message.exec();
 
         return;

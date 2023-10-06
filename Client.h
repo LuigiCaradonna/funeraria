@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QDialog>
 #include <QMap>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -10,9 +9,8 @@
 #include <QRegularExpression>
 #include <QSqlTableModel>
 #include <QMessageBox>
-#include "ui_Client.h"
 
-class Client : public QDialog
+class Client : public QObject
 {
 	Q_OBJECT
 
@@ -24,7 +22,7 @@ public:
      *
      * @param	const QSqlDatabase*	db	- Reference to the database connection
      */
-    Client(const QSqlDatabase& db, QWidget* parent = nullptr);
+    Client(const QSqlDatabase& db);
 
     /********** DESTRUCTOR **********/
 
@@ -85,36 +83,9 @@ public:
      */
     void remove(const int& id);
 
-protected slots:
-
-    /********** PROTECTED SLOTS **********/
-
-    /*
-     * Saves the client's data, responds to the dialog window's save button
-     *
-     * @return  void
-     */
-    void slotSave();
-
-    /*
-     * Closes the dialog window
-     *
-     * @return  void
-     */
-    void slotCloseDialog();
-
-private:
-	Ui::ClientClass ui;
-    const QString table = "clients";
-    QSqlDatabase db;
-    QWidget* parent;
-    QString name;
-
-    /********** PRIVATE FUNCTIONS **********/
-
     /*
      * Creates a new client entry
-     * 
+     *
      * @param const int& position       -   Client's ordering position
      * @param const QString& name       -   Client's name
      * @param const QString& emails     -   Client's email(s)
@@ -124,7 +95,7 @@ private:
      *
      * @return  boolean true if the creation succeeds, false otherwise
      */
-    bool create(
+    bool store(
         const int& position,
         const QString& name,
         const QString& email,
@@ -157,13 +128,6 @@ private:
     );
 
     /*
-     * Updates the content of the QDialog according to the current client selected
-     *
-     * @return  void
-     */
-    void updateForm();
-
-    /*
      * Gets the last position in use
      *
      * @return  int - The last position in use
@@ -176,13 +140,13 @@ private:
      * @param const int&     id         -   Client's id
      * @param const QString& name       -   Client's name
      * @param const int&     position   -   Client's ordering position to set. -1 when a client must be deleted
-     * 
+     *
      * @return  boolean true if the operation succeeds, false otherwise
      */
     bool rearrangePositions(const int& id, const QString& name, const int& new_position);
 
     /*
-     * Shifts up the positions by one 
+     * Shifts up the positions by one
      *
      * @param const int&    from            -   Position where to start
      * @param const int&    last_position   -   Last position in use
@@ -209,4 +173,10 @@ private:
      * @return  boolean true if the operation succeeds, false otherwise
      */
     bool setInvalidPosition(const int& client_id);
+
+private:
+    const QString table = "clients";
+    QSqlDatabase db;
+    QString name;
+
 };
