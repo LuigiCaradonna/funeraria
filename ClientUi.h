@@ -31,6 +31,17 @@ public:
      */
     ~ClientUi();
 
+    /********** PUBLIC FUNCTIONS **********/
+
+    /*
+     * Sets the client's name property and updates the content of the QDialog according
+     *
+     * @param   const QString& name - Client's name
+     *
+     * @return  void
+     */
+    void setName(const QString& name);
+
 protected slots:
 
     /********** PROTECTED SLOTS **********/

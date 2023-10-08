@@ -7,6 +7,7 @@
 #include <QDate>
 #include <QSignalMapper>
 #include "ui_Tomb.h"
+#include "ClientUi.h"
 #include "Client.h"
 #include "Accessory.h"
 #include "Tomb.h"
@@ -82,12 +83,11 @@ protected slots:
 private:
     Ui::TombClass ui;
     const QString table = "tombs";
-    const QString btnCreateText = "Crea";
-    const QString btnUpdateText = "Aggiorna";
+    const QString btn_create_text = "Crea";
+    const QString btn_update_text = "Aggiorna";
     QSqlDatabase db;
     QWidget* parent;
     int progressive;
-    Client* client;
     Accessory* vase;
     Accessory* lamp;
     Accessory* flame;

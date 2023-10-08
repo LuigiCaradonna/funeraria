@@ -34,7 +34,8 @@ Funeraria::Funeraria(QWidget* parent)
         this->config->updateConfigFile("db_path", this->db->path);
     }
 
-    this->client = new Client(this->db->db, this);
+    this->client = new Client(this->db->db);
+    this->client_ui = new ClientUi(this->db->db, this);
     this->tombUi = new TombUi(this->db->db, this);
     this->vase = new Accessory(this->db->db, "vases");
     this->lamp = new Accessory(this->db->db, "lamps");
@@ -72,28 +73,28 @@ Funeraria::Funeraria(QWidget* parent)
     this->connect(this->ui.actionTPay, SIGNAL(triggered()), this, SLOT(slotTombsNotPaid()));
 
     // Map the signal coming from the menu items to call the same function (slotNewItem) with the proper parameter
-    this->newItemMapper = new QSignalMapper(this);
-    this->connect(this->ui.actionMNew, SIGNAL(triggered()), newItemMapper, SLOT(map()));
-    this->connect(this->ui.actionVNew, SIGNAL(triggered()), newItemMapper, SLOT(map()));
-    this->connect(this->ui.actionLNew, SIGNAL(triggered()), newItemMapper, SLOT(map()));
-    this->connect(this->ui.actionFNew, SIGNAL(triggered()), newItemMapper, SLOT(map()));
-    newItemMapper->setMapping(this->ui.actionMNew, "material");
-    newItemMapper->setMapping(this->ui.actionVNew, "vase");
-    newItemMapper->setMapping(this->ui.actionLNew, "lamp");
-    newItemMapper->setMapping(this->ui.actionFNew, "flame");
-    this->connect(newItemMapper, &QSignalMapper::mappedString, this, &Funeraria::slotNewItem);
+    this->new_item_mapper = new QSignalMapper(this);
+    this->connect(this->ui.actionMNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
+    this->connect(this->ui.actionVNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
+    this->connect(this->ui.actionLNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
+    this->connect(this->ui.actionFNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
+    new_item_mapper->setMapping(this->ui.actionMNew, "material");
+    new_item_mapper->setMapping(this->ui.actionVNew, "vase");
+    new_item_mapper->setMapping(this->ui.actionLNew, "lamp");
+    new_item_mapper->setMapping(this->ui.actionFNew, "flame");
+    this->connect(new_item_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotNewItem);
 
     // Map the signal coming from the menu items to call the same function (slotShowItems) with the proper parameter
-    this->showItemsMapper = new QSignalMapper(this);
-    this->connect(this->ui.actionMList, SIGNAL(triggered()), showItemsMapper, SLOT(map()));
-    this->connect(this->ui.actionVList, SIGNAL(triggered()), showItemsMapper, SLOT(map()));
-    this->connect(this->ui.actionLList, SIGNAL(triggered()), showItemsMapper, SLOT(map()));
-    this->connect(this->ui.actionFList, SIGNAL(triggered()), showItemsMapper, SLOT(map()));
-    showItemsMapper->setMapping(this->ui.actionMList, "material");
-    showItemsMapper->setMapping(this->ui.actionVList, "vase");
-    showItemsMapper->setMapping(this->ui.actionLList, "lamp");
-    showItemsMapper->setMapping(this->ui.actionFList, "flame");
-    this->connect(showItemsMapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
+    this->show_items_mapper = new QSignalMapper(this);
+    this->connect(this->ui.actionMList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
+    this->connect(this->ui.actionVList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
+    this->connect(this->ui.actionLList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
+    this->connect(this->ui.actionFList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
+    show_items_mapper->setMapping(this->ui.actionMList, "material");
+    show_items_mapper->setMapping(this->ui.actionVList, "vase");
+    show_items_mapper->setMapping(this->ui.actionLList, "lamp");
+    show_items_mapper->setMapping(this->ui.actionFList, "flame");
+    this->connect(show_items_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
 }
 
 /********** DESTRUCTOR **********/
@@ -105,14 +106,14 @@ Funeraria::~Funeraria()
 
     delete this->config;
     delete this->db;
-    delete this->client;
+    delete this->client_ui;
     delete this->tombUi;
     delete this->vase;
     delete this->lamp;
     delete this->flame;
     delete this->material;
-    delete this->showItemsMapper;
-    delete this->newItemMapper;
+    delete this->show_items_mapper;
+    delete this->new_item_mapper;
 }
 
 /********** SLOTS **********/
@@ -399,9 +400,9 @@ void Funeraria::slotClientDetails()
     // Row index of the clicked button
     int row = this->ui.tableWidget->currentRow();
     // Set the name property of the Client object to the name present in the clicked row
-    this->client->setName(this->ui.tableWidget->item(row, 1)->text());
-    this->client->setModal(true);
-    this->client->exec();
+    this->client_ui->setName(this->ui.tableWidget->item(row, 1)->text());
+    this->client_ui->setModal(true);
+    this->client_ui->exec();
 
     // Reload the table when the popup is closed, the user could have made some changes
     this->slotShowClients();
@@ -412,9 +413,9 @@ void Funeraria::slotNewClient()
     this->current_table = "client";
 
     // Set the name property of the Client object to an empty string
-    this->client->setName("");
-    this->client->setModal(true);
-    this->client->exec();
+    this->client_ui->setName("");
+    this->client_ui->setModal(true);
+    this->client_ui->exec();
 
     // Reload the table when the popup is closed, the user could have made some changes
     this->slotShowClients();

@@ -11,7 +11,6 @@ TombUi::TombUi(const QSqlDatabase& db, QWidget* parent)
     this->setWindowIcon(QIcon("funeraria.png"));
 
     this->progressive = 0;
-    this->client = new Client(this->db, this);
     this->material = new Accessory(this->db, "materials");
     this->vase = new Accessory(this->db, "vases");
     this->lamp = new Accessory(this->db, "lamps");
@@ -40,11 +39,10 @@ TombUi::TombUi(const QSqlDatabase& db, QWidget* parent)
 
 TombUi::~TombUi()
 {
-    delete this->client;
+    delete this->material;
     delete this->vase;
     delete this->lamp;
     delete this->flame;
-    delete this->material;
 }
 
 /********** PUBLIC FUNCTIONS **********/
@@ -92,10 +90,11 @@ void TombUi::slotSetCurrentDate(const QString& field)
 void TombUi::slotSave()
 {
     Tomb* tomb = new Tomb(this->db);
-    if (this->ui.btnSave->text() == this->btnCreateText) {
+    Client* client = new Client(this->db);
+    if (this->ui.btnSave->text() == this->btn_create_text) {
         if (tomb->store(
             this->ui.leProgressive->text().toInt(),
-            this->client->getId(this->ui.cbClient->currentText()),
+            client->getId(this->ui.cbClient->currentText()),
             this->ui.leName->text(),
             this->ui.leAdditionalNames->text(),
             this->ui.lePrice->text().toDouble(),
@@ -117,11 +116,11 @@ void TombUi::slotSave()
             this->close();
         }
     }
-    else if (this->ui.btnSave->text() == this->btnUpdateText) {
+    else if (this->ui.btnSave->text() == this->btn_update_text) {
         if (tomb->update(
             this->progressive,
             this->ui.leProgressive->text().toInt(),
-            this->client->getId(this->ui.cbClient->currentText()),
+            client->getId(this->ui.cbClient->currentText()),
             this->ui.leName->text(),
             this->ui.leAdditionalNames->text(),
             this->ui.lePrice->text().toDouble(),
@@ -140,6 +139,7 @@ void TombUi::slotSave()
         )
             ) {
             delete tomb;
+            delete client;
             this->close();
         }
     }
@@ -153,10 +153,11 @@ void TombUi::slotCloseDialog()
 void TombUi::updateForm()
 {
     Tomb* tomb = new Tomb(this->db);
+    Client* client = new Client(this->db);
     // Get the selected tomb's data
     QMap<QString, QString> tomb_details = tomb->getDetails(this->progressive);
 
-    QList<QMap<QString, QString>> clients = this->client->get();
+    QList<QMap<QString, QString>> clients = client->get();
     QList<QMap<QString, QString>> materials = this->material->get();
     QList<QMap<QString, QString>> vases = this->vase->get();
     QList<QMap<QString, QString>> lamps = this->lamp->get();
@@ -168,7 +169,7 @@ void TombUi::updateForm()
     int lamp_index = 0;
     int flame_index = 0;
 
-    QList<QString> client_names = this->client->getNames();
+    QList<QString> client_names = client->getNames();
     QList<QString> material_names = this->material->getNames();
     QList<QString> vase_names = this->vase->getNames();
     QList<QString> lamp_names = this->lamp->getNames();
@@ -281,7 +282,7 @@ void TombUi::updateForm()
         this->ui.chbAllowEdit->setEnabled(true);
 
         // Set the save button text
-        this->ui.btnSave->setText(this->btnUpdateText);
+        this->ui.btnSave->setText(this->btn_update_text);
     }
     else {
         // Tomb not found means we are asking to insert a new one
@@ -316,8 +317,9 @@ void TombUi::updateForm()
         this->ui.chbAllowEdit->setEnabled(false);
 
         // Set the save button text
-        this->ui.btnSave->setText(this->btnCreateText);
+        this->ui.btnSave->setText(this->btn_create_text);
     }
 
     delete tomb;
+    delete client;
 }

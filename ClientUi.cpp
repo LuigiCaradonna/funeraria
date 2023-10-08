@@ -19,6 +19,13 @@ ClientUi::ClientUi(const QSqlDatabase& db, QWidget* parent)
 ClientUi::~ClientUi()
 {}
 
+/********** PUBLIC FUNCTIONS **********/
+
+void ClientUi::setName(const QString& name)
+{
+    this->name = name;
+}
+
 /********** PROTECTED SLOTS **********/
 
 void ClientUi::slotSave()

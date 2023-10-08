@@ -6,6 +6,7 @@
 #include "ui_funeraria.h"
 #include "Config.h"
 #include "DatabaseManager.h"
+#include "ClientUi.h"
 #include "Client.h"
 #include "TombUi.h"
 #include "Tomb.h"
@@ -157,14 +158,15 @@ private:
     QString client_placeholder = "Tutti";
 
     Client* client;
+    ClientUi* client_ui;
     TombUi* tombUi;
     Accessory* vase;
     Accessory* lamp;
     Accessory* flame;
     Accessory* material;
 
-    QSignalMapper* showItemsMapper;
-    QSignalMapper* newItemMapper;
+    QSignalMapper* show_items_mapper;
+    QSignalMapper* new_item_mapper;
 
     // Table rows' colors
     QColor paid_cell = QColor(255, 255, 255);

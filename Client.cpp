@@ -117,11 +117,6 @@ QMap<QString, QString> Client::getDetails(const QString& name)
     return map;
 }
 
-void Client::setName(const QString& name)
-{
-    this->name = name;
-}
-
 void Client::remove(const int& id)
 {
     // Begin a transaction

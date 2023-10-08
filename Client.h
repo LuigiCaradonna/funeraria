@@ -66,15 +66,6 @@ public:
     QMap<QString, QString> getDetails(const QString& name);
 
     /*
-     * Sets the client's name property and updates the content of the QDialog according
-     *
-     * @param   const QString& name - Client's name
-     *
-     * @return  void
-     */
-    void setName(const QString& name);
-
-    /*
      * Deletes a client from the database
      *
      * @param   const int& id - Client's id
