@@ -337,24 +337,39 @@ void Funeraria::slotShowClients()
         pb_delete->setText("Elimina");
 
         QStringList emails_list = clients[i]["email"].split(u',');
+        int num_emails = emails_list.length();
         QString emails = "";
-        for (int j = 0; j < emails_list.length(); j++) {
+        for (int j = 0; j < num_emails; j++) {
             QString nl = "\n";
-            if (j == emails_list.length() - 1) {
+            if (j == num_emails - 1) {
                 nl = ""; // No new line after the last email address
             }
             emails += emails_list[j] + nl;
         }
 
         QStringList phones_list = clients[i]["phone"].split(u',');
+        int num_phones = phones_list.length();
         QString phones = "";
-        for (int j = 0; j < phones_list.length(); j++) {
+        for (int j = 0; j < num_phones; j++) {
             QString nl = "\n";
-            if (j == phones_list.length() - 1) {
+            if (j == num_phones - 1) {
                 nl = ""; // No new line after the last phone number
             }
             phones += phones_list[j] + nl;
         }
+
+        // Phone numbers and email addresses are shown one per line
+        // get the maximum number of lines to calculate the row height
+        int lines = std::max(num_emails, num_phones);
+
+        // If the client has no email and phone numbers
+        if (lines == 0) {
+            // set the lines value to 1
+            lines = 1;
+        }
+
+        // Set the row height to 20px multiplied for the number of lines
+        this->ui.tableWidget->setRowHeight(row_number-1, 20*lines);
 
         QTableWidgetItem* position_widget = new QTableWidgetItem(clients[i]["position"]);
         // Set the field as not editable

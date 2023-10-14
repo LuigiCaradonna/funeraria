@@ -279,6 +279,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
         // The proof date must not preced the order
         if (Helpers::compareItaDates(proof.trimmed(), order.trimmed()) < 0) {
             QMessageBox message;
+            // Create and add the buttons to the QMessageBox
             QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
             QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
 
@@ -287,6 +288,8 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             message.setText("La data del provino è antecedente a quella dell'ordine");
             message.exec();
 
+            // The user has been notified about the inconsistency, 
+            // but can still decide to accept it clicking on "confirmBtn" button
             if (message.clickedButton() == (QAbstractButton*)abortBtn) {
                 return false;
             }
@@ -317,6 +320,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
         // The confirmation date must not preced the proof
         if (Helpers::compareItaDates(confirmation.trimmed(), proof.trimmed()) < 0) {
             QMessageBox message;
+            // Create and add the buttons to the QMessageBox
             QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
             QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
 
@@ -325,6 +329,8 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             message.setText("La data della conferma è antecedente a quella del provino");
             message.exec();
 
+            // The user has been notified about the inconsistency, 
+            // but can still decide to accept it clicking on "confirmBtn" button
             if (message.clickedButton() == (QAbstractButton*)abortBtn) {
                 return false;
             }
@@ -355,6 +361,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
         // The engraving date must not preced the confirmation
         if (Helpers::compareItaDates(engraving.trimmed(), confirmation.trimmed()) < 0) {
             QMessageBox message;
+            // Create and add the buttons to the QMessageBox
             QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
             QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
 
@@ -363,6 +370,8 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             message.setText("La data dell'incisione è antecedente a quella della conferma");
             message.exec();
 
+            // The user has been notified about the inconsistency, 
+            // but can still decide to accept it clicking on "confirmBtn" button
             if (message.clickedButton() == (QAbstractButton*)abortBtn) {
                 return false;
             }
@@ -393,6 +402,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
         // The delivery date must not preced the engraving
         if (Helpers::compareItaDates(delivery.trimmed(), engraving.trimmed()) < 0) {
             QMessageBox message;
+            // Create and add the buttons to the QMessageBox
             QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
             QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
 
@@ -401,6 +411,8 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             message.setText("La data della consegna è antecedente a quella dell'incisione");
             message.exec();
 
+            // The user has been notified about the inconsistency, 
+            // but can still decide to accept it clicking on "confirmBtn" button
             if (message.clickedButton() == (QAbstractButton*)abortBtn) {
                 return false;
             }
