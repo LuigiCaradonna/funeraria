@@ -1,13 +1,10 @@
 #pragma once
 
-#include <QMap>
-#include <QSqlDatabase>
-#include <QSqlError>
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QDebug>
 #include <QDate>
 #include <QRegularExpression>
-#include <QSqlTableModel>
 #include <QMessageBox>
 
 class Client : public QObject

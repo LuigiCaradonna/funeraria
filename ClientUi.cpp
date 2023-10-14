@@ -100,8 +100,6 @@ void ClientUi::updateForm()
     // Get the selected client's data
     QMap<QString, QString> client_details = client->getDetails(this->name);
 
-    delete client;
-
     if (!client_details.isEmpty()) {
         this->setWindowTitle("Modifica cliente");
 
@@ -153,4 +151,6 @@ void ClientUi::updateForm()
         // Set the save button text
         this->ui.btnSave->setText("Crea");
     }
+
+    delete client;
 }

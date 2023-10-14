@@ -1,12 +1,6 @@
 #pragma once
 
-#include <QDialog>
-#include <QMap>
-#include <QSqlDatabase>
 #include <QDebug>
-#include <QRegularExpression>
-#include <QDate>
-#include <QMessageBox>
 #include "Client.h"
 #include "ui_Client.h"
 

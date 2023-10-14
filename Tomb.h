@@ -3,7 +3,6 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QMessageBox>
-#include <QDate>
 #include "Helpers.h"
 
 class Tomb : public QObject

@@ -2,7 +2,6 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QSignalMapper>
-#include <QDate>
 #include "ui_funeraria.h"
 #include "Config.h"
 #include "DatabaseManager.h"

@@ -1,10 +1,5 @@
 #pragma once
-#include <QSqlError>
-#include <QSqlQuery>
 #include <QDebug>
-#include <QDialog>
-#include <QMessageBox>
-#include <QDate>
 #include <QSignalMapper>
 #include "ui_Tomb.h"
 #include "ClientUi.h"

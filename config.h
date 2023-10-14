@@ -1,11 +1,7 @@
 #pragma once
 
-#include <string>
-#include <fstream>
-#include <iostream>
 #include <QJsonObject>
 #include <QJsonDocument>
-#include <QJsonArray>
 #include <QMessageBox>
 #include <QDir>
 
