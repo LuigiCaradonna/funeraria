@@ -40,6 +40,8 @@ protected slots:
 
     /********** SLOTS **********/
 
+    void slotHeaderClicked(int logicalIndex);
+
     /*
      * Updates the selected client's orders list shown applying the filter (deceased name string)
      *

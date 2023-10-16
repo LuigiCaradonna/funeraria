@@ -126,6 +126,13 @@ void Funeraria::slotFilterClientOrders()
     this->slotClientOrders();
 }
 
+void Funeraria::slotHeaderClicked(int logicalIndex) {
+    // Get the clicked label text
+    QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logicalIndex, Qt::Horizontal).toString();
+
+    qDebug() << label;
+}
+
 void Funeraria::slotClientOrders()
 {
     // Block the signals while building the table
@@ -159,6 +166,7 @@ void Funeraria::slotClientOrders()
     // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+    this->connect(this->ui.tableWidget->horizontalHeader(), &QHeaderView::sectionClicked, this, &Funeraria::slotHeaderClicked);
 
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
     this->ui.tableWidget->setColumnWidth(1, 230);   // Name

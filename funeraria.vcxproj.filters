@@ -61,6 +61,12 @@
     <ClCompile Include="AccessoryUi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ClientUi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TombUi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h">
@@ -87,6 +93,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="AccessoryUi.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TombUi.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ClientUi.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
