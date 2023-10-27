@@ -161,10 +161,11 @@ void Funeraria::slotQuickClientOrders()
 {
     QString buttonText;
 
-    QPushButton* senderButton = qobject_cast<QPushButton*>(sender()); // Get the sender of the signal
+    // Get the sender of the signal
+    QPushButton* senderButton = qobject_cast<QPushButton*>(sender());
+
     if (senderButton) {
         buttonText = senderButton->text();
-        // qDebug() << "Button Text: " << buttonText;
     }
     else {
         return;
@@ -175,9 +176,14 @@ void Funeraria::slotQuickClientOrders()
     this->current_table = "tomb";
 
     int client_id = this->client->getId(buttonText);
+    int year = QDate::currentDate().toString("yyyy").toInt();
+
+    this->ui.cbClient->setCurrentText(buttonText);
+    this->ui.cbYear->setCurrentText(QDate::currentDate().toString("yyyy"));
+    this->ui.leDeceased->setText("");
 
     // Search params: client's id, current year, no filter for the deceased's name
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, this->ui.cbYear->currentText().toInt(), "");
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, "");
 
     this->showClientOrders(tombs);
 
@@ -799,6 +805,8 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
 
     // Reset the table's content
     this->clearTable();
+
+    this->ui.tableWidget->setSortingEnabled(true);
 
     QStringList headers{ "Numero", "Defunto", "Materiale", "Prezzo", "Pagata", "Note", "Accessori",
         "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni" };

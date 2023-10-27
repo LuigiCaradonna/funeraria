@@ -29,7 +29,7 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Gets all the Tombs
+     * Gets all the Tombs matching the given parameters
      * 
      * @param const int& client_id      - Client's id
      * @param const int& year           - Year of the tombs to get, 0 for all the years

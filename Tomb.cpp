@@ -39,6 +39,8 @@ QList<QMap<QString, QString>> Tomb::getList(const int& client_id, const int& yea
 
     query_string += " ORDER BY progressive " + order;
 
+    qDebug() << query_string;
+
     query.prepare(query_string);
 
     if (!query.exec()) {
