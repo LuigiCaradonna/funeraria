@@ -935,6 +935,9 @@ void Funeraria::updateQuickAccessNames() {
     // List of the clients to be shown inside the quick access bar
     QStringList quick_access_clients = this->client->getQuickAccessNames();
 
+    QFont font;
+    font.setPointSize(12);
+
     // Clear the quick access buttons
     QLayoutItem* item;
     while ((item = this->ui.quickClientsAccess->takeAt(0)) != 0) {
@@ -944,6 +947,7 @@ void Funeraria::updateQuickAccessNames() {
     // Add the buttons to the bar
     for (const auto& item : std::as_const(quick_access_clients)) {
         QPushButton* btn = new QPushButton();
+        btn->setFont(font);
         btn->setText(item);
         this->ui.quickClientsAccess->addWidget(btn);
 
