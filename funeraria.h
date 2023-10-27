@@ -57,6 +57,16 @@ protected slots:
     void slotClientOrders();
 
     /*
+     * Shows the selected client's orders when using the quick access buttons
+     *
+     * @param   const QString& client - Name of the client to show
+     *
+     * @return void
+     */
+    void slotQuickClientOrders();
+
+
+    /*
      * Shows a dialog window containing the selected tomb's details
      *
      * @return void
@@ -168,6 +178,7 @@ private:
 
     QSignalMapper* show_items_mapper;
     QSignalMapper* new_item_mapper;
+    QSignalMapper* quick_client_mapper;
 
     // Table rows' colors
     QColor paid_cell = QColor(255, 255, 255);
@@ -187,6 +198,15 @@ private:
      * @return void
      */
     void clearTable();
+
+    /*
+     * Fills the table to show the client's orders.
+     *
+     * @param QList<QMap<QString, QString>> tombs   - List of the client's orders
+     *
+     * @return void
+     */
+    void showClientOrders(QList<QMap<QString, QString>> tombs);
 
     /*
      * Closes the main window.

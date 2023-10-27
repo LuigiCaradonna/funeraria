@@ -95,6 +95,20 @@ Funeraria::Funeraria(QWidget* parent)
     show_items_mapper->setMapping(this->ui.actionLList, "lamp");
     show_items_mapper->setMapping(this->ui.actionFList, "flame");
     this->connect(show_items_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
+
+    /* Event listeners for the clients quick access bar
+    this->quick_client_mapper = new QSignalMapper(this);
+    this->connect(this->ui.btnQuickCmd, SIGNAL(clikced()), show_items_mapper, SLOT(map()));
+    quick_client_mapper->setMapping(this->ui.btnQuickCmd, "cmd");
+    this->connect(quick_client_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotQuickClientOrders);
+    */
+    for (const auto& item : std::as_const(clients)) {
+        QPushButton* a = new QPushButton();
+        a->setText(item);
+        this->ui.quickClientsAccess->addWidget(a);
+
+        this->connect(a, &QPushButton::clicked, this, &Funeraria::slotQuickClientOrders);
+    }
 }
 
 /********** DESTRUCTOR **********/
@@ -114,6 +128,7 @@ Funeraria::~Funeraria()
     delete this->material;
     delete this->show_items_mapper;
     delete this->new_item_mapper;
+    delete this->quick_client_mapper;
 }
 
 /********** SLOTS **********/
@@ -135,15 +150,9 @@ void Funeraria::slotHeaderClicked(int logicalIndex) {
 
 void Funeraria::slotClientOrders()
 {
-    // Block the signals while building the table
-    const QSignalBlocker blocker(this->ui.tableWidget);
-
     Tomb* tomb = new Tomb(this->db->db);
 
     this->current_table = "tomb";
-
-    // Reset the table's content
-    this->clearTable();
 
     int client_id = this->client->getId(this->ui.cbClient->currentText());
     int year;
@@ -158,127 +167,34 @@ void Funeraria::slotClientOrders()
 
     QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, filter);
 
-    QStringList headers{ "Numero", "Defunto", "Materiale", "Prezzo", "Pagata", "Note", "Accessori",
-        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni" };
+    this->showClientOrders(tombs);
 
-    this->ui.tableWidget->setRowCount(tombs.size());
-    this->ui.tableWidget->setColumnCount(headers.size());
-    // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
-    this->connect(this->ui.tableWidget->horizontalHeader(), &QHeaderView::sectionClicked, this, &Funeraria::slotHeaderClicked);
+    delete tomb;
+}
 
-    this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
-    this->ui.tableWidget->setColumnWidth(1, 230);   // Name
-    this->ui.tableWidget->setColumnWidth(2, 150);   // Material
-    this->ui.tableWidget->setColumnWidth(3, 60);    // Price
-    this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
-    this->ui.tableWidget->setColumnWidth(5, 650);   // Notes
-    this->ui.tableWidget->setColumnWidth(6, 80);    // Accessories mounted
-    this->ui.tableWidget->setColumnWidth(7, 90);    // Ordered at
-    this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
-    this->ui.tableWidget->setColumnWidth(9, 90);    // Confirmed at
-    this->ui.tableWidget->setColumnWidth(10, 90);   // Engraved at
-    this->ui.tableWidget->setColumnWidth(11, 90);   // Delivered at
-    this->ui.tableWidget->setColumnWidth(12, 90);   // Buttons
+void Funeraria::slotQuickClientOrders()
+{
+    QString buttonText;
 
-    int row_number = 1;
-    for (int i = 0; i < tombs.size(); i++) {
-        QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
-        pb_details->setText("Dettagli");
-
-        // Generate the cells' content and set them as not editable
-        QTableWidgetItem* progressive = new QTableWidgetItem(tombs[i]["progressive"]);
-        progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* name = new QTableWidgetItem(tombs[i]["name"]);
-        name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* material = new QTableWidgetItem(this->material->getNameFromId(tombs[i]["material"]));
-        material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* price = new QTableWidgetItem(tombs[i]["price"]);
-        price->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* paid = new QTableWidgetItem("");
-        paid->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* notes = new QTableWidgetItem(tombs[i]["notes"]);
-        notes->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QTableWidgetItem* accessories_mounted = new QTableWidgetItem("");
-        accessories_mounted->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-        QString order_date = Helpers::dateSqlToIta(tombs[i]["ordered_at"]);
-        QTableWidgetItem* ordered_at = new QTableWidgetItem(order_date);
-        ordered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-        QString proof_date = Helpers::dateSqlToIta(tombs[i]["proofed_at"]);
-        QTableWidgetItem* proofed_at = new QTableWidgetItem(proof_date);
-        proofed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-        QString confirm_date = Helpers::dateSqlToIta(tombs[i]["confirmed_at"]);
-        QTableWidgetItem* confirmed_at = new QTableWidgetItem(confirm_date);
-        confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-        QString engrave_date = Helpers::dateSqlToIta(tombs[i]["engraved_at"]);
-        QTableWidgetItem* engraved_at = new QTableWidgetItem(engrave_date);
-        engraved_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-        QString deliver_date = Helpers::dateSqlToIta(tombs[i]["delivered_at"]);
-        QTableWidgetItem* delivered_at = new QTableWidgetItem(deliver_date);
-        delivered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-        if (row_number % 2 == 0) {
-            this->row_bg = this->row_even;
-        }
-        else {
-            this->row_bg = this->row_odd;
-        }
-
-        if (deliver_date != "") {
-            this->row_bg = this->tomb_delivered;
-        }
-        else if (confirm_date != "" && engrave_date == "") {
-            this->row_bg = this->tomb_to_engrave;
-        }
-
-        this->paid_cell = this->row_bg;
-        this->mounted_cell = this->row_bg;
-
-        if (tombs[i]["paid"] == "0" && deliver_date != "" && tombs[i]["price"] != "0") {
-            this->paid_cell = this->warning_bg;
-        }
-
-        if (tombs[i]["accessories_mounted"] == "0" && engrave_date != "") {
-            this->mounted_cell = this->warning_bg;
-        }
-
-        progressive->setBackground(QBrush(this->row_bg));
-        name->setBackground(QBrush(this->row_bg));
-        material->setBackground(QBrush(this->row_bg));
-        price->setBackground(QBrush(this->row_bg));
-        paid->setBackground(QBrush(this->paid_cell));
-        notes->setBackground(QBrush(this->row_bg));
-        accessories_mounted->setBackground(QBrush(this->mounted_cell));
-        ordered_at->setBackground(QBrush(this->row_bg));
-        proofed_at->setBackground(QBrush(this->row_bg));
-        confirmed_at->setBackground(QBrush(this->row_bg));
-        engraved_at->setBackground(QBrush(this->row_bg));
-        delivered_at->setBackground(QBrush(this->row_bg));
-
-        this->ui.tableWidget->setItem(i, 0, progressive);
-        this->ui.tableWidget->setItem(i, 1, name);
-        this->ui.tableWidget->setItem(i, 2, material);
-        this->ui.tableWidget->setItem(i, 3, price);
-        this->ui.tableWidget->setItem(i, 4, paid);
-        this->ui.tableWidget->setItem(i, 5, notes);
-        this->ui.tableWidget->setItem(i, 6, accessories_mounted);
-        this->ui.tableWidget->setItem(i, 7, ordered_at);
-        this->ui.tableWidget->setItem(i, 8, proofed_at);
-        this->ui.tableWidget->setItem(i, 9, confirmed_at);
-        this->ui.tableWidget->setItem(i, 10, engraved_at);
-        this->ui.tableWidget->setItem(i, 11, delivered_at);
-        this->ui.tableWidget->setCellWidget(i, 12, pb_details); // Details button
-
-        this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
-
-        row_number++;
+    QPushButton* senderButton = qobject_cast<QPushButton*>(sender()); // Get the sender of the signal
+    if (senderButton) {
+        buttonText = senderButton->text();
+        // qDebug() << "Button Text: " << buttonText;
     }
+    else {
+        return;
+    }
+
+    Tomb* tomb = new Tomb(this->db->db);
+
+    this->current_table = "tomb";
+
+    int client_id = this->client->getId(buttonText);
+
+    // Search params: client's id, current year, no filter for the deceased's name
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, this->ui.cbYear->currentText().toInt(), "");
+
+    this->showClientOrders(tombs);
 
     delete tomb;
 }
@@ -881,6 +797,137 @@ void Funeraria::clearTable()
     }
 
     this->ui.tableWidget->clear();
+}
+
+void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
+{
+    // Block the signals while building the table
+    const QSignalBlocker blocker(this->ui.tableWidget);
+
+    // Reset the table's content
+    this->clearTable();
+
+    QStringList headers{ "Numero", "Defunto", "Materiale", "Prezzo", "Pagata", "Note", "Accessori",
+        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni" };
+
+    this->ui.tableWidget->setRowCount(tombs.size());
+    this->ui.tableWidget->setColumnCount(headers.size());
+    // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+    this->connect(this->ui.tableWidget->horizontalHeader(), &QHeaderView::sectionClicked, this, &Funeraria::slotHeaderClicked);
+
+    this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
+    this->ui.tableWidget->setColumnWidth(1, 230);   // Name
+    this->ui.tableWidget->setColumnWidth(2, 150);   // Material
+    this->ui.tableWidget->setColumnWidth(3, 60);    // Price
+    this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
+    this->ui.tableWidget->setColumnWidth(5, 650);   // Notes
+    this->ui.tableWidget->setColumnWidth(6, 80);    // Accessories mounted
+    this->ui.tableWidget->setColumnWidth(7, 90);    // Ordered at
+    this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
+    this->ui.tableWidget->setColumnWidth(9, 90);    // Confirmed at
+    this->ui.tableWidget->setColumnWidth(10, 90);   // Engraved at
+    this->ui.tableWidget->setColumnWidth(11, 90);   // Delivered at
+    this->ui.tableWidget->setColumnWidth(12, 90);   // Buttons
+
+    int row_number = 1;
+    for (int i = 0; i < tombs.size(); i++) {
+        QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
+        pb_details->setText("Dettagli");
+
+        // Generate the cells' content and set them as not editable
+        QTableWidgetItem* progressive = new QTableWidgetItem(tombs[i]["progressive"]);
+        progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* name = new QTableWidgetItem(tombs[i]["name"]);
+        name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* material = new QTableWidgetItem(this->material->getNameFromId(tombs[i]["material"]));
+        material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* price = new QTableWidgetItem(tombs[i]["price"]);
+        price->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* paid = new QTableWidgetItem("");
+        paid->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* notes = new QTableWidgetItem(tombs[i]["notes"]);
+        notes->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* accessories_mounted = new QTableWidgetItem("");
+        accessories_mounted->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QString order_date = Helpers::dateSqlToIta(tombs[i]["ordered_at"]);
+        QTableWidgetItem* ordered_at = new QTableWidgetItem(order_date);
+        ordered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QString proof_date = Helpers::dateSqlToIta(tombs[i]["proofed_at"]);
+        QTableWidgetItem* proofed_at = new QTableWidgetItem(proof_date);
+        proofed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QString confirm_date = Helpers::dateSqlToIta(tombs[i]["confirmed_at"]);
+        QTableWidgetItem* confirmed_at = new QTableWidgetItem(confirm_date);
+        confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QString engrave_date = Helpers::dateSqlToIta(tombs[i]["engraved_at"]);
+        QTableWidgetItem* engraved_at = new QTableWidgetItem(engrave_date);
+        engraved_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QString deliver_date = Helpers::dateSqlToIta(tombs[i]["delivered_at"]);
+        QTableWidgetItem* delivered_at = new QTableWidgetItem(deliver_date);
+        delivered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        if (row_number % 2 == 0) {
+            this->row_bg = this->row_even;
+        }
+        else {
+            this->row_bg = this->row_odd;
+        }
+
+        if (deliver_date != "") {
+            this->row_bg = this->tomb_delivered;
+        }
+        else if (confirm_date != "" && engrave_date == "") {
+            this->row_bg = this->tomb_to_engrave;
+        }
+
+        this->paid_cell = this->row_bg;
+        this->mounted_cell = this->row_bg;
+
+        if (tombs[i]["paid"] == "0" && deliver_date != "" && tombs[i]["price"] != "0") {
+            this->paid_cell = this->warning_bg;
+        }
+
+        if (tombs[i]["accessories_mounted"] == "0" && engrave_date != "") {
+            this->mounted_cell = this->warning_bg;
+        }
+
+        progressive->setBackground(QBrush(this->row_bg));
+        name->setBackground(QBrush(this->row_bg));
+        material->setBackground(QBrush(this->row_bg));
+        price->setBackground(QBrush(this->row_bg));
+        paid->setBackground(QBrush(this->paid_cell));
+        notes->setBackground(QBrush(this->row_bg));
+        accessories_mounted->setBackground(QBrush(this->mounted_cell));
+        ordered_at->setBackground(QBrush(this->row_bg));
+        proofed_at->setBackground(QBrush(this->row_bg));
+        confirmed_at->setBackground(QBrush(this->row_bg));
+        engraved_at->setBackground(QBrush(this->row_bg));
+        delivered_at->setBackground(QBrush(this->row_bg));
+
+        this->ui.tableWidget->setItem(i, 0, progressive);
+        this->ui.tableWidget->setItem(i, 1, name);
+        this->ui.tableWidget->setItem(i, 2, material);
+        this->ui.tableWidget->setItem(i, 3, price);
+        this->ui.tableWidget->setItem(i, 4, paid);
+        this->ui.tableWidget->setItem(i, 5, notes);
+        this->ui.tableWidget->setItem(i, 6, accessories_mounted);
+        this->ui.tableWidget->setItem(i, 7, ordered_at);
+        this->ui.tableWidget->setItem(i, 8, proofed_at);
+        this->ui.tableWidget->setItem(i, 9, confirmed_at);
+        this->ui.tableWidget->setItem(i, 10, engraved_at);
+        this->ui.tableWidget->setItem(i, 11, delivered_at);
+        this->ui.tableWidget->setCellWidget(i, 12, pb_details); // Details button
+
+        this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
+
+        row_number++;
+    }
 }
 
 void Funeraria::closeWindow()
