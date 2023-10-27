@@ -1,4 +1,5 @@
 #pragma once
+#include <QSqlRecord>
 #include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -34,27 +35,30 @@ public:
 
 private:
     QWidget* parent;
+    QString backup_folder = "backups";
+    // Interval in days to create a new backup
+    int backup_interval = 3;
 
     /********** PRIVATE FUNCTIONS **********/
 
     /*
      * Opens a database connection
      * 
-     * @return void
+     * @return boolean true if the database is opened, false on failure
      */
-    void openDatabase();
+    bool openDatabase();
 
     /*
      * Gives options to solve eventual problems with the database opening
      *
-     * @return void
+     * @return boolean true if the connection has been established, false otherwise
      */
-    void solveDatabaseConnectionFailure();
+    bool solveDatabaseConnectionFailure();
 
     /*
      * Creates a new database
      *
-     * @return boolena true if the operation succeeds, false otherwise
+     * @return boolen true if the operation succeeds, false otherwise
      */
     bool createDatabase();
 
@@ -63,8 +67,23 @@ private:
      * 
      * @param const QString& file_name - Path to the file to open
      *
-     * @return boolena true if the operation succeeds, false otherwise
+     * @return boolen true if the operation succeeds, false otherwise
      */
     bool executeQueryFile(const QString& file_name);
+
+    /*
+     * Creates an sql file containing a backup of the database and a copy of the db file.
+     * The filenames will have a timestamp to distinguish them.
+     *
+     * @return void
+     */
+    void backupDatabase();
+
+    /*
+     * Checks if a new backup is required
+     *
+     * @return boolen true if a new backup is required, false otherwise
+     */
+    bool isBackupRequired();
 };
 

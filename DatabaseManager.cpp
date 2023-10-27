@@ -1,4 +1,4 @@
-#include "DatabaseManager.h"
+﻿#include "DatabaseManager.h"
 
 /********** CONSTRUCTOR **********/
 
@@ -6,7 +6,11 @@ DatabaseManager::DatabaseManager(const QString& path, QWidget* parent)
 {
     this->parent = parent;
     this->path = path;
-    this->openDatabase();
+    if (this->openDatabase()) {
+        if (this->isBackupRequired()) {
+            this->backupDatabase();
+        }
+    }
 }
 
 /********** DESTRUCTOR **********/
@@ -21,11 +25,15 @@ DatabaseManager::~DatabaseManager()
 
 /********** PRIVATE FUNCTIONS **********/
 
-void DatabaseManager::openDatabase()
+bool DatabaseManager::openDatabase()
 {
     if (!QFile::exists(this->path)) {
         this->connected = false;
-        this->solveDatabaseConnectionFailure();
+        if (!this->solveDatabaseConnectionFailure()) {
+            return false;
+        }
+
+        return true;
     }
     else {
         this->db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
@@ -33,15 +41,20 @@ void DatabaseManager::openDatabase()
 
         if (!this->db.open()) {
             this->connected = false;
-            this->solveDatabaseConnectionFailure();
+            if (!this->solveDatabaseConnectionFailure()) {
+                return false;
+            }
+
+            return true;
         }
         else {
             this->connected = true;
+            return true;
         }
     }
 }
 
-void DatabaseManager::solveDatabaseConnectionFailure()
+bool DatabaseManager::solveDatabaseConnectionFailure()
 {
     QMessageBox message;
     QPushButton* newBtn = message.addButton("Nuovo", QMessageBox::ActionRole);
@@ -59,23 +72,38 @@ void DatabaseManager::solveDatabaseConnectionFailure()
         // If the database creation fails
         if (!this->createDatabase()) {
             // Ask again what to do
-            this->solveDatabaseConnectionFailure();
+            if (!this->solveDatabaseConnectionFailure()) {
+                return false;
+            }
+
+            return true;
         }
+
+        return true;
     }
     else if (message.clickedButton() == (QAbstractButton*)openBtn) {
         this->path = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3)");
 
         if (!this->path.isEmpty()) {
-            this->openDatabase();
+            if (!this->openDatabase()) {
+                return false;
+            }
+
+            return true;
         }
         else {
             // Ask again what to do
-            this->solveDatabaseConnectionFailure();
+            if (!this->solveDatabaseConnectionFailure()) {
+                return false;
+            }
+
+            return true;
         }
     }
     else {
         // The user has decided not to solve the problem
         this->connected = false;
+        return false;
     }
 }
 
@@ -200,4 +228,119 @@ bool DatabaseManager::executeQueryFile(const QString& file_name) {
 
         return true;
     }
+}
+
+void DatabaseManager::backupDatabase()
+{
+    QString today = QDate::currentDate().toString("yyyyMMdd");
+
+    // Copy of the .db file
+    if (!QFile::copy(this->path, "./" + this->backup_folder + "/" + today + "-database.db")) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria Backup");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Impossibile eseguire la copia di backup del database.");
+        message.exec();
+        return;
+    }
+
+    // Create a file for the SQL statements
+    QFile sqlFile("./" + this->backup_folder + "/" + today + "-database.sql");
+    if (!sqlFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria Backup");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Impossibile aprire il nuovo file .sql per il backup del database.");
+        message.exec();
+        return;
+    }
+
+    QTextStream out(&sqlFile);
+
+    // Fetch and write SQL statements to the file
+    QSqlQuery query(this->db);
+    if (query.exec("PRAGMA foreign_keys=OFF") && query.exec("BEGIN")) {
+        // Iterate through tables and write SQL to recreate them
+        QSqlQuery tablesQuery("SELECT name FROM sqlite_master WHERE type='table'", this->db);
+        while (tablesQuery.next()) {
+            QString tableName = tablesQuery.value(0).toString();
+            QSqlQuery tableDump("SELECT sql FROM sqlite_master WHERE name='" + tableName + "'", this->db);
+            if (tableDump.next()) {
+                QString createTableSQL = tableDump.value(0).toString();
+                out << createTableSQL << ";\n";
+
+                QSqlQuery dataDump("SELECT * FROM " + tableName, this->db);
+                while (dataDump.next()) {
+                    out << "INSERT INTO " << tableName << " VALUES (";
+
+                    for (int i = 0; i < dataDump.record().count(); i++) {
+                        if (i > 0) {
+                            out << ", ";
+                        }
+
+                        QVariant value = dataDump.value(i);
+                        if (value.type() == QVariant::String) {
+                            out << "\"" << value.toString() << "\"";
+                        }
+                        else {
+                            out << value.toString();
+                        }
+                    }
+
+                    out << ");\n";
+                }
+            }
+        }
+
+        if (query.exec("COMMIT")) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria Backup");
+            message.setIcon(QMessageBox::Information);
+            message.setText("I file di backup del database sono stati creati.");
+            message.exec();
+        }
+        else {
+            qDebug() << "Failed to commit SQL transaction: " << query.lastError().text();
+            sqlFile.close();
+            return;
+        }
+    }
+    else {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria Backup");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Il file .db è stato copiato, ma non è stato possibile generare il file .slq");
+        message.exec();
+        return;
+    }
+
+    sqlFile.close();
+}
+
+bool DatabaseManager::isBackupRequired() {
+    QDir directory("./" + this->backup_folder);
+    QStringList files = directory.entryList(QStringList() << "*.db" << "*.sql", QDir::Files);
+
+    // If the folder is empty, it means that no backup has been created
+    if (files.isEmpty()) {
+        return true;
+    }
+
+    QString max_date = "00000000";
+    foreach(QString filename, files) {
+        QStringList date = filename.split("-");
+        
+        if (date[0].compare(max_date) > 0) {
+            max_date = date[0];
+        }
+    }
+
+    QDate today = QDate::currentDate();
+    QDate date = QDate::fromString(max_date, "yyyyMMdd");
+
+    if (date.daysTo(today) >= this->backup_interval) {
+        return true;
+    }
+
+    return false;
 }
