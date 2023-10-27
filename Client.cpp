@@ -33,11 +33,32 @@ int Client::getId(const QString& name)
     return 0;
 }
 
-QStringList Client::getNames()
+QStringList Client::getActiveNames()
 {
     QStringList names{};
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table + " ORDER BY position ASC;");
+    query.prepare("SELECT name FROM " + this->table + " WHERE active = 1 ORDER BY position ASC;");
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        names.append(query.value("name").toString());
+    }
+
+    return names;
+}
+
+QStringList Client::getQuickAccessNames()
+{
+    QStringList names{};
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " WHERE quick = 1 ORDER BY position ASC;");
 
     if (!query.exec()) {
         QMessageBox message;
@@ -79,6 +100,7 @@ QList<QMap<QString, QString>> Client::get()
         row["address"] = query.value("address").toString();
         row["phone"] = query.value("phone").toString();
         row["active"] = query.value("active").toString();
+        row["quick"] = query.value("quick").toString();
         row["created_at"] = query.value("created_at").toString();
         row["edited_at"] = query.value("edited_at").toString();
 
@@ -110,6 +132,7 @@ QMap<QString, QString> Client::getDetails(const QString& name)
         map["address"] = query.value("address").toString();
         map["phone"] = query.value("phone").toString();
         map["active"] = query.value("active").toString();
+        map["quick"] = query.value("quick").toString();
         map["created_at"] = query.value("created_at").toString();
         map["edited_at"] = query.value("edited_at").toString();
     }
@@ -161,7 +184,8 @@ bool Client::store(
     const QString& emails, 
     const QString& address, 
     const QString& phones, 
-    const int& active
+    const int& active,
+    const int& quick
 )
 {
     this->db.transaction();
@@ -200,14 +224,15 @@ bool Client::store(
 
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("INSERT INTO " + this->table + ""
-        " (position, name, email, address, phone, active, created_at, edited_at)"
-        " VALUES (:position, :name, :emails, :address, :phones, :active, :created_at, :edited_at)");
+        " (position, name, email, address, phone, active, quick, created_at, edited_at)"
+        " VALUES (:position, :name, :emails, :address, :phones, :active, :quick, :created_at, :edited_at)");
     query.bindValue(":position", position);
     query.bindValue(":name", name);
     query.bindValue(":emails", formatted_emails);
     query.bindValue(":address", address);
     query.bindValue(":phones", formatted_phones);
     query.bindValue(":active", active);
+    query.bindValue(":quick", quick);
     query.bindValue(":created_at", created_at);
     query.bindValue(":edited_at", created_at);
 
@@ -240,7 +265,8 @@ bool Client::update(
     const QString& emails,
     const QString& address, 
     const QString& phones,
-    const int& active
+    const int& active,
+    const int& quick
 )
 {
     this->db.transaction();
@@ -280,7 +306,7 @@ bool Client::update(
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("UPDATE "  + this->table + ""
         " SET position = :position, name = :name, email = :emails, address = :address," 
-        " phone = :phones, active = :active, edited_at = :edited_at "
+        " phone = :phones, active = :active, quick = :quick, edited_at = :edited_at "
         " WHERE id = :id;");
     query.bindValue(":position", position);
     query.bindValue(":name", name);
@@ -288,6 +314,7 @@ bool Client::update(
     query.bindValue(":address", address);
     query.bindValue(":phones", formatted_phones);
     query.bindValue(":active", active);
+    query.bindValue(":quick", quick);
     query.bindValue(":edited_at", edited_at);
     query.bindValue(":id", id);
 

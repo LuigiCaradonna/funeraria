@@ -40,11 +40,18 @@ public:
     int getId(const QString& name);
 
     /*
-     * Gets all the clients' names
+     * Gets all the active clients' names
      *
      * @return  QList<QStringList> - A list containing the clients' names
      */
-    QStringList getNames();
+    QStringList getActiveNames();
+
+    /*
+     * Gets all the clients' names to show as buttons into the quick access bar
+     *
+     * @return  QList<QStringList> - A list containing the clients' names to show as buttons into the quick access bar
+     */
+    QStringList getQuickAccessNames();
 
     /*
      * Gets all the clients' data
@@ -80,6 +87,7 @@ public:
      * @param const QString& address    -   Client's address
      * @param const QString& phones     -   Client's phone number(s)
      * @param const int& active         -   Client's active status (0/1)
+     * @param const int& quick          -   Client's quick access status (0/1)
      *
      * @return  boolean true if the creation succeeds, false otherwise
      */
@@ -89,7 +97,8 @@ public:
         const QString& email,
         const QString& address,
         const QString& phone,
-        const int& active
+        const int& active,
+        const int& quick
     );
 
     /*
@@ -102,6 +111,7 @@ public:
      * @param const QString& address    -   Client's address
      * @param const QString& phones     -   Client's phone number(s)
      * @param const int& active         -   Client's active status (0/1)
+     * @param const int& quick          -   Client's quick access status (0/1)
      *
      * @return  boolean true if the update succeeds, false otherwise
      */
@@ -112,7 +122,8 @@ public:
         const QString& email,
         const QString& address,
         const QString& phone,
-        const int& active
+        const int& active,
+        const int& quick
     );
 
     /*

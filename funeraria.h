@@ -178,7 +178,6 @@ private:
 
     QSignalMapper* show_items_mapper;
     QSignalMapper* new_item_mapper;
-    QSignalMapper* quick_client_mapper;
 
     // Table rows' colors
     QColor paid_cell = QColor(255, 255, 255);
@@ -207,6 +206,20 @@ private:
      * @return void
      */
     void showClientOrders(QList<QMap<QString, QString>> tombs);
+
+    /*
+     * Updates the combobox containing the clients.
+     *
+     * @return void
+     */
+    void updateClientsCombobox();
+
+    /*
+     * Updates the quick access bar using only the selected clients.
+     *
+     * @return void
+     */
+    void updateQuickAccessNames();
 
     /*
      * Closes the main window.

@@ -58,6 +58,30 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="leId">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>27</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>27</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="lblPosition">
        <property name="minimumSize">
@@ -298,8 +322,8 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="lblActive">
+     <item row="6" column="1">
+      <widget class="QCheckBox" name="cbActive">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -322,46 +346,15 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
-      <widget class="QCheckBox" name="cbActive">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="leId">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>50</width>
-         <height>27</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>50</width>
-         <height>27</height>
-        </size>
-       </property>
+     <item row="7" column="1">
+      <widget class="QCheckBox" name="cbQuick">
        <property name="font">
         <font>
          <pointsize>12</pointsize>
         </font>
+       </property>
+       <property name="text">
+        <string>Aggiungi ad accesso veloce</string>
        </property>
       </widget>
      </item>

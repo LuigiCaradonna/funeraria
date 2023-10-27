@@ -42,11 +42,8 @@ Funeraria::Funeraria(QWidget* parent)
     this->flame = new Accessory(this->db->db, "flames");
     this->material = new Accessory(this->db->db, "materials");
 
-    // List of clients' names
-    QStringList clients = this->client->getNames();
-    // Add the clients to the combo box
-    this->ui.cbClient->addItem(this->client_placeholder);
-    this->ui.cbClient->addItems(clients);
+    // Insert the clients' names into the combobox
+    this->updateClientsCombobox();
 
     // Populate the years combo box
     this->ui.cbYear->addItem("Tutti");
@@ -96,19 +93,8 @@ Funeraria::Funeraria(QWidget* parent)
     show_items_mapper->setMapping(this->ui.actionFList, "flame");
     this->connect(show_items_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
 
-    /* Event listeners for the clients quick access bar
-    this->quick_client_mapper = new QSignalMapper(this);
-    this->connect(this->ui.btnQuickCmd, SIGNAL(clikced()), show_items_mapper, SLOT(map()));
-    quick_client_mapper->setMapping(this->ui.btnQuickCmd, "cmd");
-    this->connect(quick_client_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotQuickClientOrders);
-    */
-    for (const auto& item : std::as_const(clients)) {
-        QPushButton* a = new QPushButton();
-        a->setText(item);
-        this->ui.quickClientsAccess->addWidget(a);
-
-        this->connect(a, &QPushButton::clicked, this, &Funeraria::slotQuickClientOrders);
-    }
+    // Create a qPushButton for each client for the quick access bar
+    this->updateQuickAccessNames();
 }
 
 /********** DESTRUCTOR **********/
@@ -128,7 +114,6 @@ Funeraria::~Funeraria()
     delete this->material;
     delete this->show_items_mapper;
     delete this->new_item_mapper;
-    delete this->quick_client_mapper;
 }
 
 /********** SLOTS **********/
@@ -256,7 +241,7 @@ void Funeraria::slotShowClients()
     int row_number = 1;
     for (int i = 0; i < clients.size(); i++) {
         QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
-        pb_details->setText("Dettagli");
+        pb_details->setText("Modifica");
         QPushButton* pb_delete = new QPushButton(this->ui.tableWidget);
         pb_delete->setText("Elimina");
 
@@ -340,8 +325,16 @@ void Funeraria::slotClientDetails()
     int row = this->ui.tableWidget->currentRow();
     // Set the name property of the Client object to the name present in the clicked row
     this->client_ui->setName(this->ui.tableWidget->item(row, 1)->text());
+    this->client_ui->updateForm();
     this->client_ui->setModal(true);
     this->client_ui->exec();
+
+    // Clear the combobox content
+    this->ui.cbClient->clear();
+    // Update the combobox with the active clients
+    this->updateClientsCombobox();
+    // Update the quick access bar with the active clients
+    this->updateQuickAccessNames();
 
     // Reload the table when the popup is closed, the user could have made some changes
     this->slotShowClients();
@@ -928,6 +921,38 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
 
         row_number++;
     }
+}
+
+void Funeraria::updateClientsCombobox() {
+    // List of clients' names
+    QStringList clients = this->client->getActiveNames();
+    // Add the clients to the combo box
+    this->ui.cbClient->addItem(this->client_placeholder);
+    this->ui.cbClient->addItems(clients);
+}
+
+void Funeraria::updateQuickAccessNames() {
+    // List of the clients to be shown inside the quick access bar
+    QStringList quick_access_clients = this->client->getQuickAccessNames();
+
+    // Clear the quick access buttons
+    QLayoutItem* item;
+    while ((item = this->ui.quickClientsAccess->takeAt(0)) != 0) {
+        delete item->widget();
+    }
+
+    // Add the buttons to the bar
+    for (const auto& item : std::as_const(quick_access_clients)) {
+        QPushButton* btn = new QPushButton();
+        btn->setText(item);
+        this->ui.quickClientsAccess->addWidget(btn);
+
+        this->connect(btn, &QPushButton::clicked, this, &Funeraria::slotQuickClientOrders);
+    }
+
+    // Add an horizontal spacer as last item to compact the buttons to the left
+    QSpacerItem* spacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    this->ui.quickClientsAccess->addSpacerItem(spacer);
 }
 
 void Funeraria::closeWindow()

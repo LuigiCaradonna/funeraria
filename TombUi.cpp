@@ -169,7 +169,7 @@ void TombUi::updateForm()
     int lamp_index = 0;
     int flame_index = 0;
 
-    QList<QString> client_names = client->getNames();
+    QList<QString> client_names = client->getActiveNames();
     QList<QString> material_names = this->material->getNames();
     QList<QString> vase_names = this->vase->getNames();
     QList<QString> lamp_names = this->lamp->getNames();

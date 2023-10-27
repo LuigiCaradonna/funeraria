@@ -52,6 +52,14 @@ void ClientUi::slotSave()
         active = 0;
     }
 
+    int quick;
+    if (this->ui.cbQuick->isChecked()) {
+        quick = 1;
+    }
+    else {
+        quick = 0;
+    }
+
     // An id set to 0 means that we are creating a new client
     if (this->ui.leId->text().toInt() == 0) {
         if (client->store(
@@ -60,7 +68,8 @@ void ClientUi::slotSave()
             this->ui.teEmail->toPlainText().trimmed(),
             this->ui.leAddress->text().trimmed(),
             this->ui.tePhone->toPlainText().trimmed(),
-            active
+            active,
+            quick
         )
             ) {
             delete client;
@@ -76,7 +85,8 @@ void ClientUi::slotSave()
             this->ui.teEmail->toPlainText().trimmed(),
             this->ui.leAddress->text().trimmed(),
             this->ui.tePhone->toPlainText().trimmed(),
-            active
+            active,
+            quick
         )
             ) {
             delete client;
@@ -90,9 +100,6 @@ void ClientUi::slotCloseDialog()
 {
     this->close();
 }
-
-
-/********** PRIVATE FUNCTIONS **********/
 
 void ClientUi::updateForm()
 {
@@ -131,6 +138,7 @@ void ClientUi::updateForm()
         this->ui.leAddress->setText(client_details["address"]);
         this->ui.tePhone->setText(phones);
         this->ui.cbActive->setChecked(client_details["active"] == "1");
+        this->ui.cbQuick->setChecked(client_details["quick"] == "1");
 
         // Set the save button text
         this->ui.btnSave->setText("Aggiorna");
