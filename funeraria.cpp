@@ -20,6 +20,7 @@ Funeraria::Funeraria(QWidget* parent)
     int pixelsHigh = fm.height();
     */
 
+    // TODO: Inizialization function inside Config to create the backup folder if not existing etc..
     this->config = new Config();
     this->db = new DatabaseManager(this);
 

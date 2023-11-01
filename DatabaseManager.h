@@ -22,7 +22,7 @@ public:
     /*
      * Constructs the DatabaseManager object.
      *
-     * @param	QWidget*        parent	- Pointer to the parent widget
+     * @param	QWidget*    parent	- Pointer to the parent widget
      */
     DatabaseManager(QWidget* parent = nullptr);
 

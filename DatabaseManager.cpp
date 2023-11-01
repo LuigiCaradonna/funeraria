@@ -53,11 +53,13 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
 {
     QMessageBox message;
     QPushButton* newBtn = message.addButton("Nuovo", QMessageBox::ActionRole);
+    QPushButton* backupBtn = message.addButton("Ripristina", QMessageBox::ActionRole);
     QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
     message.setWindowTitle("Funeraria");
     message.setIcon(QMessageBox::Warning);
     message.setText("Non e' stato possibile accedere al database.\n"
-        "Creane uno nuovo o ripristina un backup se disponibile.");
+        "Creane uno nuovo se è il primo utilizzo del sofware o se non hai backup.\n"
+        "In alternativa ripristina un backup se disponibile.");
     message.exec();
 
     if (message.clickedButton() == (QAbstractButton*)newBtn) {
@@ -71,6 +73,62 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
             return true;
         }
     }
+    else if (message.clickedButton() == (QAbstractButton*)backupBtn) {
+        // Copy the last .db file from the backups folder if available
+        QDir directory("./" + this->backup_folder);
+        QStringList files = directory.entryList(QStringList() << "*.db", QDir::Files);
+
+        if (files.length() > 0) {
+            // Find the last backup created
+            QString max_date = "00000000";
+            QString backup_file = "";
+            foreach(QString filename, files) {
+                QStringList date = filename.split("-");
+
+                if (date[0].compare(max_date) > 0) {
+                    max_date = date[0];
+                    backup_file = filename;
+                }
+            }
+
+            if (!QFile::copy("./" + this->backup_folder + "/" + backup_file, this->db_path + this->db_name)) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Critical);
+                message.setText("Il ripristino del file di backup non è riuscito.");
+                message.exec();
+
+                return false;
+            }
+
+            // Try to open the just recovered backup
+            if (!this->openDatabase()) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Warning);
+                message.setText("File di backup ripristinato, ma non è stato possibile aprire il database.");
+                message.exec();
+
+                return this->solveDatabaseConnectionFailure();
+            }
+
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Information);
+            message.setText("File di backup ripristinato.");
+            message.exec();
+
+            return true;
+        }
+
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Non sono stati trovati file di backup da ripristinare.");
+        message.exec();
+
+        return false;
+    }
     else {
         // The user has decided not to solve the problem
         return false;
@@ -79,7 +137,9 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
 
 bool DatabaseManager::createDatabase()
 {
-    this->db = QSqlDatabase::addDatabase("QSQLITE");
+    // Can't use the code inside openDatabase() method, because at this point no DB yet exists
+    // thus a new one must be created here before to execute the queries from the sql file
+    this->db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
     this->db.setDatabaseName(this->db_name);
 
     if (!this->db.open()) {
