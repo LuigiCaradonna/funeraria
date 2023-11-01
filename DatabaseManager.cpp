@@ -10,6 +10,8 @@ DatabaseManager::DatabaseManager(const QString& path, QWidget* parent)
         if (this->isBackupRequired()) {
             this->backupDatabase();
         }
+
+        this->deleteOldBackups();
     }
 }
 
@@ -292,15 +294,14 @@ void DatabaseManager::backupDatabase()
             }
         }
 
-        if (query.exec("COMMIT")) {
+        if (!query.exec("COMMIT")) {
+            qDebug() << "Failed to commit SQL transaction: " << query.lastError().text();
             QMessageBox message;
             message.setWindowTitle("Funeraria Backup");
-            message.setIcon(QMessageBox::Information);
-            message.setText("I file di backup del database sono stati creati.");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Impossibile generare correttamente il file di backup .sql. Transazione fallita.");
             message.exec();
-        }
-        else {
-            qDebug() << "Failed to commit SQL transaction: " << query.lastError().text();
+            // Rollback not required, the database was only read
             sqlFile.close();
             return;
         }
@@ -309,7 +310,7 @@ void DatabaseManager::backupDatabase()
         QMessageBox message;
         message.setWindowTitle("Funeraria Backup");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Il file .db è stato copiato, ma non è stato possibile generare il file .slq");
+        message.setText("Impossibile iniziare la transazione per generare il file di backupp .sql");
         message.exec();
         return;
     }
@@ -343,4 +344,28 @@ bool DatabaseManager::isBackupRequired() {
     }
 
     return false;
+}
+
+void DatabaseManager::deleteOldBackups()
+{
+    qDebug() << "Initiatin deletion";
+    QString backup_path = "./" + this->backup_folder;
+    QDir directory(backup_path);
+    QStringList files = directory.entryList(QStringList() << "*.db" << "*.sql", QDir::Files);
+
+    qDebug() << "Files found: " + QString::number(files.length());
+    
+    // * 2 is there because there are 2 files (1 .db and 1 .sql) for each backup
+    int backups_to_delete = files.length() - (this->backups_to_keep * 2);
+
+    qDebug() << "Backups to delete: " + QString::number(backups_to_delete);
+
+    if (backups_to_delete > 0) {
+        // Sort the the list of files found, having the format yyyyMMdd-backup they can be alphabetically sorted
+        files.sort();
+
+        for (int i = 0; i < backups_to_delete; i++) {
+            QFile::remove(backup_path + "/" + files[i]);
+        }
+    }
 }

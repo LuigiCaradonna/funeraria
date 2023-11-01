@@ -957,6 +957,7 @@ void Funeraria::updateQuickAccessNames() {
         QPushButton* btn = new QPushButton();
         btn->setFont(font);
         btn->setText(item);
+        btn->setMinimumSize(QSize(0, 30));
         this->ui.quickClientsAccess->addWidget(btn);
 
         this->connect(btn, &QPushButton::clicked, this, &Funeraria::slotQuickClientOrders);

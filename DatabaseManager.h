@@ -38,6 +38,8 @@ private:
     QString backup_folder = "backups";
     // Interval in days to create a new backup
     int backup_interval = 3;
+    // Number of backups to keep
+    int backups_to_keep = 1;
 
     /********** PRIVATE FUNCTIONS **********/
 
@@ -85,5 +87,12 @@ private:
      * @return boolen true if a new backup is required, false otherwise
      */
     bool isBackupRequired();
+
+    /*
+     * Deletes the older backups
+     * 
+     * @return void
+     */
+    void deleteOldBackups();
 };
 
