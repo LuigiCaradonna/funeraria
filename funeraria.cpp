@@ -30,6 +30,7 @@ Funeraria::Funeraria(QWidget* parent)
     else {
         this->client = new Client(this->db->db);
         this->client_ui = new ClientUi(this->db->db, this);
+        this->settingsUi = new SettingsUi(this->db->db, this);
         this->tombUi = new TombUi(this->db->db, this);
         this->vase = new Accessory(this->db->db, "vases");
         this->lamp = new Accessory(this->db->db, "lamps");
@@ -52,6 +53,9 @@ Funeraria::Funeraria(QWidget* parent)
         // Set the event listeners
         this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
         this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
+
+        // Signal emitted from the menu Files
+        this->connect(this->ui.actionSettings, SIGNAL(triggered()), this, SLOT(slotShowSettings()));
 
         // Signal emitted on table cell edit
         this->connect(this->ui.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
@@ -101,6 +105,7 @@ Funeraria::~Funeraria()
 
     delete this->db;
     delete this->client_ui;
+    delete this->settingsUi;
     delete this->tombUi;
     delete this->vase;
     delete this->lamp;
@@ -111,6 +116,19 @@ Funeraria::~Funeraria()
 }
 
 /********** SLOTS **********/
+
+void Funeraria::slotHeaderClicked(int logicalIndex) {
+    // Get the clicked label text
+    QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logicalIndex, Qt::Horizontal).toString();
+
+    qDebug() << label;
+}
+
+void Funeraria::slotShowSettings() {
+    this->settingsUi->setModal(true);
+    this->settingsUi->exec();
+}
+
 void Funeraria::slotFilterClientOrders()
 {
     if (this->current_table != "tomb") {
@@ -118,13 +136,6 @@ void Funeraria::slotFilterClientOrders()
     }
 
     this->slotClientOrders();
-}
-
-void Funeraria::slotHeaderClicked(int logicalIndex) {
-    // Get the clicked label text
-    QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logicalIndex, Qt::Horizontal).toString();
-
-    qDebug() << label;
 }
 
 void Funeraria::slotClientOrders()

@@ -1,6 +1,8 @@
 #pragma once
 #include <QDebug>
 #include <QSignalMapper>
+#include <QSqlError>
+#include <QSqlQuery>
 #include "ui_Tomb.h"
 #include "ClientUi.h"
 #include "Client.h"
@@ -16,7 +18,7 @@ public:
     /********** CONSTRUCTOR **********/
 
     /*
-     * Constructs the Tomb object.
+     * Constructs the TombUi object.
      *
      * @param	const QSqlDatabase*	db	    - Refrence to the database connection
      * @param	QWidget*            parent	- Parent widget
@@ -26,7 +28,7 @@ public:
     /********** DESTRUCTOR **********/
 
     /*
-     * Destructs the Tomb object.
+     * Destructs the TombUi object.
      */
     ~TombUi();
 
@@ -92,5 +94,10 @@ private:
 
     /********** PRIVATE FUNCTIONS **********/
 
+    /*
+     * Updates the dialog interface with the proper data.
+     * 
+     * @return void
+     */
     void updateForm();
 };

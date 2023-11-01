@@ -273,6 +273,13 @@
     <addaction name="actionMAccessories"/>
     <addaction name="actionTPay"/>
    </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionSettings"/>
+   </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuClienti"/>
    <addaction name="menuAccessories"/>
    <addaction name="menuLapidi"/>
@@ -385,6 +392,11 @@
   <action name="actionTEngrave">
    <property name="text">
     <string>Lapidi da incidere</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Impostazioni</string>
    </property>
   </action>
  </widget>

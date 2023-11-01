@@ -6,6 +6,7 @@
 #include "DatabaseManager.h"
 #include "ClientUi.h"
 #include "Client.h"
+#include "SettingsUi.h"
 #include "TombUi.h"
 #include "Tomb.h"
 #include "AccessoryUi.h"
@@ -42,7 +43,19 @@ protected slots:
 
     /********** SLOTS **********/
 
+    /*
+     * Sorts the table's rows according to the clicked column name.
+     * 
+     * @return void
+     */
     void slotHeaderClicked(int logicalIndex);
+
+    /*
+     * Shows a dialog window containing the settings
+     *
+     * @return void
+     */
+    void slotShowSettings();
 
     /*
      * Updates the selected client's orders list shown applying the filter (deceased name string)
@@ -66,7 +79,6 @@ protected slots:
      * @return void
      */
     void slotQuickClientOrders();
-
 
     /*
      * Shows a dialog window containing the selected tomb's details
@@ -170,6 +182,7 @@ private:
 
     Client* client;
     ClientUi* client_ui;
+    SettingsUi* settingsUi;
     TombUi* tombUi;
     Accessory* vase;
     Accessory* lamp;

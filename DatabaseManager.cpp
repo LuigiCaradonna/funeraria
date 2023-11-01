@@ -10,8 +10,7 @@ DatabaseManager::DatabaseManager(QWidget* parent)
     QDir dir("./" + this->backup_folder);
 
     if (!dir.exists()) {
-        if (!dir.mkpath("./"))
-        {
+        if (!dir.mkpath("./")) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
