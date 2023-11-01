@@ -5,9 +5,27 @@
 DatabaseManager::DatabaseManager(QWidget* parent)
 {
     this->parent = parent;
+
+    // Check if the backup folder exist
+    QDir dir("./" + this->backup_folder);
+
+    if (!dir.exists()) {
+        if (!dir.mkpath("./"))
+        {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("La cartella di backup non è stata trovata e non è possibile crearla.\n"
+                            "Verificare che la cartella di installazione non sia protetta da scrittura.");
+            message.exec();
+        }
+    }
+
     if (this->openDatabase()) {
 
         this->connected = true;
+
+        this->initSettings();
 
         if (this->isBackupRequired()) {
             this->backupDatabase();
@@ -58,8 +76,8 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
     message.setWindowTitle("Funeraria");
     message.setIcon(QMessageBox::Warning);
     message.setText("Non e' stato possibile accedere al database.\n"
-        "Creane uno nuovo se è il primo utilizzo del sofware o se non hai backup.\n"
-        "In alternativa ripristina un backup se disponibile.");
+                    "Creane uno nuovo se è il primo utilizzo del sofware o se non hai un backup.\n"
+                    "In alternativa ripristina un backup se disponibile.");
     message.exec();
 
     if (message.clickedButton() == (QAbstractButton*)newBtn) {
@@ -161,6 +179,31 @@ bool DatabaseManager::createDatabase()
     }
 }
 
+void DatabaseManager::initSettings() {
+    QSqlQuery query = QSqlQuery(this->db);
+
+    query.prepare("SELECT name, value FROM settings");
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Non è stato possibile recuperare i settaggi per la gestine dei backup.\n"
+                        "Sono stati caricati i valori predefiniti");
+        message.exec();
+        return;
+    }
+
+    while (query.next()) {
+        if (query.value("name") == "backup_interval") {
+            this->backup_interval = query.value("value").toInt();
+        }
+        else if (query.value("name") == "backups_to_keep") {
+            this->backups_to_keep = query.value("value").toInt();
+        }
+    }
+}
+
 bool DatabaseManager::executeQueryFile(const QString& file_name) {
 
     if (!QFile::exists(file_name)) {
@@ -254,8 +297,9 @@ void DatabaseManager::backupDatabase()
 {
     QString today = QDate::currentDate().toString("yyyyMMdd");
 
-    // Copy of the .db file
-    if (!QFile::copy(this->db_path, "./" + this->backup_folder + "/" + today + "-database.db")) {
+    // Copy of the .db file, no need to check if it exists, 
+    // the program arrives here only after having solved any issues with the database
+    if (!QFile::copy(this->db_path + this->db_name, "./" + this->backup_folder + "/" + today + "-database.db")) {
         QMessageBox message;
         message.setWindowTitle("Funeraria Backup");
         message.setIcon(QMessageBox::Critical);

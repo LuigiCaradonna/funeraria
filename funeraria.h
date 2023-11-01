@@ -192,13 +192,6 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Initializes the application.
-     * 
-     * @return boolean true on success, false on failure
-     */
-    bool init();
-
-    /*
      * Clears the table content and deletes all the created pointers.
      *
      * @return void

@@ -20,8 +20,6 @@ Funeraria::Funeraria(QWidget* parent)
     int pixelsHigh = fm.height();
     */
 
-    // TODO: Inizialization function inside Config to create the backup folder if not existing etc..
-    this->init();
     this->db = new DatabaseManager(this);
 
     // The connection failed
@@ -101,7 +99,6 @@ Funeraria::~Funeraria()
     // Delete the table content
     this->clearTable();
 
-    delete this->config;
     delete this->db;
     delete this->client_ui;
     delete this->tombUi;
@@ -764,10 +761,6 @@ void Funeraria::slotTombsNotPaid()
 }
 
 /********** PRIVATE FUNCTIONS **********/
-
-bool Funeraria::init() {
-    return true;
-}
 
 void Funeraria::clearTable()
 {

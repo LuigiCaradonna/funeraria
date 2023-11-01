@@ -37,7 +37,7 @@ private:
     QWidget* parent;
     QString backup_folder = "backups";
     // Interval in days to create a new backup
-    int backup_interval = 3;
+    int backup_interval = 1;
     // Number of backups to keep
     int backups_to_keep = 1;
 
@@ -53,23 +53,30 @@ private:
     /*
      * Gives options to solve eventual problems with the database opening
      *
-     * @return boolean true if the connection has been established, false otherwise
+     * @return boolean true if the connection has been established, false on failure
      */
     bool solveDatabaseConnectionFailure();
 
     /*
      * Creates a new database
      *
-     * @return boolen true if the operation succeeds, false otherwise
+     * @return boolen true if the operation succeeds, false on failure
      */
     bool createDatabase();
+
+    /*
+     * Reads the database and load the settings
+     *
+     * @return void
+     */
+    void initSettings();
 
     /*
      * Opens and executes the queries contained into the provided sql file
      * 
      * @param const QString& file_name - Path to the file to open
      *
-     * @return boolen true if the operation succeeds, false otherwise
+     * @return boolen true if the operation succeeds, false on failure
      */
     bool executeQueryFile(const QString& file_name);
 
@@ -84,7 +91,7 @@ private:
     /*
      * Checks if a new backup is required
      *
-     * @return boolen true if a new backup is required, false otherwise
+     * @return boolen true if a new backup is required, false on failure
      */
     bool isBackupRequired();
 
