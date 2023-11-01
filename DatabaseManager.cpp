@@ -106,7 +106,8 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
                 QMessageBox message;
                 message.setWindowTitle("Funeraria");
                 message.setIcon(QMessageBox::Warning);
-                message.setText("File di backup ripristinato, ma non è stato possibile aprire il database.");
+                message.setText("File di backup ripristinato, ma potrebbe essere danneggiato. \n"
+                                "Non è stato possibile aprire il database.");
                 message.exec();
 
                 return this->solveDatabaseConnectionFailure();
@@ -123,11 +124,12 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
 
         QMessageBox message;
         message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
+        message.setIcon(QMessageBox::Warning);
         message.setText("Non sono stati trovati file di backup da ripristinare.");
         message.exec();
 
-        return false;
+        // Ask again to the user how to solve the problem
+        return this->solveDatabaseConnectionFailure();
     }
     else {
         // The user has decided not to solve the problem

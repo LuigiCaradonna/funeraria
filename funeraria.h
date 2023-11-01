@@ -3,7 +3,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QSignalMapper>
 #include "ui_funeraria.h"
-#include "Config.h"
 #include "DatabaseManager.h"
 #include "ClientUi.h"
 #include "Client.h"
@@ -160,8 +159,6 @@ protected slots:
 private:
     Ui::FunerariaClass ui;
 
-    // Configuration manager
-    Config* config;
     // Database manager
     DatabaseManager* db;
 
@@ -193,6 +190,13 @@ private:
     QColor warning_bg = QColor(250, 200, 70);
 
     /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Initializes the application.
+     * 
+     * @return boolean true on success, false on failure
+     */
+    bool init();
 
     /*
      * Clears the table content and deletes all the created pointers.

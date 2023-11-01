@@ -21,7 +21,7 @@ Funeraria::Funeraria(QWidget* parent)
     */
 
     // TODO: Inizialization function inside Config to create the backup folder if not existing etc..
-    this->config = new Config();
+    this->init();
     this->db = new DatabaseManager(this);
 
     // The connection failed
@@ -30,10 +30,6 @@ Funeraria::Funeraria(QWidget* parent)
         this->closeWindow();
     }
     else {
-        // Update the db path into the config file, the db manager could have had to 
-        // create a new db file or select a different one, but we do not know about that here
-        this->config->updateConfigFile("db_path", this->db->db_path + this->db->db_name);
-
         this->client = new Client(this->db->db);
         this->client_ui = new ClientUi(this->db->db, this);
         this->tombUi = new TombUi(this->db->db, this);
@@ -768,6 +764,10 @@ void Funeraria::slotTombsNotPaid()
 }
 
 /********** PRIVATE FUNCTIONS **********/
+
+bool Funeraria::init() {
+    return true;
+}
 
 void Funeraria::clearTable()
 {
