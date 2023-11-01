@@ -14,17 +14,17 @@ class DatabaseManager
 public:
     QSqlDatabase db;
     bool connected;
-    QString path;
+    QString db_path = "./";
+    QString db_name = "funeraria.db";
 
     /********** CONSTRUCTOR **********/
 
     /*
      * Constructs the DatabaseManager object.
      *
-     * @param	const QString&	path	- Path to the database file
      * @param	QWidget*        parent	- Pointer to the parent widget
      */
-    DatabaseManager(const QString& path, QWidget* parent = nullptr);
+    DatabaseManager(QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 

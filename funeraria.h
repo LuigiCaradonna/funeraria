@@ -18,6 +18,9 @@ class Funeraria : public QMainWindow
     Q_OBJECT
 
 public:
+    // Says whether the app was correctly initialized or not
+    bool up = true;
+
     /********** CONSTRUCTOR **********/
 
     /*

@@ -2,16 +2,21 @@
 
 /********** CONSTRUCTOR **********/
 
-DatabaseManager::DatabaseManager(const QString& path, QWidget* parent)
+DatabaseManager::DatabaseManager(QWidget* parent)
 {
     this->parent = parent;
-    this->path = path;
     if (this->openDatabase()) {
+
+        this->connected = true;
+
         if (this->isBackupRequired()) {
             this->backupDatabase();
         }
 
         this->deleteOldBackups();
+    }
+    else {
+        this->connected = false;
     }
 }
 
@@ -29,30 +34,18 @@ DatabaseManager::~DatabaseManager()
 
 bool DatabaseManager::openDatabase()
 {
-    if (!QFile::exists(this->path)) {
-        this->connected = false;
-        if (!this->solveDatabaseConnectionFailure()) {
-            return false;
-        }
-
-        return true;
+    if (!QFile::exists(this->db_path + this->db_name)) {
+        return this->solveDatabaseConnectionFailure();
     }
     else {
         this->db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
-        this->db.setDatabaseName(this->path);
+        this->db.setDatabaseName(this->db_name);
 
         if (!this->db.open()) {
-            this->connected = false;
-            if (!this->solveDatabaseConnectionFailure()) {
-                return false;
-            }
+            return this->solveDatabaseConnectionFailure();
+        }
 
-            return true;
-        }
-        else {
-            this->connected = true;
-            return true;
-        }
+        return true;
     }
 }
 
@@ -60,13 +53,11 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
 {
     QMessageBox message;
     QPushButton* newBtn = message.addButton("Nuovo", QMessageBox::ActionRole);
-    QPushButton* openBtn = message.addButton("Apri", QMessageBox::ActionRole);
     QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
     message.setWindowTitle("Funeraria");
     message.setIcon(QMessageBox::Warning);
     message.setText("Non e' stato possibile accedere al database.\n"
-        "Vuoi crearne uno nuovo?\n"
-        "In alternativa puoi aprire un file differente.");
+        "Creane uno nuovo o ripristina un backup se disponibile.");
     message.exec();
 
     if (message.clickedButton() == (QAbstractButton*)newBtn) {
@@ -74,73 +65,38 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
         // If the database creation fails
         if (!this->createDatabase()) {
             // Ask again what to do
-            if (!this->solveDatabaseConnectionFailure()) {
-                return false;
-            }
-
-            return true;
-        }
-
-        return true;
-    }
-    else if (message.clickedButton() == (QAbstractButton*)openBtn) {
-        this->path = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3)");
-
-        if (!this->path.isEmpty()) {
-            if (!this->openDatabase()) {
-                return false;
-            }
-
-            return true;
+            return this->solveDatabaseConnectionFailure();
         }
         else {
-            // Ask again what to do
-            if (!this->solveDatabaseConnectionFailure()) {
-                return false;
-            }
-
             return true;
         }
     }
     else {
         // The user has decided not to solve the problem
-        this->connected = false;
         return false;
     }
 }
 
 bool DatabaseManager::createDatabase()
 {
-    this->path = QFileDialog::getSaveFileName(this->parent, "Salva", "./", "Database (*.db *.sqlite *.sqlite3)");
+    this->db = QSqlDatabase::addDatabase("QSQLITE");
+    this->db.setDatabaseName(this->db_name);
 
-    // If the user does not select any file
-    if (this->path.isEmpty()) {
-        this->connected = false;
+    if (!this->db.open()) {
+        return this->solveDatabaseConnectionFailure();
     }
     else {
-        this->db = QSqlDatabase::addDatabase("QSQLITE");
-        this->db.setDatabaseName(this->path);
+        // Ask for the sql file to open to generate the new database
+        QString sqlFile = QFileDialog::getOpenFileName(this->parent, "Selezione file sql per generare il database", "./", "Database (*.sql)");
 
-        if (!this->db.open()) {
-            this->connected = false;
-            this->solveDatabaseConnectionFailure();
+        // If no file is selected or if the sql execution fails
+        if (!QFile::exists(sqlFile) || sqlFile.isEmpty() || !this->executeQueryFile(sqlFile)) {
+            this->db.close();
+            return this->solveDatabaseConnectionFailure();
         }
-        else {
-            this->connected = true;
-            
-            // Ask for the sql file to open
-            QString sqlFile = QFileDialog::getOpenFileName(this->parent, "Selezione file sql", "./", "Database (*.sql)");
 
-            // If no file is selected or if the sql execution fails
-            if (!QFile::exists(sqlFile) || sqlFile.isEmpty() || !this->executeQueryFile(sqlFile)) {
-                this->connected = false;
-                this->db.close();
-                this->solveDatabaseConnectionFailure();
-            }
-        }
+        return true;
     }
-    
-    return this->connected;
 }
 
 bool DatabaseManager::executeQueryFile(const QString& file_name) {
@@ -237,7 +193,7 @@ void DatabaseManager::backupDatabase()
     QString today = QDate::currentDate().toString("yyyyMMdd");
 
     // Copy of the .db file
-    if (!QFile::copy(this->path, "./" + this->backup_folder + "/" + today + "-database.db")) {
+    if (!QFile::copy(this->db_path, "./" + this->backup_folder + "/" + today + "-database.db")) {
         QMessageBox message;
         message.setWindowTitle("Funeraria Backup");
         message.setIcon(QMessageBox::Critical);
@@ -263,24 +219,28 @@ void DatabaseManager::backupDatabase()
     QSqlQuery query(this->db);
     if (query.exec("PRAGMA foreign_keys=OFF") && query.exec("BEGIN")) {
         // Iterate through tables and write SQL to recreate them
-        QSqlQuery tablesQuery("SELECT name FROM sqlite_master WHERE type='table'", this->db);
-        while (tablesQuery.next()) {
-            QString tableName = tablesQuery.value(0).toString();
-            QSqlQuery tableDump("SELECT sql FROM sqlite_master WHERE name='" + tableName + "'", this->db);
-            if (tableDump.next()) {
-                QString createTableSQL = tableDump.value(0).toString();
-                out << createTableSQL << ";\n";
+        QSqlQuery tables_query("SELECT name FROM sqlite_master WHERE type='table'", this->db);
+        while (tables_query.next()) {
+            QString table_name = tables_query.value(0).toString();
 
-                QSqlQuery dataDump("SELECT * FROM " + tableName, this->db);
-                while (dataDump.next()) {
-                    out << "INSERT INTO " << tableName << " VALUES (";
+            // Exclude reserved tables generatead automatically by sqlite
+            if (table_name == "sqlite_sequence") continue;
 
-                    for (int i = 0; i < dataDump.record().count(); i++) {
+            QSqlQuery tables_dump("SELECT sql FROM sqlite_master WHERE name='" + table_name + "'", this->db);
+            if (tables_dump.next()) {
+                QString create_table_sql = tables_dump.value(0).toString();
+                out << create_table_sql << ";\n";
+
+                QSqlQuery data_dump("SELECT * FROM " + table_name, this->db);
+                while (data_dump.next()) {
+                    out << "INSERT INTO " << table_name << " VALUES (";
+
+                    for (int i = 0; i < data_dump.record().count(); i++) {
                         if (i > 0) {
                             out << ", ";
                         }
 
-                        QVariant value = dataDump.value(i);
+                        QVariant value = data_dump.value(i);
                         if (value.type() == QVariant::String) {
                             out << "\"" << value.toString() << "\"";
                         }
@@ -348,17 +308,12 @@ bool DatabaseManager::isBackupRequired() {
 
 void DatabaseManager::deleteOldBackups()
 {
-    qDebug() << "Initiatin deletion";
     QString backup_path = "./" + this->backup_folder;
     QDir directory(backup_path);
     QStringList files = directory.entryList(QStringList() << "*.db" << "*.sql", QDir::Files);
 
-    qDebug() << "Files found: " + QString::number(files.length());
-    
     // * 2 is there because there are 2 files (1 .db and 1 .sql) for each backup
     int backups_to_delete = files.length() - (this->backups_to_keep * 2);
-
-    qDebug() << "Backups to delete: " + QString::number(backups_to_delete);
 
     if (backups_to_delete > 0) {
         // Sort the the list of files found, having the format yyyyMMdd-backup they can be alphabetically sorted
