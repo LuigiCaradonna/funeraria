@@ -51,12 +51,17 @@ DatabaseManager::~DatabaseManager()
 
 bool DatabaseManager::openDatabase()
 {
-    if (!QFile::exists(this->db_path + this->db_name)) {
+    QFile config_file("config.cfg");
+    config_file.open(QIODevice::ReadOnly);
+    this->db_path = config_file.readAll();
+    config_file.close();
+
+    if (!QFile::exists(this->db_path)) {
         return this->solveDatabaseConnectionFailure();
     }
     else {
         this->db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
-        this->db.setDatabaseName(this->db_name);
+        this->db.setDatabaseName(this->db_path);
 
         if (!this->db.open()) {
             return this->solveDatabaseConnectionFailure();
@@ -71,6 +76,7 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
     QMessageBox message;
     QPushButton* newBtn = message.addButton("Nuovo", QMessageBox::ActionRole);
     QPushButton* backupBtn = message.addButton("Ripristina", QMessageBox::ActionRole);
+    QPushButton* openBtn = message.addButton("Apri", QMessageBox::ActionRole);
     QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
     message.setWindowTitle("Funeraria");
     message.setIcon(QMessageBox::Warning);
@@ -108,7 +114,7 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
                 }
             }
 
-            if (!QFile::copy("./" + this->backup_folder + "/" + backup_file, this->db_path + this->db_name)) {
+            if (!QFile::copy("./" + this->backup_folder + "/" + backup_file, this->db_path)) {
                 QMessageBox message;
                 message.setWindowTitle("Funeraria");
                 message.setIcon(QMessageBox::Critical);
@@ -148,6 +154,26 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
         // Ask again to the user how to solve the problem
         return this->solveDatabaseConnectionFailure();
     }
+    if (message.clickedButton() == (QAbstractButton*)openBtn) {
+        // Prompt the user to select the db file
+        this->db_path = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3)");
+
+        if (!this->db_path.isEmpty()) {
+            // Rewrite the content of the config file with the new db path
+            QFile config_file("config.cfg");
+            config_file.open(QIODeviceBase::ReadWrite | QIODeviceBase::Truncate);
+
+            QTextStream outStream(&config_file);
+            outStream << this->db_path;
+            config_file.close();
+
+            return this->openDatabase();
+        }
+        else {
+            // Ask again what to do
+            return this->solveDatabaseConnectionFailure();
+        }
+    }
     else {
         // The user has decided not to solve the problem
         return false;
@@ -159,7 +185,7 @@ bool DatabaseManager::createDatabase()
     // Can't use the code inside openDatabase() method, because at this point no DB yet exists
     // thus a new one must be created here before to execute the queries from the sql file
     this->db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
-    this->db.setDatabaseName(this->db_name);
+    this->db.setDatabaseName(this->db_path);
 
     if (!this->db.open()) {
         return this->solveDatabaseConnectionFailure();
@@ -298,7 +324,7 @@ void DatabaseManager::backupDatabase()
 
     // Copy of the .db file, no need to check if it exists, 
     // the program arrives here only after having solved any issues with the database
-    if (!QFile::copy(this->db_path + this->db_name, "./" + this->backup_folder + "/" + today + "-database.db")) {
+    if (!QFile::copy(this->db_path, "./" + this->backup_folder + "/" + today + "-database.db")) {
         QMessageBox message;
         message.setWindowTitle("Funeraria Backup");
         message.setIcon(QMessageBox::Critical);

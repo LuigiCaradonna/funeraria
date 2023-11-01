@@ -8,14 +8,14 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QRegularExpression>
+#include "Settings.h"
 
 class DatabaseManager
 {
 public:
     QSqlDatabase db;
     bool connected;
-    QString db_path = "./";
-    QString db_name = "funeraria.db";
+    QString db_path = "./funeraria.db";
 
     /********** CONSTRUCTOR **********/
 

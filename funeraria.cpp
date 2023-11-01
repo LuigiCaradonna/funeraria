@@ -20,6 +20,20 @@ Funeraria::Funeraria(QWidget* parent)
     int pixelsHigh = fm.height();
     */
 
+    QFile config_file("config.cfg");
+    if (!config_file.exists()) {
+        if (!this->initConfigFile()) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Non è possibile aprire il file di configurazione.\n"
+                "Assicurarsi che la cartella di installazione non sia protetta da scrittura.");
+            message.exec();
+
+            this->closeWindow();
+        }
+    }
+
     this->db = new DatabaseManager(this);
 
     // The connection failed
@@ -772,6 +786,21 @@ void Funeraria::slotTombsNotPaid()
 }
 
 /********** PRIVATE FUNCTIONS **********/
+
+bool Funeraria::initConfigFile() {
+    QFile config_file(this->config_file);
+    config_file.open(QIODevice::WriteOnly);
+
+    if (!config_file.isOpen()) {
+        return false;
+    }
+
+    QTextStream outStream(&config_file);
+    outStream << this->default_db_path;
+    config_file.close();
+
+    return true;
+}
 
 void Funeraria::clearTable()
 {

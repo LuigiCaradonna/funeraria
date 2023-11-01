@@ -2,6 +2,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
+#include <QFile>
 #include <QMessageBox>
 
 class Settings : public QObject
@@ -37,15 +38,15 @@ public:
     /*
      * Updates a settings into the database
      *
-     * @param const QList<QMap<QString, QString>>& settings - Settings name/value to store
+     * @param const QMap<QString, QString>& setting - Setting name/value to store
      *
      * @return  boolean true on success, false on faliure
      */
-    bool store(const QList<QMap<QString, QString>>& settings);
+    bool store(const QMap<QString, QString>& setting);
 
 private:
     const QString table = "settings";
     QSqlDatabase db;
-
+    QString config_file = "config.cfg";
 };
 

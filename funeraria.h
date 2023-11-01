@@ -7,6 +7,7 @@
 #include "ClientUi.h"
 #include "Client.h"
 #include "SettingsUi.h"
+#include "Settings.h"
 #include "TombUi.h"
 #include "Tomb.h"
 #include "AccessoryUi.h"
@@ -180,6 +181,9 @@ private:
     // Placeholder for the clients' combo box
     QString client_placeholder = "Tutti";
 
+    QString config_file = "config.cfg";
+    QString default_db_path = "./funeraria.db";
+
     Client* client;
     ClientUi* client_ui;
     SettingsUi* settingsUi;
@@ -203,6 +207,8 @@ private:
     QColor warning_bg = QColor(250, 200, 70);
 
     /********** PRIVATE FUNCTIONS **********/
+
+    bool initConfigFile();
 
     /*
      * Clears the table content and deletes all the created pointers.

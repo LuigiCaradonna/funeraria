@@ -40,27 +40,37 @@ QList<QMap<QString, QString>> Settings::get() {
     return list;
 }
 
-bool Settings::store(const QList<QMap<QString, QString>>& settings)
+bool Settings::store(const QMap<QString, QString>& setting)
 {
-    QString queryString;
-    for (int i = 0; i < settings.size(); i++) {
-        QSqlQuery query = QSqlQuery(this->db);
-        if (settings[i]["name"] == "backup_interval") {
-            queryString = "UPDATE " + this->table + " SET `value` = " + settings[i]["value"] + " WHERE name = \"backup_interval\"";
-            query.prepare("UPDATE " + this->table + " SET `value` = " + settings[i]["value"] + " WHERE name = \"backup_interval\"");
-        }
-        else if (settings[i]["name"] == "backups_to_keep") {
-            queryString = "UPDATE " + this->table + " SET `value` = " + settings[i]["value"] + " WHERE name = \"backups_to_keep\"";
-            query.prepare("UPDATE " + this->table + " SET `value` = " + settings[i]["value"] + " WHERE name = \"backups_to_keep\"");
+    QSqlQuery query = QSqlQuery(this->db);
+
+    if (setting["name"] == "db_path") {
+        // Set the update into the config file
+        QFile config_file(this->config_file);
+        config_file.open(QIODeviceBase::ReadWrite | QIODeviceBase::Truncate);
+
+        if (!config_file.isOpen()) {
+            return false;
         }
 
-        qDebug() << queryString;
+        QTextStream outStream(&config_file);
+        outStream << setting["value"];
+        config_file.close();
+    }
+    else if (setting["name"] == "backup_interval") {
+        query.prepare("UPDATE " + this->table + " SET `value` = \"" + setting["value"] + "\" WHERE name = \"backup_interval\"");
 
         if (!query.exec()) {
             return false;
         }
     }
+    else if (setting["name"] == "backups_to_keep") {
+        query.prepare("UPDATE " + this->table + " SET `value` = \"" + setting["value"] + "\" WHERE name = \"backups_to_keep\"");
 
+        if (!query.exec()) {
+            return false;
+        }
+    }
     return true;
 }
 

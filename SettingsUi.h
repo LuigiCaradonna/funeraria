@@ -3,6 +3,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QMessageBox>
+#include <QFileDialog>
 #include "Settings.h"
 #include "ui_Settings.h"
 
@@ -40,6 +41,13 @@ protected slots:
     void slotSave();
 
     /*
+     * Asks the user to provide a new path for the db file
+     *
+     * @return  void
+     */
+    void slotChangeDbPath();
+
+    /*
      * Closes the dialog window
      *
      * @return  void
@@ -60,5 +68,12 @@ private:
      * @return void
      */
     void updateForm();
+
+    /*
+     * Updates the settings according to the data provided into the dialog box.
+     *
+     * @return bool true on success, false on failure
+     */
+    bool store(const QMap<QString, QString>& setting);
 };
 
