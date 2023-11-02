@@ -37,6 +37,18 @@ QList<QMap<QString, QString>> Settings::get() {
         list.append(setting);
     }
 
+    // Get the db path reading from the config file
+    QFile config_file(this->config_file);
+    config_file.open(QIODeviceBase::ReadOnly);
+
+    QString db_path = config_file.readAll();
+
+    QMap<QString, QString> setting;
+    setting["name"] = "db_path";
+    setting["value"] = db_path;
+
+    list.append(setting);
+
     return list;
 }
 
@@ -44,20 +56,7 @@ bool Settings::store(const QMap<QString, QString>& setting)
 {
     QSqlQuery query = QSqlQuery(this->db);
 
-    if (setting["name"] == "db_path") {
-        // Set the update into the config file
-        QFile config_file(this->config_file);
-        config_file.open(QIODeviceBase::ReadWrite | QIODeviceBase::Truncate);
-
-        if (!config_file.isOpen()) {
-            return false;
-        }
-
-        QTextStream outStream(&config_file);
-        outStream << setting["value"];
-        config_file.close();
-    }
-    else if (setting["name"] == "backup_interval") {
+    if (setting["name"] == "backup_interval") {
         query.prepare("UPDATE " + this->table + " SET `value` = \"" + setting["value"] + "\" WHERE name = \"backup_interval\"");
 
         if (!query.exec()) {

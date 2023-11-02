@@ -8,7 +8,6 @@ SettingsUi::SettingsUi(const QSqlDatabase& db, QWidget* parent)
     this->ui.setupUi(this);
     this->updateForm();
 
-    this->connect(this->ui.btnChengeDbPath, &QPushButton::clicked, this, &SettingsUi::slotChangeDbPath);
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SettingsUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &SettingsUi::slotCloseDialog);
 }
@@ -25,12 +24,6 @@ void SettingsUi::slotSave()
 {
     QMap<QString, QString> setting;
     bool stored = true;
-
-    setting["name"] = "db_path";
-    setting["value"] = this->ui.lblDbPathInUse->text();
-    if (!this->store(setting)) {
-        stored = false;
-    };
 
     setting["name"] = "backup_interval";
     setting["value"] = this->ui.leBkupInterval->text();
@@ -76,9 +69,6 @@ void SettingsUi::slotChangeDbPath()
             message.exec();
             return;
         }
-
-        // Set the new path into the text field
-        this->ui.lblDbPathInUse->setText(new_db_path);
     }
     else {
         QMessageBox message;
@@ -102,11 +92,7 @@ void SettingsUi::updateForm() {
     QList<QMap<QString, QString>> settings_list = settings->get();
 
     for (int i = 0; i < settings_list.size(); i++) {
-        if (settings_list[i]["name"] == "db_path") {
-            // TODO: Read the db path from the config file and use it to fill the dialog field
-            this->ui.lblDbPathInUse->setText(settings_list[i]["value"]);
-        }
-        else if (settings_list[i]["name"] == "backup_interval") {
+        if (settings_list[i]["name"] == "backup_interval") {
             this->ui.leBkupInterval->setText(settings_list[i]["value"]);
         }
         else if (settings_list[i]["name"] == "backups_to_keep") {
