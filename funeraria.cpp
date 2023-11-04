@@ -5,23 +5,19 @@
 Funeraria::Funeraria(QWidget* parent)
     : QMainWindow(parent)
 {
-    this->ui.setupUi(this);
-
-    // Sets an icon for the window
-    this->setWindowIcon(QIcon("funeraria.png"));
-
-    // Set the font for the table
-    QFont font("Calibri", 12);
-    this->ui.tableWidget->setFont(font);
-
     /*
     QFontMetrics fm(font);
     int pixelsWide = fm.horizontalAdvance("What's the advance width of this text?");
     int pixelsHigh = fm.height();
     */
 
+    /*
+     * Before to setup the application: check the config file and the database
+     */
+
     QFile config_file("config.cfg");
     if (!config_file.exists()) {
+        // Try to initialize a new config file
         if (!this->initConfigFile()) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
@@ -42,9 +38,23 @@ Funeraria::Funeraria(QWidget* parent)
         this->closeWindow();
     }
     else {
+        this->ui.setupUi(this);
+
+        // Sets an icon for the window
+        this->setWindowIcon(QIcon("funeraria.png"));
+
+        // Set the font for the table
+        QFont font("Calibri", 12);
+        this->ui.tableWidget->setFont(font);
+
+        QMenu* context_menu = new QMenu(this);
+        // Connect the customContextMenuRequested signal to a slot
+        connect(this->ui.tableWidget, &QTableWidget::customContextMenuRequested, this, &Funeraria::slotShowContextMenu);
+
+        this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
         this->client_ui = new ClientUi(this->db->db, this);
-        this->settingsUi = new SettingsUi(this->db->db, this);
+        this->settings_ui = new SettingsUi(this->db->db, this);
         this->tombUi = new TombUi(this->db->db, this);
         this->vase = new Accessory(this->db->db, "vases");
         this->lamp = new Accessory(this->db->db, "lamps");
@@ -118,8 +128,9 @@ Funeraria::~Funeraria()
     this->clearTable();
 
     delete this->db;
+    delete this->context_menu;
     delete this->client_ui;
-    delete this->settingsUi;
+    delete this->settings_ui;
     delete this->tombUi;
     delete this->vase;
     delete this->lamp;
@@ -130,17 +141,65 @@ Funeraria::~Funeraria()
 }
 
 /********** SLOTS **********/
+void Funeraria::slotShowContextMenu(const QPoint& pos) {
+    // Clear from the menu the eventual entries shown before
+    this->context_menu->clear();
+
+    // Create the actions according to what is the selection or the point where clicked
+    QAction* sumPrices = this->context_menu->addAction("Somma i prezzi selezionati");
+    // QAction* action2 = this->context_menu->addAction("Action 2");
+    
+    // Connect actions to slots
+    connect(sumPrices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
+    // connect(action2, &QAction::triggered, this, &Funeraria::handleAction2);
+
+    // Position where to show the context menu
+    this->context_menu->popup(this->ui.tableWidget->viewport()->mapToGlobal(pos));
+}
+
+void Funeraria::slotSumSelectedPrices() {
+    QList<QTableWidgetItem*> items = this->ui.tableWidget->selectedItems();
+
+    if (items.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Nessun prezzo selezionato");
+        message.exec();
+        return;
+    }
+
+    float sum = 0;
+    for (int i = 0; i < items.size(); i++) {
+        if (!items[i]->data(Qt::DisplayRole).toFloat()) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("Nella selezione sono presenti valori non numerici");
+            message.exec();
+            return;
+        }
+
+        sum += items[i]->data(Qt::DisplayRole).toFloat();
+    }
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("La somma è: " + QString::number(sum));
+    message.exec();
+}
 
 void Funeraria::slotHeaderClicked(int logicalIndex) {
     // Get the clicked label text
     QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logicalIndex, Qt::Horizontal).toString();
-
-    qDebug() << label;
+    qDebug() << "Column clicked: " + label;
+    // TODO: having the name of the column clicked, ask for the data sorted upon that column and the search bar current entries
 }
 
 void Funeraria::slotShowSettings() {
-    this->settingsUi->setModal(true);
-    this->settingsUi->exec();
+    this->settings_ui->setModal(true);
+    this->settings_ui->exec();
 }
 
 void Funeraria::slotFilterClientOrders()
@@ -839,8 +898,6 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
 
     // Reset the table's content
     this->clearTable();
-
-    this->ui.tableWidget->setSortingEnabled(true);
 
     QStringList headers{ "Numero", "Defunto", "Materiale", "Prezzo", "Pagata", "Note", "Accessori",
         "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "Azioni" };

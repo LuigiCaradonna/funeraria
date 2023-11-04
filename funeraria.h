@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QSignalMapper>
+#include <QMenu>
 #include "ui_funeraria.h"
 #include "DatabaseManager.h"
 #include "ClientUi.h"
@@ -43,6 +44,18 @@ public:
 protected slots:
 
     /********** SLOTS **********/
+
+    /*
+     * Shows a context menu when right clicking on the QTableWidget, containis the proper actions according to the current table status
+     *
+     * @return void
+     */
+    void slotShowContextMenu(const QPoint& pos);
+
+    /*
+     * Iterates over the selected cells, sums their content and shows a dialog containig the result.
+     */
+    void slotSumSelectedPrices();
 
     /*
      * Sorts the table's rows according to the clicked column name.
@@ -184,9 +197,11 @@ private:
     QString config_file = "config.cfg";
     QString default_db_path = "./funeraria.db";
 
+    QMenu* context_menu;
+
     Client* client;
     ClientUi* client_ui;
-    SettingsUi* settingsUi;
+    SettingsUi* settings_ui;
     TombUi* tombUi;
     Accessory* vase;
     Accessory* lamp;
