@@ -147,11 +147,9 @@ void Funeraria::slotShowContextMenu(const QPoint& pos) {
 
     // Create the actions according to what is the selection or the point where clicked
     QAction* sumPrices = this->context_menu->addAction("Somma i prezzi selezionati");
-    // QAction* action2 = this->context_menu->addAction("Action 2");
     
     // Connect actions to slots
     connect(sumPrices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
-    // connect(action2, &QAction::triggered, this, &Funeraria::handleAction2);
 
     // Position where to show the context menu
     this->context_menu->popup(this->ui.tableWidget->viewport()->mapToGlobal(pos));
@@ -195,6 +193,27 @@ void Funeraria::slotHeaderClicked(int logicalIndex) {
     QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logicalIndex, Qt::Horizontal).toString();
     qDebug() << "Column clicked: " + label;
     // TODO: having the name of the column clicked, ask for the data sorted upon that column and the search bar current entries
+
+    Tomb* tomb = new Tomb(this->db->db);
+
+    this->current_table = "tomb";
+
+    int client_id = this->client->getId(this->ui.cbClient->currentText());
+    int year;
+    QString name = this->ui.leDeceased->text().trimmed();
+
+    if (this->ui.cbYear->currentText() == "Tutti") {
+        year = 0;
+    }
+    else {
+        year = this->ui.cbYear->currentText().toInt();
+    }
+
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, name);
+
+    this->showClientOrders(tombs);
+
+    delete tomb;
 }
 
 void Funeraria::slotShowSettings() {
@@ -219,7 +238,7 @@ void Funeraria::slotClientOrders()
 
     int client_id = this->client->getId(this->ui.cbClient->currentText());
     int year;
-    QString filter = this->ui.leDeceased->text().trimmed();
+    QString name = this->ui.leDeceased->text().trimmed();
 
     if (this->ui.cbYear->currentText() == "Tutti") {
         year = 0;
@@ -228,7 +247,7 @@ void Funeraria::slotClientOrders()
         year = this->ui.cbYear->currentText().toInt();
     }
 
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, filter);
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, name);
 
     this->showClientOrders(tombs);
 
@@ -261,7 +280,7 @@ void Funeraria::slotQuickClientOrders()
     this->ui.leDeceased->setText("");
 
     // Search params: client's id, current year, no filter for the deceased's name
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, "");
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year);
 
     this->showClientOrders(tombs);
 

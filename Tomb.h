@@ -33,11 +33,19 @@ public:
      * 
      * @param const int& client_id      - Client's id
      * @param const int& year           - Year of the tombs to get, 0 for all the years
-     * @param const QString& filter     - Deceased name to use to refine the result
+     * @param QString name              - Deceased name or partial name to use to refine the result
+     * @param QString column            - Column to sort
+     * @param QString sort_direction    - Sort direction
      *
      * @return  QList<QMap<QString, QString>> - A list containing the Tombs' details
      */
-    QList<QMap<QString, QString>> getList(const int& client_id, const int& year, const QString& filter);
+    QList<QMap<QString, QString>> getList(
+        const int& client_id, 
+        const int& year, 
+        QString name = "",
+        QString column = "",
+        QString sort_direction = ""
+    );
 
     /*
      * Gets the given tomb's datails joined to the related tables

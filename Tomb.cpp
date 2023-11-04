@@ -13,7 +13,13 @@ Tomb::~Tomb()
 
 /********** PUBLIC FUNCTIONS **********/
 
-QList<QMap<QString, QString>> Tomb::getList(const int& client_id, const int& year, const QString& filter)
+QList<QMap<QString, QString>> Tomb::getList(
+    const int& client_id, 
+    const int& year, 
+    QString filter,
+    QString column,
+    QString sort_direction
+)
 {
     QString order = "DESC";
     QList<QMap<QString, QString>> list;
