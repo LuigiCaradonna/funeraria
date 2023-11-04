@@ -46,6 +46,7 @@ Funeraria::Funeraria(QWidget* parent)
         // Set the font for the table
         QFont font("Calibri", 12);
         this->ui.tableWidget->setFont(font);
+        this->connect(this->ui.tableWidget->horizontalHeader(), &QHeaderView::sectionClicked, this, &Funeraria::slotHeaderClicked);
 
         QMenu* context_menu = new QMenu(this);
         // Connect the customContextMenuRequested signal to a slot
@@ -168,6 +169,7 @@ void Funeraria::slotSumSelectedPrices() {
     }
 
     float sum = 0;
+    int prices = 0;
     for (int i = 0; i < items.size(); i++) {
         if (!items[i]->data(Qt::DisplayRole).toFloat()) {
             QMessageBox message;
@@ -179,20 +181,28 @@ void Funeraria::slotSumSelectedPrices() {
         }
 
         sum += items[i]->data(Qt::DisplayRole).toFloat();
+        prices++;
     }
 
     QMessageBox message;
     message.setWindowTitle("Funeraria");
     message.setIcon(QMessageBox::Information);
-    message.setText("La somma è: " + QString::number(sum));
+    message.setText("La somma dei " +  QString::number(prices) + " prezzi selezionti è: € " + QString::number(sum));
     message.exec();
 }
 
 void Funeraria::slotHeaderClicked(int logicalIndex) {
     // Get the clicked label text
     QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logicalIndex, Qt::Horizontal).toString();
-    qDebug() << "Column clicked: " + label;
-    // TODO: having the name of the column clicked, ask for the data sorted upon that column and the search bar current entries
+    QString sort_by = this->db->getSortableColumnName(label);
+
+    // The selected column can't be sorted
+    if (sort_by == "") {
+        return;
+    }
+
+    // Decide the sorting direction
+    this->sortColumnDirection(label);
 
     Tomb* tomb = new Tomb(this->db->db);
 
@@ -209,7 +219,7 @@ void Funeraria::slotHeaderClicked(int logicalIndex) {
         year = this->ui.cbYear->currentText().toInt();
     }
 
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, name);
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, name, sort_by, this->sort_column_direction);
 
     this->showClientOrders(tombs);
 
@@ -328,7 +338,7 @@ void Funeraria::slotShowClients()
 
     QList<QMap<QString, QString>> clients = this->client->get();
 
-    QStringList headers{ "Ordine", "Nome", "Email", "Telefono", "", "" };
+    QStringList headers{ "Posizione", "Nome", "Email", "Telefono", "", "" };
 
     this->ui.tableWidget->setRowCount(clients.size());
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -654,7 +664,7 @@ void Funeraria::slotTombsToEngrave()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Numero", "Defunto", "Materiale", "Cliente" };
+        QStringList headers{ "#", "Defunto", "Materiale", "Cliente" };
 
         this->ui.tableWidget->setRowCount(tombs.size());
         this->ui.tableWidget->setColumnCount(headers.size());
@@ -926,7 +936,6 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
     // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
-    this->connect(this->ui.tableWidget->horizontalHeader(), &QHeaderView::sectionClicked, this, &Funeraria::slotHeaderClicked);
 
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
     this->ui.tableWidget->setColumnWidth(1, 230);   // Name
@@ -1082,4 +1091,27 @@ void Funeraria::closeWindow()
 {
     this->up = false;
     this->close();
+}
+
+void Funeraria::sortColumnDirection(const QString& column)
+{
+    qDebug() << "COLUMN: " + column;
+    // If no column was selected before or the currently selected column is not the last selected
+    if (this->last_sorting_column == "" || this->last_sorting_column != column) {
+        this->last_sorting_column = column;
+        this->sort_column_direction = "ASC";
+        qDebug() << "FIRST TIME: " + this->sort_column_direction;
+    }
+    // If the currently selected column is the same that was selected the last time
+    else if (this->last_sorting_column == column) {
+        if (this->sort_column_direction == "ASC") {
+            this->sort_column_direction = "DESC";
+        }
+        else {
+            this->sort_column_direction = "ASC";
+        }
+        qDebug() << "NOT FIRST TIME: " + this->sort_column_direction;
+    }
+
+    qDebug() << "------------------------------";
 }

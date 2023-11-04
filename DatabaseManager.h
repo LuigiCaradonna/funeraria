@@ -33,6 +33,18 @@ public:
      */
     ~DatabaseManager();
 
+    /********** PUBLIC FUNCTIONS **********/
+
+    /*
+     * Given the name of the QTableWidget column passed, retrieves the corresponding column's name
+     * contained into the database if the column is sortable
+     *
+     * @param const QString& column - Name of the column to retrieve
+     * 
+     * @return the name of the column if it is sortable, empty string if the given colum can't be sorted
+     */
+    QString getSortableColumnName(const QString& column);
+
 private:
     QWidget* parent;
     QString backup_folder = "backups";

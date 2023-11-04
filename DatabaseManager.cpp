@@ -46,7 +46,35 @@ DatabaseManager::~DatabaseManager()
 }
 
 /********** PUBLIC FUNCTIONS **********/
-
+QString DatabaseManager::getSortableColumnName(const QString& column) {
+    if (column == "Numero") {
+        return "progressive";
+    }
+    else if (column == "Defunto") {
+        return "name";
+    }
+    else if (column == "Prezzo") {
+        return "price";
+    }
+    else if (column == "Ordine") {
+        return "ordered_At";
+    }
+    else if (column == "Provino") {
+        return "proofed_at";
+    }
+    else if (column == "Conferma") {
+        return "confirmed_at";
+    }
+    else if (column == "Incisione") {
+        return "engraved_at";
+    }
+    else if (column == "Consegna") {
+        return "delivered_at";
+    }
+    else {
+        return "";
+    }
+}
 /********** PRIVATE FUNCTIONS **********/
 
 bool DatabaseManager::openDatabase()

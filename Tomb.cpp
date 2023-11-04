@@ -17,11 +17,10 @@ QList<QMap<QString, QString>> Tomb::getList(
     const int& client_id, 
     const int& year, 
     QString filter,
-    QString column,
+    QString sort_by,
     QString sort_direction
 )
 {
-    QString order = "DESC";
     QList<QMap<QString, QString>> list;
     QSqlQuery query = QSqlQuery(this->db);
 
@@ -40,10 +39,10 @@ QList<QMap<QString, QString>> Tomb::getList(
         // When looking for a spedific year, show from the older to the newer, there if a few to scroll
         // while looking for all the orders of the specific client, shows the list from the newer which is
         // generally where we want to look in that situation
-        order = "ASC";
+        // sort_direction = "ASC";
     }
 
-    query_string += " ORDER BY progressive " + order;
+    query_string += " ORDER BY " + sort_by + " " + sort_direction;
 
     query.prepare(query_string);
 

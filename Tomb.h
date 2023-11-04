@@ -34,7 +34,7 @@ public:
      * @param const int& client_id      - Client's id
      * @param const int& year           - Year of the tombs to get, 0 for all the years
      * @param QString name              - Deceased name or partial name to use to refine the result
-     * @param QString column            - Column to sort
+     * @param QString sort_by           - Column to sort
      * @param QString sort_direction    - Sort direction
      *
      * @return  QList<QMap<QString, QString>> - A list containing the Tombs' details
@@ -43,8 +43,8 @@ public:
         const int& client_id, 
         const int& year, 
         QString name = "",
-        QString column = "",
-        QString sort_direction = ""
+        QString sort_by = "progressive",
+        QString sort_direction = "DESC"
     );
 
     /*

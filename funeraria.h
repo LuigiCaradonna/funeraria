@@ -221,6 +221,11 @@ private:
     QColor tomb_to_engrave = QColor(180, 225, 235);
     QColor warning_bg = QColor(250, 200, 70);
 
+    // Last selected column to sort
+    QString last_sorting_column = "";
+    // Direction to use to sort the selected table's column (ASC/DESC)
+    QString sort_column_direction = "";
+
     /********** PRIVATE FUNCTIONS **********/
 
     bool initConfigFile();
@@ -261,4 +266,13 @@ private:
      * @return void
      */
     void closeWindow();
+
+    /*
+     * Sets the sorting direction for the selected column.
+     *
+     * @param const QString& column - column name
+     *
+     * @return void
+     */
+    void sortColumnDirection(const QString& column);
 };
