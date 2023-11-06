@@ -56,20 +56,16 @@ bool Settings::store(const QMap<QString, QString>& setting)
 {
     QSqlQuery query = QSqlQuery(this->db);
 
-    if (setting["name"] == "backup_interval") {
-        query.prepare("UPDATE " + this->table + " SET `value` = \"" + setting["value"] + "\" WHERE name = \"backup_interval\"");
+    query.prepare("UPDATE " + this->table + " SET value = :value, updated_at = :updated_at WHERE name = :name");
 
-        if (!query.exec()) {
-            return false;
-        }
-    }
-    else if (setting["name"] == "backups_to_keep") {
-        query.prepare("UPDATE " + this->table + " SET `value` = \"" + setting["value"] + "\" WHERE name = \"backups_to_keep\"");
+    query.bindValue(":value", setting["value"]);
+    query.bindValue(":updated_at", QDate::currentDate().toString("yyyy-MM-dd"));
+    query.bindValue(":name", setting["name"]);
 
-        if (!query.exec()) {
-            return false;
-        }
+    if (!query.exec()) {
+        return false;
     }
+
     return true;
 }
 

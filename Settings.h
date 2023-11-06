@@ -3,6 +3,7 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QFile>
+#include <QDate>
 #include <QMessageBox>
 
 class Settings : public QObject
