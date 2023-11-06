@@ -46,6 +46,7 @@ DatabaseManager::~DatabaseManager()
 }
 
 /********** PUBLIC FUNCTIONS **********/
+
 QString DatabaseManager::getSortableColumnName(const QString& column) {
     if (column == "Numero") {
         return "progressive";
@@ -414,7 +415,6 @@ void DatabaseManager::backupDatabase()
         }
 
         if (!query.exec("COMMIT")) {
-            qDebug() << "Failed to commit SQL transaction: " << query.lastError().text();
             QMessageBox message;
             message.setWindowTitle("Funeraria Backup");
             message.setIcon(QMessageBox::Critical);

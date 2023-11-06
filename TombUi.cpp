@@ -50,7 +50,6 @@ TombUi::~TombUi()
 void TombUi::setProgressive(const int& progressive)
 {
     this->progressive = progressive;
-    qDebug() << this->progressive;
     this->updateForm();
 }
 

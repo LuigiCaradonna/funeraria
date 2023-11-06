@@ -1095,12 +1095,10 @@ void Funeraria::closeWindow()
 
 void Funeraria::sortColumnDirection(const QString& column)
 {
-    qDebug() << "COLUMN: " + column;
     // If no column was selected before or the currently selected column is not the last selected
     if (this->last_sorting_column == "" || this->last_sorting_column != column) {
         this->last_sorting_column = column;
         this->sort_column_direction = "ASC";
-        qDebug() << "FIRST TIME: " + this->sort_column_direction;
     }
     // If the currently selected column is the same that was selected the last time
     else if (this->last_sorting_column == column) {
@@ -1110,8 +1108,5 @@ void Funeraria::sortColumnDirection(const QString& column)
         else {
             this->sort_column_direction = "ASC";
         }
-        qDebug() << "NOT FIRST TIME: " + this->sort_column_direction;
     }
-
-    qDebug() << "------------------------------";
 }
