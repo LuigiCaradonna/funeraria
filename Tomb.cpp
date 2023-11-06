@@ -36,10 +36,6 @@ QList<QMap<QString, QString>> Tomb::getList(
 
     if (year != 0) {
         query_string += " AND ordered_at LIKE '" + QString::number(year) + "%'";
-        // When looking for a spedific year, show from the older to the newer, there if a few to scroll
-        // while looking for all the orders of the specific client, shows the list from the newer which is
-        // generally where we want to look in that situation
-        // sort_direction = "ASC";
     }
 
     query_string += " ORDER BY " + sort_by + " " + sort_direction;

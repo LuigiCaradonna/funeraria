@@ -44,7 +44,7 @@ public:
         const int& year, 
         QString name = "",
         QString sort_by = "progressive",
-        QString sort_direction = "DESC"
+        QString sort_direction = "ASC"
     );
 
     /*

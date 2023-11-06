@@ -221,6 +221,8 @@ private:
     QColor tomb_to_engrave = QColor(180, 225, 235);
     QColor warning_bg = QColor(250, 200, 70);
 
+    // Whether the currently shown table is sortable or not
+    bool is_table_sortable = true;
     // Last selected column to sort
     QString last_sorting_column = "";
     // Direction to use to sort the selected table's column (ASC/DESC)

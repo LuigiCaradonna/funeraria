@@ -197,7 +197,7 @@ void Funeraria::slotHeaderClicked(int logicalIndex) {
     QString sort_by = this->db->getSortableColumnName(label);
 
     // The selected column can't be sorted
-    if (sort_by == "") {
+    if (!this->is_table_sortable || sort_by == "") {
         return;
     }
 
@@ -332,6 +332,8 @@ void Funeraria::slotShowClients()
     const QSignalBlocker blocker(this->ui.tableWidget);
 
     this->current_table = "client";
+
+    this->is_table_sortable = false;
 
     // Reset the table's content
     this->clearTable();
@@ -473,6 +475,8 @@ void Funeraria::slotShowItems(const QString& type)
 
     this->current_table = type;
 
+    this->is_table_sortable = false;
+
     // Reset the table's content
     this->ui.tableWidget->clear();
 
@@ -543,32 +547,32 @@ void Funeraria::slotNewItem(const QString& type)
     this->current_table = type;
 
     if (type == "vase") {
-        AccessoryUi* vaseUi = new AccessoryUi(this->db->db, "vases", this);
-        vaseUi->setModal(true);
-        vaseUi->exec();
+        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vases", this);
+        vase_ui->setModal(true);
+        vase_ui->exec();
 
-        delete vaseUi;
+        delete vase_ui;
     }
     else if (type == "lamp") {
-        AccessoryUi* lampUi = new AccessoryUi(this->db->db, "lamp", this);
-        lampUi->setModal(true);
-        lampUi->exec();
+        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamp", this);
+        lamp_ui->setModal(true);
+        lamp_ui->exec();
 
-        delete lampUi;
+        delete lamp_ui;
     }
     else if (type == "flame") {
-        AccessoryUi* flameUi = new AccessoryUi(this->db->db, "flame", this);
-        flameUi->setModal(true);
-        flameUi->exec();
+        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flame", this);
+        flame_ui->setModal(true);
+        flame_ui->exec();
 
-        delete flameUi;
+        delete flame_ui;
     }
     else if (type == "material") {
-        AccessoryUi* materialUi = new AccessoryUi(this->db->db, "material", this);
-        materialUi->setModal(true);
-        materialUi->exec();
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this);
+        material_ui->setModal(true);
+        material_ui->exec();
 
-        delete materialUi;
+        delete material_ui;
     }
     else {
         // The type requested is not valid
@@ -581,10 +585,7 @@ void Funeraria::slotNewItem(const QString& type)
 void Funeraria::slotUpdateEntry()
 {
     int row = this->ui.tableWidget->currentRow();
-    if (this->current_table == "tomb") {
-
-    }
-    else if (this->current_table == "vase") {
+   if (this->current_table == "vase") {
         this->vase->update(
             this->ui.tableWidget->item(row, 0)->text(), // code
             this->ui.tableWidget->item(row, 1)->text() // name
@@ -655,6 +656,8 @@ void Funeraria::slotTombsToEngrave()
 
     QList<QMap<QString, QString>> tombs = tomb->tombsToEngrave();
 
+    this->is_table_sortable = false;
+
     if (tombs.size() > 0) {
         // Block the signals while building the table
         const QSignalBlocker blocker(this->ui.tableWidget);
@@ -664,7 +667,7 @@ void Funeraria::slotTombsToEngrave()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "#", "Defunto", "Materiale", "Cliente" };
+        QStringList headers{ "Numero", "Defunto", "Materiale", "Cliente" };
 
         this->ui.tableWidget->setRowCount(tombs.size());
         this->ui.tableWidget->setColumnCount(headers.size());
@@ -726,6 +729,8 @@ void Funeraria::slotAccessoriesToMount()
     Tomb* tomb = new Tomb(this->db->db);
 
     QList<QMap<QString, QString>> accessories = tomb->accessoriesToMount();
+
+    this->is_table_sortable = false;
 
     if (accessories.size() > 0) {
         // Block the signals while building the table
@@ -812,6 +817,8 @@ void Funeraria::slotTombsNotPaid()
     Tomb* tomb = new Tomb(this->db->db);
 
     QList<QMap<QString, QString>> tombs = tomb->tombsToPay();
+
+    this->is_table_sortable = false;
 
     if (tombs.size() > 0) {
         // Block the signals while building the table
@@ -924,6 +931,8 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
 {
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
+
+    this->is_table_sortable = true;
 
     // Reset the table's content
     this->clearTable();
