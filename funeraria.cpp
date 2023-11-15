@@ -997,8 +997,15 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
         QTableWidgetItem* engraved_at = new QTableWidgetItem(engrave_date);
         engraved_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-        QString deliver_date = Helpers::dateSqlToIta(tombs[i]["delivered_at"]);
-        QTableWidgetItem* delivered_at = new QTableWidgetItem(deliver_date);
+        QString delivery_date;
+        if (tombs[i]["delivered_at"] == "Consegnata") {
+            delivery_date = "Consegnata";
+        }
+        else {
+            delivery_date = Helpers::dateSqlToIta(tombs[i]["delivered_at"]);
+        }
+
+        QTableWidgetItem* delivered_at = new QTableWidgetItem(delivery_date);
         delivered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
         if (row_number % 2 == 0) {
@@ -1008,7 +1015,7 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
             this->row_bg = this->row_odd;
         }
 
-        if (deliver_date != "") {
+        if (delivery_date != "") {
             this->row_bg = this->tomb_delivered;
         }
         else if (confirm_date != "" && engrave_date == "") {
@@ -1018,7 +1025,7 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
         this->paid_cell = this->row_bg;
         this->mounted_cell = this->row_bg;
 
-        if (tombs[i]["paid"] == "0" && deliver_date != "" && tombs[i]["price"] != "0") {
+        if (tombs[i]["paid"] == "0" && delivery_date != "" && tombs[i]["price"] != "0") {
             this->paid_cell = this->warning_bg;
         }
 

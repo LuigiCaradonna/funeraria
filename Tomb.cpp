@@ -380,7 +380,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
     }
 
     // If the delivery date is set
-    if (delivery.trimmed() != "" && delivery.trimmed() != "-") {
+    if (delivery.trimmed() != "" && delivery.trimmed() != "-" && delivery.trimmed() != "Consegnata") {
         // The engraving date must be set to set delivery date
         if (engraving.trimmed() == "" || engraving.trimmed() == "-") {
             QMessageBox message;
@@ -520,7 +520,15 @@ bool Tomb::store(
     query.bindValue(":proofed_at", QDate::fromString(proofed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":confirmed_at", QDate::fromString(confirmed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":engraved_at", QDate::fromString(engraved_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
-    query.bindValue(":delivered_at", QDate::fromString(delivered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
+
+    QString delivery_date;
+    if (delivered_at.trimmed() == "Consegnata") {
+        query.bindValue(":delivered_at", "Consegnata");
+    }
+    else {
+        query.bindValue(":delivered_at", QDate::fromString(delivered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
+    }
+
     query.bindValue(":created_at", QDate::currentDate().toString("yyyy-MM-dd"));
     query.bindValue(":edited_at", QDate::currentDate().toString("yyyy-MM-dd"));
 
@@ -641,7 +649,15 @@ bool Tomb::update(
     query.bindValue(":proofed_at", QDate::fromString(proofed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":confirmed_at", QDate::fromString(confirmed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":engraved_at", QDate::fromString(engraved_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
-    query.bindValue(":delivered_at", QDate::fromString(delivered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
+
+    QString delivery_date;
+    if (delivered_at.trimmed() == "Consegnata") {
+        query.bindValue(":delivered_at", "Consegnata");
+    }
+    else {
+        query.bindValue(":delivered_at", QDate::fromString(delivered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
+    }
+    
     query.bindValue(":edited_at", QDate::currentDate().toString("yyyy-MM-dd"));
     query.bindValue(":old_progressive", old_progressive);
 

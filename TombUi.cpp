@@ -33,6 +33,8 @@ TombUi::TombUi(const QSqlDatabase& db, QWidget* parent)
     currentDateMapper->setMapping(this->ui.btnEngravedAt, "engrave");
     currentDateMapper->setMapping(this->ui.btnDeliveredAt, "deliver");
     this->connect(currentDateMapper, &QSignalMapper::mappedString, this, &TombUi::slotSetCurrentDate);
+
+    this->connect(this->ui.btnDelivered, &QPushButton::clicked, this, &TombUi::slotSetDelivered);
 }
 
 /********** DESTRUCTOR **********/
@@ -84,6 +86,11 @@ void TombUi::slotSetCurrentDate(const QString& field)
     else if (field == "deliver") {
         this->ui.leDeliveredAt->setText(today);
     }
+}
+
+void TombUi::slotSetDelivered()
+{
+    this->ui.leDeliveredAt->setText("Consegnata");
 }
 
 void TombUi::slotSave()
@@ -258,7 +265,14 @@ void TombUi::updateForm()
         this->ui.leProofedAt->setText(Helpers::dateSqlToIta(tomb_details["proofed_at"]));
         this->ui.leConfirmedAt->setText(Helpers::dateSqlToIta(tomb_details["confirmed_at"]));
         this->ui.leEngravedAt->setText(Helpers::dateSqlToIta(tomb_details["engraved_at"]));
-        this->ui.leDeliveredAt->setText(Helpers::dateSqlToIta(tomb_details["delivered_at"]));
+        
+        QString delivery_date;
+        if (tomb_details["delivered_at"] == "Consegnata") {
+            this->ui.leDeliveredAt->setText("Consegnata");
+        }
+        else {
+            this->ui.leDeliveredAt->setText(Helpers::dateSqlToIta(tomb_details["delivered_at"]));
+        }
 
         // Disable the fields which should not generally be edited
         this->ui.leProgressive->setEnabled(false);

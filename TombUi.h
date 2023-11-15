@@ -64,6 +64,13 @@ protected slots:
     void slotSetCurrentDate(const QString& field);
 
     /*
+     * Sets the delivered input field with a generic value (Consegnata)
+     *
+     * @return  void
+     */
+    void slotSetDelivered();
+
+    /*
      * Saves a tomb's data
      *
      * @return  void
