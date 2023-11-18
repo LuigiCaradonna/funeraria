@@ -76,6 +76,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.cbYear->setCurrentIndex(1);
 
         // Set the event listeners
+        this->connect(this->ui.btnNewTomb, &QPushButton::clicked, this, &Funeraria::slotNewTomb);
         this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
         this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
 

@@ -161,7 +161,7 @@
          <widget class="QLineEdit" name="leDeceased">
           <property name="minimumSize">
            <size>
-            <width>0</width>
+            <width>500</width>
             <height>30</height>
            </size>
           </property>
@@ -187,6 +187,34 @@
           </property>
           <property name="text">
            <string>Cerca</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnNewTomb">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Nuova lapide</string>
+          </property>
+          <property name="text">
+           <string>Nuova</string>
           </property>
          </widget>
         </item>
