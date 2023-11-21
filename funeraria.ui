@@ -204,6 +204,18 @@
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="btnToEngrave">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Da incidere</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="btnNewTomb">
           <property name="font">
            <font>
