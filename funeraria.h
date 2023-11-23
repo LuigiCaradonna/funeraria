@@ -65,6 +65,13 @@ protected slots:
     void slotHeaderClicked(int logicalIndex);
 
     /*
+     * Saves the database in CSV format
+     *
+     * @return void
+     */
+    void slotBackupDbToCSV();
+
+    /*
      * Shows a dialog window containing the settings
      *
      * @return void

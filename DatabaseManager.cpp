@@ -76,6 +76,77 @@ QString DatabaseManager::getSortableColumnName(const QString& column) {
         return "";
     }
 }
+bool DatabaseManager::backupToCSV()
+{
+    Client* client = new Client(this->db);
+    Tomb* tomb = new Tomb(this->db);
+
+    QStringList client_names = client->getActiveNames();
+
+    QSqlQuery query = QSqlQuery(this->db);
+    QString year = QDate::currentDate().toString("yyyy");
+    QString filename;
+
+    // Check if the backup folder exist
+    QDir dir("./" + this->backup_folder + "/" + year);
+
+    if (!dir.exists()) {
+        if (!dir.mkpath("./")) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("La cartella per il backup in CSV del database non è stata trovata e non è possibile crearla.\n"
+                "Verificare che la cartella di backup non sia protetta da scrittura.");
+            message.exec();
+        }
+    }
+
+    for (QString client_name : client_names) {
+        int client_id = client->getId(client_name);
+
+        query.prepare(
+            "SELECT "
+            "tombs.progressive as progressive, tombs.client_id as client_id, tombs.name as name, "
+            "tombs.ordered_at as ordered_at, tombs.proofed_at as proofed_at, tombs.confirmed_at as confirmed_at, "
+            "tombs.engraved_at as engraved_at, tombs.delivered_at as delivered_at "
+            "FROM tombs "
+            "JOIN clients ON tombs.client_id = clients.id "
+            "WHERE tombs.ordered_at LIKE '" + year + "%' AND tombs.client_id = " + QString::number(client_id) + ";"
+        );
+
+        if (!query.exec()) {
+            return false;
+        }
+        else {
+            filename = client_name + ".csv";
+            QFile sqlFile("./" + this->backup_folder + "/" + year + "/" + filename);
+
+            if (!sqlFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                return false;
+            }
+
+            QTextStream out(&sqlFile);
+            // Columns name row
+            out << "Numero;Nome;Ordine;Provino;Conferma;Incisione;Consegna;" << "\n";
+
+            while (query.next()) {
+                out << query.value("progressive").toString() << ";";
+                out << query.value("name").toString() << ";";
+                out << query.value("ordered_at").toString() << ";";
+                out << query.value("proofed_at").toString() << ";";
+                out << query.value("confirmed_at").toString() << ";";
+                out << query.value("engraved_at").toString() << ";";
+                out << query.value("delivered_at").toString() << ";\n";
+            }
+
+            sqlFile.close();
+        }
+    }
+
+    delete client;
+    delete tomb;
+    return true;
+}
 /********** PRIVATE FUNCTIONS **********/
 
 bool DatabaseManager::openDatabase()

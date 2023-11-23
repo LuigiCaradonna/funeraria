@@ -82,10 +82,12 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
 
         // Signal emitted from the menu Files
+        this->connect(this->ui.actionBackupCSV, SIGNAL(triggered()), this, SLOT(slotBackupDbToCSV()));
         this->connect(this->ui.actionSettings, SIGNAL(triggered()), this, SLOT(slotShowSettings()));
 
         // Signal emitted on table cell edit
         this->connect(this->ui.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
+
         // Signal emitted from the menu items
         this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
         this->connect(this->ui.actionCNew, SIGNAL(triggered()), this, SLOT(slotNewClient()));
@@ -226,6 +228,20 @@ void Funeraria::slotHeaderClicked(int logicalIndex) {
     this->showClientOrders(tombs);
 
     delete tomb;
+}
+
+void Funeraria::slotBackupDbToCSV() {
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    if (this->db->backupToCSV()) {
+        message.setIcon(QMessageBox::Information);
+        message.setText("Esportazione del DB in CSV eseguita.");
+    }
+    else {
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Esportazione del DB in CSV fallita.");
+    }
+    message.exec();
 }
 
 void Funeraria::slotShowSettings() {

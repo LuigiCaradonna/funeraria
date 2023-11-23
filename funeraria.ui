@@ -324,6 +324,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionBackupCSV"/>
     <addaction name="actionSettings"/>
    </widget>
    <addaction name="menuFile"/>
@@ -444,6 +445,11 @@
   <action name="actionSettings">
    <property name="text">
     <string>Impostazioni</string>
+   </property>
+  </action>
+  <action name="actionBackupCSV">
+   <property name="text">
+    <string>Backup CSV</string>
    </property>
   </action>
  </widget>

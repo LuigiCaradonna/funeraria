@@ -9,6 +9,8 @@
 #include <QMessageBox>
 #include <QRegularExpression>
 #include "Settings.h"
+#include "Tomb.h"
+#include "Client.h"
 
 class DatabaseManager
 {
@@ -44,6 +46,14 @@ public:
      * @return the name of the column if it is sortable, empty string if the given colum can't be sorted
      */
     QString getSortableColumnName(const QString& column);
+
+    /*
+     * Saves the database in CSV format
+     *
+     * @return boolean true on success, false on failure
+     */
+    bool backupToCSV();
+
 
 private:
     QWidget* parent;
