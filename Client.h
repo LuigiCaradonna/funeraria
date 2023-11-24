@@ -40,6 +40,13 @@ public:
     int getId(const QString& name);
 
     /*
+     * Gets all the clients' names
+     *
+     * @return  QList<QStringList> - A list containing all the clients' names
+     */
+    QStringList getNames();
+
+    /*
      * Gets all the active clients' names
      *
      * @return  QList<QStringList> - A list containing the clients' names

@@ -81,16 +81,17 @@ bool DatabaseManager::backupToCSV()
     Client* client = new Client(this->db);
     Tomb* tomb = new Tomb(this->db);
 
-    QStringList client_names = client->getActiveNames();
+    QStringList clients = client->getNames();
 
-    QSqlQuery query = QSqlQuery(this->db);
     QString year = QDate::currentDate().toString("yyyy");
     QString filename;
 
     // Check if the backup folder exist
     QDir dir("./" + this->backup_folder + "/" + year);
 
+    // Check if the folder for the current year already exists
     if (!dir.exists()) {
+        // Try to create the folder starting from the current folder position
         if (!dir.mkpath("./")) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
@@ -98,26 +99,18 @@ bool DatabaseManager::backupToCSV()
             message.setText("La cartella per il backup in CSV del database non è stata trovata e non è possibile crearla.\n"
                 "Verificare che la cartella di backup non sia protetta da scrittura.");
             message.exec();
+
+            return false;
         }
     }
 
-    for (QString client_name : client_names) {
+    // For each name
+    for (QString client_name : clients) {
         int client_id = client->getId(client_name);
+        QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year.toInt());
 
-        query.prepare(
-            "SELECT "
-            "tombs.progressive as progressive, tombs.client_id as client_id, tombs.name as name, "
-            "tombs.ordered_at as ordered_at, tombs.proofed_at as proofed_at, tombs.confirmed_at as confirmed_at, "
-            "tombs.engraved_at as engraved_at, tombs.delivered_at as delivered_at "
-            "FROM tombs "
-            "JOIN clients ON tombs.client_id = clients.id "
-            "WHERE tombs.ordered_at LIKE '" + year + "%' AND tombs.client_id = " + QString::number(client_id) + ";"
-        );
-
-        if (!query.exec()) {
-            return false;
-        }
-        else {
+        // If the current client has tombs ordered in the current year
+        if (tombs.size() > 0) {
             filename = client_name + ".csv";
             QFile sqlFile("./" + this->backup_folder + "/" + year + "/" + filename);
 
@@ -127,16 +120,18 @@ bool DatabaseManager::backupToCSV()
 
             QTextStream out(&sqlFile);
             // Columns name row
-            out << "Numero;Nome;Ordine;Provino;Conferma;Incisione;Consegna;" << "\n";
+            out << "Numero;Nome;Ordine;Provino;Conferma;Incisione;Consegna;Note;" << "\n";
 
-            while (query.next()) {
-                out << query.value("progressive").toString() << ";";
-                out << query.value("name").toString() << ";";
-                out << query.value("ordered_at").toString() << ";";
-                out << query.value("proofed_at").toString() << ";";
-                out << query.value("confirmed_at").toString() << ";";
-                out << query.value("engraved_at").toString() << ";";
-                out << query.value("delivered_at").toString() << ";\n";
+            // Tombs' data, one per row
+            for (int i = 0; i < tombs.size(); i++) {
+                out << tombs[i]["progressive"] << ";";
+                out << tombs[i]["name"] << ";";
+                out << tombs[i]["ordered_at"] << ";";
+                out << tombs[i]["proofed_at"] << ";";
+                out << tombs[i]["confirmed_at"] << ";";
+                out << tombs[i]["engraved_at"] << ";";
+                out << tombs[i]["delivered_at"] << ";";
+                out << tombs[i]["notes"] << ";\n";
             }
 
             sqlFile.close();
