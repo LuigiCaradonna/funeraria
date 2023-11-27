@@ -66,6 +66,7 @@ void AccessoryUi::slotAddAccessoryUi()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
+        message.setText("L'inserimento non è riuscito.");
         message.exec();
 
         return;

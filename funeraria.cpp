@@ -572,21 +572,21 @@ void Funeraria::slotNewItem(const QString& type)
         delete vase_ui;
     }
     else if (type == "lamp") {
-        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamp", this);
+        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamps", this);
         lamp_ui->setModal(true);
         lamp_ui->exec();
 
         delete lamp_ui;
     }
     else if (type == "flame") {
-        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flame", this);
+        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flames", this);
         flame_ui->setModal(true);
         flame_ui->exec();
 
         delete flame_ui;
     }
     else if (type == "material") {
-        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this);
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "materials", this);
         material_ui->setModal(true);
         material_ui->exec();
 
