@@ -1034,7 +1034,12 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
         }
 
         if (delivery_date != "") {
-            this->row_bg = this->tomb_delivered;
+            if (this->row_bg == this->row_even) {
+                this->row_bg = this->tomb_delivered_even;
+            }
+            else {
+                this->row_bg = this->tomb_delivered_odd;
+            }
         }
         else if (confirm_date != "" && engrave_date == "") {
             this->row_bg = this->tomb_to_engrave;
