@@ -410,8 +410,8 @@ void Funeraria::slotShowClients()
             lines = 1;
         }
 
-        // Set the row height to 20px multiplied by the number of lines
-        this->ui.tableWidget->setRowHeight(i, 20*lines);
+        // Set the row height to 21px multiplied by the number of lines
+        this->ui.tableWidget->setRowHeight(i, 30*lines);
 
         QTableWidgetItem* position_widget = new QTableWidgetItem(clients[i]["position"]);
         // Set the field as not editable
@@ -919,7 +919,7 @@ void Funeraria::clearTable()
 {
     int row_number = 1;
     for (int i = 0; i < this->ui.tableWidget->rowCount(); i++) {
-        this->ui.tableWidget->setRowHeight(i, 20);
+        this->ui.tableWidget->setRowHeight(i, 30);
         for (int j = 0; j < this->ui.tableWidget->columnCount(); j++) {
             // Usually the last column holds a button
             if (j == this->ui.tableWidget->columnCount() - 1) {
