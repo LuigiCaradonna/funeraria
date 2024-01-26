@@ -48,7 +48,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.tableWidget->setFont(font);
         this->connect(this->ui.tableWidget->horizontalHeader(), &QHeaderView::sectionClicked, this, &Funeraria::slotHeaderClicked);
 
-        QMenu* context_menu = new QMenu(this);
+        // QMenu* context_menu = new QMenu(this);
         // Connect the customContextMenuRequested signal to a slot
         connect(this->ui.tableWidget, &QTableWidget::customContextMenuRequested, this, &Funeraria::slotShowContextMenu);
 

@@ -8,6 +8,7 @@ SettingsUi::SettingsUi(const QSqlDatabase& db, QWidget* parent)
     this->ui.setupUi(this);
     this->updateForm();
 
+    this->connect(this->ui.btnArchiveFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeArchivePath);
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SettingsUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &SettingsUi::slotCloseDialog);
 }
@@ -19,6 +20,23 @@ SettingsUi::~SettingsUi()
 }
 
 /********** PROTECTED SLOTS **********/
+
+void SettingsUi::slotChangeArchivePath()
+{
+    // Prompt the user to select the db file
+    QString filename = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
+
+    if (filename.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("La cartella indicata risulta inesistente.");
+        message.exec();
+        return;
+    }
+
+    this->ui.lblArchiveFolder->setText(filename);
+}
 
 void SettingsUi::slotSave()
 {
@@ -33,6 +51,12 @@ void SettingsUi::slotSave()
 
     setting["name"] = "backups_to_keep";
     setting["value"] = this->ui.leBkupKeep->text();
+    if (!this->store(setting)) {
+        stored = false;
+    };
+
+    setting["name"] = "archive_folder";
+    setting["value"] = this->ui.lblArchiveFolder->text();
     if (!this->store(setting)) {
         stored = false;
     };
@@ -97,6 +121,9 @@ void SettingsUi::updateForm() {
         }
         else if (settings_list[i]["name"] == "backups_to_keep") {
             this->ui.leBkupKeep->setText(settings_list[i]["value"]);
+        }
+        else if (settings_list[i]["name"] == "archive_folder") {
+            this->ui.lblArchiveFolder->setText(settings_list[i]["value"]);
         }
     }
 

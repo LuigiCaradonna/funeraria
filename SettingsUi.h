@@ -34,6 +34,13 @@ protected slots:
     /********** PROTECTED SLOTS **********/
 
     /*
+     * Asks the user to provide a new path for the archive file
+     *
+     * @return  void
+     */
+    void slotChangeArchivePath();
+
+    /*
      * Saves a settings
      *
      * @return  void

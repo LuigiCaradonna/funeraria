@@ -54,16 +54,40 @@ QList<QMap<QString, QString>> Settings::get() {
 
 bool Settings::store(const QMap<QString, QString>& setting)
 {
-    QSqlQuery query = QSqlQuery(this->db);
+    QSqlQuery query_check = QSqlQuery(this->db);
 
-    query.prepare("UPDATE " + this->table + " SET value = :value, updated_at = :updated_at WHERE name = :name");
+    // Check if the value to store already exists
+    query_check.prepare("SELECT name FROM " + this->table + " WHERE name = :name");
+    query_check.bindValue(":name", setting["name"]);
 
-    query.bindValue(":value", setting["value"]);
-    query.bindValue(":updated_at", QDate::currentDate().toString("yyyy-MM-dd"));
-    query.bindValue(":name", setting["name"]);
-
-    if (!query.exec()) {
+    if (!query_check.exec()) {
         return false;
+    }
+    else {
+        QSqlQuery query = QSqlQuery(this->db);
+
+        if (query_check.next()) {
+            // This setting exists, it needs to be updated
+
+            query.prepare("UPDATE " + this->table + " SET value = :value, updated_at = :updated_at WHERE name = :name");
+
+            query.bindValue(":value", setting["value"]);
+            query.bindValue(":updated_at", QDate::currentDate().toString("yyyy-MM-dd"));
+            query.bindValue(":name", setting["name"]);
+        }
+        else {
+            // This setting doesn't yet exist, it needs to be inserted
+
+            query.prepare("INSERT INTO " + this->table + " (name, value, created_at) VALUES (:name, :value, :created_at)");
+
+            query.bindValue(":name", setting["name"]);
+            query.bindValue(":value", setting["value"]);
+            query.bindValue(":created_at", QDate::currentDate().toString("yyyy-MM-dd"));
+        }
+
+        if (!query.exec()) {
+            return false;
+        }
     }
 
     return true;
