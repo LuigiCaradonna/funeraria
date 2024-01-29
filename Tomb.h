@@ -3,6 +3,8 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QMessageBox>
+#include <QDir>
+#include "Settings.h"
 #include "Helpers.h"
 
 class Tomb : public QObject
@@ -204,5 +206,17 @@ public:
 private:
     const QString table = "tombs";
     QSqlDatabase db;
+    Settings* settings;
 
+    /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Given the progressive number of the tomb, calculates its range and then the folder where it belongs.
+     * E.G.: progressive 2140, it belongs to 2100-2199
+     * 
+     * @param   const int& - progressive number of the tomb
+     * 
+     * @return  QString - The folder where the tomb belongs.
+     */
+    QString getGroupingFolder(const int& progressive);
 };

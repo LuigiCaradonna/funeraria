@@ -4,12 +4,16 @@
 
 Tomb::Tomb(const QSqlDatabase& db)
     : db(db)
-{}
+{
+    this->settings = new Settings(db);
+}
 
 /********** DESTRUCTOR **********/
 
 Tomb::~Tomb()
-{}
+{
+    delete this->settings;
+}
 
 /********** PUBLIC FUNCTIONS **********/
 
@@ -494,6 +498,43 @@ bool Tomb::store(
 
     // Validation passed
 
+    // Create the folder into the archive
+    QString path_to_archive = this->settings->getArchiveFolder();
+
+    if (path_to_archive == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Non è stato possibile recuperare la cartella dell'archivio.\n"
+                "La procedura di inserimento nel database continuerà regolarmente.");
+        message.exec();
+    }
+    else {
+        // e.g.: archive/2400-2499/2465 - lastname firstname
+        QString full_path = path_to_archive + "/" + this->getGroupingFolder(progressive) + "/" + QString::number(progressive) + " - " + name.trimmed();
+
+        QDir dir(full_path);
+
+        if (!dir.exists()) {
+            if (!dir.mkpath(full_path)) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Warning);
+                message.setText("Non è stato possibile creare la cartella relativa a questa lapide.\n"
+                    "La procedura di inserimento nel database continuerà regolarmente.");
+                message.exec();
+            }
+        }
+        else {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Information);
+            message.setText("La cartella relativa a questa lapide è già presente.\n"
+                "La procedura di inserimento nel database continuerà regolarmente.");
+            message.exec();
+        }
+    }
+
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare(
         "INSERT INTO " + this->table + " "
@@ -730,4 +771,18 @@ bool Tomb::isProgressiveInUse(const int& progressive)
     }
 
     return false;
+}
+
+QString Tomb::getGroupingFolder(const int& progressive)
+{
+    // last 2 digit of the progressive number
+    int last = QString::number(progressive).last(2).toInt();
+
+    // e.g.: prog_int = 2446, last = 46, start = 2446 - 46 = 2400
+    int start = progressive - last;
+    // e.g.: end = 2400 + 99 = 2499
+    int end = start + 99;
+
+    // e.g.: "2400-2499"
+    return QString::number(start) + "-" + QString::number(end);
 }

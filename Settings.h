@@ -45,6 +45,27 @@ public:
      */
     bool store(const QMap<QString, QString>& setting);
 
+    /*
+     * Gets the backup interval
+     *
+     * @return  int - The backup interval on success, -1 on failure
+     */
+    int getBackupInterval();
+
+    /*
+     * Gets the number of backups to keep
+     *
+     * @return  int - The backups to keep on success, -1 on failure
+     */
+    int getBackupsToKeep();
+
+    /*
+     * Gets the path to the archive folder
+     *
+     * @return  QString - The path to the archive folder, empty string on failure
+     */
+    QString getArchiveFolder();
+
 private:
     const QString table = "settings";
     QSqlDatabase db;

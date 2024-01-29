@@ -57,11 +57,12 @@ public:
 
 private:
     QWidget* parent;
+    Settings* settings;
     QString backup_folder = "backups";
     // Interval in days to create a new backup
     int backup_interval = 1;
     // Number of backups to keep
-    int backups_to_keep = 1;
+    int backups_to_keep = 10;
 
     /********** PRIVATE FUNCTIONS **********/
 

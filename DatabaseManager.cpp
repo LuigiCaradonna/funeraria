@@ -24,6 +24,8 @@ DatabaseManager::DatabaseManager(QWidget* parent)
 
         this->connected = true;
 
+        this->settings = new Settings(this->db);
+
         this->initSettings();
 
         if (this->isBackupRequired()) {
@@ -43,6 +45,7 @@ DatabaseManager::~DatabaseManager()
 {
     this->db.close();
     QSqlDatabase::removeDatabase(this->db.connectionName());
+    delete this->settings;
 }
 
 /********** PUBLIC FUNCTIONS **********/
@@ -299,28 +302,32 @@ bool DatabaseManager::createDatabase()
     }
 }
 
-void DatabaseManager::initSettings() {
-    QSqlQuery query = QSqlQuery(this->db);
+void DatabaseManager::initSettings() {    
+    bool errors = false;
+    int interval = this->settings->getBackupInterval();
+    int keep = this->settings->getBackupsToKeep();
 
-    query.prepare("SELECT name, value FROM settings");
+    if (interval != -1) {
+        this->backup_interval = interval;
+    }
+    else {
+        errors = true;
+    }
 
-    if (!query.exec()) {
+    if (interval != -1) {
+        this->backups_to_keep = keep;
+    }
+    else {
+        errors = true;
+    }
+
+    if (errors) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Non è stato possibile recuperare i settaggi per la gestine dei backup.\n"
-                        "Sono stati caricati i valori predefiniti");
+        message.setText("Non è stato possibile recuperare uno o più settaggi.\n"
+                        "Sono stati caricati i valori di default.");
         message.exec();
-        return;
-    }
-
-    while (query.next()) {
-        if (query.value("name") == "backup_interval") {
-            this->backup_interval = query.value("value").toInt();
-        }
-        else if (query.value("name") == "backups_to_keep") {
-            this->backups_to_keep = query.value("value").toInt();
-        }
     }
 }
 
@@ -484,7 +491,7 @@ void DatabaseManager::backupDatabase()
             QMessageBox message;
             message.setWindowTitle("Funeraria Backup");
             message.setIcon(QMessageBox::Critical);
-            message.setText("Impossibile generare correttamente il file di backup .sql. Transazione fallita.");
+            message.setText("Impossibile generare correttamente il file di backup .sql. \nTransazione fallita.");
             message.exec();
             // Rollback not required, the database was only read
             sqlFile.close();

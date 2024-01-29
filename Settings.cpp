@@ -93,4 +93,44 @@ bool Settings::store(const QMap<QString, QString>& setting)
     return true;
 }
 
+int Settings::getBackupInterval()
+{
+    QSqlQuery query = QSqlQuery(this->db);
+
+    query.prepare("SELECT value FROM settings WHERE name = 'backup_interval'");
+
+    if (!query.exec() || !query.next()) {
+        return -1;
+    }
+
+    return query.value("value").toInt();
+}
+
+int Settings::getBackupsToKeep()
+{
+    QSqlQuery query = QSqlQuery(this->db);
+
+    query.prepare("SELECT value FROM settings WHERE name = 'backups_to_keep'");
+
+    if (!query.exec() || !query.next()) {
+        return -1;
+    }
+
+    return query.value("value").toInt();
+}
+
+QString Settings::getArchiveFolder()
+{
+    QSqlQuery query = QSqlQuery(this->db);
+
+    query.prepare("SELECT value FROM settings WHERE name = 'archive_folder'");
+
+    if (!query.exec() || !query.next()) {
+        return "";
+    }
+
+    return query.value("value").toString();
+}
+
+
 /********** PRIVATE FUNCTIONS **********/
