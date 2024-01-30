@@ -116,9 +116,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="btnOk">
+      <widget class="QPushButton" name="btnSave">
        <property name="text">
-        <string>OK</string>
+        <string>Salva</string>
        </property>
       </widget>
      </item>
@@ -201,13 +201,13 @@
  <tabstops>
   <tabstop>leCode</tabstop>
   <tabstop>leName</tabstop>
-  <tabstop>btnOk</tabstop>
+  <tabstop>btnSave</tabstop>
   <tabstop>btnCancel</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>btnOk</sender>
+   <sender>btnSave</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
    <slot>accept()</slot>

@@ -86,7 +86,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionSettings, SIGNAL(triggered()), this, SLOT(slotShowSettings()));
 
         // Signal emitted on table cell edit
-        this->connect(this->ui.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
+        // this->connect(this->ui.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
 
         // Signal emitted from the menu items
         this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
@@ -102,10 +102,10 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionVNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionLNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionFNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
-        new_item_mapper->setMapping(this->ui.actionMNew, "material");
-        new_item_mapper->setMapping(this->ui.actionVNew, "vase");
-        new_item_mapper->setMapping(this->ui.actionLNew, "lamp");
-        new_item_mapper->setMapping(this->ui.actionFNew, "flame");
+        new_item_mapper->setMapping(this->ui.actionMNew, "materials");
+        new_item_mapper->setMapping(this->ui.actionVNew, "vases");
+        new_item_mapper->setMapping(this->ui.actionLNew, "lamps");
+        new_item_mapper->setMapping(this->ui.actionFNew, "flames");
         this->connect(new_item_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotNewItem);
 
         // Map the signal coming from the menu items to call the same function (slotShowItems) with the proper parameter
@@ -114,10 +114,10 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionVList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionLList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionFList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
-        show_items_mapper->setMapping(this->ui.actionMList, "material");
-        show_items_mapper->setMapping(this->ui.actionVList, "vase");
-        show_items_mapper->setMapping(this->ui.actionLList, "lamp");
-        show_items_mapper->setMapping(this->ui.actionFList, "flame");
+        show_items_mapper->setMapping(this->ui.actionMList, "materials");
+        show_items_mapper->setMapping(this->ui.actionVList, "vases");
+        show_items_mapper->setMapping(this->ui.actionLList, "lamps");
+        show_items_mapper->setMapping(this->ui.actionFList, "flames");
         this->connect(show_items_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
 
         // Create a qPushButton for each client for the quick access bar
@@ -210,7 +210,7 @@ void Funeraria::slotHeaderClicked(int logicalIndex) {
 
     Tomb* tomb = new Tomb(this->db->db);
 
-    this->current_table = "tomb";
+    this->current_table = "tombs";
 
     int client_id = this->client->getId(this->ui.cbClient->currentText());
     int year;
@@ -251,7 +251,7 @@ void Funeraria::slotShowSettings() {
 
 void Funeraria::slotFilterClientOrders()
 {
-    if (this->current_table != "tomb") {
+    if (this->current_table != "tombs") {
         return;
     }
 
@@ -262,7 +262,7 @@ void Funeraria::slotClientOrders()
 {
     Tomb* tomb = new Tomb(this->db->db);
 
-    this->current_table = "tomb";
+    this->current_table = "tombs";
 
     int client_id = this->client->getId(this->ui.cbClient->currentText());
     int year;
@@ -298,7 +298,7 @@ void Funeraria::slotQuickClientOrders()
 
     Tomb* tomb = new Tomb(this->db->db);
 
-    this->current_table = "tomb";
+    this->current_table = "tombs";
 
     int client_id = this->client->getId(buttonText);
     int year = QDate::currentDate().toString("yyyy").toInt();
@@ -330,7 +330,7 @@ void Funeraria::slotTombDetails()
 
 void Funeraria::slotNewTomb()
 {
-    this->current_table = "tomb";
+    this->current_table = "tombs";
 
     // Set the name property of the Client object to an empty string
     this->tombUi->setProgressive(0);
@@ -349,7 +349,7 @@ void Funeraria::slotShowClients()
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
-    this->current_table = "client";
+    this->current_table = "clients";
 
     this->is_table_sortable = false;
 
@@ -446,7 +446,7 @@ void Funeraria::slotShowClients()
         this->ui.tableWidget->setCellWidget(i, 5, pb_delete);
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotClientDetails);
-        this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDelete);
+        this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDeleteItem);
 
         row_number++;
     }
@@ -475,7 +475,7 @@ void Funeraria::slotClientDetails()
 
 void Funeraria::slotNewClient()
 {
-    this->current_table = "client";
+    this->current_table = "clients";
 
     // Set the name property of the Client object to an empty string
     this->client_ui->setName("");
@@ -501,16 +501,16 @@ void Funeraria::slotShowItems(const QString& type)
     QList<QMap<QString, QString>> accessories;
 
     // Get the the list of the required accessories
-    if (type == "vase") {
+    if (type == "vases") {
         accessories = this->vase->get();
     }
-    else if (type == "lamp") {
+    else if (type == "lamps") {
         accessories = this->lamp->get();
     }
-    else if (type == "flame") {
+    else if (type == "flames") {
         accessories = this->flame->get();
     }
-    else if (type == "material") {
+    else if (type == "materials") {
         accessories = this->material->get();
     }
     else {
@@ -518,7 +518,7 @@ void Funeraria::slotShowItems(const QString& type)
         return;
     }
 
-    QStringList headers{ "Codice", "Nome", "Azioni" };
+    QStringList headers{ "Codice", "Nome", "", ""};
 
     this->ui.tableWidget->setRowCount(accessories.size());
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -538,8 +538,10 @@ void Funeraria::slotShowItems(const QString& type)
         QTableWidgetItem* name = new QTableWidgetItem(accessories[i]["name"]);
         // Set the field as not editable
         name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        QPushButton* pb = new QPushButton(this->ui.tableWidget);
-        pb->setText("Elimina");
+        QPushButton* pb_edit = new QPushButton(this->ui.tableWidget);
+        pb_edit->setText("Modifica");
+        QPushButton* pb_del = new QPushButton(this->ui.tableWidget);
+        pb_del->setText("Elimina");
 
         if (row_number % 2 == 0) {
             this->row_bg = this->row_even;
@@ -553,8 +555,10 @@ void Funeraria::slotShowItems(const QString& type)
 
         this->ui.tableWidget->setItem(i, 0, code);
         this->ui.tableWidget->setItem(i, 1, name);
-        this->ui.tableWidget->setCellWidget(i, 2, pb); // Delete button
-        this->connect(pb, &QPushButton::clicked, this, &Funeraria::slotDelete);
+        this->ui.tableWidget->setCellWidget(i, 2, pb_edit); // Edit button
+        this->ui.tableWidget->setCellWidget(i, 3, pb_del); // Delete button
+        this->connect(pb_edit, &QPushButton::clicked, this, &Funeraria::slotEditItem);
+        this->connect(pb_del, &QPushButton::clicked, this, &Funeraria::slotDeleteItem);
 
         row_number++;
     }
@@ -564,28 +568,28 @@ void Funeraria::slotNewItem(const QString& type)
 {
     this->current_table = type;
 
-    if (type == "vase") {
+    if (type == "vases") {
         AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vases", this);
         vase_ui->setModal(true);
         vase_ui->exec();
 
         delete vase_ui;
     }
-    else if (type == "lamp") {
+    else if (type == "lamps") {
         AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamps", this);
         lamp_ui->setModal(true);
         lamp_ui->exec();
 
         delete lamp_ui;
     }
-    else if (type == "flame") {
+    else if (type == "flames") {
         AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flames", this);
         flame_ui->setModal(true);
         flame_ui->exec();
 
         delete flame_ui;
     }
-    else if (type == "material") {
+    else if (type == "materials") {
         AccessoryUi* material_ui = new AccessoryUi(this->db->db, "materials", this);
         material_ui->setModal(true);
         material_ui->exec();
@@ -600,36 +604,77 @@ void Funeraria::slotNewItem(const QString& type)
     this->slotShowItems(this->current_table);
 }
 
+/*
 void Funeraria::slotUpdateEntry()
 {
     int row = this->ui.tableWidget->currentRow();
-   if (this->current_table == "vase") {
+   if (this->current_table == "vases") {
         this->vase->update(
             this->ui.tableWidget->item(row, 0)->text(), // code
             this->ui.tableWidget->item(row, 1)->text() // name
         );
     }
-    else if (this->current_table == "lamp") {
+    else if (this->current_table == "lamps") {
         this->lamp->update(
             this->ui.tableWidget->item(row, 0)->text(), // code
             this->ui.tableWidget->item(row, 1)->text() // name
         );
     }
-    else if (this->current_table == "flame") {
+    else if (this->current_table == "flames") {
         this->flame->update(
             this->ui.tableWidget->item(row, 0)->text(), // code
             this->ui.tableWidget->item(row, 1)->text() // name
         );
     }
-    else if (this->current_table == "material") {
+    else if (this->current_table == "materials") {
         this->material->update(
             this->ui.tableWidget->item(row, 0)->text(), // code
             this->ui.tableWidget->item(row, 1)->text() // name
         );
     }
 }
+*/ 
+void Funeraria::slotEditItem() {
+    // Row index of the clicked button
+    int row = this->ui.tableWidget->currentRow();
+    // Set the name property of the Client object to the name present in the clicked row
+    if (this->current_table == "vases") {
+        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vases", this);
+        vase_ui->updateForm(this->ui.tableWidget->item(row, 0)->text(), this->ui.tableWidget->item(row, 1)->text());
+        vase_ui->setModal(true);
+        vase_ui->exec();
 
-void Funeraria::slotDelete() {
+        delete vase_ui;
+    }
+    else if (this->current_table == "lamps") {
+        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamps", this);
+        lamp_ui->updateForm(this->ui.tableWidget->item(row, 0)->text(), this->ui.tableWidget->item(row, 1)->text());
+        lamp_ui->setModal(true);
+        lamp_ui->exec();
+
+        delete lamp_ui;
+    }
+    else if (this->current_table == "flames") {
+        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flames", this);
+        flame_ui->updateForm(this->ui.tableWidget->item(row, 0)->text(), this->ui.tableWidget->item(row, 1)->text());
+        flame_ui->setModal(true);
+        flame_ui->exec();
+
+        delete flame_ui;
+    }
+    else if (this->current_table == "materials") {
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "materials", this);
+        material_ui->updateForm(this->ui.tableWidget->item(row, 0)->text(), this->ui.tableWidget->item(row, 1)->text());
+        material_ui->setModal(true);
+        material_ui->exec();
+
+        delete material_ui;
+    }
+
+    this->slotShowItems(this->current_table);
+}
+
+void Funeraria::slotDeleteItem() {
     int row = this->ui.tableWidget->currentRow();
 
     QMessageBox message;
@@ -643,22 +688,22 @@ void Funeraria::slotDelete() {
     if (message.clickedButton() == proceedBtn) {
         // Delete the item
 
-        if (this->current_table == "tomb") {
+        if (this->current_table == "tombs") {
 
         }
-        else if (this->current_table == "vase") {
+        else if (this->current_table == "vases") {
             this->vase->remove(this->ui.tableWidget->item(row, 0)->text());
         }
-        else if (this->current_table == "lamp") {
+        else if (this->current_table == "lamps") {
             this->lamp->remove(this->ui.tableWidget->item(row, 0)->text());
         }
-        else if (this->current_table == "flame") {
+        else if (this->current_table == "flames") {
             this->flame->remove(this->ui.tableWidget->item(row, 0)->text());
         }
-        else if (this->current_table == "material") {
+        else if (this->current_table == "materials") {
             this->material->remove(this->ui.tableWidget->item(row, 0)->text());
         }
-        else if (this->current_table == "client") {
+        else if (this->current_table == "clients") {
             this->client->remove(this->client->getId(this->ui.tableWidget->item(row, 1)->text()));
             this->slotShowClients();
             return;
@@ -680,7 +725,7 @@ void Funeraria::slotTombsToEngrave()
         // Block the signals while building the table
         const QSignalBlocker blocker(this->ui.tableWidget);
 
-        this->current_table = "tomb";
+        this->current_table = "tombs";
 
         // Reset the table's content
         this->clearTable();
@@ -842,7 +887,7 @@ void Funeraria::slotTombsNotPaid()
         // Block the signals while building the table
         const QSignalBlocker blocker(this->ui.tableWidget);
 
-        this->current_table = "tomb";
+        this->current_table = "tombs";
 
         // Reset the table's content
         this->clearTable();

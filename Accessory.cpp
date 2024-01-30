@@ -109,8 +109,8 @@ QString Accessory::store(const QString& code, const QString& name)
 
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES (:code, :name, :created_at, :edited_at);");
-    query.bindValue(":code", code.trimmed());
-    query.bindValue(":name", name.trimmed());
+    query.bindValue(":code", code);
+    query.bindValue(":name", name);
     query.bindValue(":created_at", date);
     query.bindValue(":edited_at", date);
 
@@ -123,16 +123,21 @@ QString Accessory::store(const QString& code, const QString& name)
     return result;
 }
 
-QString Accessory::update(const QString& code, const QString& name)
+QString Accessory::update(const QString& old_code, const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
+    qDebug() << old_code;
+    qDebug() << code;
+    qDebug() << name;
+    qDebug() << this->table;
+
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("UPDATE " + this->table + " SET code = :code, name = :name, edited_at = :edited_at WHERE code = :codew; ");
-    query.bindValue(":code", code.trimmed());
-    query.bindValue(":name", name.trimmed());
+    query.prepare("UPDATE " + this->table + " SET code = :code, name = :name, edited_at = :edited_at WHERE code = :old_code; ");
+    query.bindValue(":code", code);
+    query.bindValue(":name", name);
     query.bindValue(":edited_at", date);
-    query.bindValue(":codew", code.trimmed());
+    query.bindValue(":old_code", old_code);
 
     QString result = "";
 

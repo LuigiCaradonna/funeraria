@@ -74,12 +74,13 @@ public:
     /*
      * Updates an accessory into the database
      *
-     * @param const QString& code   - Accessory's code
-     * @param const QString& name   - Accessory's name
+     * @param const QString& old_code   - Accessory's previous code
+     * @param const QString& code       - Accessory's code
+     * @param const QString& name       - Accessory's name
      *
      * @return  QString - Empty on success, failure cause on failure
      */
-    QString update(const QString& code, const QString& name);
+    QString update(const QString& old_code, const QString& code, const QString& name);
 
     /*
      * Removes a accessory from the database

@@ -26,6 +26,15 @@ public:
      */
     ~AccessoryUi();
 
+    /********** PUBLIC FUNCTIONS **********/
+
+    /*
+     * Updates the form fields
+     *
+     * @return  void
+     */
+    void updateForm(const QString& code = "", const QString& name = "");
+
 protected slots:
 
     /********** PRIVATE SLOTS **********/
@@ -35,7 +44,14 @@ protected slots:
      *
      * @return  void
      */
-    void slotAddAccessoryUi();
+    void slotSave();
+
+    /*
+     * Gets the data from the dialog window and edits the accessory information into the database
+     *
+     * @return  void
+     */
+    void slotEdit();
 
     /*
      * Closes the dialog window
@@ -49,5 +65,36 @@ private:
     const QString table;
     QSqlDatabase db;
     QWidget* parent;
+    QString old_code = "";
+
+    /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Sets the code field
+     *
+     * @return  void
+     */
+    void setCode(QString code);
+
+    /*
+     * Sets the name field
+     *
+     * @return  void
+     */
+    void setName(QString name);
+
+    /*
+     * Checks the data inserted into the form to add/edit an accessory
+     *
+     * @return  bool - True if the validation passes, false on failure
+     */
+    bool checkForm();
+
+    /*
+     * Resets the form's fields
+     *
+     * @return  void
+     */
+    void resetFields();
 };
 

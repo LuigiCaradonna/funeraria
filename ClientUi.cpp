@@ -10,7 +10,6 @@ ClientUi::ClientUi(const QSqlDatabase& db, QWidget* parent)
     // Sets an icon for the window
     this->setWindowIcon(QIcon("funeraria.png"));
 
-    this->connect(this->ui.btnSave, &QPushButton::clicked, this, &ClientUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &ClientUi::slotCloseDialog);
 }
 
@@ -30,39 +29,20 @@ void ClientUi::setName(const QString& name)
 
 void ClientUi::slotSave()
 {
-    Client* client = new Client(this->db);
+    if (this->checkForm()) {
+        Client* client = new Client(this->db);
 
-    QRegularExpression re("\\d+");
-    QRegularExpressionMatch match = re.match(this->ui.lePosition->text().trimmed());
-    if (!match.hasMatch() || this->ui.lePosition->text().trimmed().toInt() < 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La posizione deve essere un numero intero maggiore di zero.");
-        message.exec();
+        int active = 0;
+        if (this->ui.cbActive->isChecked()) {
+            active = 1;
+        }
 
-        return;
-    }
+        int quick = 0;
+        if (this->ui.cbQuick->isChecked()) {
+            quick = 1;
+        }
 
-    int active;
-    if (this->ui.cbActive->isChecked()) {
-        active = 1;
-    }
-    else {
-        active = 0;
-    }
-
-    int quick;
-    if (this->ui.cbQuick->isChecked()) {
-        quick = 1;
-    }
-    else {
-        quick = 0;
-    }
-
-    // An id set to 0 means that we are creating a new client
-    if (this->ui.leId->text().toInt() == 0) {
-        if (client->store(
+        client->store(
             this->ui.lePosition->text().trimmed().toInt(),
             this->ui.leName->text().trimmed(),
             this->ui.teEmail->toPlainText().trimmed(),
@@ -70,15 +50,30 @@ void ClientUi::slotSave()
             this->ui.tePhone->toPlainText().trimmed(),
             active,
             quick
-        )
-            ) {
-            delete client;
-            // Close the dialog on success
-            this->close();
-        }
+        );
+
+        delete client;
+        // Close the dialog
+        this->close();
     }
-    else {
-        if (client->update(
+}
+
+void ClientUi::slotUpdate()
+{
+    if (this->checkForm()) {
+        Client* client = new Client(this->db);
+
+        int active = 0;
+        if (this->ui.cbActive->isChecked()) {
+            active = 1;
+        }
+
+        int quick = 0;
+        if (this->ui.cbQuick->isChecked()) {
+            quick = 1;
+        }
+
+        client->update(
             this->ui.leId->text().toInt(),
             this->ui.lePosition->text().trimmed().toInt(),
             this->ui.leName->text().trimmed(),
@@ -87,12 +82,11 @@ void ClientUi::slotSave()
             this->ui.tePhone->toPlainText().trimmed(),
             active,
             quick
-        )
-            ) {
-            delete client;
-            // Close the dialog on success
-            this->close();
-        }
+        );
+
+        delete client;
+        // Close the dialog
+        this->close();
     }
 }
 
@@ -142,6 +136,7 @@ void ClientUi::updateForm()
 
         // Set the save button text
         this->ui.btnSave->setText("Aggiorna");
+        this->connect(this->ui.btnSave, &QPushButton::clicked, this, &ClientUi::slotUpdate);
     }
     else {
         // Client not found means we are asking to insert a new one
@@ -158,7 +153,27 @@ void ClientUi::updateForm()
 
         // Set the save button text
         this->ui.btnSave->setText("Crea");
+        this->connect(this->ui.btnSave, &QPushButton::clicked, this, &ClientUi::slotSave);
     }
 
     delete client;
+}
+
+/********** PRIVATE FUNCTIONS **********/
+
+bool ClientUi::checkForm()
+{
+    QRegularExpression re("\\d+");
+    QRegularExpressionMatch match = re.match(this->ui.lePosition->text().trimmed());
+    if (!match.hasMatch() || this->ui.lePosition->text().trimmed().toInt() < 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La posizione deve essere un numero intero maggiore di zero.");
+        message.exec();
+
+        return false;
+    }
+
+    return true;
 }

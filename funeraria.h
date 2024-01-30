@@ -159,14 +159,21 @@ protected slots:
      *
      * @return void
      */
-    void slotUpdateEntry();
+    // void slotUpdateEntry();
+
+    /*
+     * Edits the selected item
+     *
+     * @return void
+     */
+    void slotEditItem();
 
     /*
      * Deletes the selected item from the database
      *
      * @return void
      */
-    void slotDelete();
+    void slotDeleteItem();
 
     /*
      * Shows the tombs needed which can be engraved

@@ -55,6 +55,13 @@ protected slots:
     void slotSave();
 
     /*
+     * Updates the client's data, responds to the dialog window's update button
+     *
+     * @return  void
+     */
+    void slotUpdate();
+
+    /*
      * Closes the dialog window
      *
      * @return  void
@@ -70,4 +77,10 @@ private:
 
     /********** PRIVATE FUNCTIONS **********/
 
+    /*
+     * Checks the data inserted into the form to add/edit a client
+     *
+     * @return  bool - True if the validation passes, false on failure
+     */
+    bool checkForm();
 };
