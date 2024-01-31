@@ -159,11 +159,12 @@ QList<QMap<QString, QString>> Tomb::tombsToEngrave()
     QList<QMap<QString, QString>> tombs;
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT tombs.progressive AS progressive, tombs.name AS name, clients.name AS client_name, materials.name AS material "
+    query.prepare("SELECT tombs.progressive AS progressive, tombs.name AS name, tombs.confirmed_at AS confirmed_at, clients.name AS client_name, materials.name AS material "
         "FROM " + this->table + " "
         "JOIN clients ON tombs.client_id = clients.id "
         "JOIN materials ON tombs.material_code = materials.code "
-        "WHERE (tombs.confirmed_at != '' AND tombs.confirmed_at IS NOT NULL) AND (tombs.engraved_at == '' OR tombs.engraved_at IS NULL);"
+        "WHERE (tombs.confirmed_at != '' AND tombs.confirmed_at IS NOT NULL) AND (tombs.engraved_at == '' OR tombs.engraved_at IS NULL)"
+        "ORDER BY confirmed_at ASC;"
     );
 
     if (!query.exec()) {
@@ -177,6 +178,7 @@ QList<QMap<QString, QString>> Tomb::tombsToEngrave()
         while (query.next()) {
             tomb["progressive"] = query.value("progressive").toString();
             tomb["deceased"] = query.value("name").toString();
+            tomb["confirmed_at"] = query.value("confirmed_at").toString();
             tomb["material"] = query.value("material").toString();
             tomb["client"] = query.value("client_name").toString();
             tombs.append(tomb);

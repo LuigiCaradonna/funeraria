@@ -730,7 +730,7 @@ void Funeraria::slotTombsToEngrave()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Numero", "Defunto", "Materiale", "Cliente" };
+        QStringList headers{ "Numero", "Defunto", "Materiale", "Cliente", "Conferma", ""};
 
         this->ui.tableWidget->setRowCount(tombs.size());
         this->ui.tableWidget->setColumnCount(headers.size());
@@ -740,6 +740,7 @@ void Funeraria::slotTombsToEngrave()
         this->ui.tableWidget->setColumnWidth(1, 250);
         this->ui.tableWidget->setColumnWidth(2, 250);
         this->ui.tableWidget->setColumnWidth(3, 200);
+        this->ui.tableWidget->setColumnWidth(4, 100);
 
         int row_number = 1;
         for (int i = 0; i < tombs.size(); i++) {
@@ -755,6 +756,12 @@ void Funeraria::slotTombsToEngrave()
             QTableWidgetItem* client = new QTableWidgetItem(tombs[i]["client"]);
             // Set the field as not editable
             client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            QTableWidgetItem* confirmed_at = new QTableWidgetItem(tombs[i]["confirmed_at"]);
+            // Set the field as not editable
+            confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+            QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
+            pb_details->setText("Dettagli");
 
             if (row_number % 2 == 0) {
                 this->row_bg = this->row_even;
@@ -767,11 +774,15 @@ void Funeraria::slotTombsToEngrave()
             deceased->setBackground(QBrush(row_bg));
             material->setBackground(QBrush(row_bg));
             client->setBackground(QBrush(row_bg));
+            confirmed_at->setBackground(QBrush(row_bg));
 
             this->ui.tableWidget->setItem(i, 0, progressive);
             this->ui.tableWidget->setItem(i, 1, deceased);
             this->ui.tableWidget->setItem(i, 2, material);
             this->ui.tableWidget->setItem(i, 3, client);
+            this->ui.tableWidget->setItem(i, 4, confirmed_at);
+            this->ui.tableWidget->setCellWidget(i, 5, pb_details); // Details button
+            this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
 
             row_number++;
         }
