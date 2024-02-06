@@ -502,7 +502,6 @@ bool Tomb::store(
 
     // Create the folder into the archive
 
-    // TODO: Prendere il path da Config e rimuovere la funzione da Settings
     Config* config = new Config();
 
     QString path_to_archive = config->getArchivePath();
