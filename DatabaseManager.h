@@ -11,13 +11,13 @@
 #include "Settings.h"
 #include "Tomb.h"
 #include "Client.h"
+#include "Config.h"
 
 class DatabaseManager
 {
 public:
     QSqlDatabase db;
     bool connected;
-    QString db_path = "./funeraria.db";
 
     /********** CONSTRUCTOR **********/
 
@@ -58,6 +58,7 @@ public:
 private:
     QWidget* parent;
     Settings* settings;
+    QString db_path = "./funeraria.db";
     QString backup_folder = "backups";
     // Interval in days to create a new backup
     int backup_interval = 1;

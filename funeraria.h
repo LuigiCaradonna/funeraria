@@ -5,6 +5,7 @@
 #include <QMenu>
 #include "ui_funeraria.h"
 #include "DatabaseManager.h"
+#include "Config.h"
 #include "ClientUi.h"
 #include "Client.h"
 #include "SettingsUi.h"
@@ -202,14 +203,14 @@ private:
     // Database manager
     DatabaseManager* db;
 
+    // Config manager
+    Config* config;
+
     // Contains the name of the current table shown
     QString current_table = "";
 
     // Placeholder for the clients' combo box
     QString client_placeholder = "Tutti";
-
-    QString config_file = "config.cfg";
-    QString default_db_path = "./funeraria.db";
 
     QMenu* context_menu;
 
@@ -244,8 +245,6 @@ private:
     QString sort_column_direction = "";
 
     /********** PRIVATE FUNCTIONS **********/
-
-    bool initConfigFile();
 
     /*
      * Clears the table content and deletes all the created pointers.

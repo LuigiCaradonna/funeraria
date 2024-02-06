@@ -15,19 +15,15 @@ Funeraria::Funeraria(QWidget* parent)
      * Before to setup the application: check the config file and the database
      */
 
-    QFile config_file("config.cfg");
-    if (!config_file.exists()) {
-        // Try to initialize a new config file
-        if (!this->initConfigFile()) {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Critical);
-            message.setText("Non è possibile aprire il file di configurazione.\n"
-                "Assicurarsi che la cartella di installazione non sia protetta da scrittura.");
-            message.exec();
+    // Check the config file before to instantiate the DatabaseManager object,
+    // DatabaseManager needs to read the configuration file and we want to be sure
+    // that the configuration is correctly set.
+    this->config = new Config();
 
-            this->closeWindow();
-        }
+    // The config file is not valid
+    if (!this->config->loaded) {
+        // Close the application
+        this->closeWindow();
     }
 
     this->db = new DatabaseManager(this);
@@ -741,6 +737,7 @@ void Funeraria::slotTombsToEngrave()
         this->ui.tableWidget->setColumnWidth(2, 250);
         this->ui.tableWidget->setColumnWidth(3, 200);
         this->ui.tableWidget->setColumnWidth(4, 100);
+        this->ui.tableWidget->setColumnWidth(5, 100);
 
         int row_number = 1;
         for (int i = 0; i < tombs.size(); i++) {
@@ -955,21 +952,6 @@ void Funeraria::slotTombsNotPaid()
 }
 
 /********** PRIVATE FUNCTIONS **********/
-
-bool Funeraria::initConfigFile() {
-    QFile config_file(this->config_file);
-    config_file.open(QIODevice::WriteOnly);
-
-    if (!config_file.isOpen()) {
-        return false;
-    }
-
-    QTextStream outStream(&config_file);
-    outStream << this->default_db_path;
-    config_file.close();
-
-    return true;
-}
 
 void Funeraria::clearTable()
 {

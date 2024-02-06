@@ -59,16 +59,8 @@ public:
      */
     int getBackupsToKeep();
 
-    /*
-     * Gets the path to the archive folder
-     *
-     * @return  QString - The path to the archive folder, empty string on failure
-     */
-    QString getArchiveFolder();
-
 private:
     const QString table = "settings";
     QSqlDatabase db;
-    QString config_file = "config.cfg";
 };
 

@@ -501,7 +501,13 @@ bool Tomb::store(
     // Validation passed
 
     // Create the folder into the archive
-    QString path_to_archive = this->settings->getArchiveFolder();
+
+    // TODO: Prendere il path da Config e rimuovere la funzione da Settings
+    Config* config = new Config();
+
+    QString path_to_archive = config->getArchivePath();
+
+    delete config;
 
     if (path_to_archive == "") {
         QMessageBox message;
@@ -512,7 +518,7 @@ bool Tomb::store(
         message.exec();
     }
     else {
-        // e.g.: archive/2400-2499/2465 - lastname firstname
+        // e.g.: archive/2400 - 2499/2465 - lastname firstname
         QString full_path = path_to_archive + "/" + this->getGroupingFolder(progressive) + "/" + QString::number(progressive) + " - " + name.trimmed();
 
         QDir dir(full_path);
@@ -786,5 +792,5 @@ QString Tomb::getGroupingFolder(const int& progressive)
     int end = start + 99;
 
     // e.g.: "2400-2499"
-    return QString::number(start) + "-" + QString::number(end);
+    return QString::number(start) + " - " + QString::number(end);
 }

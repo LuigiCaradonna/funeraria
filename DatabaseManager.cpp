@@ -149,10 +149,11 @@ bool DatabaseManager::backupToCSV()
 
 bool DatabaseManager::openDatabase()
 {
-    QFile config_file("config.cfg");
-    config_file.open(QIODevice::ReadOnly);
-    this->db_path = config_file.readAll();
-    config_file.close();
+    Config* config = new Config();
+
+    this->db_path = config->getDbPath();
+
+    delete config;
 
     if (!QFile::exists(this->db_path)) {
         return this->solveDatabaseConnectionFailure();
@@ -258,12 +259,11 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
 
         if (!this->db_path.isEmpty()) {
             // Rewrite the content of the config file with the new db path
-            QFile config_file("config.cfg");
-            config_file.open(QIODeviceBase::ReadWrite | QIODeviceBase::Truncate);
+            Config* config = new Config();
 
-            QTextStream outStream(&config_file);
-            outStream << this->db_path;
-            config_file.close();
+            config->setDbPath(this->db_path);
+
+            delete config;
 
             return this->openDatabase();
         }

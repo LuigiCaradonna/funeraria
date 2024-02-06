@@ -37,18 +37,6 @@ QList<QMap<QString, QString>> Settings::get() {
         list.append(setting);
     }
 
-    // Get the db path reading from the config file
-    QFile config_file(this->config_file);
-    config_file.open(QIODeviceBase::ReadOnly);
-
-    QString db_path = config_file.readAll();
-
-    QMap<QString, QString> setting;
-    setting["name"] = "db_path";
-    setting["value"] = db_path;
-
-    list.append(setting);
-
     return list;
 }
 
@@ -117,19 +105,6 @@ int Settings::getBackupsToKeep()
     }
 
     return query.value("value").toInt();
-}
-
-QString Settings::getArchiveFolder()
-{
-    QSqlQuery query = QSqlQuery(this->db);
-
-    query.prepare("SELECT value FROM settings WHERE name = 'archive_folder'");
-
-    if (!query.exec() || !query.next()) {
-        return "";
-    }
-
-    return query.value("value").toString();
 }
 
 

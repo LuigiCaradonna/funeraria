@@ -6,6 +6,7 @@
 #include <QDir>
 #include "Settings.h"
 #include "Helpers.h"
+#include "Config.h"
 
 class Tomb : public QObject
 {

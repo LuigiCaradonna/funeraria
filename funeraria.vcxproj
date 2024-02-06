@@ -94,6 +94,7 @@
     <ClCompile Include="AccessoryUi.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientUi.cpp" />
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SettingsUi.cpp" />
@@ -116,6 +117,7 @@
     <QtMoc Include="TombUi.h" />
     <QtMoc Include="AccessoryUi.h" />
     <QtMoc Include="ClientUi.h" />
+    <QtMoc Include="Config.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="Tomb.h" />
