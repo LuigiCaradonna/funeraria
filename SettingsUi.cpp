@@ -55,11 +55,10 @@ void SettingsUi::slotSave()
         stored = false;
     };
 
-    setting["name"] = "archive_folder";
-    setting["value"] = this->ui.lblArchiveFolder->text();
-    if (!this->store(setting)) {
-        stored = false;
-    };
+    Config* config = new Config();
+    QString archive_path = this->ui.lblArchiveFolder->text();
+    config->setArchivePath(archive_path);
+    delete config;
 
     if (!stored) {
         QMessageBox message;

@@ -11,7 +11,7 @@ Config::Config()
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText("Non è possibile aprire il file di configurazione.\n"
+            message.setText("Non Ã¨ possibile aprire il file di configurazione.\n"
                 "Assicurarsi che la cartella di installazione non sia protetta da scrittura.\n"
                 "E' necessario riavviare il programma.");
             message.exec();

@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "Settings.h"
+#include "Config.h"
 #include "ui_Settings.h"
 
 class SettingsUi : public QDialog
