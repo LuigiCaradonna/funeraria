@@ -35,6 +35,13 @@ protected slots:
     /********** PROTECTED SLOTS **********/
 
     /*
+     * Asks the user to provide a new path for the DB file
+     *
+     * @return  void
+     */
+    void slotChangeDbPath();
+
+    /*
      * Asks the user to provide a new path for the archive file
      *
      * @return  void
@@ -47,13 +54,6 @@ protected slots:
      * @return  void
      */
     void slotSave();
-
-    /*
-     * Asks the user to provide a new path for the db file
-     *
-     * @return  void
-     */
-    void slotChangeDbPath();
 
     /*
      * Closes the dialog window

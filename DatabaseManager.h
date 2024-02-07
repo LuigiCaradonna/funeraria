@@ -54,6 +54,12 @@ public:
      */
     bool backupToCSV();
 
+    /*
+     * Reloads the database
+     *
+     * @return boolean true on success, false on failure
+     */
+    bool reloadDatabase();
 
 private:
     QWidget* parent;

@@ -145,6 +145,13 @@ bool DatabaseManager::backupToCSV()
     delete tomb;
     return true;
 }
+bool DatabaseManager::reloadDatabase()
+{
+    // Close the currently open DB
+    this->db.close();
+
+    return this->openDatabase();
+}
 /********** PRIVATE FUNCTIONS **********/
 
 bool DatabaseManager::openDatabase()
