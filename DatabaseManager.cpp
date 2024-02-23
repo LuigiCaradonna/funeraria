@@ -123,12 +123,14 @@ bool DatabaseManager::backupToCSV()
 
             QTextStream out(&sqlFile);
             // Columns name row
-            out << "Numero;Nome;Ordine;Provino;Conferma;Incisione;Consegna;Note;" << "\n";
+            out << "Numero;Nome;Prezzo;Pagata;Ordine;Provino;Conferma;Incisione;Consegna;Note;" << "\n";
 
             // Tombs' data, one per row
             for (int i = 0; i < tombs.size(); i++) {
                 out << tombs[i]["progressive"] << ";";
                 out << tombs[i]["name"] << ";";
+                out << tombs[i]["price"] << ";";
+                out << tombs[i]["paid"] << ";";
                 out << tombs[i]["ordered_at"] << ";";
                 out << tombs[i]["proofed_at"] << ";";
                 out << tombs[i]["confirmed_at"] << ";";
