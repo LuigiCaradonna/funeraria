@@ -36,6 +36,7 @@ public:
      * 
      * @param const int& client_id      - Client's id
      * @param const int& year           - Year of the tombs to get, 0 for all the years
+     * @param bool engraved             - True to get only the tobs that required to be engraved, false for all the tombs
      * @param QString name              - Deceased name or partial name to use to refine the result
      * @param QString sort_by           - Column to sort
      * @param QString sort_direction    - Sort direction
@@ -45,6 +46,7 @@ public:
     QList<QMap<QString, QString>> getList(
         const int& client_id, 
         const int& year, 
+        bool engraved = false, 
         QString name = "",
         QString sort_by = "progressive",
         QString sort_direction = "ASC"
@@ -100,6 +102,7 @@ public:
      * @param const int& client_id              - Client's id
      * @param const QString& name               - Deceased's name
      * @param const QString& additional_names   - Additional names
+     * @param const bool& engraved              - Whether the tomb must be engraved or only the material was requested
      * @param const double& price               - Price
      * @param const bool& paid                  - Paid or not
      * @param const QString& material_code      - Material's code
@@ -121,6 +124,7 @@ public:
         const int& client_id,
         const QString& name,
         const QString& additional_names,
+        const bool& engraved,
         const double& price,
         const bool& paid,
         const QString& material_code,
@@ -144,6 +148,7 @@ public:
      * @param const int& client_id              - Client's id
      * @param const QString& name               - Deceased's name
      * @param const QString& additional_names   - Additional names
+     * @param const bool& engraved              - Whether the tomb must be engraved or only the material was requested
      * @param const double& price               - Price
      * @param const bool& paid                  - Paid or not
      * @param const QString& material_code      - Material's code
@@ -166,6 +171,7 @@ public:
         const int& client_id,
         const QString& name,
         const QString& additional_names,
+        const bool& engraved,
         const double& price,
         const bool& paid,
         const QString& material_code,

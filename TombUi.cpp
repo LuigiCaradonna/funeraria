@@ -103,6 +103,7 @@ void TombUi::slotSave()
             client->getId(this->ui.cbClient->currentText()),
             this->ui.leName->text(),
             this->ui.leAdditionalNames->text(),
+            this->ui.rbToEngrave->isChecked(),
             this->ui.lePrice->text().toDouble(),
             this->ui.chbPaid->isChecked(),
             this->material->getCode(this->ui.cbMaterial->currentText()),
@@ -129,6 +130,7 @@ void TombUi::slotSave()
             client->getId(this->ui.cbClient->currentText()),
             this->ui.leName->text(),
             this->ui.leAdditionalNames->text(),
+            this->ui.rbToEngrave->isChecked(),
             this->ui.lePrice->text().toDouble(),
             this->ui.chbPaid->isChecked(),
             this->material->getCode(this->ui.cbMaterial->currentText()),
@@ -253,6 +255,8 @@ void TombUi::updateForm()
         this->ui.cbClient->addItems(client_names);
         this->ui.leName->setText(tomb_details["name"]);
         this->ui.leAdditionalNames->setText(tomb_details["additional_names"]);
+        this->ui.rbToEngrave->setChecked(tomb_details["engraved"] == "1");
+        this->ui.rbNotToEngrave->setChecked(tomb_details["engraved"] == "0");
         this->ui.lePrice->setText(tomb_details["price"]);
         this->ui.chbPaid->setChecked(tomb_details["paid"] == "1");
         this->ui.cbMaterial->addItems(material_names);

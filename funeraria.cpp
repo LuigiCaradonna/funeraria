@@ -219,7 +219,7 @@ void Funeraria::slotHeaderClicked(int logicalIndex) {
         year = this->ui.cbYear->currentText().toInt();
     }
 
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, name, sort_by, this->sort_column_direction);
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->ui.chbEngraved->isChecked(), name, sort_by, this->sort_column_direction);
 
     this->showClientOrders(tombs);
 
@@ -271,7 +271,7 @@ void Funeraria::slotClientOrders()
         year = this->ui.cbYear->currentText().toInt();
     }
 
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, name);
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->ui.chbEngraved->isChecked(), name);
 
     this->showClientOrders(tombs);
 
@@ -304,7 +304,7 @@ void Funeraria::slotQuickClientOrders()
     this->ui.leDeceased->setText("");
 
     // Search params: client's id, current year, no filter for the deceased's name
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year);
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->ui.chbEngraved->isChecked());
 
     this->showClientOrders(tombs);
 

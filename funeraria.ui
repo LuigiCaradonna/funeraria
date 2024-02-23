@@ -161,7 +161,7 @@
          <widget class="QLineEdit" name="leDeceased">
           <property name="minimumSize">
            <size>
-            <width>500</width>
+            <width>200</width>
             <height>30</height>
            </size>
           </property>
@@ -187,6 +187,24 @@
           </property>
           <property name="text">
            <string>Cerca</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chbEngraved">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Lapidi che richievevano incisione</string>
+          </property>
+          <property name="text">
+           <string>Incise</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
