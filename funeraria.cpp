@@ -566,6 +566,7 @@ void Funeraria::slotNewItem(const QString& type)
 
     if (type == "vases") {
         AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vases", this);
+        vase_ui->updateForm();
         vase_ui->setModal(true);
         vase_ui->exec();
 
@@ -573,6 +574,7 @@ void Funeraria::slotNewItem(const QString& type)
     }
     else if (type == "lamps") {
         AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamps", this);
+        lamp_ui->updateForm();
         lamp_ui->setModal(true);
         lamp_ui->exec();
 
@@ -580,6 +582,7 @@ void Funeraria::slotNewItem(const QString& type)
     }
     else if (type == "flames") {
         AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flames", this);
+        flame_ui->updateForm();
         flame_ui->setModal(true);
         flame_ui->exec();
 
@@ -587,6 +590,7 @@ void Funeraria::slotNewItem(const QString& type)
     }
     else if (type == "materials") {
         AccessoryUi* material_ui = new AccessoryUi(this->db->db, "materials", this);
+        material_ui->updateForm();
         material_ui->setModal(true);
         material_ui->exec();
 
