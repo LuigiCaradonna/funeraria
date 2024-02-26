@@ -127,11 +127,6 @@ QString Accessory::update(const QString& old_code, const QString& code, const QS
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
-    qDebug() << old_code;
-    qDebug() << code;
-    qDebug() << name;
-    qDebug() << this->table;
-
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("UPDATE " + this->table + " SET code = :code, name = :name, edited_at = :edited_at WHERE code = :old_code; ");
     query.bindValue(":code", code);
