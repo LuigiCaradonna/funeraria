@@ -107,9 +107,6 @@ QString Accessory::store(const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
-    QString sql = "INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES ( "+code+", "+name+", :created_at, :edited_at); ";
-    qDebug() << sql;
-
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES (:code, :name, :created_at, :edited_at);");
     query.bindValue(":code", code);
