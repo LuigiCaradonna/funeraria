@@ -604,36 +604,6 @@ void Funeraria::slotNewItem(const QString& type)
     this->slotShowItems(this->current_table);
 }
 
-/*
-void Funeraria::slotUpdateEntry()
-{
-    int row = this->ui.tableWidget->currentRow();
-   if (this->current_table == "vases") {
-        this->vase->update(
-            this->ui.tableWidget->item(row, 0)->text(), // code
-            this->ui.tableWidget->item(row, 1)->text() // name
-        );
-    }
-    else if (this->current_table == "lamps") {
-        this->lamp->update(
-            this->ui.tableWidget->item(row, 0)->text(), // code
-            this->ui.tableWidget->item(row, 1)->text() // name
-        );
-    }
-    else if (this->current_table == "flames") {
-        this->flame->update(
-            this->ui.tableWidget->item(row, 0)->text(), // code
-            this->ui.tableWidget->item(row, 1)->text() // name
-        );
-    }
-    else if (this->current_table == "materials") {
-        this->material->update(
-            this->ui.tableWidget->item(row, 0)->text(), // code
-            this->ui.tableWidget->item(row, 1)->text() // name
-        );
-    }
-}
-*/ 
 void Funeraria::slotEditItem() {
     // Row index of the clicked button
     int row = this->ui.tableWidget->currentRow();
