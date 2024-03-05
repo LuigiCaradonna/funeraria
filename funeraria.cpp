@@ -171,7 +171,8 @@ void Funeraria::slotSumSelectedPrices() {
     float sum = 0;
     int prices = 0;
     for (int i = 0; i < items.size(); i++) {
-        if (!items[i]->data(Qt::DisplayRole).toFloat()) {
+
+        if (items[i]->data(Qt::DisplayRole).toString() != "0" && !items[i]->data(Qt::DisplayRole).toFloat()) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
