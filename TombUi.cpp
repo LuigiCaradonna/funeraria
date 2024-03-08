@@ -34,6 +34,7 @@ TombUi::TombUi(const QSqlDatabase& db, QWidget* parent)
     currentDateMapper->setMapping(this->ui.btnDeliveredAt, "deliver");
     this->connect(currentDateMapper, &QSignalMapper::mappedString, this, &TombUi::slotSetCurrentDate);
 
+    this->connect(this->ui.btnNoEngraving, &QPushButton::clicked, this, &TombUi::slotSetNoEngraving);
     this->connect(this->ui.btnDelivered, &QPushButton::clicked, this, &TombUi::slotSetDelivered);
 }
 
@@ -91,6 +92,11 @@ void TombUi::slotSetCurrentDate(const QString& field)
 void TombUi::slotSetDelivered()
 {
     this->ui.leDeliveredAt->setText("Consegnata");
+}
+
+void TombUi::slotSetNoEngraving()
+{
+    this->ui.leEngravedAt->setText("N/N");
 }
 
 void TombUi::slotSave()

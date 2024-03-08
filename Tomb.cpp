@@ -354,7 +354,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
     }
 
     // If the engraving date is set
-    if (engraving.trimmed() != "" && engraving.trimmed() != "-") {
+    if (engraving.trimmed() != "" && engraving.trimmed() != "-" && engraving.trimmed() != "N/N") {
         // The confirmation date must be set to set the engraving date
         if (confirmation.trimmed() == "" || confirmation.trimmed() == "-") {
             QMessageBox message;
@@ -578,9 +578,14 @@ bool Tomb::store(
     query.bindValue(":ordered_at", QDate::fromString(ordered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":proofed_at", QDate::fromString(proofed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":confirmed_at", QDate::fromString(confirmed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
-    query.bindValue(":engraved_at", QDate::fromString(engraved_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
 
-    QString delivery_date;
+    if (engraved_at.trimmed() == "N/N") {
+        query.bindValue(":engraved_at", "N/N");
+    }
+    else {
+        query.bindValue(":engraved_at", QDate::fromString(engraved_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
+    }
+
     if (delivered_at.trimmed() == "Consegnata") {
         query.bindValue(":delivered_at", "Consegnata");
     }
@@ -709,9 +714,14 @@ bool Tomb::update(
     query.bindValue(":ordered_at", QDate::fromString(ordered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":proofed_at", QDate::fromString(proofed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":confirmed_at", QDate::fromString(confirmed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
-    query.bindValue(":engraved_at", QDate::fromString(engraved_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
 
-    QString delivery_date;
+    if (engraved_at.trimmed() == "N/N") {
+        query.bindValue(":engraved_at", "N/N");
+    }
+    else {
+        query.bindValue(":engraved_at", QDate::fromString(engraved_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
+    }
+
     if (delivered_at.trimmed() == "Consegnata") {
         query.bindValue(":delivered_at", "Consegnata");
     }

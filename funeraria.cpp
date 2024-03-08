@@ -1026,7 +1026,14 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
         QTableWidgetItem* confirmed_at = new QTableWidgetItem(confirm_date);
         confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-        QString engrave_date = Helpers::dateSqlToIta(tombs[i]["engraved_at"]);
+        QString engrave_date;
+        if (tombs[i]["engraved_at"] == "N/N") {
+            engrave_date = "N/N";
+        }
+        else {
+            engrave_date = Helpers::dateSqlToIta(tombs[i]["engraved_at"]);
+        }
+
         QTableWidgetItem* engraved_at = new QTableWidgetItem(engrave_date);
         engraved_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
@@ -1056,7 +1063,7 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
                 this->row_bg = this->tomb_delivered_odd;
             }
         }
-        else if (confirm_date != "" && engrave_date == "") {
+        else if (tombs[i]["engraved"].toInt() == 1 && confirm_date != "" && engrave_date == "") {
             this->row_bg = this->tomb_to_engrave;
         }
 

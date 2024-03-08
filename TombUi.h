@@ -71,6 +71,13 @@ protected slots:
     void slotSetDelivered();
 
     /*
+     * Sets the engraved input field with a N/N tag (Not Necessary)
+     *
+     * @return  void
+     */
+    void slotSetNoEngraving();
+
+    /*
      * Saves a tomb's data
      *
      * @return  void
