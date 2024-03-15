@@ -236,24 +236,13 @@ void TombUi::updateForm()
         }
         /******************************************************/
 
-        QStringList emails_list = tomb_details["email"].split(u',');
-        QString emails = "";
-        for (int i = 0; i < emails_list.length(); i++) {
-            QString nl = "\n";
-            if (i == emails_list.length() - 1) {
-                nl = ""; // No new line after the last email address
-            }
-            emails += emails_list[i] + nl;
-        }
+        QString engraved_at;
 
-        QStringList phones_list = tomb_details["phone"].split(u',');
-        QString phones = "";
-        for (int i = 0; i < phones_list.length(); i++) {
-            QString nl = "\n";
-            if (i == phones_list.length() - 1) {
-                nl = ""; // No new line after the last phone number
-            }
-            phones += phones_list[i] + nl;
+        if (tomb_details["engraved_at"] != "N/N") {
+            engraved_at = Helpers::dateSqlToIta(tomb_details["engraved_at"]);
+        }
+        else {
+            engraved_at = "N/N";
         }
 
         // Fill the form fields with the selected tomb's data
@@ -274,7 +263,7 @@ void TombUi::updateForm()
         this->ui.leOrderedAt->setText(Helpers::dateSqlToIta(tomb_details["ordered_at"]));
         this->ui.leProofedAt->setText(Helpers::dateSqlToIta(tomb_details["proofed_at"]));
         this->ui.leConfirmedAt->setText(Helpers::dateSqlToIta(tomb_details["confirmed_at"]));
-        this->ui.leEngravedAt->setText(Helpers::dateSqlToIta(tomb_details["engraved_at"]));
+        this->ui.leEngravedAt->setText(engraved_at);
         
         QString delivery_date;
         if (tomb_details["delivered_at"] == "Consegnata") {
