@@ -312,6 +312,8 @@ void TombUi::updateForm()
         this->ui.cbClient->addItems(client_names);
         this->ui.leName->setText("");
         this->ui.leAdditionalNames->setText("");
+        this->ui.rbToEngrave->setChecked(true);
+        this->ui.rbNotToEngrave->setChecked(false);
         this->ui.lePrice->setText("0");
         this->ui.chbPaid->setChecked(false);
         this->ui.cbMaterial->addItems(material_names);
