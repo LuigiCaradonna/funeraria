@@ -1000,7 +1000,7 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
     this->ui.tableWidget->setColumnWidth(2, 150);   // Material
     this->ui.tableWidget->setColumnWidth(3, 60);    // Price
     this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
-    this->ui.tableWidget->setColumnWidth(5, 650);   // Notes
+    this->ui.tableWidget->setColumnWidth(5, 625);   // Notes
     this->ui.tableWidget->setColumnWidth(6, 80);    // Accessories mounted
     this->ui.tableWidget->setColumnWidth(7, 90);    // Ordered at
     this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
