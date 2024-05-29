@@ -816,3 +816,16 @@ QString Tomb::getGroupingFolder(const int& progressive)
     // e.g.: "2400-2499"
     return QString::number(start) + " - " + QString::number(end);
 }
+
+QString Tomb::getFolderPath(const int& progressive, const QString& name)
+{
+    Config* config = new Config();
+
+    QString path_to_archive = config->getArchivePath();
+
+    delete config;
+
+    return "file:///" + path_to_archive + "/" + this->getGroupingFolder(progressive) + "/" + QString::number(progressive) + " - " + name.trimmed();
+}
+
+

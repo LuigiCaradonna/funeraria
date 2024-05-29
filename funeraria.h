@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <QDesktopServices>
+#include <QUrl>
 #include <QSignalMapper>
 #include <QMenu>
 #include "ui_funeraria.h"
@@ -108,6 +110,13 @@ protected slots:
      * @return void
      */
     void slotTombDetails();
+
+    /*
+     * Opens the tomb's folder
+     *
+     * @return void
+     */
+    void slotTombFolder();
 
     /*
      * Shows the dialog to insert a new tomb
