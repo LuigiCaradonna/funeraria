@@ -471,7 +471,6 @@ void Funeraria::slotClientDetails()
     int row = this->ui.tableWidget->currentRow();
     // Set the name property of the Client object to the name present in the clicked row
     this->client_ui->setName(this->ui.tableWidget->item(row, 1)->text());
-    this->client_ui->updateForm();
     this->client_ui->setModal(true);
     this->client_ui->exec();
 

@@ -36,13 +36,6 @@ public:
      */
     void setName(const QString& name);
 
-    /*
-     * Updateds the UI filling the fields with the proper values for the selected client
-     *
-     * @return  void
-     */
-    void updateForm();
-
 protected slots:
 
     /********** PROTECTED SLOTS **********/
@@ -76,6 +69,13 @@ private:
     QString name;
 
     /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Updateds the UI filling the fields with the proper values for the selected client
+     *
+     * @return  void
+     */
+    void updateForm();
 
     /*
      * Checks the data inserted into the form to add/edit a client

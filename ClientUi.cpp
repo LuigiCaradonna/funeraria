@@ -23,6 +23,7 @@ ClientUi::~ClientUi()
 void ClientUi::setName(const QString& name)
 {
     this->name = name;
+    this->updateForm();
 }
 
 /********** PROTECTED SLOTS **********/
@@ -95,6 +96,8 @@ void ClientUi::slotCloseDialog()
     this->close();
 }
 
+/********** PRIVATE FUNCTIONS **********/
+
 void ClientUi::updateForm()
 {
     Client* client = new Client(this->db);
@@ -158,8 +161,6 @@ void ClientUi::updateForm()
 
     delete client;
 }
-
-/********** PRIVATE FUNCTIONS **********/
 
 bool ClientUi::checkForm()
 {

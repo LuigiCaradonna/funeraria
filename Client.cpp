@@ -134,6 +134,10 @@ QList<QMap<QString, QString>> Client::get()
 QMap<QString, QString> Client::getDetails(const QString& name)
 {
     QMap<QString, QString> map;
+
+    // If no name is provided, just return the empty map
+    if (name == "") return map;
+
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT * FROM " + this->table + " WHERE name = :name;");
     query.bindValue(":name", name);
