@@ -941,6 +941,29 @@ void Funeraria::slotTombsNotPaid()
     delete tomb;
 }
 
+void Funeraria::slotSetPaidTomb()
+{
+    Tomb* tomb = new Tomb(this->db->db);
+
+    // Row index of the clicked button
+    int row = this->ui.tableWidget->currentRow();
+    // Set the progressive property of the Tomb object to the progressive number present in the clicked row
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
+
+    if (!tomb->setPaid(progressive)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Non è stato possibile impostare la lapide come pagata.");
+        message.exec();
+    }
+    else {
+        // Reload the table
+        this->slotClientOrders();
+    }
+    
+    delete tomb;
+}
 /********** PRIVATE FUNCTIONS **********/
 
 void Funeraria::clearTable()
@@ -985,8 +1008,8 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
     // Reset the table's content
     this->clearTable();
 
-    QStringList headers{ "Numero", "Defunto", "Materiale", "Prezzo", "Pagata", "Note", "Accessori",
-        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "", ""};
+    QStringList headers{ "Numero", "Defunto", "Materiale", "€", "Pagata", "Note", "Accessori",
+        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "", "", ""};
 
     this->ui.tableWidget->setRowCount(tombs.size());
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -997,9 +1020,9 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
     this->ui.tableWidget->setColumnWidth(1, 220);   // Name
     this->ui.tableWidget->setColumnWidth(2, 150);   // Material
-    this->ui.tableWidget->setColumnWidth(3, 60);    // Price
+    this->ui.tableWidget->setColumnWidth(3, 45);    // Price
     this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
-    this->ui.tableWidget->setColumnWidth(5, 625);   // Notes
+    this->ui.tableWidget->setColumnWidth(5, 600);   // Notes
     this->ui.tableWidget->setColumnWidth(6, 80);    // Accessories mounted
     this->ui.tableWidget->setColumnWidth(7, 90);    // Ordered at
     this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
@@ -1008,6 +1031,7 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
     this->ui.tableWidget->setColumnWidth(11, 90);   // Delivered at
     this->ui.tableWidget->setColumnWidth(12, 80);   // Details Button
     this->ui.tableWidget->setColumnWidth(13, 70);   // Open folder Button
+    this->ui.tableWidget->setColumnWidth(14, 70);   // Set paid tomb button
 
     int row_number = 1;
     for (int i = 0; i < tombs.size(); i++) {
@@ -1016,6 +1040,9 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
 
         QPushButton* pb_open_folder = new QPushButton(this->ui.tableWidget);
         pb_open_folder->setText("Apri");
+
+        QPushButton* pb_set_apid = new QPushButton(this->ui.tableWidget);
+        pb_set_apid->setText("Pagata");
 
         // Generate the cells' content and set them as not editable
         QTableWidgetItem* progressive = new QTableWidgetItem(tombs[i]["progressive"]);
@@ -1124,9 +1151,11 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
         this->ui.tableWidget->setItem(i, 11, delivered_at);
         this->ui.tableWidget->setCellWidget(i, 12, pb_details); // Details button
         this->ui.tableWidget->setCellWidget(i, 13, pb_open_folder); // Open folder button
+        this->ui.tableWidget->setCellWidget(i, 14, pb_set_apid); // Set paid tomb button
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
         this->connect(pb_open_folder, &QPushButton::clicked, this, &Funeraria::slotTombFolder);
+        this->connect(pb_set_apid, &QPushButton::clicked, this, &Funeraria::slotSetPaidTomb);
 
         row_number++;
     }

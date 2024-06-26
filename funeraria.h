@@ -165,13 +165,6 @@ protected slots:
     void slotNewItem(const QString& type);
 
     /*
-     * Persists into the database the change made to a table cell
-     *
-     * @return void
-     */
-    // void slotUpdateEntry();
-
-    /*
      * Edits the selected item
      *
      * @return void
@@ -205,6 +198,13 @@ protected slots:
      * @return void
      */
     void slotTombsNotPaid();
+
+    /*
+     * Sets a tomb as paid
+     *
+     * @return void
+     */
+    void slotSetPaidTomb();
 
 private:
     Ui::FunerariaClass ui;

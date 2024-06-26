@@ -196,6 +196,8 @@ public:
      */
     void remove(const int& progressive);
 
+    bool setPaid(const int& progressive);
+
     /*
      * Gets the last progressive number in use
      *

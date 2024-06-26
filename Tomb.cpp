@@ -163,6 +163,7 @@ QMap<QString, QString> Tomb::getDetails(const int& progressive)
 
 QList<QMap<QString, QString>> Tomb::tombsToEngrave()
 {
+    qDebug() << "TOMB: GET DETAILS";
     QList<QMap<QString, QString>> tombs;
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
@@ -762,6 +763,23 @@ void Tomb::remove(const int& progressive)
         message.setText(query.lastError().text());
         message.exec();
     }
+}
+
+bool Tomb::setPaid(const int& progressive)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare(
+        "UPDATE " + this->table + " "
+        "SET paid = 1 "
+        "WHERE progressive = :progressive;"
+    );
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        return false;
+    }
+
+    return true;
 }
 
 int Tomb::getLastProgresive() {
