@@ -141,4 +141,7 @@
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\.gitignore" />
+  </ItemGroup>
 </Project>

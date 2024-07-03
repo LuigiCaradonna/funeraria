@@ -101,8 +101,8 @@ $RECYCLE.BIN/
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # *.sln
-# *.vcxproj
-# *.vcxproj.filters
+*.vcxproj
+*.vcxproj.filters
 
 # User-specific files
 *.rsuser
@@ -500,3 +500,4 @@ FodyWeavers.xsd
 [Dd]ocs
 *.sql
 *.db
+config.cfg
