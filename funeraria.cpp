@@ -36,6 +36,9 @@ Funeraria::Funeraria(QWidget* parent)
     else {
         this->ui.setupUi(this);
 
+        // Load the application stylesheet
+        this->loadStyleSheet();
+
         // Sets an icon for the window
         this->setWindowIcon(QIcon("funeraria.png"));
 
@@ -115,6 +118,8 @@ Funeraria::Funeraria(QWidget* parent)
         show_items_mapper->setMapping(this->ui.actionLList, "lamps");
         show_items_mapper->setMapping(this->ui.actionFList, "flames");
         this->connect(show_items_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
+
+
 
         // Create a qPushButton for each client for the quick access bar
         this->updateQuickAccessNames();
@@ -844,14 +849,14 @@ void Funeraria::slotAccessoriesToMount()
             else {
                 this->row_bg = this->row_odd;
             }
-
+            
             deceased->setBackground(QBrush(row_bg));
             material->setBackground(QBrush(row_bg));
             vase->setBackground(QBrush(row_bg));
             lamp->setBackground(QBrush(row_bg));
             flame->setBackground(QBrush(row_bg));
             client->setBackground(QBrush(row_bg));
-
+            
             this->ui.tableWidget->setItem(i, 0, deceased);
             this->ui.tableWidget->setItem(i, 1, material);
             this->ui.tableWidget->setItem(i, 2, vase);
@@ -965,6 +970,16 @@ void Funeraria::slotSetPaidTomb()
     delete tomb;
 }
 /********** PRIVATE FUNCTIONS **********/
+
+void Funeraria::loadStyleSheet()
+{
+    QFile file("style.qss");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+
+    qApp->setStyleSheet(styleSheet);
+    file.close();
+}
 
 void Funeraria::clearTable()
 {

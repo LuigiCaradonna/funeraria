@@ -256,6 +256,13 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
+     * Loads the stylesheet(s) for the application.
+     *
+     * @return void
+     */
+    void loadStyleSheet();
+
+    /*
      * Clears the table content and deletes all the created pointers.
      *
      * @return void
