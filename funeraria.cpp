@@ -36,9 +36,6 @@ Funeraria::Funeraria(QWidget* parent)
     else {
         this->ui.setupUi(this);
 
-        // Load the application stylesheet
-        this->loadStyleSheet();
-
         // Sets an icon for the window
         this->setWindowIcon(QIcon("funeraria.png"));
 
@@ -970,16 +967,6 @@ void Funeraria::slotSetPaidTomb()
     delete tomb;
 }
 /********** PRIVATE FUNCTIONS **********/
-
-void Funeraria::loadStyleSheet()
-{
-    QFile file("style.qss");
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-
-    qApp->setStyleSheet(styleSheet);
-    file.close();
-}
 
 void Funeraria::clearTable()
 {

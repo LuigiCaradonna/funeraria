@@ -1,9 +1,0 @@
-QTableView {
-    background-color: #ffffff;
-    gridline-color: #dcdcdc;
-}
-
-QTableView::item {
-    background-color: #ffffff;
-    color: #333333;
-}
