@@ -1023,7 +1023,7 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
     // Reset the table's content
     this->clearTable();
 
-    QStringList headers{ "Numero", "Defunto", "Materiale", "€", "Pagata", "Note", "Accessori",
+    QStringList headers{"Numero", "Defunto", "Materiale", "€", "Pagata", "Note", "Accessori",
         "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "", "", ""};
 
     this->ui.tableWidget->setRowCount(tombs.size());
@@ -1033,8 +1033,8 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
-    this->ui.tableWidget->setColumnWidth(1, 220);   // Name
-    this->ui.tableWidget->setColumnWidth(2, 150);   // Material
+    this->ui.tableWidget->setColumnWidth(1, 200);   // Name
+    this->ui.tableWidget->setColumnWidth(2, 145);   // Material
     this->ui.tableWidget->setColumnWidth(3, 45);    // Price
     this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
     this->ui.tableWidget->setColumnWidth(5, 600);   // Notes
