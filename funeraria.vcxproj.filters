@@ -143,8 +143,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="D:\.gitignore" />
-    <None Include="style.qss">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
