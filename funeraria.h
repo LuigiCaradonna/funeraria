@@ -253,6 +253,8 @@ private:
     // Direction to use to sort the selected table's column (ASC/DESC)
     QString sort_column_direction = "";
 
+    const QString not_engraved = "No";
+
     /********** PRIVATE FUNCTIONS **********/
 
     /*

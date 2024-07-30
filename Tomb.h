@@ -229,6 +229,8 @@ private:
     QSqlDatabase db;
     Settings* settings;
 
+    const QString not_engraved = "No";
+
     /********** PRIVATE FUNCTIONS **********/
 
 };

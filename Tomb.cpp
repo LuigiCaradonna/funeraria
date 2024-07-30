@@ -271,7 +271,13 @@ QList<QMap<QString, QString>> Tomb::tombsToPay()
 
 bool Tomb::checkDates(const QString& order, const QString& proof, const QString& confirmation, const QString& engraving, const QString& delivery)
 {
+
+    // About the dates when updating a tomb, check for the "-" character which is set when a NULL is found
+    // in the database when retrieving the dates (NULLs are related to the data loss in the past)
+
+    // The dates can be empty, they also can have not a valid format
     if (order.trimmed() == "" || !Helpers::isValidItaDate(order.trimmed())) {
+        // But if the format is not correct, only the string "-" is acceptable 
         if (order.trimmed() != "-") {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
@@ -355,7 +361,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
     }
 
     // If the engraving date is set
-    if (engraving.trimmed() != "" && engraving.trimmed() != "-" && engraving.trimmed() != "N/N") {
+    if (engraving.trimmed() != "" && engraving.trimmed() != "-") {
         // The confirmation date must be set to set the engraving date
         if (confirmation.trimmed() == "" || confirmation.trimmed() == "-") {
             QMessageBox message;
@@ -500,9 +506,6 @@ bool Tomb::store(
         return false;
     }
 
-    // About the dates when updating a tomb, check for the "-" character which is set when a NULL is found
-    // in the database when retrieving the dates (NULLs related to the data loss in the past)
-
     if (!this->checkDates(ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at)) {
         return false;
     }
@@ -580,8 +583,8 @@ bool Tomb::store(
     query.bindValue(":proofed_at", QDate::fromString(proofed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":confirmed_at", QDate::fromString(confirmed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
 
-    if (engraved_at.trimmed() == "N/N") {
-        query.bindValue(":engraved_at", "N/N");
+    if (engraved_at.trimmed() == this->not_engraved) {
+        query.bindValue(":engraved_at", this->not_engraved);
     }
     else {
         query.bindValue(":engraved_at", QDate::fromString(engraved_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
@@ -716,8 +719,8 @@ bool Tomb::update(
     query.bindValue(":proofed_at", QDate::fromString(proofed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":confirmed_at", QDate::fromString(confirmed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
 
-    if (engraved_at.trimmed() == "N/N") {
-        query.bindValue(":engraved_at", "N/N");
+    if (engraved_at.trimmed() == this->not_engraved) {
+        query.bindValue(":engraved_at", this->not_engraved);
     }
     else {
         query.bindValue(":engraved_at", QDate::fromString(engraved_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));

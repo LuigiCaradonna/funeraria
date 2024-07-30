@@ -96,6 +96,7 @@ private:
     const QString table = "tombs";
     const QString btn_create_text = "Crea";
     const QString btn_update_text = "Aggiorna";
+    const QString not_engraved = "No";
     QSqlDatabase db;
     QWidget* parent;
     int progressive;

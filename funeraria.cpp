@@ -1075,8 +1075,8 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
         confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
         QString engrave_date;
-        if (tombs[i]["engraved_at"] == "N/N") {
-            engrave_date = "N/N";
+        if (tombs[i]["engraved_at"] == this->not_engraved) {
+            engrave_date = this->not_engraved;
         }
         else {
             engrave_date = Helpers::dateSqlToIta(tombs[i]["engraved_at"]);

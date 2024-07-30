@@ -96,7 +96,7 @@ void TombUi::slotSetDelivered()
 
 void TombUi::slotSetNoEngraving()
 {
-    this->ui.leEngravedAt->setText("N/N");
+    this->ui.leEngravedAt->setText(this->not_engraved);
 }
 
 void TombUi::slotSave()
@@ -238,11 +238,11 @@ void TombUi::updateForm()
 
         QString engraved_at;
 
-        if (tomb_details["engraved_at"] != "N/N") {
+        if (tomb_details["engraved_at"] != this->not_engraved) {
             engraved_at = Helpers::dateSqlToIta(tomb_details["engraved_at"]);
         }
         else {
-            engraved_at = "N/N";
+            engraved_at = this->not_engraved;
         }
 
         // Fill the form fields with the selected tomb's data
