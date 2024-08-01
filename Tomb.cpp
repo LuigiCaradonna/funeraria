@@ -372,37 +372,44 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             return false;
         }
 
-        if (!Helpers::isValidItaDate(engraving.trimmed())) {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Warning);
-            message.setText("La data dell'incisione non è valida");
-            message.exec();
-            return false;
-        }
+        // The dates must be checked only if the tomb had to be engraved
+        if (engraving.trimmed() != this->not_engraved) {
 
-        // The engraving date must not preced the confirmation
-        if (Helpers::compareItaDates(engraving.trimmed(), confirmation.trimmed()) < 0) {
-            QMessageBox message;
-            // Create and add the buttons to the QMessageBox
-            QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
-            QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
-
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Warning);
-            message.setText("La data dell'incisione è antecedente a quella della conferma");
-            message.exec();
-
-            // The user has been notified about the inconsistency, 
-            // but can still decide to accept it clicking on "confirmBtn" button
-            if (message.clickedButton() == (QAbstractButton*)abortBtn) {
+            if (!Helpers::isValidItaDate(engraving.trimmed())) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Warning);
+                message.setText("La data dell'incisione non è valida");
+                message.exec();
                 return false;
+            }
+
+            // The engraving date must not preced the confirmation
+            if (Helpers::compareItaDates(engraving.trimmed(), confirmation.trimmed()) < 0) {
+                QMessageBox message;
+                // Create and add the buttons to the QMessageBox
+                QPushButton* confirmBtn = message.addButton("Continua", QMessageBox::ActionRole);
+                QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
+
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Warning);
+                message.setText("La data dell'incisione è antecedente a quella della conferma");
+                message.exec();
+
+                // The user has been notified about the inconsistency, 
+                // but can still decide to accept it clicking on "confirmBtn" button
+                if (message.clickedButton() == (QAbstractButton*)abortBtn) {
+                    return false;
+                }
             }
         }
     }
 
-    // If the delivery date is set
-    if (delivery.trimmed() != "" && delivery.trimmed() != "-" && delivery.trimmed() != "Consegnata") {
+    // If the delivery date is set and the tomb was engraved (it has an engraving date)
+    if (delivery.trimmed() != "" && 
+        delivery.trimmed() != "-" && 
+        delivery.trimmed() != "Consegnata" &&
+        engraving.trimmed() != this->not_engraved) {
         // The engraving date must be set to set delivery date
         if (engraving.trimmed() == "" || engraving.trimmed() == "-") {
             QMessageBox message;
