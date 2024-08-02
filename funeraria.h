@@ -57,8 +57,17 @@ protected slots:
 
     /*
      * Iterates over the selected cells, sums their content and shows a dialog containig the result.
+     *
+     * @return void
      */
     void slotSumSelectedPrices();
+
+    /*
+     * Iterates over the selected rows and gets informations to save a list containing the data of the tombs to be paid.
+     * 
+     * @return void
+     */
+    void slotPrintToPayList();
 
     /*
      * Sorts the table's rows according to the clicked column name.

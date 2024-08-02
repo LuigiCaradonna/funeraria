@@ -150,9 +150,11 @@ void Funeraria::slotShowContextMenu(const QPoint& pos) {
 
     // Create the actions according to what is the selection or the point where clicked
     QAction* sumPrices = this->context_menu->addAction("Somma i prezzi selezionati");
+    QAction* printList = this->context_menu->addAction("Genera lista");
     
     // Connect actions to slots
     connect(sumPrices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
+    connect(printList, &QAction::triggered, this, &Funeraria::slotPrintToPayList);
 
     // Position where to show the context menu
     this->context_menu->popup(this->ui.tableWidget->viewport()->mapToGlobal(pos));
@@ -192,6 +194,59 @@ void Funeraria::slotSumSelectedPrices() {
     message.setIcon(QMessageBox::Information);
     message.setText("La somma dei " +  QString::number(prices) + " prezzi selezionti è: € " + QString::number(sum));
     message.exec();
+}
+
+void Funeraria::slotPrintToPayList() {
+    QList<QTableWidgetItem*> items = this->ui.tableWidget->selectedItems();
+
+    if (items.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Nessun lavoro selezionato");
+        message.exec();
+        return;
+    }
+
+    // Get the top left and bottom right index of any selection made on the table
+    QList<QTableWidgetSelectionRange> ranges = this->ui.tableWidget->selectedRanges();
+
+    // Filter to show only txt files
+    QString filter = "txt(*.txt)";
+    QString filename = QFileDialog::getSaveFileName(this, tr("save_to"), "", filter);
+    QFile listFile(filename);
+
+    QTextStream out(&listFile);
+
+    if (!listFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Non è possibile aprire il file selezionato, verificare che il percorso non sia protetto da scrittura.");
+        message.exec();
+        return;
+    }
+
+    // For all the selections
+    for (int i = 0; i < ranges.size(); i++) {
+        // Loop through the first and last row
+        for (int j = ranges[i].topRow(); j <= ranges[i].bottomRow(); j++) {
+            // Print the data of each row
+            out << this->ui.tableWidget->item(j, 1)->data(Qt::DisplayRole).toString() + " "; // Name
+            out << this->ui.tableWidget->item(j, 2)->data(Qt::DisplayRole).toString() + " "; // Material
+            out << this->ui.tableWidget->item(j, 5)->data(Qt::DisplayRole).toString() + " "; // Notes
+            out << "€ " + this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toString() + "\n\n"; // Price
+        }
+    }
+
+    listFile.close();
+
+    QMessageBox message;
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Information);
+    message.setText("Il file è stato generato.");
+    message.exec();
+    return;
 }
 
 void Funeraria::slotHeaderClicked(int logicalIndex) {
