@@ -231,10 +231,17 @@ void Funeraria::slotPrintToPayList() {
     for (int i = 0; i < ranges.size(); i++) {
         // Loop through the first and last row
         for (int j = ranges[i].topRow(); j <= ranges[i].bottomRow(); j++) {
-            // Print the data of each row
-            out << this->ui.tableWidget->item(j, 1)->data(Qt::DisplayRole).toString() + " "; // Name
-            out << this->ui.tableWidget->item(j, 2)->data(Qt::DisplayRole).toString() + " "; // Material
-            out << this->ui.tableWidget->item(j, 5)->data(Qt::DisplayRole).toString() + " "; // Notes
+            // If a name is defined, the material and the description are not necessary
+            if (this->ui.tableWidget->item(j, 1)->data(Qt::DisplayRole).toString() != this->name_not_defined) {
+                // Print the data of each row
+                out << this->ui.tableWidget->item(j, 1)->data(Qt::DisplayRole).toString() + " "; // Name
+            }
+            else {
+                // Print the data of each row
+                out << this->ui.tableWidget->item(j, 2)->data(Qt::DisplayRole).toString() + " "; // Material
+                out << this->ui.tableWidget->item(j, 5)->data(Qt::DisplayRole).toString() + " "; // Notes
+            }
+
             out << "€ " + this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toString() + "\n\n"; // Price
         }
     }

@@ -263,6 +263,7 @@ private:
     QString sort_column_direction = "";
 
     const QString not_engraved = "No";
+    const QString name_not_defined = "Non definito";
 
     /********** PRIVATE FUNCTIONS **********/
 
