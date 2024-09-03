@@ -108,7 +108,7 @@ void TombUi::slotSave()
             this->ui.leProgressive->text().toInt(),
             client->getId(this->ui.cbClient->currentText()),
             this->ui.leName->text(),
-            this->ui.leAdditionalNames->text(),
+            this->ui.leEngravedNames->text(),
             this->ui.rbToEngrave->isChecked(),
             this->ui.lePrice->text().toDouble(),
             this->ui.chbPaid->isChecked(),
@@ -135,7 +135,7 @@ void TombUi::slotSave()
             this->ui.leProgressive->text().toInt(),
             client->getId(this->ui.cbClient->currentText()),
             this->ui.leName->text(),
-            this->ui.leAdditionalNames->text(),
+            this->ui.leEngravedNames->text(),
             this->ui.rbToEngrave->isChecked(),
             this->ui.lePrice->text().toDouble(),
             this->ui.chbPaid->isChecked(),
@@ -249,7 +249,7 @@ void TombUi::updateForm()
         this->ui.leProgressive->setText(tomb_details["progressive"]);
         this->ui.cbClient->addItems(client_names);
         this->ui.leName->setText(tomb_details["name"]);
-        this->ui.leAdditionalNames->setText(tomb_details["additional_names"]);
+        this->ui.leEngravedNames->setText(tomb_details["engraved_names"]);
         this->ui.rbToEngrave->setChecked(tomb_details["engraved"] == "1");
         this->ui.rbNotToEngrave->setChecked(tomb_details["engraved"] == "0");
         this->ui.lePrice->setText(tomb_details["price"]);
@@ -311,7 +311,7 @@ void TombUi::updateForm()
         this->ui.leProgressive->setText(QString::number(tomb->getLastProgresive() + 1));
         this->ui.cbClient->addItems(client_names);
         this->ui.leName->setText("");
-        this->ui.leAdditionalNames->setText("");
+        this->ui.leEngravedNames->setText("");
         this->ui.rbToEngrave->setChecked(true);
         this->ui.rbNotToEngrave->setChecked(false);
         this->ui.lePrice->setText("0");

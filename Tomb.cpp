@@ -78,7 +78,7 @@ QList<QMap<QString, QString>> Tomb::getList(
         tomb["client_id"] = query.value("client_id").toString();
         tomb["name"] = query.value("name").toString();
         tomb["material"] = query.value("material_code").toString();
-        tomb["additional_names"] = query.value("additional_names").toString();
+        tomb["engraved_names"] = query.value("engraved_names").toString();
         tomb["engraved"] = query.value("engraved").toString();
         tomb["price"] = query.value("price").toString();
         tomb["paid"] = query.value("paid").toString();
@@ -107,7 +107,7 @@ QMap<QString, QString> Tomb::getDetails(const int& progressive)
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT "
-        "tombs.progressive, tombs.client_id, clients.name AS client_name, tombs.name, tombs.additional_names,"
+        "tombs.progressive, tombs.client_id, clients.name AS client_name, tombs.name, tombs.engraved_names,"
         "tombs.engraved, tombs.price, tombs.paid, tombs.material_code, materials.name AS material_name, tombs.vase_code, "
         "vases.name AS vase_name, tombs.lamp_code, lamps.name AS lamp_name, tombs.flame_code, "
         "flames.name AS flame_name, tombs.notes, tombs.accessories_mounted,"
@@ -135,7 +135,7 @@ QMap<QString, QString> Tomb::getDetails(const int& progressive)
         tomb["client_id"] = query.value("client_id").toString();
         tomb["client"] = query.value("client_name").toString();
         tomb["name"] = query.value("name").toString();
-        tomb["additional_names"] = query.value("additional_names").toString();
+        tomb["engraved_names"] = query.value("engraved_names").toString();
         tomb["engraved"] = query.value("engraved").toString();
         tomb["price"] = query.value("price").toString();
         tomb["paid"] = query.value("paid").toString();
@@ -456,7 +456,7 @@ bool Tomb::store(
     const int& progressive,
     const int& client_id,
     const QString& name,
-    const QString& additional_names,
+    const QString& engraved_names,
     const bool& engraved,
     const double& price,
     const bool& paid,
@@ -563,20 +563,22 @@ bool Tomb::store(
         }
     }
 
+    // Store the tomb into the database
+
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare(
         "INSERT INTO " + this->table + " "
-        "(progressive, client_id, name, additional_names, engraved, price, paid, material_code, vase_code, lamp_code, "
+        "(progressive, client_id, name, engraved_names, engraved, price, paid, material_code, vase_code, lamp_code, "
         "flame_code, notes, accessories_mounted, ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at, "
         "created_at, edited_at) "
-        "VALUES (:progressive, :client_id, :name, :additional_names, :engraved, :price, :paid, :material_code, :vase_code, :lamp_code, "
+        "VALUES (:progressive, :client_id, :name, :engraved_names, :engraved, :price, :paid, :material_code, :vase_code, :lamp_code, "
         ":flame_code, :notes, :accessories_mounted, :ordered_at, :proofed_at, :confirmed_at, :engraved_at, :delivered_at, "
         ":created_at, :edited_at)"
     );
     query.bindValue(":progressive", progressive);
     query.bindValue(":client_id", client_id);
     query.bindValue(":name", name.trimmed());
-    query.bindValue(":additional_names", additional_names.trimmed());
+    query.bindValue(":engraved_names", (engraved_names.trimmed() == "") ? name.trimmed() : engraved_names.trimmed());
     query.bindValue(":engraved", engraved);
     query.bindValue(":price", price);
     query.bindValue(":paid", paid);
@@ -630,7 +632,7 @@ bool Tomb::update(
     const int& progressive,
     const int& client_id,
     const QString& name,
-    const QString& additional_names,
+    const QString& engraved_names,
     const bool& engraved,
     const double& price,
     const bool& paid,
@@ -702,7 +704,7 @@ bool Tomb::update(
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare(
         "UPDATE " + this->table + " "
-        "SET progressive = :progressive, client_id = :client_id, name = :name, additional_names = :additional_names, "
+        "SET progressive = :progressive, client_id = :client_id, name = :name, engraved_names = :engraved_names, "
         "engraved = :engraved, price = :price, paid = :paid, material_code = :material_code, vase_code = :vase_code, "
         "lamp_code = :lamp_code, flame_code = :flame_code, notes = :notes, accessories_mounted = :accessories_mounted, "
         "ordered_at = :ordered_at, proofed_at = :proofed_at, confirmed_at = :confirmed_at, engraved_at = :engraved_at, "
@@ -712,7 +714,7 @@ bool Tomb::update(
     query.bindValue(":progressive", progressive);
     query.bindValue(":client_id", client_id);
     query.bindValue(":name", name.trimmed());
-    query.bindValue(":additional_names", additional_names.trimmed());
+    query.bindValue(":engraved_names", engraved_names.trimmed());
     query.bindValue(":engraved", engraved);
     query.bindValue(":price", price);
     query.bindValue(":paid", paid);

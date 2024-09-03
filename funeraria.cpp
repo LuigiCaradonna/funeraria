@@ -6,12 +6,6 @@ Funeraria::Funeraria(QWidget* parent)
     : QMainWindow(parent)
 {
     /*
-    QFontMetrics fm(font);
-    int pixelsWide = fm.horizontalAdvance("What's the advance width of this text?");
-    int pixelsHigh = fm.height();
-    */
-
-    /*
      * Before to setup the application: check the config file and the database
      */
 
@@ -44,7 +38,6 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.tableWidget->setFont(font);
         this->connect(this->ui.tableWidget->horizontalHeader(), &QHeaderView::sectionClicked, this, &Funeraria::slotHeaderClicked);
 
-        // QMenu* context_menu = new QMenu(this);
         // Connect the customContextMenuRequested signal to a slot
         connect(this->ui.tableWidget, &QTableWidget::customContextMenuRequested, this, &Funeraria::slotShowContextMenu);
 
@@ -61,7 +54,7 @@ Funeraria::Funeraria(QWidget* parent)
         // Insert the clients' names into the combobox
         this->updateClientsCombobox();
 
-        // Populate the years combo box
+        // Populate the years combo box, years go back until 2020
         this->ui.cbYear->addItem("Tutti");
         QString this_year = QDate::currentDate().toString("yyyy");
         for (int i = this_year.toInt(); i >= 2020; i--) {
@@ -80,9 +73,6 @@ Funeraria::Funeraria(QWidget* parent)
         // Signal emitted from the menu Files
         this->connect(this->ui.actionBackupCSV, SIGNAL(triggered()), this, SLOT(slotBackupDbToCSV()));
         this->connect(this->ui.actionSettings, SIGNAL(triggered()), this, SLOT(slotShowSettings()));
-
-        // Signal emitted on table cell edit
-        // this->connect(this->ui.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), SLOT(slotUpdateEntry()));
 
         // Signal emitted from the menu items
         this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
@@ -115,8 +105,6 @@ Funeraria::Funeraria(QWidget* parent)
         show_items_mapper->setMapping(this->ui.actionLList, "lamps");
         show_items_mapper->setMapping(this->ui.actionFList, "flames");
         this->connect(show_items_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
-
-
 
         // Create a qPushButton for each client for the quick access bar
         this->updateQuickAccessNames();
@@ -284,7 +272,8 @@ void Funeraria::slotHeaderClicked(int logicalIndex) {
         year = this->ui.cbYear->currentText().toInt();
     }
 
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->ui.chbEngraved->isChecked(), name, sort_by, this->sort_column_direction);
+    QList<QMap<QString, QString>> tombs = 
+        tomb->getList(client_id, year, this->ui.chbEngraved->isChecked(), name, sort_by, this->sort_column_direction);
 
     this->showClientOrders(tombs);
 
@@ -780,7 +769,7 @@ void Funeraria::slotTombsToEngrave()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Numero", "Defunto", "Materiale", "Cliente", "Conferma", ""};
+        QStringList headers{ "Numero", "Nome", "Materiale", "Cliente", "Conferma", ""};
 
         this->ui.tableWidget->setRowCount(tombs.size());
         this->ui.tableWidget->setColumnCount(headers.size());
@@ -866,7 +855,7 @@ void Funeraria::slotAccessoriesToMount()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Defunto", "Materiali", "Vasi", "Lampade", "Fiamme", "Cliente" };
+        QStringList headers{ "Nome", "Materiali", "Vasi", "Lampade", "Fiamme", "Cliente" };
 
         this->ui.tableWidget->setRowCount(accessories.size());
         this->ui.tableWidget->setColumnCount(headers.size());
@@ -954,7 +943,7 @@ void Funeraria::slotTombsNotPaid()
         // Reset the table's content
         this->clearTable();
 
-        QStringList headers{ "Defunto", "Prezzo", "Cliente" };
+        QStringList headers{ "Nome", "Prezzo", "Cliente" };
 
         this->ui.tableWidget->setRowCount(tombs.size());
         this->ui.tableWidget->setColumnCount(headers.size());
@@ -1072,7 +1061,7 @@ void Funeraria::showClientOrders(QList<QMap<QString, QString>> tombs)
     // Reset the table's content
     this->clearTable();
 
-    QStringList headers{"Numero", "Defunto", "Materiale", "€", "Pagata", "Note", "Accessori",
+    QStringList headers{"Numero", "Nome", "Materiale", "€", "Pagata", "Note", "Accessori",
         "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "", "", ""};
 
     this->ui.tableWidget->setRowCount(tombs.size());

@@ -78,7 +78,7 @@
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -156,8 +156,11 @@
            <pointsize>12</pointsize>
           </font>
          </property>
+         <property name="toolTip">
+          <string>Nome assegnato alla lapide</string>
+         </property>
          <property name="text">
-          <string>Defunto</string>
+          <string>Nome</string>
          </property>
         </widget>
        </item>
@@ -212,7 +215,7 @@
        <item>
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -245,13 +248,16 @@
            <pointsize>12</pointsize>
           </font>
          </property>
+         <property name="toolTip">
+          <string>Nomi incisi sulla lapide</string>
+         </property>
          <property name="text">
-          <string>Altri nomi</string>
+          <string>Defunto/i</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="leAdditionalNames">
+        <widget class="QLineEdit" name="leEngravedNames">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -347,7 +353,7 @@
        <item>
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1183,7 +1189,7 @@
        <item>
         <spacer name="horizontalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1252,7 +1258,7 @@
   <tabstop>leProgressive</tabstop>
   <tabstop>cbClient</tabstop>
   <tabstop>leName</tabstop>
-  <tabstop>leAdditionalNames</tabstop>
+  <tabstop>leEngravedNames</tabstop>
   <tabstop>lePrice</tabstop>
   <tabstop>chbPaid</tabstop>
   <tabstop>cbMaterial</tabstop>
