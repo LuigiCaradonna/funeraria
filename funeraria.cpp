@@ -202,6 +202,10 @@ void Funeraria::slotPrintToPayList() {
     // Filter to show only txt files
     QString filter = "txt(*.txt)";
     QString filename = QFileDialog::getSaveFileName(this, tr("save_to"), "", filter);
+
+    // If no file name is provided, stop the execution, the user just closed the dialog window
+    if (filename.trimmed() == "") return;
+
     QFile listFile(filename);
 
     QTextStream out(&listFile);
@@ -214,6 +218,8 @@ void Funeraria::slotPrintToPayList() {
         message.exec();
         return;
     }
+
+    double total = 0;
 
     // For all the selections
     for (int i = 0; i < ranges.size(); i++) {
@@ -231,8 +237,12 @@ void Funeraria::slotPrintToPayList() {
             }
 
             out << "€ " + this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toString() + "\n\n"; // Price
+
+            total += this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toDouble();
         }
     }
+
+    out << "Totale € " + QString::number(total); // Total price
 
     listFile.close();
 
