@@ -102,6 +102,62 @@ QList<QMap<QString, QString>> Tomb::getList(
     return list;
 }
 
+QMap<QString, QString> Tomb::getByProgressive(const int& progressive)
+{
+    QMap<QString, QString> tomb;
+    QSqlQuery query = QSqlQuery(this->db);
+
+    query.prepare("SELECT * FROM " + this->table + " WHERE progressive = :progressive");
+
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+        return tomb;
+    }
+
+    while (query.next()) {
+        QString mounted = "0";
+
+        // Accessories should result to be mounted also if the field is set to 0, but there were no accessories to be mounted
+        if (query.value("accessories_mounted").toString() == "1" ||
+            (query.value("vase_code").toString() == "NV" &&
+                query.value("lamp_code").toString() == "NL" &&
+                query.value("flame_code").toString() == "NF"
+                )) {
+            mounted = "1";
+        }
+
+        tomb["progressive"] = QString::number(query.value("progressive").toInt());
+        tomb["client_id"] = query.value("client_id").toString();
+        tomb["name"] = query.value("name").toString();
+        tomb["material"] = query.value("material_code").toString();
+        tomb["engraved_names"] = query.value("engraved_names").toString();
+        tomb["engraved"] = query.value("engraved").toString();
+        tomb["price"] = query.value("price").toString();
+        tomb["paid"] = query.value("paid").toString();
+        tomb["material_code"] = query.value("material_code").toString();
+        tomb["vase_code"] = query.value("vase_code").toString();
+        tomb["lamp_code"] = query.value("lamp_code").toString();
+        tomb["flame_code"] = query.value("flame_code").toString();
+        tomb["notes"] = query.value("notes").toString();
+        tomb["accessories_mounted"] = mounted;
+        tomb["ordered_at"] = query.value("ordered_at").toString();
+        tomb["proofed_at"] = query.value("proofed_at").toString();
+        tomb["confirmed_at"] = query.value("confirmed_at").toString();
+        tomb["engraved_at"] = query.value("engraved_at").toString();
+        tomb["delivered_at"] = query.value("delivered_at").toString();
+        tomb["created_at"] = query.value("created_at").toString();
+        tomb["edited_at"] = query.value("edited_at").toString();
+    }
+
+    return tomb;
+}
+
 QMap<QString, QString> Tomb::getDetails(const int& progressive)
 {
     QMap<QString, QString> tomb;

@@ -5,6 +5,7 @@
 #include <QUrl>
 #include <QSignalMapper>
 #include <QMenu>
+#include <QInputDialog>
 #include "ui_funeraria.h"
 #include "DatabaseManager.h"
 #include "Config.h"
@@ -209,6 +210,13 @@ protected slots:
     void slotTombsNotPaid();
 
     /*
+     * Shows a client's order given its progressive number
+     *
+     * @return void
+     */
+    void slotTombByProgressive();
+
+    /*
      * Sets a tomb as paid
      *
      * @return void
@@ -277,11 +285,20 @@ private:
     /*
      * Fills the table to show the client's orders.
      *
-     * @param QList<QMap<QString, QString>> tombs   - List of the client's orders
+     * @param const QList<QMap<QString, QString>> &tombs   - List of the client's orders
      *
      * @return void
      */
-    void showClientOrders(QList<QMap<QString, QString>> tombs);
+    void showClientOrders(const QList<QMap<QString, QString>>& tombs);
+
+    /*
+     * Fills the table to show the client's orders.
+     *
+     * @param const QList<QMap<QString, QString>> &tombs   - List of the client's orders
+     *
+     * @return void
+     */
+    void showClientOrder(const QMap<QString, QString>& tomb);
 
     /*
      * Updates the combobox containing the clients.
@@ -312,4 +329,23 @@ private:
      * @return void
      */
     void sortColumnDirection(const QString& column);
+
+    /*
+     * Sets up the table to show a client's orders.
+     *
+     * @param tombs_Count  - Number of tombs to show
+     *
+     * @return void
+     */
+    void setupClientOrdersTable(int tombs_count);
+
+    /*
+     * Adds a row to the table that shows the client's orders.
+     *
+     * @param QMap<QString, QString> &tomb  - Tomb's data
+     * @param int row  - Row's number
+     *
+     * @return void
+     */
+    void addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row);
 };

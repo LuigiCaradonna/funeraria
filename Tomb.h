@@ -53,6 +53,15 @@ public:
     );
 
     /*
+     * Gets the Tombs matching the given progressive number
+     *
+     * @param const int& progressive    - Tomb's progressive number
+     *
+     * @return  QMap<QString, QString>  - The Tomb's details
+     */
+    QMap<QString, QString> getByProgressive(const int& progressive);
+
+    /*
      * Gets the given tomb's datails joined to the related tables
      *
      * @param   int - Tomb's progressive number

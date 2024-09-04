@@ -211,7 +211,7 @@
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -258,7 +258,7 @@
            <bool>true</bool>
           </property>
           <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
+           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
           </property>
          </widget>
         </item>
@@ -277,7 +277,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAccessories">
@@ -330,13 +330,14 @@
     </property>
     <addaction name="actionTNew"/>
    </widget>
-   <widget class="QMenu" name="menuReport">
+   <widget class="QMenu" name="menuTools">
     <property name="title">
-     <string>Report</string>
+     <string>Strumenti</string>
     </property>
     <addaction name="actionTEngrave"/>
     <addaction name="actionMAccessories"/>
     <addaction name="actionTPay"/>
+    <addaction name="actionSearchByProgressive"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -349,7 +350,7 @@
    <addaction name="menuClienti"/>
    <addaction name="menuAccessories"/>
    <addaction name="menuLapidi"/>
-   <addaction name="menuReport"/>
+   <addaction name="menuTools"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -468,6 +469,11 @@
   <action name="actionBackupCSV">
    <property name="text">
     <string>Backup CSV</string>
+   </property>
+  </action>
+  <action name="actionSearchByProgressive">
+   <property name="text">
+    <string>Cerca per numero</string>
    </property>
   </action>
  </widget>
