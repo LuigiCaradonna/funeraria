@@ -329,14 +329,9 @@
      <string>Lapidi</string>
     </property>
     <addaction name="actionTNew"/>
-   </widget>
-   <widget class="QMenu" name="menuTools">
-    <property name="title">
-     <string>Strumenti</string>
-    </property>
     <addaction name="actionTEngrave"/>
-    <addaction name="actionMAccessories"/>
     <addaction name="actionTPay"/>
+    <addaction name="actionMAccessories"/>
     <addaction name="actionSearchByProgressive"/>
    </widget>
    <widget class="QMenu" name="menuFile">
@@ -350,7 +345,6 @@
    <addaction name="menuClienti"/>
    <addaction name="menuAccessories"/>
    <addaction name="menuLapidi"/>
-   <addaction name="menuTools"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -453,12 +447,12 @@
   </action>
   <action name="actionTPay">
    <property name="text">
-    <string>Lapidi da saldare</string>
+    <string>Da saldare</string>
    </property>
   </action>
   <action name="actionTEngrave">
    <property name="text">
-    <string>Lapidi da incidere</string>
+    <string>Da incidere</string>
    </property>
   </action>
   <action name="actionSettings">
