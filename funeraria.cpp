@@ -13,7 +13,7 @@ Funeraria::Funeraria(QWidget* parent)
     // DatabaseManager needs to read the configuration file and we want to be sure
     // that the configuration is correctly set.
     this->config = new Config();
-
+    
     // The config file is not valid
     if (!this->config->loaded) {
         // Close the application
@@ -774,47 +774,36 @@ void Funeraria::slotTombsToEngrave()
     this->is_table_sortable = false;
 
     if (tombs.size() > 0) {
-        // Block the signals while building the table
-        const QSignalBlocker blocker(this->ui.tableWidget);
-
-        this->current_table = "tombs";
-
-        // Reset the table's content
-        this->clearTable();
-
-        QStringList headers{ "Numero", "Nome", "Materiale", "Cliente", "Conferma", ""};
-
-        this->ui.tableWidget->setRowCount(tombs.size());
-        this->ui.tableWidget->setColumnCount(headers.size());
-        this->ui.tableWidget->setHorizontalHeaderLabels(headers);
-
-        this->ui.tableWidget->setColumnWidth(0, 90);
-        this->ui.tableWidget->setColumnWidth(1, 250);
-        this->ui.tableWidget->setColumnWidth(2, 250);
-        this->ui.tableWidget->setColumnWidth(3, 200);
-        this->ui.tableWidget->setColumnWidth(4, 100);
-        this->ui.tableWidget->setColumnWidth(5, 100);
+        this->setupTombsToEngraveTable(tombs.size());
 
         int row_number = 1;
         for (int i = 0; i < tombs.size(); i++) {
             QTableWidgetItem* progressive = new QTableWidgetItem(tombs[i]["progressive"]);
             // Set the field as not editable
             progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
             QTableWidgetItem* deceased = new QTableWidgetItem(tombs[i]["deceased"]);
             // Set the field as not editable
             deceased->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
             QTableWidgetItem* material = new QTableWidgetItem(tombs[i]["material"]);
             // Set the field as not editable
             material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
             QTableWidgetItem* client = new QTableWidgetItem(tombs[i]["client"]);
             // Set the field as not editable
             client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-            QTableWidgetItem* confirmed_at = new QTableWidgetItem(tombs[i]["confirmed_at"]);
+
+            QString date = Helpers::dateSqlToIta(tombs[i]["confirmed_at"]);
+            QTableWidgetItem* confirmed_at = new QTableWidgetItem(date);
             // Set the field as not editable
             confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
             QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
             pb_details->setText("Dettagli");
+
+            QPushButton* pb_set_engraved = new QPushButton(this->ui.tableWidget);
+            pb_set_engraved->setText("Incisa");
 
             if (row_number % 2 == 0) {
                 this->row_bg = this->row_even;
@@ -864,9 +853,6 @@ void Funeraria::slotAccessoriesToMount()
 
         int row_number = 1;
         for (int i = 0; i < accessories.size(); i++) {
-            QPushButton* pb_set_mounted = new QPushButton(this->ui.tableWidget);
-            pb_set_mounted->setText("Montati");
-
             QTableWidgetItem* progressive = new QTableWidgetItem(accessories[i]["progressive"]);
             // Set the field as not editable
             progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -894,6 +880,9 @@ void Funeraria::slotAccessoriesToMount()
             QTableWidgetItem* client = new QTableWidgetItem(accessories[i]["client"]);
             // Set the field as not editable
             client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+            QPushButton* pb_set_mounted = new QPushButton(this->ui.tableWidget);
+            pb_set_mounted->setText("Montati");
 
             if (row_number % 2 == 0) {
                 this->row_bg = this->row_even;
@@ -946,35 +935,28 @@ void Funeraria::slotTombsNotPaid()
     this->is_table_sortable = false;
 
     if (tombs.size() > 0) {
-        // Block the signals while building the table
-        const QSignalBlocker blocker(this->ui.tableWidget);
-
-        this->current_table = "tombs";
-
-        // Reset the table's content
-        this->clearTable();
-
-        QStringList headers{ "Nome", "Prezzo", "Cliente" };
-
-        this->ui.tableWidget->setRowCount(tombs.size());
-        this->ui.tableWidget->setColumnCount(headers.size());
-        this->ui.tableWidget->setHorizontalHeaderLabels(headers);
-
-        this->ui.tableWidget->setColumnWidth(0, 250);
-        this->ui.tableWidget->setColumnWidth(1, 90);
-        this->ui.tableWidget->setColumnWidth(2, 200);
+        this->setupTombsNotPaidTable(tombs.size());
 
         int row_number = 1;
         for (int i = 0; i < tombs.size(); i++) {
+            QTableWidgetItem* progressive = new QTableWidgetItem(tombs[i]["progressive"]);
+            // Set the field as not editable
+            progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
             QTableWidgetItem* deceased = new QTableWidgetItem(tombs[i]["deceased"]);
             // Set the field as not editable
             deceased->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
             QTableWidgetItem* price = new QTableWidgetItem(tombs[i]["price"]);
             // Set the field as not editable
             price->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
             QTableWidgetItem* client = new QTableWidgetItem(tombs[i]["client"]);
             // Set the field as not editable
             client->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+            QPushButton* pb_set_paid = new QPushButton(this->ui.tableWidget);
+            pb_set_paid->setText("Pagata");
 
             if (row_number % 2 == 0) {
                 this->row_bg = this->row_even;
@@ -983,13 +965,18 @@ void Funeraria::slotTombsNotPaid()
                 this->row_bg = this->row_odd;
             }
 
+            progressive->setBackground(QBrush(row_bg));
             deceased->setBackground(QBrush(row_bg));
             price->setBackground(QBrush(row_bg));
             client->setBackground(QBrush(row_bg));
 
-            this->ui.tableWidget->setItem(i, 0, deceased);
-            this->ui.tableWidget->setItem(i, 1, price);
-            this->ui.tableWidget->setItem(i, 2, client);
+            this->ui.tableWidget->setItem(i, 0, progressive);
+            this->ui.tableWidget->setItem(i, 1, deceased);
+            this->ui.tableWidget->setItem(i, 2, price);
+            this->ui.tableWidget->setItem(i, 3, client);
+            this->ui.tableWidget->setCellWidget(i, 4, pb_set_paid); // Set mounted accessories button
+
+            this->connect(pb_set_paid, &QPushButton::clicked, this, &Funeraria::slotSetPaidTomb);
 
             row_number++;
         }
@@ -1000,6 +987,8 @@ void Funeraria::slotTombsNotPaid()
         message.setIcon(QMessageBox::Information);
         message.setText("Non risultano lapidi da pagare.");
         message.exec();
+
+        this->setupTombsNotPaidTable(0);
     }
 
     delete tomb;
@@ -1047,6 +1036,7 @@ void Funeraria::slotSetPaidTomb()
     
     delete tomb;
 }
+
 void Funeraria::slotSetAccessoriesMounted()
 {
     Tomb* tomb = new Tomb(this->db->db);
@@ -1218,34 +1208,6 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
 
 }
 
-void Funeraria::setupAccessoriesToMountTable(int tombs_count)
-{
-    this->current_table = "accessories";
-
-    // Block the signals while building the table
-    const QSignalBlocker blocker(this->ui.tableWidget);
-
-    // Reset the table's content
-    this->clearTable();
-
-    QStringList headers{ "Numero", "Nome", "Materiale", "Vaso", "Lampada", "Fiamma", "Cliente", "Azioni" };
-
-    this->ui.tableWidget->setRowCount(tombs_count);
-    this->ui.tableWidget->setColumnCount(headers.size());
-    // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
-
-    this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
-    this->ui.tableWidget->setColumnWidth(1, 250);   // Name
-    this->ui.tableWidget->setColumnWidth(2, 300);   // Material
-    this->ui.tableWidget->setColumnWidth(3, 200);   // Vase
-    this->ui.tableWidget->setColumnWidth(4, 200);   // Lamp
-    this->ui.tableWidget->setColumnWidth(5, 200);   // Flame
-    this->ui.tableWidget->setColumnWidth(6, 300);   // Client
-    this->ui.tableWidget->setColumnWidth(7, 80);    // Actions
-}
-
 void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row)
 {
     QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
@@ -1369,4 +1331,80 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
     this->connect(pb_open_folder, &QPushButton::clicked, this, &Funeraria::slotTombFolder);
     this->connect(pb_set_paid, &QPushButton::clicked, this, &Funeraria::slotSetPaidTomb);
+}
+
+void Funeraria::setupAccessoriesToMountTable(int tombs_count)
+{
+    this->current_table = "accessories";
+
+    // Block the signals while building the table
+    const QSignalBlocker blocker(this->ui.tableWidget);
+
+    // Reset the table's content
+    this->clearTable();
+
+    QStringList headers{ "Numero", "Nome", "Materiale", "Vaso", "Lampada", "Fiamma", "Cliente", "Azioni" };
+
+    this->ui.tableWidget->setRowCount(tombs_count);
+    this->ui.tableWidget->setColumnCount(headers.size());
+    // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+    this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
+    this->ui.tableWidget->setColumnWidth(1, 250);   // Name
+    this->ui.tableWidget->setColumnWidth(2, 300);   // Material
+    this->ui.tableWidget->setColumnWidth(3, 200);   // Vase
+    this->ui.tableWidget->setColumnWidth(4, 200);   // Lamp
+    this->ui.tableWidget->setColumnWidth(5, 200);   // Flame
+    this->ui.tableWidget->setColumnWidth(6, 300);   // Client
+    this->ui.tableWidget->setColumnWidth(7, 80);    // Actions
+}
+
+void Funeraria::setupTombsNotPaidTable(int tombs_count)
+{
+    this->current_table = "tombs";
+
+    // Block the signals while building the table
+    const QSignalBlocker blocker(this->ui.tableWidget);
+
+    // Reset the table's content
+    this->clearTable();
+
+    QStringList headers{ "Numero", "Nome", "Prezzo", "Cliente", "Azioni" };
+
+    this->ui.tableWidget->setRowCount(tombs_count);
+    this->ui.tableWidget->setColumnCount(headers.size());
+    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+    this->ui.tableWidget->setColumnWidth(0, 60);
+    this->ui.tableWidget->setColumnWidth(1, 250);
+    this->ui.tableWidget->setColumnWidth(2, 90);
+    this->ui.tableWidget->setColumnWidth(3, 250);
+    this->ui.tableWidget->setColumnWidth(4, 70);
+
+}
+
+void Funeraria::setupTombsToEngraveTable(int tombs_count)
+{
+    this->current_table = "tombs";
+
+    // Block the signals while building the table
+    const QSignalBlocker blocker(this->ui.tableWidget);
+
+    // Reset the table's content
+    this->clearTable();
+
+    QStringList headers{ "Numero", "Nome", "Materiale", "Cliente", "Conferma", "" };
+
+    this->ui.tableWidget->setRowCount(tombs_count);
+    this->ui.tableWidget->setColumnCount(headers.size());
+    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+    this->ui.tableWidget->setColumnWidth(0, 90);
+    this->ui.tableWidget->setColumnWidth(1, 250);
+    this->ui.tableWidget->setColumnWidth(2, 250);
+    this->ui.tableWidget->setColumnWidth(3, 200);
+    this->ui.tableWidget->setColumnWidth(4, 100);
+    this->ui.tableWidget->setColumnWidth(5, 100);
 }

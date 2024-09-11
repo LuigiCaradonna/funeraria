@@ -347,6 +347,16 @@ private:
     void setupClientOrdersTable(int tombs_count);
 
     /*
+     * Adds a row to the table that shows the client's orders.
+     *
+     * @param QMap<QString, QString> &tomb  - Tomb's data
+     * @param int row  - Row's number
+     *
+     * @return void
+     */
+    void addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row);
+
+    /*
      * Sets up the table to show the accessories to be mounted.
      *
      * @param tombs_Count  - Number of tombs to show
@@ -356,12 +366,20 @@ private:
     void setupAccessoriesToMountTable(int tombs_count);
 
     /*
-     * Adds a row to the table that shows the client's orders.
+     * Sets up the table to show the tombs to be paid.
      *
-     * @param QMap<QString, QString> &tomb  - Tomb's data
-     * @param int row  - Row's number
+     * @param tombs_Count  - Number of tombs to show
      *
      * @return void
      */
-    void addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row);
+    void setupTombsNotPaidTable(int tombs_count);
+
+    /*
+     * Sets up the table to show the tombs to be engraved.
+     *
+     * @param tombs_Count  - Number of tombs to show
+     *
+     * @return void
+     */
+    void setupTombsToEngraveTable(int tombs_count);
 };

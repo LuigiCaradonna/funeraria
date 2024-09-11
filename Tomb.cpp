@@ -300,7 +300,8 @@ QList<QMap<QString, QString>> Tomb::tombsToPay()
     QList<QMap<QString, QString>> tombs;
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT tombs.name AS name, tombs.price AS price, clients.name AS client_name "
+    query.prepare("SELECT tombs.progressive AS progressive, tombs.name AS name, tombs.price AS price, "
+        "clients.name AS client_name "
         "FROM " + this->table + " "
         "JOIN clients ON tombs.client_id = clients.id "
         "WHERE tombs.delivered_at != '' AND tombs.delivered_at IS NOT NULL AND tombs.paid = 0 AND tombs.price != 0;"
@@ -315,6 +316,7 @@ QList<QMap<QString, QString>> Tomb::tombsToPay()
     }
     else {
         while (query.next()) {
+            tomb["progressive"] = query.value("progressive").toString();
             tomb["deceased"] = query.value("name").toString();
             tomb["price"] = query.value("price").toString();
             tomb["client"] = query.value("client_name").toString();
