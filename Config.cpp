@@ -37,7 +37,7 @@ Config::~Config()
 
 /********** PUBLIC FUNCTIONS **********/
 
-void Config::setDbPath(QString& db_path)
+void Config::setDbPath(const QString& db_path)
 {
     QJsonObject config;
 
@@ -59,7 +59,7 @@ QString Config::getDbPath()
     return db_path;
 }
 
-void Config::setArchivePath(QString& archive_path)
+void Config::setArchivePath(const QString& archive_path)
 {
     QJsonObject config;
 
@@ -118,7 +118,7 @@ QJsonObject Config::getConfigFileContent()
     return jsonDocument.object();
 }
 
-bool Config::storeConfig(QJsonObject& config)
+bool Config::storeConfig(const QJsonObject& config)
 {
     QJsonDocument json_config;
     QFile config_file(this->config_file);

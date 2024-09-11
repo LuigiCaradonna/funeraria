@@ -51,6 +51,8 @@ protected slots:
 
     /*
      * Shows a context menu when right clicking on the QTableWidget, containis the proper actions according to the current table status
+     * 
+     * @param const QPoint& pos - Mouse pointer's position where the right button was clicked
      *
      * @return void
      */
@@ -73,9 +75,11 @@ protected slots:
     /*
      * Sorts the table's rows according to the clicked column name.
      * 
+     * @param int logical_index - Clicked column index
+     * 
      * @return void
      */
-    void slotHeaderClicked(int logicalIndex);
+    void slotHeaderClicked(int logical_index);
 
     /*
      * Saves the database in CSV format
@@ -107,8 +111,6 @@ protected slots:
 
     /*
      * Shows the selected client's orders when using the quick access buttons
-     *
-     * @param   const QString& client - Name of the client to show
      *
      * @return void
      */
@@ -359,7 +361,7 @@ private:
     /*
      * Sets up the table to show the accessories to be mounted.
      *
-     * @param tombs_Count  - Number of tombs to show
+     * @param tombs_count  - Number of tombs to show
      *
      * @return void
      */

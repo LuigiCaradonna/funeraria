@@ -15,6 +15,7 @@ public:
      * Constructs the Client object.
      *
      * @param	const QSqlDatabase*	db	- Reference to the database connection
+     * @param	QWidget* parent	- Parent widget
      */
     ClientUi(const QSqlDatabase& db, QWidget* parent = nullptr);
 

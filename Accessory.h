@@ -46,13 +46,13 @@ public:
     QString getCode(const QString& name);
 
     /*
-     * Gets all the accessories' names
+     * Gets the accessory name given its code
      *
-     * @param const QString& name   - The accessory's name
+     * @param const QString& code   - The accessory's code
      *
      * @return  QString - The accessory's code id
      */
-    QString getNameFromId(const QString& code);
+    QString getNameFromCode(const QString& code);
 
     /*
      * Gets all the accessories' names

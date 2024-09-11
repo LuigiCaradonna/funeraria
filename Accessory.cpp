@@ -60,7 +60,7 @@ QString Accessory::getCode(const QString& name)
     return "";
 }
 
-QString Accessory::getNameFromId(const QString& code)
+QString Accessory::getNameFromCode(const QString& code)
 {
     QString name;
     QSqlQuery query = QSqlQuery(this->db);
@@ -84,7 +84,7 @@ QString Accessory::getNameFromId(const QString& code)
 
 QStringList Accessory::getNames()
 {
-    QStringList accessories;
+    QStringList accessories = {};
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT name FROM " + this->table);
 

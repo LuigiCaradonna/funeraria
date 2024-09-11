@@ -79,6 +79,8 @@ private:
 
     /*
      * Updates the settings according to the data provided into the dialog box.
+     * 
+     * @param const QMap<QString, QString>& setting - Setting name/value to store
      *
      * @return bool true on success, false on failure
      */

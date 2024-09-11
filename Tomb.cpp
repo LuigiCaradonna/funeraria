@@ -18,8 +18,8 @@ Tomb::~Tomb()
 /********** PUBLIC FUNCTIONS **********/
 
 QList<QMap<QString, QString>> Tomb::getList(
-    const int& client_id, 
-    const int& year,
+    const int client_id, 
+    const int year,
     bool engraved,
     QString filter,
     QString sort_by,
@@ -102,7 +102,7 @@ QList<QMap<QString, QString>> Tomb::getList(
     return list;
 }
 
-QMap<QString, QString> Tomb::getByProgressive(const int& progressive)
+QMap<QString, QString> Tomb::getByProgressive(const int progressive)
 {
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
@@ -158,7 +158,7 @@ QMap<QString, QString> Tomb::getByProgressive(const int& progressive)
     return tomb;
 }
 
-QMap<QString, QString> Tomb::getDetails(const int& progressive)
+QMap<QString, QString> Tomb::getDetails(const int progressive)
 {
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
@@ -219,7 +219,6 @@ QMap<QString, QString> Tomb::getDetails(const int& progressive)
 
 QList<QMap<QString, QString>> Tomb::tombsToEngrave()
 {
-    qDebug() << "TOMB: GET DETAILS";
     QList<QMap<QString, QString>> tombs;
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
@@ -513,19 +512,19 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
 }
 
 bool Tomb::store(
-    const int& progressive,
-    const int& client_id,
+    const int progressive,
+    const int client_id,
     const QString& name,
     const QString& engraved_names,
-    const bool& engraved,
+    const bool engraved,
     const double& price,
-    const bool& paid,
+    const bool paid,
     const QString& material_code,
     const QString& vase_code,
     const QString& lamp_code,
     const QString& flame_code,
     const QString& notes,
-    const bool& accessories_mounted,
+    const bool accessories_mounted,
     const QString& ordered_at,
     const QString& proofed_at,
     const QString& confirmed_at,
@@ -688,20 +687,20 @@ bool Tomb::store(
 }
 
 bool Tomb::update(
-    const int& old_progressive,
-    const int& progressive,
-    const int& client_id,
+    const int old_progressive,
+    const int progressive,
+    const int client_id,
     const QString& name,
     const QString& engraved_names,
-    const bool& engraved,
+    const bool engraved,
     const double& price,
-    const bool& paid,
+    const bool paid,
     const QString& material_code,
     const QString& vase_code,
     const QString& lamp_code,
     const QString& flame_code,
     const QString& notes,
-    const bool& accessories_mounted,
+    const bool accessories_mounted,
     const QString& ordered_at,
     const QString& proofed_at,
     const QString& confirmed_at,
@@ -822,7 +821,7 @@ bool Tomb::update(
     return true;
 }
 
-void Tomb::remove(const int& progressive)
+void Tomb::remove(const int progressive)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE progressive = :progressive;");
@@ -837,7 +836,7 @@ void Tomb::remove(const int& progressive)
     }
 }
 
-bool Tomb::setPaid(const int& progressive)
+bool Tomb::setPaid(const int progressive)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare(
@@ -854,7 +853,7 @@ bool Tomb::setPaid(const int& progressive)
     return true;
 }
 
-bool Tomb::setAccessoriesMounted(const int& progressive)
+bool Tomb::setAccessoriesMounted(const int progressive)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare(
@@ -889,7 +888,7 @@ int Tomb::getLastProgresive() {
     return 0;
 }
 
-bool Tomb::isProgressiveInUse(const int& progressive)
+bool Tomb::isProgressiveInUse(const int progressive)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT progressive FROM " + this->table + " WHERE progressive = :progressive");
@@ -910,7 +909,7 @@ bool Tomb::isProgressiveInUse(const int& progressive)
     return false;
 }
 
-QString Tomb::getGroupingFolder(const int& progressive)
+QString Tomb::getGroupingFolder(const int progressive)
 {
     // last 2 digit of the progressive number
     int last = QString::number(progressive).last(2).toInt();
@@ -924,7 +923,7 @@ QString Tomb::getGroupingFolder(const int& progressive)
     return QString::number(start) + " - " + QString::number(end);
 }
 
-QString Tomb::getFolderPath(const int& progressive, const QString& name)
+QString Tomb::getFolderPath(const int progressive, const QString& name)
 {
     Config* config = new Config();
 

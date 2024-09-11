@@ -209,11 +209,11 @@ void Funeraria::slotPrintToPayList() {
     // If no file name is provided, stop the execution, the user just closed the dialog window
     if (filename.trimmed() == "") return;
 
-    QFile listFile(filename);
+    QFile list_file(filename);
 
-    QTextStream out(&listFile);
+    QTextStream out(&list_file);
 
-    if (!listFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (!list_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
@@ -247,7 +247,7 @@ void Funeraria::slotPrintToPayList() {
 
     out << "Totale € " + QString::number(total); // Total price
 
-    listFile.close();
+    list_file.close();
 
     QMessageBox message;
     message.setWindowTitle("Funeraria");
@@ -257,9 +257,9 @@ void Funeraria::slotPrintToPayList() {
     return;
 }
 
-void Funeraria::slotHeaderClicked(int logicalIndex) {
+void Funeraria::slotHeaderClicked(int logical_index) {
     // Get the clicked label text
-    QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logicalIndex, Qt::Horizontal).toString();
+    QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logical_index, Qt::Horizontal).toString();
     QString sort_by = this->db->getSortableColumnName(label);
 
     // The selected column can't be sorted
@@ -347,13 +347,13 @@ void Funeraria::slotClientOrders()
 
 void Funeraria::slotQuickClientOrders()
 {
-    QString buttonText;
+    QString button_text;
 
     // Get the sender of the signal
-    QPushButton* senderButton = qobject_cast<QPushButton*>(sender());
+    QPushButton* sender_button = qobject_cast<QPushButton*>(sender());
 
-    if (senderButton) {
-        buttonText = senderButton->text();
+    if (sender_button) {
+        button_text = sender_button->text();
     }
     else {
         return;
@@ -363,10 +363,10 @@ void Funeraria::slotQuickClientOrders()
 
     this->current_table = "tombs";
 
-    int client_id = this->client->getId(buttonText);
+    int client_id = this->client->getId(button_text);
     int year = QDate::currentDate().toString("yyyy").toInt();
 
-    this->ui.cbClient->setCurrentText(buttonText);
+    this->ui.cbClient->setCurrentText(button_text);
     this->ui.cbYear->setCurrentText(QDate::currentDate().toString("yyyy"));
     this->ui.leDeceased->setText("");
 
@@ -495,12 +495,15 @@ void Funeraria::slotShowClients()
         QTableWidgetItem* position_widget = new QTableWidgetItem(clients[i]["position"]);
         // Set the field as not editable
         position_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QTableWidgetItem* name_widget = new QTableWidgetItem(clients[i]["name"]);
         // Set the field as not editable
         name_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QTableWidgetItem* emails_widget = new QTableWidgetItem(emails);
         // Set the field as not editable
         emails_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QTableWidgetItem* phones_widget = new QTableWidgetItem(phones);
         // Set the field as not editable
         phones_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -613,11 +616,14 @@ void Funeraria::slotShowItems(const QString& type)
         QTableWidgetItem* code = new QTableWidgetItem(accessories[i]["code"]);
         // Set the field as not editable
         code->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QTableWidgetItem* name = new QTableWidgetItem(accessories[i]["name"]);
         // Set the field as not editable
         name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QPushButton* pb_edit = new QPushButton(this->ui.tableWidget);
         pb_edit->setText("Modifica");
+
         QPushButton* pb_del = new QPushButton(this->ui.tableWidget);
         pb_del->setText("Elimina");
 
@@ -730,14 +736,14 @@ void Funeraria::slotDeleteItem() {
     int row = this->ui.tableWidget->currentRow();
 
     QMessageBox message;
-    QPushButton* proceedBtn = message.addButton("Elimina", QMessageBox::ActionRole);
-    QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
+    QPushButton* proceed_btn = message.addButton("Elimina", QMessageBox::ActionRole);
+    QPushButton* abort_btn = message.addButton("Annulla", QMessageBox::ActionRole);
     message.setWindowTitle("Funeraria");
     message.setIcon(QMessageBox::Warning);
     message.setText("Vuoi eliminare questo elemento?");
     message.exec();
 
-    if (message.clickedButton() == proceedBtn) {
+    if (message.clickedButton() == proceed_btn) {
         // Delete the item
 
         if (this->current_table == "tombs") {
@@ -1222,16 +1228,22 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     // Generate the cells' content and set them as not editable
     QTableWidgetItem* progressive = new QTableWidgetItem(tomb["progressive"]);
     progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
     QTableWidgetItem* name = new QTableWidgetItem(tomb["name"]);
     name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    QTableWidgetItem* material = new QTableWidgetItem(this->material->getNameFromId(tomb["material"]));
+
+    QTableWidgetItem* material = new QTableWidgetItem(this->material->getNameFromCode(tomb["material"]));
     material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
     QTableWidgetItem* price = new QTableWidgetItem(tomb["price"]);
     price->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
     QTableWidgetItem* paid = new QTableWidgetItem("");
     paid->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
     QTableWidgetItem* notes = new QTableWidgetItem(tomb["notes"]);
     notes->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
     QTableWidgetItem* accessories_mounted = new QTableWidgetItem("");
     accessories_mounted->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 

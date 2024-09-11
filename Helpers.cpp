@@ -1,13 +1,13 @@
 #include "Helpers.h"
 
-QString Helpers::dateSqlToIta(const QString& dateSql)
+QString Helpers::dateSqlToIta(const QString& date_sql)
 {
     // Some of the dates are set to NULL because they went lost
-    if (dateSql == "NULL" || dateSql == "") {
+    if (date_sql == "NULL" || date_sql == "") {
         return "";
     }
 
-    QString date = QDate::fromString(dateSql, "yyyy-MM-dd").toString("dd/MM/yyyy");
+    QString date = QDate::fromString(date_sql, "yyyy-MM-dd").toString("dd/MM/yyyy");
 
     // If the date provided was not valid
     if (date == "") {

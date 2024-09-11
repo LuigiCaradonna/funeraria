@@ -30,10 +30,12 @@ public:
 
     /*
      * Sets the database path into the config file
+     * 
+     * @param   const QString& db_path    - DB file path
      *
      * @return void
      */
-    void setDbPath(QString& db_path);
+    void setDbPath(const QString& db_path);
 
     /*
      * Gets the database path from the config file
@@ -43,11 +45,13 @@ public:
     QString getDbPath();
 
     /*
-     * Sets the archive path into the config file
+     * Sets the archive's folder path into the config file
+     *
+     * @param   const QString& archive_path    - Archive folder path
      *
      * @return void
      */
-    void setArchivePath(QString& archive_path);
+    void setArchivePath(const QString& archive_path);
 
     /*
      * Gets the archive path from the config file
@@ -80,8 +84,10 @@ private:
     /*
      * Stores/updates the settings into the config file
      *
+     * @param   const QJsonObject& config   - Configuration to be stored
+     *
      * @return bool true on success, false on failure
      */
-    bool storeConfig(QJsonObject& config);
+    bool storeConfig(const QJsonObject& config);
 };
 

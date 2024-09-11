@@ -79,58 +79,58 @@ public:
     /*
      * Deletes a client from the database
      *
-     * @param   const int& id - Client's id
+     * @param   const int id - Client's id
      *
      * @return  void
      */
-    void remove(const int& id);
+    void remove(const int id);
 
     /*
      * Creates a new client entry
      *
-     * @param const int& position       -   Client's ordering position
+     * @param const int position        -   Client's ordering position
      * @param const QString& name       -   Client's name
      * @param const QString& emails     -   Client's email(s)
      * @param const QString& address    -   Client's address
      * @param const QString& phones     -   Client's phone number(s)
-     * @param const int& active         -   Client's active status (0/1)
-     * @param const int& quick          -   Client's quick access status (0/1)
+     * @param const int active          -   Client's active status (0/1)
+     * @param const int quick           -   Client's quick access status (0/1)
      *
      * @return  boolean true if the creation succeeds, false otherwise
      */
     bool store(
-        const int& position,
+        const int position,
         const QString& name,
         const QString& email,
         const QString& address,
         const QString& phone,
-        const int& active,
-        const int& quick
+        const int active,
+        const int quick
     );
 
     /*
      * Updates the client's data
      *
-     * @param const int& id             -   Client's id
-     * @param const int& position       -   Client's ordering position
+     * @param const int id              -   Client's id
+     * @param const int position        -   Client's ordering position
      * @param const QString& name       -   Client's name
      * @param const QString& emails     -   Client's email(s)
      * @param const QString& address    -   Client's address
      * @param const QString& phones     -   Client's phone number(s)
-     * @param const int& active         -   Client's active status (0/1)
-     * @param const int& quick          -   Client's quick access status (0/1)
+     * @param const int active          -   Client's active status (0/1)
+     * @param const int quick           -   Client's quick access status (0/1)
      *
      * @return  boolean true if the update succeeds, false otherwise
      */
     bool update(
-        const int& id,
-        const int& position,
+        const int id,
+        const int position,
         const QString& name,
         const QString& email,
         const QString& address,
         const QString& phone,
-        const int& active,
-        const int& quick
+        const int active,
+        const int quick
     );
 
     /*
@@ -143,42 +143,42 @@ public:
     /*
      * Given a client's id, name and wanted position, rearranges all the clients' position if necessary
      *
-     * @param const int&     id         -   Client's id
+     * @param const int     id          -   Client's id
      * @param const QString& name       -   Client's name
-     * @param const int&     position   -   Client's ordering position to set. -1 when a client must be deleted
+     * @param const int     position    -   Client's ordering position to set. -1 when a client must be deleted
      *
      * @return  boolean true if the operation succeeds, false otherwise
      */
-    bool rearrangePositions(const int& id, const QString& name, const int& new_position);
+    bool rearrangePositions(const int id, const QString& name, const int new_position);
 
     /*
      * Shifts up the positions by one
      *
-     * @param const int&    from            -   Position where to start
-     * @param const int&    last_position   -   Last position in use
+     * @param const int    from            -   Position where to start
+     * @param const int    last_position   -   Last position in use
      *
      * @return  boolean true if the operation succeeds, false otherwise
      */
-    bool shiftPositionsUp(const int& from, const int& last_position);
+    bool shiftPositionsUp(const int from, const int last_position);
 
     /*
      * Shifts down the positions by one
      *
-     * @param const int&    from            -   Position where to start
-     * @param const int&    last_position   -   Last position in use
+     * @param const int    from            -   Position where to start
+     * @param const int    last_position   -   Last position in use
      *
      * @return  boolean true if the operation succeeds, false otherwise
      */
-    bool shiftPositionsDown(const int& from, const int& last_position);
+    bool shiftPositionsDown(const int from, const int last_position);
 
     /*
      * Sets the given client's position to a not valid value to allow positions rearranging
      *
-     * @param const int&    client_id    -   Client's id
+     * @param const int    client_id    -   Client's id
      *
      * @return  boolean true if the operation succeeds, false otherwise
      */
-    bool setInvalidPosition(const int& client_id);
+    bool setInvalidPosition(const int client_id);
 
 private:
     const QString table = "clients";

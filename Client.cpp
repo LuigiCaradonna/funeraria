@@ -165,7 +165,7 @@ QMap<QString, QString> Client::getDetails(const QString& name)
     return map;
 }
 
-void Client::remove(const int& id)
+void Client::remove(const int id)
 {
     // Begin a transaction
     this->db.transaction();
@@ -204,13 +204,13 @@ void Client::remove(const int& id)
 /********** PRIVATE FUNCTIONS **********/
 
 bool Client::store(
-    const int& position, 
+    const int position, 
     const QString& name, 
     const QString& emails, 
     const QString& address, 
     const QString& phones, 
-    const int& active,
-    const int& quick
+    const int active,
+    const int quick
 )
 {
     this->db.transaction();
@@ -284,14 +284,14 @@ bool Client::store(
 }
 
 bool Client::update(
-    const int& id, 
-    const int& position, 
+    const int id, 
+    const int position, 
     const QString& name, 
     const QString& emails,
     const QString& address, 
     const QString& phones,
-    const int& active,
-    const int& quick
+    const int active,
+    const int quick
 )
 {
     this->db.transaction();
@@ -384,7 +384,7 @@ int Client::getLastPosition()
     return 0;
 }
 
-bool Client::rearrangePositions(const int& id, const QString& name, const int& new_position)
+bool Client::rearrangePositions(const int id, const QString& name, const int new_position)
 {
     // Last position currently in use
     int last_position = this->getLastPosition();
@@ -457,7 +457,7 @@ bool Client::rearrangePositions(const int& id, const QString& name, const int& n
     return true;
 }
 
-bool Client::shiftPositionsUp(const int& from, const int& last_position)
+bool Client::shiftPositionsUp(const int from, const int last_position)
 {
     // Update one by one all the clients with a position higher than "from"
     for (int i = from + 1; i <= last_position; i++) {
@@ -479,7 +479,7 @@ bool Client::shiftPositionsUp(const int& from, const int& last_position)
     return true;
 }
 
-bool Client::shiftPositionsDown(const int& from, const int& last_position)
+bool Client::shiftPositionsDown(const int from, const int last_position)
 {
     // Update one by one all the clients with a position higher than "from" starting from the last
     for (int i = last_position; i >= from; i--) {
@@ -501,7 +501,7 @@ bool Client::shiftPositionsDown(const int& from, const int& last_position)
     return true;
 }
 
-bool Client::setInvalidPosition(const int& client_id)
+bool Client::setInvalidPosition(const int client_id)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("UPDATE " + this->table + " SET position = -1 WHERE id = :id");

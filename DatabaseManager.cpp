@@ -115,13 +115,13 @@ bool DatabaseManager::backupToCSV()
         // If the current client has tombs ordered in the current year
         if (tombs.size() > 0) {
             filename = client_name + ".csv";
-            QFile sqlFile("./" + this->backup_folder + "/" + year + "/" + filename);
+            QFile sql_file("./" + this->backup_folder + "/" + year + "/" + filename);
 
-            if (!sqlFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            if (!sql_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
                 return false;
             }
 
-            QTextStream out(&sqlFile);
+            QTextStream out(&sql_file);
             // Columns name row
             out << "Numero;Nome;Prezzo;Pagata;Ordine;Provino;Conferma;Incisione;Consegna;Note;" << "\n";
 
@@ -139,7 +139,7 @@ bool DatabaseManager::backupToCSV()
                 out << tombs[i]["notes"] << ";\n";
             }
 
-            sqlFile.close();
+            sql_file.close();
         }
     }
 
@@ -182,8 +182,8 @@ bool DatabaseManager::openDatabase()
 bool DatabaseManager::solveDatabaseConnectionFailure()
 {
     QMessageBox message;
-    QPushButton* newBtn = message.addButton("Nuovo", QMessageBox::ActionRole);
-    QPushButton* backupBtn = message.addButton("Ripristina", QMessageBox::ActionRole);
+    QPushButton* new_btn = message.addButton("Nuovo", QMessageBox::ActionRole);
+    QPushButton* backup_btn = message.addButton("Ripristina", QMessageBox::ActionRole);
     QPushButton* openBtn = message.addButton("Apri", QMessageBox::ActionRole);
     QPushButton* abortBtn = message.addButton("Annulla", QMessageBox::ActionRole);
     message.setWindowTitle("Funeraria");
@@ -193,7 +193,7 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
                     "In alternativa ripristina un backup se disponibile.");
     message.exec();
 
-    if (message.clickedButton() == (QAbstractButton*)newBtn) {
+    if (message.clickedButton() == (QAbstractButton*)new_btn) {
         // Create a new database
         // If the database creation fails
         if (!this->createDatabase()) {
@@ -204,7 +204,7 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
             return true;
         }
     }
-    else if (message.clickedButton() == (QAbstractButton*)backupBtn) {
+    else if (message.clickedButton() == (QAbstractButton*)backup_btn) {
         // Copy the last .db file from the backups folder if available
         QDir directory("./" + this->backup_folder);
         QStringList files = directory.entryList(QStringList() << "*.db", QDir::Files);
@@ -373,10 +373,10 @@ bool DatabaseManager::executeQueryFile(const QString& file_name) {
         QRegularExpression re_commit("\\bcommit.*", QRegularExpression::CaseInsensitiveOption);
 
         // Check if the SQL file has a transaction set
-        bool isStartedWithTransaction = re_transaction.match(qList.at(0)).hasMatch();
+        bool is_started_with_transaction = re_transaction.match(qList.at(0)).hasMatch();
 
         // If the SQL file did not had a transaction set
-        if (!isStartedWithTransaction) {
+        if (!is_started_with_transaction) {
             this->db.transaction();
         }
 
@@ -403,7 +403,7 @@ bool DatabaseManager::executeQueryFile(const QString& file_name) {
         }
 
         // If the SQL file did not had a transaction set
-        if (!isStartedWithTransaction) {
+        if (!is_started_with_transaction) {
             this->db.commit();
         }
 
@@ -445,8 +445,8 @@ void DatabaseManager::backupDatabase()
     }
 
     // Create a file for the SQL statements
-    QFile sqlFile("./" + this->backup_folder + "/" + today + "-database.sql");
-    if (!sqlFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    QFile sql_file("./" + this->backup_folder + "/" + today + "-database.sql");
+    if (!sql_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QMessageBox message;
         message.setWindowTitle("Funeraria Backup");
         message.setIcon(QMessageBox::Critical);
@@ -455,7 +455,7 @@ void DatabaseManager::backupDatabase()
         return;
     }
 
-    QTextStream out(&sqlFile);
+    QTextStream out(&sql_file);
 
     // Fetch and write SQL statements to the file
     QSqlQuery query(this->db);
@@ -503,7 +503,7 @@ void DatabaseManager::backupDatabase()
             message.setText("Impossibile generare correttamente il file di backup .sql. \nTransazione fallita.");
             message.exec();
             // Rollback not required, the database was only read
-            sqlFile.close();
+            sql_file.close();
             return;
         }
     }
@@ -516,7 +516,7 @@ void DatabaseManager::backupDatabase()
         return;
     }
 
-    sqlFile.close();
+    sql_file.close();
 }
 
 bool DatabaseManager::isBackupRequired() {

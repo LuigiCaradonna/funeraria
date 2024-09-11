@@ -31,6 +31,9 @@ public:
     /*
      * Updates the form fields
      *
+     * @param const QString& code   - The accessory's code
+     * @param const QString& name   - The accessory's name
+     *
      * @return  void
      */
     void updateForm(const QString& code = "", const QString& name = "");
@@ -72,6 +75,8 @@ private:
     /*
      * Sets the code field
      *
+     * @param const QString& code   - The accessory's code
+     * 
      * @return  void
      */
     void setCode(QString code);
@@ -79,6 +84,8 @@ private:
     /*
      * Sets the name field
      *
+     * @param const QString& name   - The accessory's name
+     * 
      * @return  void
      */
     void setName(QString name);

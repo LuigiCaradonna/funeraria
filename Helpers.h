@@ -10,11 +10,11 @@ public:
     /*
      * Converts a date string formatted as yyyy-mm-dd to dd/mm/yyyy.
      *
-     * @param   const QString&  dateSql - The date in Sql format
+     * @param   const QString&  date_sql - The date in Sql format
      *
      * @return  QString - A date in dd/mm/yyyy format or an empty string if the given date was not valid.
      */
-	static QString dateSqlToIta(const QString& dateSql);
+	static QString dateSqlToIta(const QString& date_sql);
 
     /*
      * Checks if the given date has the format dd/mm/yyyy.
