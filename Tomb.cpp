@@ -259,7 +259,8 @@ QList<QMap<QString, QString>> Tomb::accessoriesToMount()
     QList<QMap<QString, QString>> accessories;
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT tombs.name AS name, clients.name AS client_name, vases.name AS vase_name, "
+    query.prepare("SELECT tombs.progressive AS progressive, tombs.name AS name, "
+        "clients.name AS client_name, vases.name AS vase_name, "
         "lamps.name AS lamp_name, flames.name AS flame_name, materials.name AS material_name "
         "FROM " + this->table + " "
         "JOIN materials ON tombs.material_code = materials.code "
@@ -280,6 +281,7 @@ QList<QMap<QString, QString>> Tomb::accessoriesToMount()
     }
     else {
         while (query.next()) {
+            tomb["progressive"] = query.value("progressive").toString();
             tomb["deceased"] = query.value("name").toString();
             tomb["material"] = query.value("material_name").toString();
             tomb["vase"] = query.value("vase_name").toString();
@@ -839,6 +841,23 @@ bool Tomb::setPaid(const int& progressive)
     query.prepare(
         "UPDATE " + this->table + " "
         "SET paid = 1 "
+        "WHERE progressive = :progressive;"
+    );
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Tomb::setAccessoriesMounted(const int& progressive)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare(
+        "UPDATE " + this->table + " "
+        "SET accessories_mounted = 1 "
         "WHERE progressive = :progressive;"
     );
     query.bindValue(":progressive", progressive);

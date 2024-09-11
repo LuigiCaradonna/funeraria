@@ -223,6 +223,13 @@ protected slots:
      */
     void slotSetPaidTomb();
 
+    /*
+     * Sets the tomb's accessories as mounted
+     *
+     * @return void
+     */
+    void slotSetAccessoriesMounted();
+
 private:
     Ui::FunerariaClass ui;
 
@@ -292,7 +299,7 @@ private:
     void showClientOrders(const QList<QMap<QString, QString>>& tombs);
 
     /*
-     * Fills the table to show the client's orders.
+     * Shows a single client's order.
      *
      * @param const QList<QMap<QString, QString>> &tombs   - List of the client's orders
      *
@@ -338,6 +345,15 @@ private:
      * @return void
      */
     void setupClientOrdersTable(int tombs_count);
+
+    /*
+     * Sets up the table to show the accessories to be mounted.
+     *
+     * @param tombs_Count  - Number of tombs to show
+     *
+     * @return void
+     */
+    void setupAccessoriesToMountTable(int tombs_count);
 
     /*
      * Adds a row to the table that shows the client's orders.

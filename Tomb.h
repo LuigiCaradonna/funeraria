@@ -205,7 +205,23 @@ public:
      */
     void remove(const int& progressive);
 
+    /*
+     * Sets a tomb as paid
+     *
+     * @param   const int& progressive - Tomb's progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
     bool setPaid(const int& progressive);
+
+    /*
+     * Sets a tomb's accessories as mounted
+     *
+     * @param   const int& progressive - Tomb's progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
+    bool setAccessoriesMounted(const int& progressive);
 
     /*
      * Gets the last progressive number in use
