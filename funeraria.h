@@ -379,7 +379,7 @@ private:
     /*
      * Sets up the table to show the tombs to be engraved.
      *
-     * @param tombs_Count  - Number of tombs to show
+     * @param tombs_count  - Number of tombs to show
      *
      * @return void
      */

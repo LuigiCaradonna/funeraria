@@ -97,7 +97,7 @@ Funeraria::Funeraria(QWidget* parent)
         new_item_mapper->setMapping(this->ui.actionFNew, "flames");
         this->connect(new_item_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotNewItem);
 
-        // Map the signal coming from the menu items to call the same function (slotShowItems) with the proper parameter
+        // Map the signal coming from the menu "Accessori" to call the same function (slotShowItems) with the proper parameter
         this->show_items_mapper = new QSignalMapper(this);
         this->connect(this->ui.actionMList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionVList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
@@ -183,7 +183,7 @@ void Funeraria::slotSumSelectedPrices() {
     QMessageBox message;
     message.setWindowTitle("Funeraria");
     message.setIcon(QMessageBox::Information);
-    message.setText("La somma dei " +  QString::number(prices) + " prezzi selezionti è: € " + QString::number(sum));
+    message.setText("La somma delle " +  QString::number(prices) + " lapidi selezionte è: € " + QString::number(sum));
     message.exec();
 }
 
