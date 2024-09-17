@@ -45,7 +45,8 @@ Funeraria::Funeraria(QWidget* parent)
         this->client = new Client(this->db->db);
         this->client_ui = new ClientUi(this->db->db, this);
         this->settings_ui = new SettingsUi(this->db->db, this);
-        this->tombUi = new TombUi(this->db->db, this);
+        this->report_ui = new ReportUi(this->db->db, this);
+        this->tomb_ui = new TombUi(this->db->db, this);
         this->vase = new Accessory(this->db->db, "vases");
         this->lamp = new Accessory(this->db->db, "lamps");
         this->flame = new Accessory(this->db->db, "flames");
@@ -69,6 +70,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.btnNewTomb, &QPushButton::clicked, this, &Funeraria::slotNewTomb);
         this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
         this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
+        this->connect(this->ui.btnReport, &QPushButton::clicked, this, &Funeraria::slotReport);
 
         // Signal emitted from the menu "Files"
         this->connect(this->ui.actionBackupCSV, SIGNAL(triggered()), this, SLOT(slotBackupDbToCSV()));
@@ -125,7 +127,8 @@ Funeraria::~Funeraria()
     delete this->context_menu;
     delete this->client_ui;
     delete this->settings_ui;
-    delete this->tombUi;
+    delete this->report_ui;
+    delete this->tomb_ui;
     delete this->vase;
     delete this->lamp;
     delete this->flame;
@@ -383,9 +386,9 @@ void Funeraria::slotTombDetails()
     // Row index of the clicked button
     int row = this->ui.tableWidget->currentRow();
     // Set the progressive property of the Tomb object to the progressive number present in the clicked row
-    this->tombUi->setProgressive(this->ui.tableWidget->item(row, 0)->text().toInt());
-    this->tombUi->setModal(true);
-    this->tombUi->exec();
+    this->tomb_ui->setProgressive(this->ui.tableWidget->item(row, 0)->text().toInt());
+    this->tomb_ui->setModal(true);
+    this->tomb_ui->exec();
 
     // Reload the table when the popup is closed, the user could have made some changes
     this->slotClientOrders();
@@ -412,9 +415,9 @@ void Funeraria::slotNewTomb()
     this->current_table = "tombs";
 
     // Set the name property of the Client object to an empty string
-    this->tombUi->setProgressive(0);
-    this->tombUi->setModal(true);
-    this->tombUi->exec();
+    this->tomb_ui->setProgressive(0);
+    this->tomb_ui->setModal(true);
+    this->tomb_ui->exec();
 
     // If the table shows any tomb
     if (this->ui.tableWidget->rowCount() > 0) {
@@ -1066,6 +1069,15 @@ void Funeraria::slotSetAccessoriesMounted()
 
     delete tomb;
 }
+
+void Funeraria::slotReport()
+{
+    this->current_table = "tombs";
+
+    this->report_ui->setModal(true);
+    this->report_ui->exec();
+}
+
 /********** PRIVATE FUNCTIONS **********/
 
 void Funeraria::clearTable()

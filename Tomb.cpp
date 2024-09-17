@@ -26,7 +26,7 @@ QList<QMap<QString, QString>> Tomb::getList(
     QString sort_direction
 )
 {
-    QList<QMap<QString, QString>> list;
+    QList<QMap<QString, QString>> list{};
     QSqlQuery query = QSqlQuery(this->db);
 
     QString query_string = "SELECT * FROM " + this->table + " WHERE 1 = 1";
@@ -100,6 +100,66 @@ QList<QMap<QString, QString>> Tomb::getList(
     }
 
     return list;
+}
+
+QList<QMap<QString, QString>> Tomb::getReport(const int client_id, const int year, bool engraved, bool year_by_year)
+{
+    QList<QMap<QString, QString>> report{};
+    QSqlQuery query = QSqlQuery(this->db);
+
+    QString query_string = "SELECT client_id, count(name) AS amount ";
+    
+    if (year_by_year) {
+        query_string += ", strftime('%Y', ordered_at) AS year ";
+    }
+
+    query_string += " FROM " + this->table + " WHERE 1 = 1";
+
+    if (client_id > 0) {
+        query_string += " AND client_id = " + QString::number(client_id);
+    }
+
+    if (engraved == true) {
+        query_string += " AND engraved = 1";
+    }
+
+    if (year != 0) {
+        query_string += " AND ordered_at LIKE '" + QString::number(year) + "%'";
+    }
+
+    // Only delivered tombs to heve only those actually made
+    query_string += " AND delivered_at != ''";
+
+    query_string += " GROUP BY client_id";
+
+    if (year_by_year) {
+        query_string += ", year";
+    }
+
+    query.prepare(query_string);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+        return report;
+    }
+
+    while (query.next()) {
+        QMap<QString, QString> orders;
+        orders["client_id"] = query.value("client_id").toString();
+        orders["amount"] = QString::number(query.value("amount").toInt());
+
+        if (year_by_year) {
+            orders["year"] = QString::number(query.value("year").toInt());
+        }
+
+        report.append(orders);
+    }
+
+    return report;
 }
 
 QMap<QString, QString> Tomb::getByProgressive(const int progressive)

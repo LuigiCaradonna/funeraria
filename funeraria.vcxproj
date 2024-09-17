@@ -96,6 +96,7 @@
     <ClCompile Include="ClientUi.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Helpers.cpp" />
+    <ClCompile Include="ReportUi.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SettingsUi.cpp" />
     <ClCompile Include="Tomb.cpp" />
@@ -108,6 +109,7 @@
     <ClCompile Include="Funeraria.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="Accessory.ui" />
+    <QtUic Include="Report.ui" />
     <QtUic Include="Settings.ui" />
     <QtUic Include="Tomb.ui" />
   </ItemGroup>
@@ -119,6 +121,7 @@
     <QtMoc Include="ClientUi.h" />
     <QtMoc Include="Config.h" />
     <ClInclude Include="Helpers.h" />
+    <QtMoc Include="ReportUi.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="Tomb.h" />
     <QtMoc Include="Client.h" />

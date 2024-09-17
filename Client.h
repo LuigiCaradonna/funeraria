@@ -35,9 +35,18 @@ public:
      *
      * @param   const QString& name - Client's name
      *
-     * @return  int - The clients' id, 0 if not found
+     * @return  int - The clients' id, 0 if not found, also meaning "all"
      */
     int getId(const QString& name);
+
+    /*
+     * Gets the clients' name
+     *
+     * @param   const int - Client's id
+     *
+     * @return  QString - The clients' id, 0 if not found, also meaning "all"
+     */
+    QString getName(const int id);
 
     /*
      * Gets all the clients' names

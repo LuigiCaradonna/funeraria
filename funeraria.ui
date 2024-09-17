@@ -222,6 +222,18 @@
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="btnReport">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Report</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="btnToEngrave">
           <property name="font">
            <font>

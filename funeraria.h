@@ -13,6 +13,7 @@
 #include "Client.h"
 #include "SettingsUi.h"
 #include "Settings.h"
+#include "ReportUi.h"
 #include "TombUi.h"
 #include "Tomb.h"
 #include "AccessoryUi.h"
@@ -231,6 +232,13 @@ protected slots:
      * @return void
      */
     void slotSetAccessoriesMounted();
+    
+    /*
+     * Shows the report dialog
+     *
+     * @return void
+     */
+    void slotReport();
 
 private:
     Ui::FunerariaClass ui;
@@ -252,7 +260,8 @@ private:
     Client* client;
     ClientUi* client_ui;
     SettingsUi* settings_ui;
-    TombUi* tombUi;
+    TombUi* tomb_ui;
+    ReportUi* report_ui;
     Accessory* vase;
     Accessory* lamp;
     Accessory* flame;

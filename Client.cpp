@@ -33,6 +33,26 @@ int Client::getId(const QString& name)
     return 0;
 }
 
+QString Client::getName(const int id)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " WHERE id = :id;");
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+    else if (query.next()) {
+        return query.value("name").toString();
+    }
+
+    return "";
+}
+
 QStringList Client::getNames()
 {
     QStringList names{};
