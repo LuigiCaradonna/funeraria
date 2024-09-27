@@ -32,7 +32,7 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Gets all the Tombs matching the given parameters
+     * Gets all the tombs matching the given parameters
      * 
      * @param const int client_id       - Client's id
      * @param const int year            - Year of the tombs to get, 0 for all the years
@@ -53,7 +53,7 @@ public:
     );
 
     /*
-     * Gets all the Tombs matching the given parameters and formats the report
+     * Gets all the tombs matching the given parameters and formats the report
      *
      * @param const int client_id       - Client's id
      * @param const int year            - Year of the tombs to get, 0 for all the years
@@ -70,7 +70,14 @@ public:
     );
 
     /*
-     * Gets the Tombs matching the given progressive number
+     * Gets all the tombs in the archive giving the sum of them sort by year
+     *
+     * @return  QList<QMap<QString, QString>> - A list containing the general trend info
+     */
+    QList<QMap<QString, QString>> getGeneralTrend();
+
+    /*
+     * Gets the tombs matching the given progressive number
      *
      * @param const int progressive     - Tomb's progressive number
      *

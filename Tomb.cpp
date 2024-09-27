@@ -162,6 +162,42 @@ QList<QMap<QString, QString>> Tomb::getReport(const int client_id, const int yea
     return report;
 }
 
+QList<QMap<QString, QString>> Tomb::getGeneralTrend()
+{
+    QList<QMap<QString, QString>> trend{};
+    QSqlQuery query = QSqlQuery(this->db);
+
+    QString query_string = "SELECT strftime('%Y', ordered_at) AS year, count(name) AS amount ";
+
+    query_string += " FROM " + this->table + " WHERE 1 = 1";
+
+    // Only delivered tombs to heve only those actually made
+    query_string += " AND delivered_at != ''";
+
+    query_string += " GROUP BY year";
+
+    query.prepare(query_string);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+        return trend;
+    }
+
+    while (query.next()) {
+        QMap<QString, QString> years;
+        years["year"] = query.value("year").toString();
+        years["amount"] = QString::number(query.value("amount").toInt());
+
+        trend.append(years);
+    }
+
+    return trend;
+}
+
 QMap<QString, QString> Tomb::getByProgressive(const int progressive)
 {
     QMap<QString, QString> tomb;

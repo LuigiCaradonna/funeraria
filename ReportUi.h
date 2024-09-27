@@ -2,9 +2,35 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QDialog>
+#include <QTimer>
+#include <QTableWidget>
 #include "ui_Report.h"
 #include "Client.h"
 #include "Tomb.h"
+// Widget used to display charts
+#include <QtCharts/QChartView>
+#include <QtCharts/QValueAxis>
+// Represents 1 set of bars in a bar chart
+#include <QtCharts/QBarSet>
+
+// Displays the color used to represent each
+// QBarSet
+#include <QtCharts/QLegend>
+
+// Adds categories to the charts axes
+#include <QtCharts/QBarCategoryAxis>
+
+// Used to create stacked bar charts
+#include <QtCharts/QHorizontalStackedBarSeries>
+
+// Used to create a bar chart
+#include <QtCharts/QBarSeries>
+
+// Used to change names on axis
+#include <QtCharts/QCategoryAxis>
+#include <QGraphicsSimpleTextItem>
+
 
 class ReportUi : public QDialog
 {
@@ -35,6 +61,13 @@ protected slots:
     /********** PROTECTED SLOTS **********/
 
     /*
+     * Adds the value labels to each bar of the chart
+     *
+     * @return  void
+     */
+    void slotAddValueLabels();
+
+    /*
      * Retrieves and formats the data for the report
      *
      * @return  void
@@ -42,17 +75,28 @@ protected slots:
     void slotGenerateReport();
 
     /*
+     * Retrieves and formats the data for the report based on all the archived year
+     *
+     * @return  void
+     */
+    void slotGeneralTrend();
+
+    /*
      * Sets the radio buttons enabled/disabled according to the user's selections
      *
      * @return  void
      */
-    void slotUpdateRadioState();
+    void slotUpdateClientRadioState();
 
 private:
     Ui::ReportClass ui;
     QSqlDatabase db;
     QWidget* parent;
     QStringList clients;
+    QTableWidget* tableWidget;
+    QChart* chart;
+    QChartView* chartView;
+    QBarSeries* series;
     Client* client;
     QColor row_bg = QColor(255, 255, 255);
     QColor row_even = QColor(255, 255, 255);
@@ -61,11 +105,46 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Shows the report generating a table
+     * Shows the report
      *
      * @return  void
      */
     void showReport(QList<QMap<QString, QString>> report, bool year_by_year);
+
+    /*
+     * Generates the report as a table
+     *
+     * @return  void
+     */
+    void showClientReportTable();
+
+    /*
+     * Generates the report as a bar chart
+     *
+     * @return  void
+     */
+    void showClientReportGraph();
+
+    /*
+     * Generates the report as a table
+     *
+     * @return  void
+     */
+    void showGeneralTrendTable();
+
+    /*
+     * Generates the report as a bar chart
+     *
+     * @return  void
+     */
+    void showGeneralTrendGraph();
+
+    /*
+     * Resets the layout containing the report
+     *
+     * @return  void
+     */
+    void clearLayout();
 
     /*
      * Clears the table content and deletes all the created pointers.
