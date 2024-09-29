@@ -8,26 +8,12 @@
 #include "ui_Report.h"
 #include "Client.h"
 #include "Tomb.h"
-// Widget used to display charts
 #include <QtCharts/QChartView>
 #include <QtCharts/QValueAxis>
-// Represents 1 set of bars in a bar chart
 #include <QtCharts/QBarSet>
-
-// Displays the color used to represent each
-// QBarSet
 #include <QtCharts/QLegend>
-
-// Adds categories to the charts axes
 #include <QtCharts/QBarCategoryAxis>
-
-// Used to create stacked bar charts
-#include <QtCharts/QHorizontalStackedBarSeries>
-
-// Used to create a bar chart
 #include <QtCharts/QBarSeries>
-
-// Used to change names on axis
 #include <QtCharts/QCategoryAxis>
 #include <QGraphicsSimpleTextItem>
 
@@ -86,7 +72,7 @@ protected slots:
      *
      * @return  void
      */
-    void slotUpdateClientRadioState();
+    void slotUpdateRadioState();
 
 private:
     Ui::ReportClass ui;

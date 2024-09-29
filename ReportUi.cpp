@@ -12,8 +12,11 @@ ReportUi::ReportUi(const QSqlDatabase& db, QWidget* parent)
     this->setWindowTitle("Report");
 
     this->connect(this->ui.btnReport, &QPushButton::clicked, this, &ReportUi::slotGenerateReport);
-    this->connect(this->ui.cbClient, &QComboBox::currentTextChanged, this, &ReportUi::slotUpdateClientRadioState);
-    this->connect(this->ui.cbYear, &QComboBox::currentTextChanged, this, &ReportUi::slotUpdateClientRadioState);
+    this->connect(this->ui.cbClient, &QComboBox::currentTextChanged, this, &ReportUi::slotUpdateRadioState);
+    this->connect(this->ui.cbYear, &QComboBox::currentTextChanged, this, &ReportUi::slotUpdateRadioState);
+    this->connect(this->ui.rbByYear, &QRadioButton::toggled, this, &ReportUi::slotUpdateRadioState);
+    this->connect(this->ui.rbOverall, &QRadioButton::toggled, this, &ReportUi::slotUpdateRadioState);
+    this->connect(this->ui.rbGraph, &QRadioButton::toggled, this, &ReportUi::slotUpdateRadioState);
     this->connect(this->ui.btnGeneralTrend, &QPushButton::clicked, this, &ReportUi::slotGeneralTrend);
 
     this->tableWidget = new QTableWidget();
@@ -35,10 +38,6 @@ ReportUi::ReportUi(const QSqlDatabase& db, QWidget* parent)
     for (int i = this_year.toInt(); i >= 2020; i--) {
         this->ui.cbYear->addItem(QString::number(i));
     }
-
-    // Initially, the radio buttons are disabled because the client is set to "Tutti"
-    this->ui.rbByYearYes->setEnabled(false);
-    this->ui.rbByYearNo->setEnabled(false);
 }
 
 /********** DESTRUCTOR **********/
@@ -93,7 +92,7 @@ void ReportUi::slotGenerateReport()
         year = this->ui.cbYear->currentText().toInt();
     }
 
-    bool year_by_year = this->ui.rbByYearYes->isEnabled() && this->ui.rbByYearYes->isChecked();
+    bool year_by_year = this->ui.rbByYear->isEnabled() && this->ui.rbByYear->isChecked();
 
     QList<QMap<QString, QString>> report = tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), year_by_year);
     
@@ -119,77 +118,34 @@ void ReportUi::slotGeneralTrend()
     }
 }
 
-void ReportUi::slotUpdateClientRadioState()
+void ReportUi::slotUpdateRadioState()
 {
-    bool year_by_year_enabled = true;
-    this->ui.rbByYearYes->setChecked(true);
-
-    /*
-        Radio buttons to group or split the tombs count for each year for the given client
-        True only if all the years are selected
-     */
-    if (this->ui.cbYear->currentText() != "Tutti") {
-        year_by_year_enabled = false;
-        this->ui.rbByYearNo->setChecked(true);
-    }
-
-    this->ui.rbByYearYes->setEnabled(year_by_year_enabled);
-    this->ui.rbByYearNo->setEnabled(year_by_year_enabled);
-
-    bool choose_output_style = true;
-
-    /*
-        All years selected, all clients selected and group by year
-        Both Graph and Table are available
-    */
-    if (
-        this->ui.cbYear->currentText() == "Tutti" && 
-        this->ui.cbClient->currentText() == "Tutti" &&
-        this->ui.rbByYearNo->isChecked()
-    ) {
-        this->ui.rbGraph->setChecked(true);
-        this->ui.rbTable->setEnabled(true);
-        this->ui.rbGraph->setEnabled(true);
-        choose_output_style = true;
-    }
-
-    /*
-        All years selected, specific client selected
-    */
-    if (
-        this->ui.cbYear->currentText() == "Tutti" && 
-        this->ui.cbClient->currentText() != "Tutti"
-    ) {
-        // If group by year
-        if (this->ui.rbByYearYes->isChecked()) {
-            // Both Graph and Table are available
-            this->ui.rbGraph->setChecked(true);
-            this->ui.rbTable->setEnabled(true);
-            this->ui.rbGraph->setEnabled(true);
-            choose_output_style = true;
-        }
-        else {
-            // OnlyTable are available, no use for a Graph
-            this->ui.rbGraph->setChecked(true);
-            this->ui.rbTable->setEnabled(true);
-            this->ui.rbGraph->setEnabled(true);
-            choose_output_style = true;
+    // Specific client and all years
+    if (this->ui.cbClient->currentText() != "Tutti" && this->ui.cbYear->currentText() == "Tutti") {
+        // If overall is selected
+        if (this->ui.rbOverall->isChecked()) {
+            this->ui.rbTable->setChecked(true);
         }
     }
 
-    /* 
-        Specific client selected, specific year selected and not to group by year 
+    /*
+        Specific client selected, specific year selected
         Only table output available, no use for graph
     */
-    if (
-        this->ui.cbClient->currentText() != "Tutti" && 
-        this->ui.cbYear->currentText() != "Tutti" && 
-        this->ui.rbByYearNo->isChecked()
-    ) {
+    if (this->ui.cbClient->currentText() != "Tutti" && this->ui.cbYear->currentText() != "Tutti") {
+        // Only overall is available
+        this->ui.rbOverall->setChecked(true);
+        // Only the table is available
         this->ui.rbTable->setChecked(true);
-        this->ui.rbTable->setEnabled(false);
-        this->ui.rbGraph->setEnabled(false);
-        choose_output_style = false;
+    }
+
+    /*
+        All client selected, specific year selected
+        Both the table and graph output are available
+    */
+    if (this->ui.cbClient->currentText() == "Tutti" && this->ui.cbYear->currentText() != "Tutti") {
+        // Only overall is available
+        this->ui.rbOverall->setChecked(true);
     }
 }
 

@@ -145,7 +145,7 @@
          <property name="title">
           <string/>
          </property>
-         <widget class="QRadioButton" name="rbByYearNo">
+         <widget class="QRadioButton" name="rbOverall">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -169,7 +169,7 @@
            <string>Complessivo</string>
           </property>
          </widget>
-         <widget class="QRadioButton" name="rbByYearYes">
+         <widget class="QRadioButton" name="rbByYear">
           <property name="geometry">
            <rect>
             <x>10</x>
