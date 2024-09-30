@@ -61,13 +61,6 @@ protected slots:
     void slotGenerateReport();
 
     /*
-     * Retrieves and formats the data for the report based on all the archived year
-     *
-     * @return  void
-     */
-    void slotGeneralTrend();
-
-    /*
      * Sets the radio buttons enabled/disabled according to the user's selections
      *
      * @return  void
@@ -91,39 +84,23 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Shows the report
-     *
-     * @return  void
-     */
-    void showReport(QList<QMap<QString, QString>> report, bool year_by_year);
-
-    /*
      * Generates the report as a table
      *
      * @return  void
      */
-    void showClientReportTable();
+    void showReportTable(QList<QMap<QString, QString>> report, bool year_by_year);
 
     /*
      * Generates the report as a bar chart
      *
      * @return  void
      */
-    void showClientReportGraph();
-
-    /*
-     * Generates the report as a table
-     *
-     * @return  void
-     */
-    void showGeneralTrendTable();
-
-    /*
-     * Generates the report as a bar chart
-     *
-     * @return  void
-     */
-    void showGeneralTrendGraph();
+    void showReportGraph(
+        QList<QMap<QString, QString>> report, 
+        bool year_by_year, 
+        const QString& title, 
+        const QString& category
+    );
 
     /*
      * Resets the layout containing the report

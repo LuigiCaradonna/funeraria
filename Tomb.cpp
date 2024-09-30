@@ -102,7 +102,13 @@ QList<QMap<QString, QString>> Tomb::getList(
     return list;
 }
 
-QList<QMap<QString, QString>> Tomb::getReport(const int client_id, const int year, bool engraved, bool year_by_year)
+QList<QMap<QString, QString>> Tomb::getReport(
+    const int client_id, 
+    const int year, 
+    bool engraved, 
+    bool year_by_year,
+    bool by_client
+)
 {
     QList<QMap<QString, QString>> report{};
     QSqlQuery query = QSqlQuery(this->db);
@@ -130,10 +136,14 @@ QList<QMap<QString, QString>> Tomb::getReport(const int client_id, const int yea
     // Only delivered tombs to heve only those actually made
     query_string += " AND delivered_at != ''";
 
-    query_string += " GROUP BY client_id";
-
-    if (year_by_year) {
-        query_string += ", year";
+    if (by_client && year_by_year) {
+        query_string += " GROUP BY client_id, year";
+    }
+    else if (by_client) {
+        query_string += " GROUP BY client_id";
+    }
+    else if (year_by_year) {
+        query_string += " GROUP BY year";
     }
 
     query.prepare(query_string);
