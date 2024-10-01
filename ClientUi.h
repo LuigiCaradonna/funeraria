@@ -29,6 +29,15 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
+     * Sets the client's id property and updates the content of the QDialog according
+     *
+     * @param   int id - Client's id
+     *
+     * @return  void
+     */
+    void setId(int id);
+
+    /*
      * Sets the client's name property and updates the content of the QDialog according
      *
      * @param   const QString& name - Client's name
@@ -68,6 +77,7 @@ private:
     QSqlDatabase db;
     QWidget* parent;
     QString name;
+    int id;
 
     /********** PRIVATE FUNCTIONS **********/
 

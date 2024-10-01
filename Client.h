@@ -79,11 +79,20 @@ public:
     /*
      * Gets the given client's datails
      *
+     * @param   int id - Client's id
+     *
+     * @return  QMap<QString, QString> - A map containing the client's data
+     */
+    QMap<QString, QString> getDetailsById(int id);
+
+    /*
+     * Gets the given client's datails
+     *
      * @param   const QString& name - Client's name
      *
      * @return  QMap<QString, QString> - A map containing the client's data
      */
-    QMap<QString, QString> getDetails(const QString& name);
+    QMap<QString, QString> getDetailsByName(const QString& name);
 
     /*
      * Deletes a client from the database
@@ -193,5 +202,6 @@ private:
     const QString table = "clients";
     QSqlDatabase db;
     QString name;
-
+    // Temporary id for a client to be inserted
+    int new_client_temp_id = 2000;
 };

@@ -20,6 +20,12 @@ ClientUi::~ClientUi()
 
 /********** PUBLIC FUNCTIONS **********/
 
+void ClientUi::setId(int id)
+{
+    this->id = id;
+    this->updateForm();
+}
+
 void ClientUi::setName(const QString& name)
 {
     this->name = name;
@@ -102,7 +108,7 @@ void ClientUi::updateForm()
 {
     Client* client = new Client(this->db);
     // Get the selected client's data
-    QMap<QString, QString> client_details = client->getDetails(this->name);
+    QMap<QString, QString> client_details = client->getDetailsById(this->id);
 
     if (!client_details.isEmpty()) {
         this->setWindowTitle("Modifica cliente");

@@ -440,18 +440,19 @@ void Funeraria::slotShowClients()
 
     QList<QMap<QString, QString>> clients = this->client->get();
 
-    QStringList headers{ "Posizione", "Nome", "Email", "Telefono", "", "" };
+    QStringList headers{ "ID", "Posizione", "Nome", "Email", "Telefono", "", "" };
 
     this->ui.tableWidget->setRowCount(clients.size());
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 60);
-    this->ui.tableWidget->setColumnWidth(1, 300);
+    this->ui.tableWidget->setColumnWidth(0, 80);
+    this->ui.tableWidget->setColumnWidth(1, 80);
     this->ui.tableWidget->setColumnWidth(2, 300);
     this->ui.tableWidget->setColumnWidth(3, 300);
-    this->ui.tableWidget->setColumnWidth(4, 90);
+    this->ui.tableWidget->setColumnWidth(4, 300);
     this->ui.tableWidget->setColumnWidth(5, 90);
+    this->ui.tableWidget->setColumnWidth(6, 90);
 
     int row_number = 1;
     for (int i = 0; i < clients.size(); i++) {
@@ -495,6 +496,10 @@ void Funeraria::slotShowClients()
         // Set the row height to 21px multiplied by the number of lines
         this->ui.tableWidget->setRowHeight(i, 30*lines);
 
+        QTableWidgetItem* id_widget = new QTableWidgetItem(clients[i]["id"]);
+        // Set the field as not editable
+        id_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         QTableWidgetItem* position_widget = new QTableWidgetItem(clients[i]["position"]);
         // Set the field as not editable
         position_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -518,17 +523,19 @@ void Funeraria::slotShowClients()
             this->row_bg = this->row_odd;
         }
 
+        id_widget->setBackground(QBrush(row_bg));
         position_widget->setBackground(QBrush(row_bg));
         name_widget->setBackground(QBrush(row_bg));
         emails_widget->setBackground(QBrush(row_bg));
         phones_widget->setBackground(QBrush(row_bg));
 
-        this->ui.tableWidget->setItem(i, 0, position_widget);
-        this->ui.tableWidget->setItem(i, 1, name_widget);
-        this->ui.tableWidget->setItem(i, 2, emails_widget);
-        this->ui.tableWidget->setItem(i, 3, phones_widget);
-        this->ui.tableWidget->setCellWidget(i, 4, pb_details);
-        this->ui.tableWidget->setCellWidget(i, 5, pb_delete);
+        this->ui.tableWidget->setItem(i, 0, id_widget);
+        this->ui.tableWidget->setItem(i, 1, position_widget);
+        this->ui.tableWidget->setItem(i, 2, name_widget);
+        this->ui.tableWidget->setItem(i, 3, emails_widget);
+        this->ui.tableWidget->setItem(i, 4, phones_widget);
+        this->ui.tableWidget->setCellWidget(i, 5, pb_details);
+        this->ui.tableWidget->setCellWidget(i, 6, pb_delete);
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotClientDetails);
         this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDeleteItem);
@@ -542,6 +549,7 @@ void Funeraria::slotClientDetails()
     // Row index of the clicked button
     int row = this->ui.tableWidget->currentRow();
     // Set the name property of the Client object to the name present in the clicked row
+    this->client_ui->setId(this->ui.tableWidget->item(row, 0)->text().toInt());
     this->client_ui->setName(this->ui.tableWidget->item(row, 1)->text());
     this->client_ui->setModal(true);
     this->client_ui->exec();

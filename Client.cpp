@@ -151,7 +151,38 @@ QList<QMap<QString, QString>> Client::get()
     return list;
 }
 
-QMap<QString, QString> Client::getDetails(const QString& name)
+QMap<QString, QString> Client::getDetailsById(int id)
+{
+    QMap<QString, QString> map;
+
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT * FROM " + this->table + " WHERE id = :id;");
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+    else if (query.next()) {
+        map["id"] = query.value("id").toString();
+        map["position"] = query.value("position").toString();
+        map["name"] = query.value("name").toString();
+        map["email"] = query.value("email").toString();
+        map["address"] = query.value("address").toString();
+        map["phone"] = query.value("phone").toString();
+        map["active"] = query.value("active").toString();
+        map["quick"] = query.value("quick").toString();
+        map["created_at"] = query.value("created_at").toString();
+        map["edited_at"] = query.value("edited_at").toString();
+    }
+
+    return map;
+}
+
+QMap<QString, QString> Client::getDetailsByName(const QString& name)
 {
     QMap<QString, QString> map;
 
@@ -192,7 +223,7 @@ void Client::remove(const int id)
 
     // rearrangePosition() will intercept the intent to remove a client (-1) 
     // and will take care of set an invalid position to this client to prevent collisions
-    if (!this->rearrangePositions(id, name, -1)) {
+    if (!this->rearrangePositions(id, this->getName(id), - 1)) {
         this->db.rollback();
         return;
     }
@@ -408,10 +439,10 @@ bool Client::rearrangePositions(const int id, const QString& name, const int new
 {
     // Last position currently in use
     int last_position = this->getLastPosition();
-
+    
     // A client is being removed
     if (new_position == -1) {
-        QMap<QString, QString> old_client_data = this->getDetails(name);
+        QMap<QString, QString> old_client_data = this->getDetailsByName(name);
 
         // Set the client's position to a not valid number
         if (!this->setInvalidPosition(id)) {
@@ -438,9 +469,9 @@ bool Client::rearrangePositions(const int id, const QString& name, const int new
 
     // If the new position is not after the curent last
     if (new_position <= last_position) {
-        // If the client's id is not 0, this is an existing client, we also need to check for position change
-        if (id != 0) {
-            QMap<QString, QString> old_client_data = this->getDetails(name);
+        // If the client's id is not new_client_temp_id, this is an existing client, we also need to check for position change
+        if (id != this->new_client_temp_id) {
+            QMap<QString, QString> old_client_data = this->getDetailsById(id);
 
             // If the client's position has changed
             if (new_position != old_client_data["position"].toInt()) {

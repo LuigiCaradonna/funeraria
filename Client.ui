@@ -3,7 +3,7 @@
  <class>ClientClass</class>
  <widget class="QDialog" name="ClientClass">
   <property name="windowModality">
-   <enum>Qt::NonModal</enum>
+   <enum>Qt::WindowModality::NonModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -65,13 +65,13 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>50</width>
+         <width>70</width>
          <height>27</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>50</width>
+         <width>70</width>
          <height>27</height>
         </size>
        </property>
@@ -113,13 +113,13 @@
       <widget class="QLineEdit" name="lePosition">
        <property name="minimumSize">
         <size>
-         <width>50</width>
+         <width>70</width>
          <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>50</width>
+         <width>70</width>
          <height>30</height>
         </size>
        </property>
@@ -365,7 +365,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
