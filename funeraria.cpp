@@ -446,7 +446,7 @@ void Funeraria::slotShowClients()
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 80);
+    this->ui.tableWidget->setColumnWidth(0, 60);
     this->ui.tableWidget->setColumnWidth(1, 80);
     this->ui.tableWidget->setColumnWidth(2, 300);
     this->ui.tableWidget->setColumnWidth(3, 300);
@@ -757,10 +757,7 @@ void Funeraria::slotDeleteItem() {
     if (message.clickedButton() == proceed_btn) {
         // Delete the item
 
-        if (this->current_table == "tombs") {
-
-        }
-        else if (this->current_table == "vases") {
+        if (this->current_table == "vases") {
             this->vase->remove(this->ui.tableWidget->item(row, 0)->text());
         }
         else if (this->current_table == "lamps") {
@@ -773,7 +770,7 @@ void Funeraria::slotDeleteItem() {
             this->material->remove(this->ui.tableWidget->item(row, 0)->text());
         }
         else if (this->current_table == "clients") {
-            this->client->remove(this->client->getId(this->ui.tableWidget->item(row, 1)->text()));
+            this->client->remove(this->ui.tableWidget->item(row, 0)->text().toInt());
             this->slotShowClients();
             return;
         }
