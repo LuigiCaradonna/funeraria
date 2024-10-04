@@ -111,6 +111,13 @@ protected slots:
     void slotClientOrders();
 
     /*
+     * Shows an order given its progressive number
+     *
+     * @return void
+     */
+    void slotSearchByProgressive();
+
+    /*
      * Shows the selected client's orders when using the quick access buttons
      *
      * @return void
@@ -276,8 +283,8 @@ private:
     QColor row_bg = QColor(255, 255, 255);
     QColor row_even = QColor(255, 255, 255);
     QColor row_odd = QColor(235, 235, 235);
-    QColor tomb_delivered_even = QColor(200, 240, 200);
-    QColor tomb_delivered_odd = QColor(180, 210, 180);
+    QColor tomb_delivered_even = QColor(180, 211, 180);
+    QColor tomb_delivered_odd = QColor(200, 240, 200);
     QColor tomb_to_engrave = QColor(180, 225, 235);
     QColor warning_bg = QColor(250, 200, 70);
 

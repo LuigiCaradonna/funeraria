@@ -45,6 +45,77 @@
        <number>3</number>
       </property>
       <item>
+       <layout class="QHBoxLayout" name="btnBar">
+        <item>
+         <widget class="QPushButton" name="btnReport">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Report</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset theme="QIcon::ThemeIcon::DocumentPageSetup"/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnToEngrave">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Da incidere</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset theme="QIcon::ThemeIcon::MailMessageNew"/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnNewTomb">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Nuova lapide</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset theme="QIcon::ThemeIcon::ListAdd"/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="topHContainer">
         <item>
          <widget class="QLabel" name="lblClient">
@@ -222,41 +293,59 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="btnReport">
+         <widget class="QLabel" name="lblSearchByProgressive">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
           <property name="font">
            <font>
             <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
-           <string>Report</string>
+           <string>Numero</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnToEngrave">
+         <widget class="QLineEdit" name="leSearchByProgressive">
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>65</width>
+            <height>30</height>
+           </size>
+          </property>
           <property name="font">
            <font>
             <pointsize>12</pointsize>
            </font>
-          </property>
-          <property name="text">
-           <string>Da incidere</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnNewTomb">
+         <widget class="QPushButton" name="btnSearchByProgressive">
           <property name="font">
            <font>
             <pointsize>12</pointsize>
            </font>
           </property>
-          <property name="toolTip">
-           <string>Nuova lapide</string>
-          </property>
           <property name="text">
-           <string>Nuova</string>
+           <string>Cerca</string>
           </property>
          </widget>
         </item>
@@ -266,6 +355,11 @@
        <layout class="QHBoxLayout" name="mainHContainer">
         <item>
          <widget class="QTableWidget" name="tableWidget">
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
           <property name="mouseTracking">
            <bool>true</bool>
           </property>
@@ -357,14 +451,6 @@
    <addaction name="menuClienti"/>
    <addaction name="menuAccessories"/>
    <addaction name="menuLapidi"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionFNew">

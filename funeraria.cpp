@@ -66,11 +66,12 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.cbYear->setCurrentIndex(1);
 
         // Set the event listeners for main UI's elements
+        this->connect(this->ui.btnReport, &QPushButton::clicked, this, &Funeraria::slotReport);
         this->connect(this->ui.btnToEngrave, &QPushButton::clicked, this, &Funeraria::slotTombsToEngrave);
         this->connect(this->ui.btnNewTomb, &QPushButton::clicked, this, &Funeraria::slotNewTomb);
         this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
         this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
-        this->connect(this->ui.btnReport, &QPushButton::clicked, this, &Funeraria::slotReport);
+        this->connect(this->ui.btnSearchByProgressive, &QPushButton::clicked, this, &Funeraria::slotSearchByProgressive);
 
         // Signal emitted from the menu "Files"
         this->connect(this->ui.actionBackupCSV, SIGNAL(triggered()), this, SLOT(slotBackupDbToCSV()));
@@ -342,6 +343,22 @@ void Funeraria::slotClientOrders()
     }
 
     QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->ui.chbEngraved->isChecked(), name);
+
+    this->showClientOrders(tombs);
+
+    delete tomb;
+}
+
+void Funeraria::slotSearchByProgressive()
+{
+    Tomb* tomb = new Tomb(this->db->db);
+    QList<QMap<QString, QString>> tombs;
+
+    this->current_table = "tombs";
+
+    int progressive = this->ui.leSearchByProgressive->text().trimmed().toInt();
+
+    tombs.append(tomb->getByProgressive(progressive));
 
     this->showClientOrders(tombs);
 
