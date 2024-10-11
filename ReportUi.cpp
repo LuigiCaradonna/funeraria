@@ -31,10 +31,10 @@ ReportUi::ReportUi(const QSqlDatabase& db, QWidget* parent)
     this->ui.cbClient->addItem("Tutti");
     this->ui.cbClient->addItems(clients);
 
-    // Populate the years combo box, years go back until 2020
+    // Populate the years combo box, years go back until 2013
     this->ui.cbYear->addItem("Tutti");
     QString this_year = QDate::currentDate().toString("yyyy");
-    for (int i = this_year.toInt(); i >= 2020; i--) {
+    for (int i = this_year.toInt(); i >= 2013; i--) {
         this->ui.cbYear->addItem(QString::number(i));
     }
 }

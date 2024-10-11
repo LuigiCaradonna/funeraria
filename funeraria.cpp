@@ -358,7 +358,19 @@ void Funeraria::slotSearchByProgressive()
 
     int progressive = this->ui.leSearchByProgressive->text().trimmed().toInt();
 
-    tombs.append(tomb->getByProgressive(progressive));
+    QMap<QString, QString> tomb_found = tomb->getByProgressive(progressive);
+
+    if (tomb_found.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Non è stata trovata alcuna lapide col numero progressivo fornito.");
+        message.exec();
+
+        return;
+    }
+
+    tombs.append(tomb_found);
 
     this->showClientOrders(tombs);
 
