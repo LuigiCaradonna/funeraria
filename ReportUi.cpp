@@ -68,9 +68,18 @@ void ReportUi::slotAddValueLabels()
             // Create and position the text item
             QGraphicsSimpleTextItem* label = new QGraphicsSimpleTextItem(QString::number(set->at(j)));
             label->setFont(font);
-            label->setBrush(QBrush(Qt::white));
-            // +25 pushes the lable down inside the bar
-            label->setPos(barX - label->boundingRect().width() / 2, barY - label->boundingRect().height() + 25);
+            
+
+            if (set->at(j) > 5) {
+                label->setBrush(QBrush(Qt::white));
+                // +25 pushes the lable down inside the bar
+                label->setPos(barX - label->boundingRect().width() / 2, barY - label->boundingRect().height() + 25);
+            }
+            else {
+                // Write the value in black outside the bar
+                label->setBrush(QBrush(Qt::black));
+                label->setPos(barX - label->boundingRect().width() / 2, barY - label->boundingRect().height());
+            }
 
             this->chart->scene()->addItem(label);
         }
@@ -351,60 +360,7 @@ void ReportUi::showReportGraph(
     // Add value labels on top of bars, using a delay to wait the graph to be ready before to add the lables
     QTimer::singleShot(100, this, SLOT(slotAddValueLabels()));
 }
-/*
-void ReportUi::showGeneralTrendGraph()
-{
-    this->clearLayout();
 
-    Tomb* tomb = new Tomb(this->db);
-
-    QList<QMap<QString, QString>> report = tomb->getGeneralTrend();
-
-    QBarSet* set = new QBarSet("Lapidi");
-    QCategoryAxis* axisX = new QCategoryAxis();
-    QStringList categories;
-
-    int max = 0;
-    for (int i = 0; i < report.size(); i++) {
-        // Years prior to 2013 have missing data
-        if (report[i]["year"].toInt() < 2013) continue;
-
-        // The inserted set is the last of the list, assign a value to it
-        *set << report[i]["amount"].toInt();
-
-        // Holds the category titles, the year
-        categories << report[i]["year"];
-    }
-
-    // Add the set to the series
-    this->series->append(set);
-
-    // Create chart, add data, hide legend, and add axis
-    this->chart->addSeries(this->series);
-
-    // Customize the title font
-    QFont font;
-    font.setPixelSize(18);
-    this->chart->setTitleFont(font);
-    this->chart->setTitleBrush(QBrush(Qt::black));
-    this->chart->setTitle("Andamento realizzazione lapidi");
-
-    // Adds categories to the axes
-    QBarCategoryAxis* axis = new QBarCategoryAxis();
-    axis->append(categories);
-    this->chart->createDefaultAxes();
-
-    this->chart->setAxisX(axis, this->series);
-    // Used to display the chart
-    this->chartView->setRenderHint(QPainter::Antialiasing);
-    this->ui.ReportContainer->addWidget(this->chartView);
-
-    // Add value labels on top of bars, using a delay to wait the graph to be ready before to add the lables
-    QTimer::singleShot(100, this, SLOT(slotAddValueLabels()));
-
-    delete tomb;
-}
-*/
 void ReportUi::clearLayout()
 {
     QLayoutItem* child;
