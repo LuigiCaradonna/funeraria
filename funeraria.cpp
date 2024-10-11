@@ -799,8 +799,23 @@ void Funeraria::slotDeleteItem() {
             this->material->remove(this->ui.tableWidget->item(row, 0)->text());
         }
         else if (this->current_table == "clients") {
-            this->client->remove(this->ui.tableWidget->item(row, 0)->text().toInt());
-            this->slotShowClients();
+            if (this->client->remove(this->ui.tableWidget->item(row, 0)->text().toInt())) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Information);
+                message.setText("Eliminazione eseguita.");
+                message.exec();
+
+                this->slotShowClients();
+            }
+            else {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Critical);
+                message.setText("Eliminazione non riuscita.");
+                message.exec();
+            }
+
             return;
         }
 

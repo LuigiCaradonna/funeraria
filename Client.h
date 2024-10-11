@@ -99,9 +99,9 @@ public:
      *
      * @param   const int id - Client's id
      *
-     * @return  void
+     * @return  boolean true on success, false on failure
      */
-    void remove(const int id);
+    bool remove(const int id);
 
     /*
      * Creates a new client entry

@@ -10,6 +10,9 @@ ClientUi::ClientUi(const QSqlDatabase& db, QWidget* parent)
     // Sets an icon for the window
     this->setWindowIcon(QIcon("funeraria.png"));
 
+    // id initialization
+    this->id = 0;
+
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &ClientUi::slotCloseDialog);
 }
 
@@ -49,15 +52,28 @@ void ClientUi::slotSave()
             quick = 1;
         }
 
-        client->store(
+        if (client->store(
             this->ui.lePosition->text().trimmed().toInt(),
             this->ui.leName->text().trimmed(),
             this->ui.teEmail->toPlainText().trimmed(),
             this->ui.leAddress->text().trimmed(),
             this->ui.tePhone->toPlainText().trimmed(),
             active,
-            quick
-        );
+            quick)
+        ) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Information);
+            message.setText("Cliente creato.");
+            message.exec();
+        }
+        else {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Inserimento cliente non riuscito.");
+            message.exec();
+        }
 
         delete client;
         // Close the dialog
@@ -80,7 +96,7 @@ void ClientUi::slotUpdate()
             quick = 1;
         }
 
-        client->update(
+        if (client->update(
             this->ui.leId->text().toInt(),
             this->ui.lePosition->text().trimmed().toInt(),
             this->ui.leName->text().trimmed(),
@@ -88,8 +104,21 @@ void ClientUi::slotUpdate()
             this->ui.leAddress->text().trimmed(),
             this->ui.tePhone->toPlainText().trimmed(),
             active,
-            quick
-        );
+            quick)
+        ) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Information);
+            message.setText("Cliente modificato.");
+            message.exec();
+        }
+        else {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Aggiornamento cliente non riuscito.");
+            message.exec();
+        }
 
         delete client;
         // Close the dialog

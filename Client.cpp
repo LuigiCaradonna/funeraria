@@ -216,7 +216,7 @@ QMap<QString, QString> Client::getDetailsByName(const QString& name)
     return map;
 }
 
-void Client::remove(const int id)
+bool Client::remove(const int id)
 {
     // Begin a transaction
     this->db.transaction();
@@ -225,7 +225,7 @@ void Client::remove(const int id)
     // and will take care of set an invalid position to this client to prevent collisions
     if (!this->rearrangePositions(id, this->getName(id), - 1)) {
         this->db.rollback();
-        return;
+        return false;
     }
 
     QSqlQuery query = QSqlQuery(this->db);
@@ -233,23 +233,13 @@ void Client::remove(const int id)
     query.bindValue(":id", id);
 
     if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
-        message.exec();
-
         this->db.rollback();
-        return;
+        return false;
     }
 
     this->db.commit();
 
-    QMessageBox message;
-    message.setWindowTitle("Funeraria");
-    message.setIcon(QMessageBox::Information);
-    message.setText("Eliminazione eseguita.");
-    message.exec();
+    return true;
 }
 
 /********** PRIVATE FUNCTIONS **********/
@@ -313,23 +303,12 @@ bool Client::store(
     query.bindValue(":edited_at", created_at);
 
     if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
-        message.exec();
 
         this->db.rollback();
         return false;
     }
 
     this->db.commit();
-
-    QMessageBox message;
-    message.setWindowTitle("Funeraria");
-    message.setIcon(QMessageBox::Information);
-    message.setText("Cliente creato.");
-    message.exec();
 
     return true;
 }
@@ -395,23 +374,11 @@ bool Client::update(
     query.bindValue(":id", id);
 
     if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
-        message.exec();
-
         this->db.rollback();
         return false;
     }
 
     this->db.commit();
-
-    QMessageBox message;
-    message.setWindowTitle("Funeraria");
-    message.setIcon(QMessageBox::Information);
-    message.setText("Cliente modificato.");
-    message.exec();
 
     return true;
 }
