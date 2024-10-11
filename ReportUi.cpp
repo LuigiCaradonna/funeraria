@@ -69,7 +69,6 @@ void ReportUi::slotAddValueLabels()
             QGraphicsSimpleTextItem* label = new QGraphicsSimpleTextItem(QString::number(set->at(j)));
             label->setFont(font);
             
-
             if (set->at(j) > 5) {
                 label->setBrush(QBrush(Qt::white));
                 // +25 pushes the lable down inside the bar
@@ -137,7 +136,7 @@ void ReportUi::slotGenerateReport()
                 // Una barra ogni anno col totale delle lapidi richieste dal cliente
                 // Nome sopra "nome del cliente"
                 // category: anno, set: quantità
-                title = this->ui.cbClient->currentText() + "Totale: " + QString::number(total);
+                title = this->ui.cbClient->currentText() + " - Totale: " + QString::number(total);
                 category = "year";
                 this->showReportGraph(report, year_by_year, title, category);
             }
