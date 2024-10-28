@@ -307,7 +307,7 @@ void Funeraria::slotPrintToPayListPdf()
     if (filename.trimmed() == "") return;
 
     // Load the font to be used inside the table
-    QString full_path_font(qApp->applicationDirPath() + "/" + "fonts/Cour.ttf");
+    QString full_path_font(qApp->applicationDirPath() + "/" + "fonts/cour.ttf");
     int font_ID = QFontDatabase::addApplicationFont(full_path_font);
     QString font_family = QFontDatabase::applicationFontFamilies(font_ID).at(0);
 
