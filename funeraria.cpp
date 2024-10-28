@@ -36,10 +36,20 @@ Funeraria::Funeraria(QWidget* parent)
         // Set the font for the table
         QFont font("Calibri", 12);
         this->ui.tableWidget->setFont(font);
-        this->connect(this->ui.tableWidget->horizontalHeader(), &QHeaderView::sectionClicked, this, &Funeraria::slotHeaderClicked);
+        this->connect(
+            this->ui.tableWidget->horizontalHeader(), 
+            &QHeaderView::sectionClicked, 
+            this, 
+            &Funeraria::slotHeaderClicked
+        );
 
         // Connect the customContextMenuRequested signal to a slot
-        connect(this->ui.tableWidget, &QTableWidget::customContextMenuRequested, this, &Funeraria::slotShowContextMenu);
+        this->connect(
+            this->ui.tableWidget, 
+            &QTableWidget::customContextMenuRequested, 
+            this, 
+            &Funeraria::slotShowContextMenu
+        );
 
         this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
@@ -88,7 +98,10 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionTPay, SIGNAL(triggered()), this, SLOT(slotTombsNotPaid()));
         this->connect(this->ui.actionSearchByProgressive, SIGNAL(triggered()), this, SLOT(slotTombByProgressive()));
 
-        // Map the signal coming from the menu "Accessori" to call the same function (slotNewItem) with the proper parameter
+        /* 
+         * Map the signal coming from the menu "Accessori" to call the same function (slotNewItem) 
+         * with the proper parameter
+         */
         this->new_item_mapper = new QSignalMapper(this);
         this->connect(this->ui.actionMNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionVNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
@@ -100,7 +113,10 @@ Funeraria::Funeraria(QWidget* parent)
         new_item_mapper->setMapping(this->ui.actionFNew, "flames");
         this->connect(new_item_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotNewItem);
 
-        // Map the signal coming from the menu "Accessori" to call the same function (slotShowItems) with the proper parameter
+        /* 
+         * Map the signal coming from the menu "Accessori" to call the same function (slotShowItems) 
+         * with the proper parameter
+         */
         this->show_items_mapper = new QSignalMapper(this);
         this->connect(this->ui.actionMList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionVList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
@@ -145,11 +161,17 @@ void Funeraria::slotShowContextMenu(const QPoint& pos) {
 
     // Create the actions according to what is the selection or the point where clicked
     QAction* sumPrices = this->context_menu->addAction("Somma i prezzi selezionati");
-    QAction* printList = this->context_menu->addAction("Genera lista");
+
+    QMenu* list = this->context_menu->addMenu("Genera lista");
+    QAction* printListTxt = list->addAction("Formato TXT");
+    QAction* printListPdf = list->addAction("Formato PDF");
     
     // Connect actions to slots
     connect(sumPrices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
-    connect(printList, &QAction::triggered, this, &Funeraria::slotPrintToPayList);
+
+    // TODO : Rinominare le funzioni e creare quella per il PDF
+    connect(printListTxt, &QAction::triggered, this, &Funeraria::slotPrintToPayListTxt);
+    connect(printListPdf, &QAction::triggered, this, &Funeraria::slotPrintToPayListPdf);
 
     // Position where to show the context menu
     this->context_menu->popup(this->ui.tableWidget->viewport()->mapToGlobal(pos));
@@ -191,7 +213,7 @@ void Funeraria::slotSumSelectedPrices() {
     message.exec();
 }
 
-void Funeraria::slotPrintToPayList() {
+void Funeraria::slotPrintToPayListTxt() {
     QList<QTableWidgetItem*> items = this->ui.tableWidget->selectedItems();
 
     if (items.isEmpty()) {
@@ -259,6 +281,97 @@ void Funeraria::slotPrintToPayList() {
     message.setText("Il file è stato generato.");
     message.exec();
     return;
+}
+
+void Funeraria::slotPrintToPayListPdf()
+{
+    QList<QTableWidgetItem*> items = this->ui.tableWidget->selectedItems();
+
+    if (items.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Nessun lavoro selezionato");
+        message.exec();
+        return;
+    }
+
+    // Get the top left and bottom right index of any selection made on the table
+    QList<QTableWidgetSelectionRange> ranges = this->ui.tableWidget->selectedRanges();
+
+    // Filter to show only txt files
+    QString filter = "pdf(*.pdf)";
+    QString filename = QFileDialog::getSaveFileName(this, tr("save_to"), "", filter);
+
+    // If no file name is provided, stop the execution, the user just closed the dialog window
+    if (filename.trimmed() == "") return;
+
+    // Load the font to be used inside the table
+    QString full_path_font(qApp->applicationDirPath() + "/" + "fonts/Cour.ttf");
+    int font_ID = QFontDatabase::addApplicationFont(full_path_font);
+    QString font_family = QFontDatabase::applicationFontFamilies(font_ID).at(0);
+
+    QString html = "";
+    html += "<table style='font-family: " + font_family + ";font-size:220px;' cellpadding='5' width='80%'>";
+
+    html += "<tr><th colspan='2' style='text-align:left'>Elenco lavori</th></tr>";
+
+    double total = 0;
+
+    // For all the selections
+    for (int i = 0; i < ranges.size(); i++) {
+        // Loop through the first and last row
+        for (int j = ranges[i].topRow(); j <= ranges[i].bottomRow(); j++) {
+            // If a name is defined, the material and the description are not necessary
+            if (this->ui.tableWidget->item(j, 1)->data(Qt::DisplayRole).toString() != this->name_not_defined) {
+                // Print the data of each row
+                html += "<tr><td width='80%'>" + this->ui.tableWidget->item(j, 1)->data(Qt::DisplayRole).toString() + "</td>"; // Name
+            }
+            else {
+                // Print the data of each row
+                html += "<tr><td width='80%'>" + this->ui.tableWidget->item(j, 2)->data(Qt::DisplayRole).toString() + " - "; // Material
+                html += this->ui.tableWidget->item(j, 5)->data(Qt::DisplayRole).toString() + "</td>"; // Notes
+            }
+
+            QString price = this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toString();
+            // Number of spaces to add after the euro symbol, depending on the price's digits
+            // price's max predicted digits are at most 4, thus at least 1 space will be added
+            int num_spaces = 5 - price.size();
+            QString spaces = "";
+
+            for (int i = 0; i < num_spaces; i++) {
+                spaces += "&nbsp;";
+            }
+
+            html += "<td align='right'> €" + spaces + price + "</td></tr>"; // Price
+
+            total += this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toDouble();
+        }
+    }
+
+    html += "<tr><td></td><td><hr></td></tr>";
+
+    // Number of spaces to add after the euro symbol, depending on the total's digits
+    // total's max predicted digits are at most 4, thus at least 1 space will be added
+    int num_spaces = 5 - QString::number(total).size();
+    QString spaces = "";
+
+    for (int i = 0; i < num_spaces; i++) {
+        spaces += "&nbsp;";
+    }
+
+    html += "<tr><td>Totale</td><td style='text-align:right'>€" + spaces + QString::number(total) + "</td></tr></table>"; // Total price
+
+    QTextDocument document;
+    document.setHtml(html);
+
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setPageSize(QPageSize(QPageSize::A4));
+    printer.setOutputFileName(filename);
+    printer.setPageMargins(QMarginsF(5, 5, 5, 5));
+
+    document.print(&printer);
 }
 
 void Funeraria::slotHeaderClicked(int logical_index) {

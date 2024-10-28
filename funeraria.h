@@ -6,6 +6,8 @@
 #include <QSignalMapper>
 #include <QMenu>
 #include <QInputDialog>
+#include <QTextDocument>
+#include <QPrinter>
 #include "ui_funeraria.h"
 #include "DatabaseManager.h"
 #include "Config.h"
@@ -67,11 +69,20 @@ protected slots:
     void slotSumSelectedPrices();
 
     /*
-     * Iterates over the selected rows and gets informations to save a list containing the data of the tombs to be paid.
+     * Iterates over the selected rows and gets informations to save a list containing the data of the tombs 
+     * to be paid into a txt file.
      * 
      * @return void
      */
-    void slotPrintToPayList();
+    void slotPrintToPayListTxt();
+
+    /*
+     * Iterates over the selected rows and gets informations to save a list containing the data of the tombs
+     * to be paid into a pdf file.
+     *
+     * @return void
+     */
+    void slotPrintToPayListPdf();
 
     /*
      * Sorts the table's rows according to the clicked column name.
