@@ -1371,33 +1371,38 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
-    this->ui.tableWidget->setColumnWidth(1, 200);   // Name
-    this->ui.tableWidget->setColumnWidth(2, 145);   // Material
+    this->ui.tableWidget->setColumnWidth(1, 210);   // Name
+    this->ui.tableWidget->setColumnWidth(2, 155);   // Material
     this->ui.tableWidget->setColumnWidth(3, 45);    // Price
     this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
-    this->ui.tableWidget->setColumnWidth(5, 600);   // Notes
+    this->ui.tableWidget->setColumnWidth(5, 680);   // Notes
     this->ui.tableWidget->setColumnWidth(6, 80);    // Accessories mounted
     this->ui.tableWidget->setColumnWidth(7, 90);    // Ordered at
     this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
     this->ui.tableWidget->setColumnWidth(9, 90);    // Confirmed at
     this->ui.tableWidget->setColumnWidth(10, 90);   // Engraved at
     this->ui.tableWidget->setColumnWidth(11, 90);   // Delivered at
-    this->ui.tableWidget->setColumnWidth(12, 80);   // Details Button
-    this->ui.tableWidget->setColumnWidth(13, 70);   // Open folder Button
-    this->ui.tableWidget->setColumnWidth(14, 70);   // Set paid tomb button
-
+    this->ui.tableWidget->setColumnWidth(12, 40);   // Details Button
+    this->ui.tableWidget->setColumnWidth(13, 40);   // Open folder Button
+    this->ui.tableWidget->setColumnWidth(14, 40);   // Set paid tomb button
 }
 
 void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row)
 {
     QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
-    pb_details->setText("Dettagli");
+    // pb_details->setText("Dettagli");
+    pb_details->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::SystemSearch));
+    pb_details->setToolTip("Dettagli");
 
     QPushButton* pb_open_folder = new QPushButton(this->ui.tableWidget);
-    pb_open_folder->setText("Apri");
+    // pb_open_folder->setText("Apri");
+    pb_open_folder->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FolderOpen));
+    pb_open_folder->setToolTip("Apri");
 
     QPushButton* pb_set_paid = new QPushButton(this->ui.tableWidget);
-    pb_set_paid->setText("Pagata");
+    // pb_set_paid->setText("Pagata");
+    pb_set_paid->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ZoomFitBest));
+    pb_set_paid->setToolTip("Pagata");
 
     // Generate the cells' content and set them as not editable
     QTableWidgetItem* progressive = new QTableWidgetItem(tomb["progressive"]);
