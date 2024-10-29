@@ -51,6 +51,12 @@ Funeraria::Funeraria(QWidget* parent)
             &Funeraria::slotShowContextMenu
         );
 
+        // Set icons for the menu items
+        this->ui.actionBackupCSV->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentNew));
+        this->ui.actionSettings->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+        this->ui.actionCNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ContactNew));
+        this->ui.actionCList->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::AddressBookNew));
+
         this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
         this->client_ui = new ClientUi(this->db->db, this);

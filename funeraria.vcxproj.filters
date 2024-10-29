@@ -144,6 +144,12 @@
     <Image Include="funeraria.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icons\flame-48.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\vase-50.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="funeraria.rc">
