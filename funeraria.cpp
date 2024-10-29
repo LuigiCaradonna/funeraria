@@ -160,18 +160,23 @@ void Funeraria::slotShowContextMenu(const QPoint& pos) {
     this->context_menu->clear();
 
     // Create the actions according to what is the selection or the point where clicked
-    QAction* sumPrices = this->context_menu->addAction("Somma i prezzi selezionati");
+    QAction* sum_prices = this->context_menu->addAction("Somma i prezzi selezionati");
 
     QMenu* list = this->context_menu->addMenu("Genera lista");
-    QAction* printListTxt = list->addAction("Formato TXT");
-    QAction* printListPdf = list->addAction("Formato PDF");
+    QAction* print_listTxt = list->addAction("Formato TXT");
+    QAction* print_listPdf = list->addAction("Formato PDF");
+
+    sum_prices->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ZoomFitBest));
+    list->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::Printer));
+    print_listTxt->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentNew));
+    print_listPdf->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentPrintPreview));
     
     // Connect actions to slots
-    connect(sumPrices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
+    connect(sum_prices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
 
     // TODO : Rinominare le funzioni e creare quella per il PDF
-    connect(printListTxt, &QAction::triggered, this, &Funeraria::slotPrintToPayListTxt);
-    connect(printListPdf, &QAction::triggered, this, &Funeraria::slotPrintToPayListPdf);
+    connect(print_listTxt, &QAction::triggered, this, &Funeraria::slotPrintToPayListTxt);
+    connect(print_listPdf, &QAction::triggered, this, &Funeraria::slotPrintToPayListPdf);
 
     // Position where to show the context menu
     this->context_menu->popup(this->ui.tableWidget->viewport()->mapToGlobal(pos));
