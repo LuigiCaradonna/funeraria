@@ -115,28 +115,23 @@ void ReportUi::slotGenerateReport()
             tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, false);
 
         if (this->ui.rbGraph->isChecked()) {
+            int total = 0;
+            for (int i = 0; i < report.size(); i++) {
+                total += report[i]["amount"].toInt();
+            }
+
             if (group == "year") {
-                int total = 0;
-                for (int i = 0; i < report.size(); i++) {
-                    total += report[i]["amount"].toInt();
-                }
                 // Totale di ogni cliente da sempre
                 // category: nomi, set: quantità
                 title = "Andamento ordini annuali. Totale: " + QString::number(total);
                 category = "year";
-                this->showReportGraph(report, title, category, group);
             }
             else if (group == "month") {
-                int total = 0;
-                for (int i = 0; i < report.size(); i++) {
-                    total += report[i]["amount"].toInt();
-                }
-                // Totale di ogni cliente da sempre
-                // category: nomi, set: quantità
                 title = "Andamento ordini mensili. Totale: " + QString::number(total);
                 category = "month";
-                this->showReportGraph(report, title, category, group);
             }
+
+            this->showReportGraph(report, title, category, group);
         }
         else {
             // Totale di ogni cliente da sempre
