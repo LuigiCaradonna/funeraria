@@ -17,6 +17,26 @@ QString Helpers::dateSqlToIta(const QString& date_sql)
     return date;
 }
 
+QString Helpers::monthNumberToName(const int number)
+{
+    QString month = "nd";
+
+    if (number == 1) month = "Gen";
+    else if (number == 2) month = "Feb";
+    else if (number == 3) month = "Mar";
+    else if (number == 4) month = "Apr";
+    else if (number == 5) month = "Mag";
+    else if (number == 6) month = "Giu";
+    else if (number == 7) month = "Lug";
+    else if (number == 8) month = "Ago";
+    else if (number == 9) month = "Set";
+    else if (number == 10) month = "Ott";
+    else if (number == 11) month = "Nov";
+    else if (number == 12) month = "Dic";
+
+    return month;
+}
+
 bool Helpers::isValidItaDate(const QString& date)
 {
     QRegularExpression re("\\d{1,2}/\\d{1,2}/\\d{4}");

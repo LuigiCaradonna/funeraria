@@ -17,6 +17,15 @@ public:
 	static QString dateSqlToIta(const QString& date_sql);
 
     /*
+     * Converts month's ordinal number to its name.
+     *
+     * @param   const int number - The number of the month
+     *
+     * @return  QString - The name of the month.
+     */
+    static QString monthNumberToName(const int number);
+
+    /*
      * Checks if the given date has the format dd/mm/yyyy.
      *
      * @param   const QString&  date - The date to check

@@ -175,7 +175,7 @@ QList<QMap<QString, QString>> Tomb::getReport(
             orders["year"] = QString::number(query.value("year").toInt());
         }
         else if (group == "month") {
-            orders["month"] = QString::number(query.value("month").toInt());
+            orders["month"] = Helpers::monthNumberToName(query.value("month").toInt());
         }
 
         report.append(orders);
