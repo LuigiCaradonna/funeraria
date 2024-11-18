@@ -51,6 +51,34 @@ Funeraria::Funeraria(QWidget* parent)
             &Funeraria::slotShowContextMenu
         );
 
+        // Set icons for the menu items
+
+        // File
+        this->ui.actionBackupCSV->setIcon(QIcon("icons\\backup-50.png"));
+        this->ui.actionSettings->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+        // Clienti
+        this->ui.actionCNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ContactNew));
+        this->ui.actionCList->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::AddressBookNew));
+        // Accessori
+        this->ui.menuVasi->setIcon(QIcon("icons\\vase-50w.png"));
+        this->ui.actionVNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionVList->setIcon(QIcon("icons\\list-50.png"));
+        this->ui.menuLampade->setIcon(QIcon("icons\\lamp-50.png"));
+        this->ui.actionLNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionLList->setIcon(QIcon("icons\\list-50.png"));
+        this->ui.menuFlames->setIcon(QIcon("icons\\flame-50.png"));
+        this->ui.actionFNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionFList->setIcon(QIcon("icons\\list-50.png"));
+        this->ui.menuMateriali->setIcon(QIcon("icons\\material-64.png"));
+        this->ui.actionMNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionMList->setIcon(QIcon("icons\\list-50.png"));
+        // Lapidi
+        this->ui.actionTNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionTEngrave->setIcon(QIcon("icons\\engrave-48.png"));
+        this->ui.actionTPay->setIcon(QIcon("icons\\moneybag-64.png"));
+        this->ui.actionMAccessories->setIcon(QIcon("icons\\mount-50.png"));
+
+        // Instantiate objects
         this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
         this->client_ui = new ClientUi(this->db->db, this);
@@ -160,18 +188,23 @@ void Funeraria::slotShowContextMenu(const QPoint& pos) {
     this->context_menu->clear();
 
     // Create the actions according to what is the selection or the point where clicked
-    QAction* sumPrices = this->context_menu->addAction("Somma i prezzi selezionati");
+    QAction* sum_prices = this->context_menu->addAction("Somma i prezzi selezionati");
 
     QMenu* list = this->context_menu->addMenu("Genera lista");
-    QAction* printListTxt = list->addAction("Formato TXT");
-    QAction* printListPdf = list->addAction("Formato PDF");
+    QAction* print_listTxt = list->addAction("Formato TXT");
+    QAction* print_listPdf = list->addAction("Formato PDF");
+
+    sum_prices->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ZoomFitBest));
+    list->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::Printer));
+    print_listTxt->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentNew));
+    print_listPdf->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentPrintPreview));
     
     // Connect actions to slots
-    connect(sumPrices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
+    connect(sum_prices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
 
     // TODO : Rinominare le funzioni e creare quella per il PDF
-    connect(printListTxt, &QAction::triggered, this, &Funeraria::slotPrintToPayListTxt);
-    connect(printListPdf, &QAction::triggered, this, &Funeraria::slotPrintToPayListPdf);
+    connect(print_listTxt, &QAction::triggered, this, &Funeraria::slotPrintToPayListTxt);
+    connect(print_listPdf, &QAction::triggered, this, &Funeraria::slotPrintToPayListPdf);
 
     // Position where to show the context menu
     this->context_menu->popup(this->ui.tableWidget->viewport()->mapToGlobal(pos));
@@ -1371,33 +1404,38 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
-    this->ui.tableWidget->setColumnWidth(1, 200);   // Name
-    this->ui.tableWidget->setColumnWidth(2, 145);   // Material
+    this->ui.tableWidget->setColumnWidth(1, 210);   // Name
+    this->ui.tableWidget->setColumnWidth(2, 155);   // Material
     this->ui.tableWidget->setColumnWidth(3, 45);    // Price
     this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
-    this->ui.tableWidget->setColumnWidth(5, 600);   // Notes
+    this->ui.tableWidget->setColumnWidth(5, 680);   // Notes
     this->ui.tableWidget->setColumnWidth(6, 80);    // Accessories mounted
     this->ui.tableWidget->setColumnWidth(7, 90);    // Ordered at
     this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
     this->ui.tableWidget->setColumnWidth(9, 90);    // Confirmed at
     this->ui.tableWidget->setColumnWidth(10, 90);   // Engraved at
     this->ui.tableWidget->setColumnWidth(11, 90);   // Delivered at
-    this->ui.tableWidget->setColumnWidth(12, 80);   // Details Button
-    this->ui.tableWidget->setColumnWidth(13, 70);   // Open folder Button
-    this->ui.tableWidget->setColumnWidth(14, 70);   // Set paid tomb button
-
+    this->ui.tableWidget->setColumnWidth(12, 40);   // Details Button
+    this->ui.tableWidget->setColumnWidth(13, 40);   // Open folder Button
+    this->ui.tableWidget->setColumnWidth(14, 40);   // Set paid tomb button
 }
 
 void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row)
 {
     QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
-    pb_details->setText("Dettagli");
+    // pb_details->setText("Dettagli");
+    pb_details->setIcon(QIcon("icons\\detail-50.png"));
+    pb_details->setToolTip("Dettagli");
 
     QPushButton* pb_open_folder = new QPushButton(this->ui.tableWidget);
-    pb_open_folder->setText("Apri");
+    // pb_open_folder->setText("Apri");
+    pb_open_folder->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FolderOpen));
+    pb_open_folder->setToolTip("Apri");
 
     QPushButton* pb_set_paid = new QPushButton(this->ui.tableWidget);
-    pb_set_paid->setText("Pagata");
+    // pb_set_paid->setText("Pagata");
+    pb_set_paid->setIcon(QIcon("icons\\moneybag-64.png"));
+    pb_set_paid->setToolTip("Pagata");
 
     // Generate the cells' content and set them as not editable
     QTableWidgetItem* progressive = new QTableWidgetItem(tomb["progressive"]);

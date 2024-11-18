@@ -144,6 +144,36 @@
     <Image Include="funeraria.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icons\vase-50w.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\flame-50.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\material-64.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\lamp-50.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\backup-50.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\engrave-48.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\mount-50.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\list-50.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\detail-50.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\moneybag-64.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="funeraria.rc">

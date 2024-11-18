@@ -58,7 +58,7 @@ public:
      * @param const int client_id       - Client's id
      * @param const int year            - Year of the tombs to get, 0 for all the years
      * @param bool engraved             - True to get only the tombs that required to be engraved, false for all the tombs
-     * @param bool year_by_year         - True to get the tombs count separately by year
+     * @param QString group             - How to group the result: by year, month or none
      * @param bool by_client            - True to get the tombs count separately by client
      *
      * @return  QList<QMap<QString, QString>> - A list containing the Tombs' report
@@ -67,7 +67,7 @@ public:
         const int client_id,
         const int year,
         bool engraved = false,
-        bool year_by_year = false,
+        QString group = "",
         bool by_client = false
     );
 

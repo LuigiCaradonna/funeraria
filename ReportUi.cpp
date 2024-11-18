@@ -14,6 +14,7 @@ ReportUi::ReportUi(const QSqlDatabase& db, QWidget* parent)
     this->connect(this->ui.btnReport, &QPushButton::clicked, this, &ReportUi::slotGenerateReport);
     this->connect(this->ui.cbClient, &QComboBox::currentTextChanged, this, &ReportUi::slotUpdateRadioState);
     this->connect(this->ui.cbYear, &QComboBox::currentTextChanged, this, &ReportUi::slotUpdateRadioState);
+    this->connect(this->ui.rbByMonth, &QRadioButton::toggled, this, &ReportUi::slotUpdateRadioState);
     this->connect(this->ui.rbByYear, &QRadioButton::toggled, this, &ReportUi::slotUpdateRadioState);
     this->connect(this->ui.rbOverall, &QRadioButton::toggled, this, &ReportUi::slotUpdateRadioState);
     this->connect(this->ui.rbGraph, &QRadioButton::toggled, this, &ReportUi::slotUpdateRadioState);
@@ -100,34 +101,54 @@ void ReportUi::slotGenerateReport()
         year = this->ui.cbYear->currentText().toInt();
     }
 
-    bool year_by_year = this->ui.rbByYear->isEnabled() && this->ui.rbByYear->isChecked();
+    QString group = "";
+
+    if (this->ui.rbByYear->isChecked()) {
+        group = "year";
+    }
+    else if (this->ui.rbByMonth->isChecked()) {
+        group = "month";
+    }
 
     if (this->ui.cbClient->currentText() == "Tutti" && this->ui.cbYear->currentText() == "Tutti") {
         QList<QMap<QString, QString>> report =
-            tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), year_by_year, false);
+            tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, false);
 
         if (this->ui.rbGraph->isChecked()) {
-            int total = 0;
-            for (int i = 0; i < report.size(); i++) {
-                total += report[i]["amount"].toInt();
+            if (group == "year") {
+                int total = 0;
+                for (int i = 0; i < report.size(); i++) {
+                    total += report[i]["amount"].toInt();
+                }
+                // Totale di ogni cliente da sempre
+                // category: nomi, set: quantità
+                title = "Andamento ordini annuali. Totale: " + QString::number(total);
+                category = "year";
+                this->showReportGraph(report, title, category, group);
             }
-            // Totale di ogni cliente da sempre
-            // category: nomi, set: quantità
-            title = "Andamento ordini annuali. Totale: " + QString::number(total);
-            category = "year";
-            this->showReportGraph(report, year_by_year, title, category);
+            else if (group == "month") {
+                int total = 0;
+                for (int i = 0; i < report.size(); i++) {
+                    total += report[i]["amount"].toInt();
+                }
+                // Totale di ogni cliente da sempre
+                // category: nomi, set: quantità
+                title = "Andamento ordini mensili. Totale: " + QString::number(total);
+                category = "month";
+                this->showReportGraph(report, title, category, group);
+            }
         }
         else {
             // Totale di ogni cliente da sempre
-            this->showReportTable(report, year_by_year);
+            this->showReportTable(report, group);
         }
     }
 
     if (this->ui.cbClient->currentText() != "Tutti" && this->ui.cbYear->currentText() == "Tutti") {
         QList<QMap<QString, QString>> report =
-            tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), year_by_year, false);
+            tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, false);
 
-        if (year_by_year) {
+        if (group == "year") {
             if (this->ui.rbGraph->isChecked()) {
                 int total = 0;
                 for (int i = 0; i < report.size(); i++) {
@@ -138,43 +159,81 @@ void ReportUi::slotGenerateReport()
                 // category: anno, set: quantità
                 title = this->ui.cbClient->currentText() + " - Totale: " + QString::number(total);
                 category = "year";
-                this->showReportGraph(report, year_by_year, title, category);
+                this->showReportGraph(report, title, category, group);
             }
             else {
                 // Una riga ogni anno col totale delle lapidi richieste dal cliente
-                this->showReportTable(report, year_by_year);
+                this->showReportTable(report, group);
+            }
+        }
+        else if (group == "month") {
+            if (this->ui.rbGraph->isChecked()) {
+                int total = 0;
+                for (int i = 0; i < report.size(); i++) {
+                    total += report[i]["amount"].toInt();
+                }
+                // Una barra ogni anno col totale delle lapidi richieste dal cliente
+                // Nome sopra "nome del cliente"
+                // category: anno, set: quantità
+                title = this->ui.cbClient->currentText() + " - Totale: " + QString::number(total);
+                category = "month";
+                this->showReportGraph(report, title, category, group);
+            }
+            else {
+                // Una riga ogni anno col totale delle lapidi richieste dal cliente
+                this->showReportTable(report, group);
             }
         }
         else {
             // totale del cliente specificato da sempre
             // basta la tabella, c'è una sola riga contenente il nome del cliente ed il totale delle lapidi ordinate da sempre
-            this->showReportTable(report, year_by_year);
+            this->showReportTable(report, group);
         }
     }
 
     if (this->ui.cbClient->currentText() != "Tutti" && this->ui.cbYear->currentText() != "Tutti") {
         QList<QMap<QString, QString>> report =
-            tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), year_by_year, false);
+            tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, false);
 
-        // Tabella con una sola riga contenente l'anno e la quantità di lapidi richieste dal cliente
-        this->showReportTable(report, year_by_year);
+        if (this->ui.rbGraph->isChecked()) {
+            int total = 0;
+            for (int i = 0; i < report.size(); i++) {
+                total += report[i]["amount"].toInt();
+            }
+            // Una barra ogni anno col totale delle lapidi richieste dal cliente
+            // Nome sopra "nome del cliente"
+            // category: anno, set: quantità
+            title = this->ui.cbClient->currentText() + " - Totale: " + QString::number(total);
+            category = "month";
+            this->showReportGraph(report, title, category, group);
+        }
+        else {
+            // Tabella con una sola riga contenente l'anno e la quantità di lapidi richieste dal cliente
+            this->showReportTable(report, group);
+        }
     }
 
     if (this->ui.cbClient->currentText() == "Tutti" && this->ui.cbYear->currentText() != "Tutti") {
+        bool by_client = group == "month" ? false : true;
+
         QList<QMap<QString, QString>> report =
-            tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), year_by_year, true);
+            tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, by_client);
 
         if (this->ui.rbGraph->isChecked()) {
-            // Una barra per ogni cliente col totale delle lapidi richieste nell'anno
-            // Nome sopra "Ordini nell'anno x"
-            // category: nomi, set: quantità
-            title = "Ordini nell'anno " + QString::number(year);
-            category = "client_id";
-            this->showReportGraph(report, year_by_year, title, category);
+            int total = 0;
+            for (int i = 0; i < report.size(); i++) {
+                total += report[i]["amount"].toInt();
+            }
+            // Una barra ogni anno col totale delle lapidi richieste dal cliente
+            // Nome sopra "nome del cliente"
+            // category: anno, set: quantità
+            title = "Ordini mensili per l'anno " + QString::number(year) + " - Totale: " + QString::number(total);
+            category = "month";
+            this->showReportGraph(report, title, category, group);
         }
         else {
             // Una riga per ogni cliente col totale delle lapidi richieste nell'anno
-            this->showReportTable(report, year_by_year);
+            this->showReportTable(report, group);
         }
     }
     
@@ -185,7 +244,11 @@ void ReportUi::slotUpdateRadioState()
 {
     // All clients and all years
     if (this->ui.cbClient->currentText() == "Tutti" && this->ui.cbYear->currentText() == "Tutti") {
-        this->ui.rbByYear->setChecked(true);
+        // Overall is not allowed in this case
+        if (this->ui.rbOverall->isChecked()) {
+            // Set by year as default
+            this->ui.rbByYear->setChecked(true);
+        }
     }
 
     // Specific client and all years
@@ -201,10 +264,16 @@ void ReportUi::slotUpdateRadioState()
         Only table output available, no use for graph
     */
     if (this->ui.cbClient->currentText() != "Tutti" && this->ui.cbYear->currentText() != "Tutti") {
-        // Only overall is available
-        this->ui.rbOverall->setChecked(true);
-        // Only the table is available
-        this->ui.rbTable->setChecked(true);
+        // By Year is not allowed in this case
+        if (this->ui.rbByYear->isChecked()) {
+            // Set overall as default
+            this->ui.rbOverall->setChecked(true);
+        }
+
+        if (this->ui.rbOverall->isChecked()) {
+            // Only the table is available
+            this->ui.rbTable->setChecked(true);
+        }
     }
 
     /*
@@ -212,14 +281,17 @@ void ReportUi::slotUpdateRadioState()
         Both the table and graph output are available
     */
     if (this->ui.cbClient->currentText() == "Tutti" && this->ui.cbYear->currentText() != "Tutti") {
-        // Only overall is available
-        this->ui.rbOverall->setChecked(true);
+        // By Year is not allowed in this case
+        if (this->ui.rbByYear->isChecked()) {
+            // Set overall as default
+            this->ui.rbOverall->setChecked(true);
+        }
     }
 }
 
 /********** PRIVATE FUNCTIONS **********/
 
-void ReportUi::showReportTable(QList<QMap<QString, QString>> report, bool year_by_year)
+void ReportUi::showReportTable(QList<QMap<QString, QString>> report, const QString& group)
 {
     this->clearLayout();
 
@@ -231,8 +303,11 @@ void ReportUi::showReportTable(QList<QMap<QString, QString>> report, bool year_b
 
     QStringList headers{ "Cliente", "Quantità" };
 
-    if (year_by_year) {
+    if (group == "year") {
         headers.append("Anno");
+    }
+    else if (group == "month") {
+        headers.append("Mese");
     }
 
     // +1 to add the last row with the total
@@ -267,13 +342,21 @@ void ReportUi::showReportTable(QList<QMap<QString, QString>> report, bool year_b
         this->tableWidget->setItem(i, 0, name);
         this->tableWidget->setItem(i, 1, amount);
 
-        if (year_by_year) {
+        if (group == "year") {
             QTableWidgetItem* year = new QTableWidgetItem(report[i]["year"]);
             year->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
             year->setBackground(QBrush(this->row_bg));
 
             this->tableWidget->setItem(i, 2, year);
+        }
+        else if (group == "month") {
+            QTableWidgetItem* month = new QTableWidgetItem(report[i]["month"]);
+            month->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+            month->setBackground(QBrush(this->row_bg));
+
+            this->tableWidget->setItem(i, 2, month);
         }
 
         total += report[i]["amount"].toInt();
@@ -298,15 +381,15 @@ void ReportUi::showReportTable(QList<QMap<QString, QString>> report, bool year_b
 
 void ReportUi::showReportGraph(
     QList<QMap<QString, QString>> report, 
-    bool year_by_year, 
     const QString& title, 
-    const QString& category
+    const QString& category,
+    const QString& group
 )
 {
     QBarSet* set = new QBarSet("Lapidi");
     QCategoryAxis* axisX = new QCategoryAxis();
     QStringList categories;
-    QString cat = "year";
+    QString cat = group;
 
     this->clearLayout();
 
@@ -316,7 +399,7 @@ void ReportUi::showReportGraph(
             cat = this->client->getName(report[i]["client_id"].toInt());
         }
 
-        if (year_by_year) {
+        if (group == "year") {
             // Years prior to 2013 have missing data
             if (report[i]["year"].toInt() < 2013) continue;
         }
@@ -327,6 +410,9 @@ void ReportUi::showReportGraph(
         // Holds the category titles, the year
         if (cat == "year") {
             categories << report[i]["year"];
+        }
+        else if (cat == "month") {
+            categories << report[i]["month"];
         }
         else {
             categories << cat;
