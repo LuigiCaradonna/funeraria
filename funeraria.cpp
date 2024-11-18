@@ -52,11 +52,33 @@ Funeraria::Funeraria(QWidget* parent)
         );
 
         // Set icons for the menu items
-        this->ui.actionBackupCSV->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentNew));
+
+        // File
+        this->ui.actionBackupCSV->setIcon(QIcon("icons\\backup-50.png"));
         this->ui.actionSettings->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+        // Clienti
         this->ui.actionCNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ContactNew));
         this->ui.actionCList->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::AddressBookNew));
+        // Accessori
+        this->ui.menuVasi->setIcon(QIcon("icons\\vase-50w.png"));
+        this->ui.actionVNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionVList->setIcon(QIcon("icons\\list-50.png"));
+        this->ui.menuLampade->setIcon(QIcon("icons\\lamp-50.png"));
+        this->ui.actionLNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionLList->setIcon(QIcon("icons\\list-50.png"));
+        this->ui.menuFlames->setIcon(QIcon("icons\\flame-50.png"));
+        this->ui.actionFNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionFList->setIcon(QIcon("icons\\list-50.png"));
+        this->ui.menuMateriali->setIcon(QIcon("icons\\material-64.png"));
+        this->ui.actionMNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionMList->setIcon(QIcon("icons\\list-50.png"));
+        // Lapidi
+        this->ui.actionTNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+        this->ui.actionTEngrave->setIcon(QIcon("icons\\engrave-48.png"));
+        this->ui.actionTPay->setIcon(QIcon("icons\\moneybag-64.png"));
+        this->ui.actionMAccessories->setIcon(QIcon("icons\\mount-50.png"));
 
+        // Instantiate objects
         this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
         this->client_ui = new ClientUi(this->db->db, this);
@@ -1402,7 +1424,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
 {
     QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
     // pb_details->setText("Dettagli");
-    pb_details->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::SystemSearch));
+    pb_details->setIcon(QIcon("icons\\detail-50.png"));
     pb_details->setToolTip("Dettagli");
 
     QPushButton* pb_open_folder = new QPushButton(this->ui.tableWidget);
@@ -1412,7 +1434,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
 
     QPushButton* pb_set_paid = new QPushButton(this->ui.tableWidget);
     // pb_set_paid->setText("Pagata");
-    pb_set_paid->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ZoomFitBest));
+    pb_set_paid->setIcon(QIcon("icons\\moneybag-64.png"));
     pb_set_paid->setToolTip("Pagata");
 
     // Generate the cells' content and set them as not editable

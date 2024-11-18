@@ -106,7 +106,7 @@ QList<QMap<QString, QString>> Tomb::getReport(
     const int client_id, 
     const int year, 
     bool engraved, 
-    bool year_by_year,
+    QString group,
     bool by_client
 )
 {
@@ -115,8 +115,11 @@ QList<QMap<QString, QString>> Tomb::getReport(
 
     QString query_string = "SELECT client_id, count(name) AS amount ";
     
-    if (year_by_year) {
+    if (group == "year") {
         query_string += ", strftime('%Y', ordered_at) AS year ";
+    }
+    else if (group == "month") {
+        query_string += ", strftime('%m', ordered_at) AS month ";
     }
 
     query_string += " FROM " + this->table + " WHERE 1 = 1";
@@ -136,14 +139,20 @@ QList<QMap<QString, QString>> Tomb::getReport(
     // Only delivered tombs to heve only those actually made
     query_string += " AND delivered_at != ''";
 
-    if (by_client && year_by_year) {
+    if (by_client && group == "year") {
         query_string += " GROUP BY client_id, year";
+    }
+    else if (by_client && group == "month") {
+        query_string += " GROUP BY client_id, month";
     }
     else if (by_client) {
         query_string += " GROUP BY client_id";
     }
-    else if (year_by_year) {
+    else if (group == "year") {
         query_string += " GROUP BY year";
+    }
+    else if (group == "month") {
+        query_string += " GROUP BY month";
     }
 
     query.prepare(query_string);
@@ -162,8 +171,11 @@ QList<QMap<QString, QString>> Tomb::getReport(
         orders["client_id"] = query.value("client_id").toString();
         orders["amount"] = QString::number(query.value("amount").toInt());
 
-        if (year_by_year) {
+        if (group == "year") {
             orders["year"] = QString::number(query.value("year").toInt());
+        }
+        else if (group == "month") {
+            orders["month"] = QString::number(query.value("month").toInt());
         }
 
         report.append(orders);
