@@ -70,7 +70,8 @@ QList<QMap<QString, QString>> Tomb::getList(
             (query.value("vase_code").toString() == "NV" &&
             query.value("lamp_code").toString() == "NL" &&
             query.value("flame_code").toString() == "NF"
-            )) {
+            )) 
+        {
             mounted = "1";
         }
 
@@ -136,7 +137,7 @@ QList<QMap<QString, QString>> Tomb::getReport(
         query_string += " AND ordered_at LIKE '" + QString::number(year) + "%'";
     }
 
-    // Only delivered tombs to heve only those actually made
+    // Only delivered tombs to have only those actually made
     query_string += " AND delivered_at != ''";
 
     if (by_client && group == "year") {
@@ -175,6 +176,7 @@ QList<QMap<QString, QString>> Tomb::getReport(
             orders["year"] = QString::number(query.value("year").toInt());
         }
         else if (group == "month") {
+            // Convert the month number to its name before to add it to the array
             orders["month"] = Helpers::monthNumberToName(query.value("month").toInt());
         }
 

@@ -275,6 +275,14 @@ public:
      */
     QString getGroupingFolder(const int progressive);
 
+    /*
+     * Provides the full path to the folder of a given tomb
+     *
+     * @param   const int       - progressive number of the tomb
+     * @param   const QString&  - Deceased's name
+     *
+     * @return  QString - The full path to the tomb's folder.
+     */
     QString getFolderPath(const int progressive, const QString& name);
 
 private:
