@@ -8,11 +8,14 @@
 #include <QInputDialog>
 #include <QTextDocument>
 #include <QPrinter>
+#include <QPixmap>
 #include "ui_funeraria.h"
 #include "DatabaseManager.h"
 #include "Config.h"
 #include "ClientUi.h"
 #include "Client.h"
+#include "Sculpture.h"
+#include "SculptureUi.h"
 #include "SettingsUi.h"
 #include "Settings.h"
 #include "ReportUi.h"
@@ -210,6 +213,27 @@ protected slots:
     void slotDeleteItem();
 
     /*
+     * Shows the sculptures' list
+     *
+     * @return void
+     */
+    void slotShowSculptures();
+
+    /*
+     * Shows the dialog to insert a new sculpture
+     *
+     * @return void
+     */
+    void slotNewSculpture();
+
+    /*
+     * Shows a dialog window containing the selected sculpture's details
+     *
+     * @return void
+     */
+    void slotSculptureDetails();
+
+    /*
      * Shows the tombs needed which can be engraved
      *
      * @return void
@@ -279,6 +303,8 @@ private:
     ClientUi* client_ui;
     SettingsUi* settings_ui;
     TombUi* tomb_ui;
+    Sculpture* sculpture;
+    SculptureUi* sculpture_ui;
     ReportUi* report_ui;
     Accessory* vase;
     Accessory* lamp;
@@ -312,7 +338,7 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Clears the table content and deletes all the created pointers.
+     * Clears the table content ans all the created pointers.
      *
      * @return void
      */

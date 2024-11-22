@@ -10,6 +10,7 @@ SettingsUi::SettingsUi(const QSqlDatabase& db, QWidget* parent)
 
     this->connect(this->ui.btnDbPath, &QPushButton::clicked, this, &SettingsUi::slotChangeDbPath);
     this->connect(this->ui.btnArchiveFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeArchivePath);
+    this->connect(this->ui.btnSculpturesFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeSculpturesPath);
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SettingsUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &SettingsUi::slotCloseDialog);
 }
@@ -25,12 +26,12 @@ SettingsUi::~SettingsUi()
 void SettingsUi::slotChangeDbPath()
 {
     // Prompt the user to select the db file
-    QString new_db_path = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3)");
+    QString new_db_file = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3)");
 
     // Check if a file was selected
-    if (!new_db_path.isEmpty()) {
+    if (!new_db_file.isEmpty()) {
         // Check if the file exists
-        if (!QFile::exists(new_db_path)) {
+        if (!QFile::exists(new_db_file)) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
@@ -48,15 +49,15 @@ void SettingsUi::slotChangeDbPath()
         return;
     }
 
-    this->ui.lblDbPath->setText(new_db_path);
+    this->ui.lblDbFile->setText(new_db_file);
 }
 
 void SettingsUi::slotChangeArchivePath()
 {
     // Prompt the user to select the archive folder
-    QString filename = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
+    QString new_archive_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
 
-    if (filename.isEmpty()) {
+    if (new_archive_path.isEmpty()) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
@@ -65,7 +66,24 @@ void SettingsUi::slotChangeArchivePath()
         return;
     }
 
-    this->ui.lblArchiveFolder->setText(filename);
+    this->ui.lblArchiveFolder->setText(new_archive_path);
+}
+
+void SettingsUi::slotChangeSculpturesPath()
+{
+    // Prompt the user to select the archive folder
+    QString new_sculptures_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
+
+    if (new_sculptures_path.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("La cartella indicata risulta inesistente.");
+        message.exec();
+        return;
+    }
+
+    this->ui.lblSculpturesFolder->setText(new_sculptures_path);
 }
 
 void SettingsUi::slotSave()
@@ -74,14 +92,14 @@ void SettingsUi::slotSave()
     bool stored = true;
 
     /*
-        Update as first the DB path if necessary, it will also reload the DB in use
+        Update at first the DB path if necessary, it will also reload the DB in use
         In this way the following updates will affect the correct DB
     */
     Config* config = new Config();
 
-    QString db_path = this->ui.lblDbPath->text();
-    if (db_path != config->getDbPath()) {
-        config->setDbPath(db_path);
+    QString db_file = this->ui.lblDbFile->text();
+    if (db_file != config->getDbFile()) {
+        config->setDbFile(db_file);
 
         QMessageBox message;
         message.setWindowTitle("Funeraria");
@@ -91,8 +109,13 @@ void SettingsUi::slotSave()
     }
 
     QString archive_path = this->ui.lblArchiveFolder->text();
-    if (archive_path != config->getDbPath()) {
+    if (archive_path != config->getArchivePath()) {
         config->setArchivePath(archive_path);
+    }
+
+    QString sculptures_path = this->ui.lblSculpturesFolder->text();
+    if (sculptures_path != config->getSculpturesPath()) {
+        config->setSculpturesPath(sculptures_path);
     }
 
     delete config;
@@ -146,8 +169,9 @@ void SettingsUi::updateForm() {
     }
 
     Config* config = new Config();
-    this->ui.lblDbPath->setText(config->getDbPath());
+    this->ui.lblDbFile->setText(config->getDbFile());
     this->ui.lblArchiveFolder->setText(config->getArchivePath());
+    this->ui.lblSculpturesFolder->setText(config->getSculpturesPath());
 
     delete config;
     delete settings;

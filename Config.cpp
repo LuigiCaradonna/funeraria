@@ -37,24 +37,24 @@ Config::~Config()
 
 /********** PUBLIC FUNCTIONS **********/
 
-void Config::setDbPath(const QString& db_path)
+void Config::setDbFile(const QString& db_file)
 {
     QJsonObject config;
 
     config = this->getConfigFileContent();
-    config.remove("db_path");
-    config.insert("db_path", db_path);
+    config.remove("db_file");
+    config.insert("db_file", db_file);
 
     this->storeConfig(config);
 }
 
-QString Config::getDbPath()
+QString Config::getDbFile()
 {
     //Then get the main JSON object and get the datas in it
     QJsonObject config_content = this->getConfigFileContent();
 
     //Access the wanted value
-    QString db_path = config_content.value("db_path").toString();
+    QString db_path = config_content.value("db_file").toString();
 
     return db_path;
 }
@@ -81,14 +81,37 @@ QString Config::getArchivePath()
     return db_path;
 }
 
+void Config::setSculpturesPath(const QString& sculptures_path)
+{
+    QJsonObject config;
+
+    config = this->getConfigFileContent();
+    config.remove("sculptures_path");
+    config.insert("sculptures_path", sculptures_path);
+
+    this->storeConfig(config);
+}
+
+QString Config::getSculpturesPath()
+{
+    //Then get the main JSON object and get the datas in it
+    QJsonObject config_content = this->getConfigFileContent();
+
+    //Access the wanted value
+    QString db_path = config_content.value("sculptures_path").toString();
+
+    return db_path;
+}
+
 /********** PRIVATE FUNCTIONS **********/
 
 bool Config::initConfig()
 {
     QJsonObject config;
 
-    config.insert("db_path", this->default_db_path);
+    config.insert("db_file", this->default_db_file);
     config.insert("archive_path", this->default_archive_path);
+    config.insert("sculptures_path", this->default_sculptures_path);
 
     this->storeConfig(config);
 

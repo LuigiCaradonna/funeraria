@@ -63,3 +63,19 @@ int Helpers::compareItaDates(const QString& first_date, const QString& second_da
     else if (date1 > date2) return 1;
     else return 0;
 }
+
+bool Helpers::isInt(const QString& number)
+{
+    QRegularExpression re("\\d+");
+    QRegularExpressionMatch match_number = re.match(number);
+
+    return match_number.hasMatch();
+}
+
+bool Helpers::isDecimal(const QString& number)
+{
+    QRegularExpression re("\\d+\\.\\d+");
+    QRegularExpressionMatch match_number = re.match(number);
+
+    return match_number.hasMatch();
+}

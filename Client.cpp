@@ -242,8 +242,6 @@ bool Client::remove(const int id)
     return true;
 }
 
-/********** PRIVATE FUNCTIONS **********/
-
 bool Client::store(
     const int position, 
     const QString& name, 

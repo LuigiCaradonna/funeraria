@@ -2,22 +2,24 @@ IDI_ICON1               ICON                    "funeraria.ico"
 
 IDB_PNG1                PNG                     "icons\\backup-50.png"
 
-IDB_PNG2                PNG                     "icons\\detail-50.png"
+IDB_PNG2                PNG                     "icons\\busto-48.png"
 
-IDB_PNG3                PNG                     "icons\\engrave-48.png"
+IDB_PNG3                PNG                     "icons\\detail-50.png"
 
-IDB_PNG4                PNG                     "icons\\flame-50.png"
+IDB_PNG4                PNG                     "icons\\engrave-48.png"
 
-IDB_PNG5                PNG                     "funeraria.png"
+IDB_PNG5                PNG                     "icons\\flame-50.png"
 
-IDB_PNG6                PNG                     "icons\\lamp-50.png"
+IDB_PNG6                PNG                     "funeraria.png"
 
-IDB_PNG7                PNG                     "icons\\list-50.png"
+IDB_PNG7                PNG                     "icons\\lamp-50.png"
 
-IDB_PNG8                PNG                     "icons\\material-64.png"
+IDB_PNG8                PNG                     "icons\\list-50.png"
 
-IDB_PNG9                PNG                     "icons\\moneybag-64.png"
+IDB_PNG9                PNG                     "icons\\material-64.png"
 
-IDB_PNG20               PNG                     "icons\\mount-50.png"
+IDB_PNG10               PNG                     "icons\\moneybag-64.png"
 
-IDB_PNG11               PNG                     "icons\\vase-50w.png"
+IDB_PNG11               PNG                     "icons\\mount-50.png"
+
+IDB_PNG12               PNG                     "icons\\vase-50w.png"

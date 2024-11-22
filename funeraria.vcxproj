@@ -97,6 +97,8 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="ReportUi.cpp" />
+    <ClCompile Include="Sculpture.cpp" />
+    <ClCompile Include="SculptureUi.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SettingsUi.cpp" />
     <ClCompile Include="Tomb.cpp" />
@@ -110,10 +112,13 @@
     <ClCompile Include="main.cpp" />
     <QtUic Include="Accessory.ui" />
     <QtUic Include="Report.ui" />
+    <QtUic Include="Sculpture.ui" />
     <QtUic Include="Settings.ui" />
     <QtUic Include="Tomb.ui" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="SculptureUi.h" />
+    <QtMoc Include="Sculpture.h" />
     <QtMoc Include="Settings.h" />
     <QtMoc Include="SettingsUi.h" />
     <QtMoc Include="TombUi.h" />
@@ -132,6 +137,7 @@
     <Image Include="funeraria.ico" />
     <Image Include="funeraria.png" />
     <Image Include="icons\backup-50.png" />
+    <Image Include="icons\busto-48.png" />
     <Image Include="icons\detail-50.png" />
     <Image Include="icons\engrave-48.png" />
     <Image Include="icons\flame-50.png" />

@@ -40,7 +40,7 @@ public:
     int getId(const QString& name);
 
     /*
-     * Gets the clients' name
+     * Gets the client's name
      *
      * @param   const int - Client's id
      *

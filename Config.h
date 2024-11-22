@@ -29,20 +29,20 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Sets the database path into the config file
+     * Sets the database file into the config file
      * 
-     * @param   const QString& db_path    - DB file path
+     * @param   const QString& db_file    - DB file path
      *
      * @return void
      */
-    void setDbPath(const QString& db_path);
+    void setDbFile(const QString& db_file);
 
     /*
-     * Gets the database path from the config file
+     * Gets the database file path from the config file
      *
-     * @return QString the database path
+     * @return QString the database file path
      */
-    QString getDbPath();
+    QString getDbFile();
 
     /*
      * Sets the archive's folder path into the config file
@@ -56,10 +56,26 @@ public:
     /*
      * Gets the archive path from the config file
      *
-     * @return QString the database path
+     * @return QString the archive path
      */
     QString getArchivePath();
-    
+
+    /*
+     * Sets the sculptures' folder path into the config file
+     *
+     * @param   const QString& sculptures_path    - Sculptures folder path
+     *
+     * @return void
+     */
+    void setSculpturesPath(const QString& sculptures_path);
+
+    /*
+     * Gets the sculptures' folder path from the config file
+     *
+     * @return QString the sculptures' folder path
+     */
+    QString getSculpturesPath();
+
     /*
      * Initializes a new configuration file
      * 
@@ -69,8 +85,9 @@ public:
 
 private:
     QString config_file = "config.cfg";
-    QString default_db_path = "./funeraria.db";
+    QString default_db_file = "./funeraria.db";
     QString default_archive_path = "./lapidi";
+    QString default_sculptures_path = "./";
 
     /********** PRIVATE FUNCTIONS **********/
 

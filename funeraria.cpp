@@ -77,11 +77,16 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.actionTEngrave->setIcon(QIcon("icons\\engrave-48.png"));
         this->ui.actionTPay->setIcon(QIcon("icons\\moneybag-64.png"));
         this->ui.actionMAccessories->setIcon(QIcon("icons\\mount-50.png"));
+        // Sculture
+        this->ui.actionScNew->setIcon(QIcon("icons\\busto-48.png"));
+        this->ui.actionScList->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::AddressBookNew));
 
         // Instantiate objects
         this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
         this->client_ui = new ClientUi(this->db->db, this);
+        this->sculpture = new Sculpture(this->db->db);
+        this->sculpture_ui = new SculptureUi(this->db->db, this);
         this->settings_ui = new SettingsUi(this->db->db, this);
         this->report_ui = new ReportUi(this->db->db, this);
         this->tomb_ui = new TombUi(this->db->db, this);
@@ -125,6 +130,10 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionMAccessories, SIGNAL(triggered()), this, SLOT(slotAccessoriesToMount()));
         this->connect(this->ui.actionTPay, SIGNAL(triggered()), this, SLOT(slotTombsNotPaid()));
         this->connect(this->ui.actionSearchByProgressive, SIGNAL(triggered()), this, SLOT(slotTombByProgressive()));
+
+        // Signal emitted from the menu "Sculture"
+        this->connect(this->ui.actionScList, SIGNAL(triggered()), this, SLOT(slotShowSculptures()));
+        this->connect(this->ui.actionScNew, SIGNAL(triggered()), this, SLOT(slotNewSculpture()));
 
         /* 
          * Map the signal coming from the menu "Accessori" to call the same function (slotNewItem) 
@@ -170,7 +179,10 @@ Funeraria::~Funeraria()
 
     delete this->db;
     delete this->context_menu;
+    delete this->client;
     delete this->client_ui;
+    delete this->sculpture;
+    delete this->sculpture_ui;
     delete this->settings_ui;
     delete this->report_ui;
     delete this->tomb_ui;
@@ -601,6 +613,27 @@ void Funeraria::slotNewTomb()
     }
 }
 
+void Funeraria::slotClientDetails()
+{
+    // Row index of the clicked button
+    int row = this->ui.tableWidget->currentRow();
+    // Set the name property of the Client object to the name present in the clicked row
+    this->client_ui->setId(this->ui.tableWidget->item(row, 0)->text().toInt());
+    this->client_ui->setName(this->ui.tableWidget->item(row, 1)->text());
+    this->client_ui->setModal(true);
+    this->client_ui->exec();
+
+    // Clear the combobox content
+    this->ui.cbClient->clear();
+    // Update the combobox with the active clients
+    this->updateClientsCombobox();
+    // Update the quick access bar with the active clients
+    this->updateQuickAccessNames();
+
+    // Reload the table when the popup is closed, the user could have made some changes
+    this->slotShowClients();
+}
+
 void Funeraria::slotShowClients()
 {
     // Block the signals while building the table
@@ -632,7 +665,7 @@ void Funeraria::slotShowClients()
     int row_number = 1;
     for (int i = 0; i < clients.size(); i++) {
         QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
-        pb_details->setText("Modifica");
+        pb_details->setText("Dettagli");
         QPushButton* pb_delete = new QPushButton(this->ui.tableWidget);
         pb_delete->setText("Elimina");
 
@@ -719,27 +752,6 @@ void Funeraria::slotShowClients()
     }
 }
 
-void Funeraria::slotClientDetails()
-{
-    // Row index of the clicked button
-    int row = this->ui.tableWidget->currentRow();
-    // Set the name property of the Client object to the name present in the clicked row
-    this->client_ui->setId(this->ui.tableWidget->item(row, 0)->text().toInt());
-    this->client_ui->setName(this->ui.tableWidget->item(row, 1)->text());
-    this->client_ui->setModal(true);
-    this->client_ui->exec();
-
-    // Clear the combobox content
-    this->ui.cbClient->clear();
-    // Update the combobox with the active clients
-    this->updateClientsCombobox();
-    // Update the quick access bar with the active clients
-    this->updateQuickAccessNames();
-
-    // Reload the table when the popup is closed, the user could have made some changes
-    this->slotShowClients();
-}
-
 void Funeraria::slotNewClient()
 {
     this->current_table = "clients";
@@ -808,7 +820,7 @@ void Funeraria::slotShowItems(const QString& type)
         name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
         QPushButton* pb_edit = new QPushButton(this->ui.tableWidget);
-        pb_edit->setText("Modifica");
+        pb_edit->setText("Dettagli");
 
         QPushButton* pb_del = new QPushButton(this->ui.tableWidget);
         pb_del->setText("Elimina");
@@ -964,9 +976,146 @@ void Funeraria::slotDeleteItem() {
 
             return;
         }
+        else if (this->current_table == "sculptures") {
+            if (this->sculpture->remove(this->ui.tableWidget->item(row, 0)->text().toInt())) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Information);
+                message.setText("Eliminazione eseguita.");
+                message.exec();
+
+                this->slotShowSculptures();
+            }
+            else {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Critical);
+                message.setText("Eliminazione non riuscita.");
+                message.exec();
+            }
+
+            return;
+        }
 
         this->slotShowItems(this->current_table);
     }
+}
+
+void Funeraria::slotShowSculptures()
+{
+    // Block the signals while building the table
+    const QSignalBlocker blocker(this->ui.tableWidget);
+
+    this->current_table = "sculptures";
+
+    this->is_table_sortable = false;
+
+    // Reset the table's content
+    this->clearTable();
+
+    QList<QMap<QString, QString>> sculptures = this->sculpture->get();
+
+    QStringList headers{ "ID", "Img", "Codice", "Larghezza", "Altezza", "Profondità", "", ""};
+
+    this->ui.tableWidget->setRowCount(sculptures.size());
+    this->ui.tableWidget->setColumnCount(headers.size());
+    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+    this->ui.tableWidget->setColumnWidth(0, 50);  // ID
+    this->ui.tableWidget->setColumnWidth(1, 80);  // Img
+    this->ui.tableWidget->setColumnWidth(2, 300); // Code
+    this->ui.tableWidget->setColumnWidth(3, 80);  // Width
+    this->ui.tableWidget->setColumnWidth(4, 80);  // Height
+    this->ui.tableWidget->setColumnWidth(5, 80);  // Depth
+    this->ui.tableWidget->setColumnWidth(6, 90);  // Details button
+    this->ui.tableWidget->setColumnWidth(7, 90);  // Delete button
+
+    int row_number = 1;
+    for (int i = 0; i < sculptures.size(); i++) {
+        QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
+        pb_details->setText("Dettagli");
+        QPushButton* pb_delete = new QPushButton(this->ui.tableWidget);
+        pb_delete->setText("Elimina");
+
+        // Specific row height to contain the image
+        this->ui.tableWidget->setRowHeight(i, 100);
+
+        QTableWidgetItem* id_widget = new QTableWidgetItem(sculptures[i]["id"]);
+        // Set the field as not editable
+        id_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QPixmap pic(this->config->getSculpturesPath() + "/" + sculptures[i]["img"]);
+        QLabel* image_widget = new QLabel(this->ui.tableWidget);
+        image_widget->setText("");
+        image_widget->setScaledContents(true);
+        image_widget->setPixmap(pic);
+        
+        QTableWidgetItem* code_widget = new QTableWidgetItem(sculptures[i]["code"]);
+        code_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QTableWidgetItem* width_widget = new QTableWidgetItem(sculptures[i]["width"]);
+        width_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QTableWidgetItem* height_widget = new QTableWidgetItem(sculptures[i]["height"]);
+        height_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QTableWidgetItem* depth_widget = new QTableWidgetItem(sculptures[i]["depth"]);
+        depth_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        if (row_number % 2 == 0) {
+            this->row_bg = this->row_even;
+        }
+        else {
+            this->row_bg = this->row_odd;
+        }
+
+        id_widget->setBackground(QBrush(row_bg));
+        code_widget->setBackground(QBrush(row_bg));
+        width_widget->setBackground(QBrush(row_bg));
+        height_widget->setBackground(QBrush(row_bg));
+        depth_widget->setBackground(QBrush(row_bg));
+
+        this->ui.tableWidget->setItem(i, 0, id_widget);
+        this->ui.tableWidget->setCellWidget(i, 1, image_widget);
+        this->ui.tableWidget->setItem(i, 2, code_widget);
+        this->ui.tableWidget->setItem(i, 3, width_widget);
+        this->ui.tableWidget->setItem(i, 4, height_widget);
+        this->ui.tableWidget->setItem(i, 5, depth_widget);
+        this->ui.tableWidget->setCellWidget(i, 6, pb_details);
+        this->ui.tableWidget->setCellWidget(i, 7, pb_delete);
+
+        this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotSculptureDetails);
+        this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDeleteItem);
+
+        row_number++;
+    }
+}
+
+void Funeraria::slotNewSculpture()
+{
+    this->current_table = "sculptures";
+
+    // Set the name property of the Sculpture object to an empty string
+    this->sculpture_ui->setCode("");
+    this->sculpture_ui->setModal(true);
+    this->sculpture_ui->exec();
+
+    // Reload the table when the popup is closed, the user could have made some changes
+    this->slotShowSculptures();
+}
+
+void Funeraria::slotSculptureDetails()
+{
+    // Row index of the clicked button
+    int row = this->ui.tableWidget->currentRow();
+    // Set the id property of the Sculpture object to the code present in the clicked row
+    this->sculpture_ui->setId(this->ui.tableWidget->item(row, 0)->text().toInt());
+    this->sculpture_ui->setCode(this->ui.tableWidget->item(row, 2)->text());
+    this->sculpture_ui->setModal(true);
+    this->sculpture_ui->exec();
+
+    // Reload the table when the popup is closed, the user could have made some changes
+    this->slotShowSculptures();
 }
 
 void Funeraria::slotTombsToEngrave()

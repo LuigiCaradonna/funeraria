@@ -76,6 +76,12 @@
     <ClCompile Include="ReportUi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sculpture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SculptureUi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DatabaseManager.h">
@@ -119,6 +125,12 @@
     <QtMoc Include="ReportUi.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Sculpture.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="SculptureUi.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Accessory.ui">
@@ -134,6 +146,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="Report.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Sculpture.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -172,6 +187,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="icons\moneybag-64.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\busto-48.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

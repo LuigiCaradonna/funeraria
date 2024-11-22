@@ -64,7 +64,7 @@ public:
 private:
     QWidget* parent;
     Settings* settings;
-    QString db_path = "./funeraria.db";
+    QString db_file = "./funeraria.db";
     QString backup_folder = "backups";
     // Interval in days to create a new backup
     int backup_interval = 1;

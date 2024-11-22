@@ -2,7 +2,7 @@
 #include "qstring.h"
 #include "qstringlist.h"
 #include <QRegularExpression>
-#include <QDate>
+#include <QFileDialog>
 
 class Helpers
 {
@@ -42,4 +42,22 @@ public:
      * @return  int -1, 0 or 1 if the first date is earlier, same or later than the second respectively.
      */
     static int compareItaDates(const QString& first_date, const QString& second_date);
+
+    /*
+     * Checks if a string contains an integer number.
+     *
+     * @param   const QString&  number - The string to check
+     *
+     * @return  boolean true if the string contains an integer number, false otherwise.
+     */
+    static bool isInt(const QString& number);
+
+    /*
+     * Checks if a string contains a decimal number.
+     *
+     * @param   const QString&  number - The string to check
+     *
+     * @return  boolean true if the string contains a decimla number, false otherwise.
+     */
+    static bool isDecimal(const QString& number);
 };

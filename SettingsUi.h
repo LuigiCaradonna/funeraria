@@ -35,18 +35,25 @@ protected slots:
     /********** PROTECTED SLOTS **********/
 
     /*
-     * Asks the user to provide a new path for the DB file
+     * Asks the user to provide a new path for the DB's file
      *
      * @return  void
      */
     void slotChangeDbPath();
 
     /*
-     * Asks the user to provide a new path for the archive file
+     * Asks the user to provide a new path for the archive's file
      *
      * @return  void
      */
     void slotChangeArchivePath();
+
+    /*
+     * Asks the user to provide a new path for the sculptures' file
+     *
+     * @return  void
+     */
+    void slotChangeSculpturesPath();
 
     /*
      * Saves a settings

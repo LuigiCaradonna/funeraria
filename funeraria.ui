@@ -446,10 +446,18 @@
     <addaction name="actionBackupCSV"/>
     <addaction name="actionSettings"/>
    </widget>
+   <widget class="QMenu" name="menuSculture">
+    <property name="title">
+     <string>Sculture</string>
+    </property>
+    <addaction name="actionScNew"/>
+    <addaction name="actionScList"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuClienti"/>
    <addaction name="menuAccessories"/>
    <addaction name="menuLapidi"/>
+   <addaction name="menuSculture"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionFNew">
@@ -565,6 +573,16 @@
   <action name="actionSearchByProgressive">
    <property name="text">
     <string>Cerca per numero</string>
+   </property>
+  </action>
+  <action name="actionScNew">
+   <property name="text">
+    <string>Nuova</string>
+   </property>
+  </action>
+  <action name="actionScList">
+   <property name="text">
+    <string>Elenco</string>
    </property>
   </action>
  </widget>
