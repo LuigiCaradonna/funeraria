@@ -495,7 +495,7 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,visualstudio,c++,qtcreator
 
-# Personal directories
+# Personal exclusions
 .git
 [Dd]ocs
 *.sql
