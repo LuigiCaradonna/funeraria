@@ -66,7 +66,7 @@ int Helpers::compareItaDates(const QString& first_date, const QString& second_da
 
 bool Helpers::isInt(const QString& number)
 {
-    QRegularExpression re("\\d+");
+    QRegularExpression re("^\\d+$");
     QRegularExpressionMatch match_number = re.match(number);
 
     return match_number.hasMatch();
@@ -74,8 +74,18 @@ bool Helpers::isInt(const QString& number)
 
 bool Helpers::isDecimal(const QString& number)
 {
-    QRegularExpression re("\\d+\\.\\d+");
+    QRegularExpression re("^\\d+\\.?\\d*$");
     QRegularExpressionMatch match_number = re.match(number);
 
     return match_number.hasMatch();
+}
+
+float Helpers::scaleFactor(const float original, const float target)
+{
+    return floorf((target / original) * 1000) / 1000;
+}
+
+float Helpers::scaledSize(const float original, const float scale_factor)
+{
+    return floorf((original * scale_factor) * 1000) / 1000;
 }

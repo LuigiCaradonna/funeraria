@@ -60,4 +60,24 @@ public:
      * @return  boolean true if the string contains a decimla number, false otherwise.
      */
     static bool isDecimal(const QString& number);
+
+    /*
+     * Computes the scaling factor given the original and target target size.
+     *
+     * @param   const float original   - The original size
+     * @param   const float target     - The target size
+     *
+     * @return  float the scaling factor truncated to 3 decimal digits.
+     */
+    static float scaleFactor(const float original, const float target);
+
+    /*
+     * Computes the scaled size given the original size and the scaling factor.
+     *
+     * @param   const float original   - The original size
+     * @param   const float target     - The target size
+     *
+     * @return  float the scaled size truncated to 3 decimal digits.
+     */
+    static float scaledSize(const float original, const float scale_factor);
 };

@@ -285,7 +285,7 @@
        <item>
         <layout class="QVBoxLayout" name="WWContainer">
          <item>
-          <widget class="QLabel" name="lblWWidth">
+          <widget class="QLabel" name="lblTWidth">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -297,7 +297,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="leWWidth">
+          <widget class="QLineEdit" name="leTWidth">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -310,7 +310,7 @@
        <item>
         <layout class="QVBoxLayout" name="WHContainer">
          <item>
-          <widget class="QLabel" name="lblWHeight">
+          <widget class="QLabel" name="lblTHeight">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -322,7 +322,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="leWHeight">
+          <widget class="QLineEdit" name="leTHeight">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -335,7 +335,7 @@
        <item>
         <layout class="QVBoxLayout" name="WDContainer">
          <item>
-          <widget class="QLabel" name="lblWDepth">
+          <widget class="QLabel" name="lblTDepth">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -347,7 +347,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="leWDepth">
+          <widget class="QLineEdit" name="leTDepth">
            <property name="font">
             <font>
              <pointsize>12</pointsize>

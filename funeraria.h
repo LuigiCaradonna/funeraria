@@ -332,6 +332,7 @@ private:
     // Direction to use to sort the selected table's column (ASC/DESC)
     QString sort_column_direction = "";
 
+    const QString icons_folder = "assets\\icons\\";
     const QString not_engraved = "No";
     const QString name_not_defined = "Non definito";
 

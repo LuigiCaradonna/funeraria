@@ -1,25 +1,35 @@
 IDI_ICON1               ICON                    "funeraria.ico"
 
-IDB_PNG1                PNG                     "icons\\backup-50.png"
+IDB_PNG1                PNG                     "assets\\icons\\backup-50.png"
 
-IDB_PNG2                PNG                     "icons\\busto-48.png"
+IDB_PNG2                PNG                     "assets\\icons\\busto-48.png"
 
-IDB_PNG3                PNG                     "icons\\detail-50.png"
+IDB_PNG3                PNG                     "assets\\icons\\detail-50.png"
 
-IDB_PNG4                PNG                     "icons\\engrave-48.png"
+IDB_PNG4                PNG                     "assets\\icons\\engrave-48.png"
 
-IDB_PNG5                PNG                     "icons\\flame-50.png"
+IDB_PNG5                PNG                     "assets\\icons\\flame-50.png"
 
 IDB_PNG6                PNG                     "funeraria.png"
 
-IDB_PNG7                PNG                     "icons\\lamp-50.png"
+IDB_PNG7                PNG                     "assets\\icons\\lamp-50.png"
 
-IDB_PNG8                PNG                     "icons\\list-50.png"
+IDB_PNG8                PNG                     "assets\\icons\\list-50.png"
 
-IDB_PNG9                PNG                     "icons\\material-64.png"
+IDB_PNG9                PNG                     "assets\\icons\\material-64.png"
 
-IDB_PNG10               PNG                     "icons\\moneybag-64.png"
+IDB_PNG10               PNG                     "assets\\icons\\moneybag-64.png"
 
-IDB_PNG11               PNG                     "icons\\mount-50.png"
+IDB_PNG11               PNG                     "assets\\icons\\mount-50.png"
 
-IDB_PNG12               PNG                     "icons\\vase-50w.png"
+IDB_PNG12               PNG                     "assets\\icons\\vase-50.png"
+
+IDB_PNG13               PNG                     "assets\\icons\\settings-50.png"
+
+IDB_PNG14               PNG                     "assets\\icons\\new-client-50.png"
+
+IDB_PNG15               PNG                     "assets\\icons\\client-list-48.png"
+
+IDB_PNG16               PNG                     "assets\\icons\\add-50.png"
+
+IDB_PNG17               PNG                     "assets\\icons\\sculpture-list-50.png"

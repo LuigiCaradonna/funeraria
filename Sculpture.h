@@ -68,18 +68,18 @@ public:
      *
      * @param const QString& code   -   Sculpture's code
      * @param const QString& img    -   Sculpture's image
-     * @param const int width       -   Sculpture's width in mm
-     * @param const int height      -   Sculpture's height in mm
-     * @param const int depth       -   Sculpture's depth in mm
+     * @param const QString& width  -   Sculpture's width in mm
+     * @param const QString& height -   Sculpture's height in mm
+     * @param const QString& depth  -   Sculpture's depth in mm
      *
      * @return  boolean true if the creation succeeds, false otherwise
      */
     bool store(
         const QString& code,
         const QString& img,
-        const int width,
-        const int height,
-        const float depth
+        const QString& width,
+        const QString& height,
+        const QString& depth
     );
 
     /*
@@ -88,9 +88,9 @@ public:
      * @param const int id          -   Sculpture's id
      * @param const QString& code   -   Sculpture's code
      * @param const QString& img    -   Sculpture's image
-     * @param const int width       -   Sculpture's width in mm
-     * @param const int height      -   Sculpture's height in mm
-     * @param const int depth       -   Sculpture's depth in mm
+     * @param const QString& width  -   Sculpture's width in mm
+     * @param const QString& height -   Sculpture's height in mm
+     * @param const QString& depth  -   Sculpture's depth in mm
      *
      * @return  boolean true if the update succeeds, false otherwise
      */
@@ -98,9 +98,9 @@ public:
         const int id,
         const QString& code,
         const QString& img,
-        const int width,
-        const int height,
-        const float depth
+        const QString& width,
+        const QString& height,
+        const QString& depth
     );
 
 private:

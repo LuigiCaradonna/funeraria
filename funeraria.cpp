@@ -54,32 +54,32 @@ Funeraria::Funeraria(QWidget* parent)
         // Set icons for the menu items
 
         // File
-        this->ui.actionBackupCSV->setIcon(QIcon("icons\\backup-50.png"));
-        this->ui.actionSettings->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+        this->ui.actionBackupCSV->setIcon(QIcon(this->icons_folder + "backup-50.png"));
+        this->ui.actionSettings->setIcon(QIcon(this->icons_folder + "settings-50.png"));
         // Clienti
-        this->ui.actionCNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ContactNew));
-        this->ui.actionCList->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::AddressBookNew));
+        this->ui.actionCNew->setIcon(QIcon(this->icons_folder + "new-client-50.png"));
+        this->ui.actionCList->setIcon(QIcon(this->icons_folder + "client-list-48.png"));
         // Accessori
-        this->ui.menuVasi->setIcon(QIcon("icons\\vase-50w.png"));
-        this->ui.actionVNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
-        this->ui.actionVList->setIcon(QIcon("icons\\list-50.png"));
-        this->ui.menuLampade->setIcon(QIcon("icons\\lamp-50.png"));
-        this->ui.actionLNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
-        this->ui.actionLList->setIcon(QIcon("icons\\list-50.png"));
-        this->ui.menuFlames->setIcon(QIcon("icons\\flame-50.png"));
-        this->ui.actionFNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
-        this->ui.actionFList->setIcon(QIcon("icons\\list-50.png"));
-        this->ui.menuMateriali->setIcon(QIcon("icons\\material-64.png"));
-        this->ui.actionMNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
-        this->ui.actionMList->setIcon(QIcon("icons\\list-50.png"));
+        this->ui.menuVasi->setIcon(QIcon(this->icons_folder + "vase-50.png"));
+        this->ui.actionVNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionVList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.menuLampade->setIcon(QIcon(this->icons_folder + "lamp-50.png"));
+        this->ui.actionLNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionLList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.menuFlames->setIcon(QIcon(this->icons_folder + "flame-50.png"));
+        this->ui.actionFNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionFList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.menuMateriali->setIcon(QIcon(this->icons_folder + "material-64.png"));
+        this->ui.actionMNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionMList->setIcon(QIcon(this->icons_folder + "list-50.png"));
         // Lapidi
-        this->ui.actionTNew->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
-        this->ui.actionTEngrave->setIcon(QIcon("icons\\engrave-48.png"));
-        this->ui.actionTPay->setIcon(QIcon("icons\\moneybag-64.png"));
-        this->ui.actionMAccessories->setIcon(QIcon("icons\\mount-50.png"));
+        this->ui.actionTNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionTEngrave->setIcon(QIcon(this->icons_folder + "engrave-48.png"));
+        this->ui.actionTPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
+        this->ui.actionMAccessories->setIcon(QIcon(this->icons_folder + "mount-50.png"));
         // Sculture
-        this->ui.actionScNew->setIcon(QIcon("icons\\busto-48.png"));
-        this->ui.actionScList->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::AddressBookNew));
+        this->ui.actionScNew->setIcon(QIcon(this->icons_folder + "busto-48.png"));
+        this->ui.actionScList->setIcon(QIcon(this->icons_folder + "sculpture-list-50.png"));
 
         // Instantiate objects
         this->context_menu = new QMenu(this);
@@ -213,8 +213,6 @@ void Funeraria::slotShowContextMenu(const QPoint& pos) {
     
     // Connect actions to slots
     connect(sum_prices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
-
-    // TODO : Rinominare le funzioni e creare quella per il PDF
     connect(print_listTxt, &QAction::triggered, this, &Funeraria::slotPrintToPayListTxt);
     connect(print_listPdf, &QAction::triggered, this, &Funeraria::slotPrintToPayListPdf);
 
@@ -1015,20 +1013,25 @@ void Funeraria::slotShowSculptures()
 
     QList<QMap<QString, QString>> sculptures = this->sculpture->get();
 
-    QStringList headers{ "ID", "Img", "Codice", "Larghezza", "Altezza", "Profondità", "", ""};
+    QStringList headers{ "ID", "Img", "Codice", "Larghezza", "Altezza", "Profondità", "Rid Z", "Rid XY", "", ""};
+
+    int img_cell_width = 150;
+    int img_cell_height = 100;
 
     this->ui.tableWidget->setRowCount(sculptures.size());
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     this->ui.tableWidget->setColumnWidth(0, 50);  // ID
-    this->ui.tableWidget->setColumnWidth(1, 80);  // Img
+    this->ui.tableWidget->setColumnWidth(1, img_cell_width);  // Img
     this->ui.tableWidget->setColumnWidth(2, 300); // Code
     this->ui.tableWidget->setColumnWidth(3, 80);  // Width
     this->ui.tableWidget->setColumnWidth(4, 80);  // Height
     this->ui.tableWidget->setColumnWidth(5, 80);  // Depth
-    this->ui.tableWidget->setColumnWidth(6, 90);  // Details button
-    this->ui.tableWidget->setColumnWidth(7, 90);  // Delete button
+    this->ui.tableWidget->setColumnWidth(6, 80);  // Riduzione Z default (per profondità 11mm)
+    this->ui.tableWidget->setColumnWidth(7, 80);  // Riduzione XY default (per altezza 200mm)
+    this->ui.tableWidget->setColumnWidth(8, 90);  // Details button
+    this->ui.tableWidget->setColumnWidth(9, 90);  // Delete button
 
     int row_number = 1;
     for (int i = 0; i < sculptures.size(); i++) {
@@ -1038,17 +1041,37 @@ void Funeraria::slotShowSculptures()
         pb_delete->setText("Elimina");
 
         // Specific row height to contain the image
-        this->ui.tableWidget->setRowHeight(i, 100);
+        this->ui.tableWidget->setRowHeight(i, img_cell_height);
 
         QTableWidgetItem* id_widget = new QTableWidgetItem(sculptures[i]["id"]);
         // Set the field as not editable
         id_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-        QPixmap pic(this->config->getSculpturesPath() + "/" + sculptures[i]["img"]);
+        QString pic_path = this->config->getSculpturesPath() + "/" + sculptures[i]["img"];
+
+        // Set the not found image if the provided one is missing
+        QFile img_file(pic_path);
+        if (!img_file.exists()) {
+            pic_path = "./assets/img/notfound.jpg";
+        }
+
+        QPixmap pic(pic_path);
+        QPixmap resized;
+
+        // If the image is vertical or squared
+        if (pic.height() >= pic.width()) {
+            // Resize the image according to the cell height
+            resized = pic.scaledToHeight(img_cell_height);
+        }
+        else {
+            // Resize the image according to the cell width
+            resized = pic.scaledToWidth(img_cell_width);
+        }
+
         QLabel* image_widget = new QLabel(this->ui.tableWidget);
         image_widget->setText("");
-        image_widget->setScaledContents(true);
-        image_widget->setPixmap(pic);
+        image_widget->setScaledContents(false);
+        image_widget->setPixmap(resized);
         
         QTableWidgetItem* code_widget = new QTableWidgetItem(sculptures[i]["code"]);
         code_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -1062,6 +1085,16 @@ void Funeraria::slotShowSculptures()
         QTableWidgetItem* depth_widget = new QTableWidgetItem(sculptures[i]["depth"]);
         depth_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
+        QTableWidgetItem* rid_z_widget = new QTableWidgetItem(
+            QString::number(Helpers::scaleFactor(sculptures[i]["depth"].toFloat(), 11.0))
+        );
+        rid_z_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QTableWidgetItem* rid_xy_widget = new QTableWidgetItem(
+            QString::number(Helpers::scaleFactor(sculptures[i]["height"].toFloat(), 200.0))
+        );
+        rid_xy_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
         if (row_number % 2 == 0) {
             this->row_bg = this->row_even;
         }
@@ -1074,6 +1107,8 @@ void Funeraria::slotShowSculptures()
         width_widget->setBackground(QBrush(row_bg));
         height_widget->setBackground(QBrush(row_bg));
         depth_widget->setBackground(QBrush(row_bg));
+        rid_z_widget->setBackground(QBrush(row_bg));
+        rid_xy_widget->setBackground(QBrush(row_bg));
 
         this->ui.tableWidget->setItem(i, 0, id_widget);
         this->ui.tableWidget->setCellWidget(i, 1, image_widget);
@@ -1081,8 +1116,10 @@ void Funeraria::slotShowSculptures()
         this->ui.tableWidget->setItem(i, 3, width_widget);
         this->ui.tableWidget->setItem(i, 4, height_widget);
         this->ui.tableWidget->setItem(i, 5, depth_widget);
-        this->ui.tableWidget->setCellWidget(i, 6, pb_details);
-        this->ui.tableWidget->setCellWidget(i, 7, pb_delete);
+        this->ui.tableWidget->setItem(i, 6, rid_z_widget);
+        this->ui.tableWidget->setItem(i, 7, rid_xy_widget);
+        this->ui.tableWidget->setCellWidget(i, 8, pb_details);
+        this->ui.tableWidget->setCellWidget(i, 9, pb_delete);
 
         this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotSculptureDetails);
         this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDeleteItem);
@@ -1573,7 +1610,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
 {
     QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
     // pb_details->setText("Dettagli");
-    pb_details->setIcon(QIcon("icons\\detail-50.png"));
+    pb_details->setIcon(QIcon("assets\\icons\\detail-50.png"));
     pb_details->setToolTip("Dettagli");
 
     QPushButton* pb_open_folder = new QPushButton(this->ui.tableWidget);
@@ -1583,7 +1620,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
 
     QPushButton* pb_set_paid = new QPushButton(this->ui.tableWidget);
     // pb_set_paid->setText("Pagata");
-    pb_set_paid->setIcon(QIcon("icons\\moneybag-64.png"));
+    pb_set_paid->setIcon(QIcon("assets\\icons\\moneybag-64.png"));
     pb_set_paid->setToolTip("Pagata");
 
     // Generate the cells' content and set them as not editable

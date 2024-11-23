@@ -21,6 +21,9 @@ SculptureUi::SculptureUi(const QSqlDatabase& db, QWidget* parent)
     this->connect(this->ui.chbAllowEdit, &QCheckBox::stateChanged, this, &SculptureUi::slotSwitchEnableState);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &SculptureUi::slotCloseDialog);
     // Save button binding is set inside slotSave() and slotUpdate()
+    this->connect(this->ui.leTWidth, &QLineEdit::textChanged, this, &SculptureUi::slotReductionWXY);
+    this->connect(this->ui.leTHeight, &QLineEdit::textChanged, this, &SculptureUi::slotReductionHXY);
+    this->connect(this->ui.leTDepth, &QLineEdit::textChanged, this, &SculptureUi::slotReductionZ);
 }
 
 /********** DESTRUCTOR **********/
@@ -62,7 +65,6 @@ void SculptureUi::slotSelectImage()
 void SculptureUi::slotSwitchEnableState()
 {
     this->ui.leCode->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.leImgPath->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leOWidth->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leOHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leODepth->setEnabled(this->ui.chbAllowEdit->isChecked());
@@ -76,9 +78,9 @@ void SculptureUi::slotSave()
         if (sculpture->store(
             this->ui.leCode->text().trimmed(),
             this->ui.leImgPath->text().trimmed(),
-            this->ui.leOWidth->text().trimmed().toInt(),
-            this->ui.leOHeight->text().trimmed().toInt(),
-            this->ui.leODepth->text().trimmed().toFloat())
+            this->ui.leOWidth->text().trimmed(),
+            this->ui.leOHeight->text().trimmed(),
+            this->ui.leODepth->text().trimmed())
             ) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
@@ -109,9 +111,9 @@ void SculptureUi::slotUpdate()
             this->id,
             this->ui.leCode->text().trimmed(),
             this->ui.leImgPath->text().trimmed(),
-            this->ui.leOWidth->text().trimmed().toInt(),
-            this->ui.leOHeight->text().trimmed().toInt(),
-            this->ui.leODepth->text().trimmed().toFloat())
+            this->ui.leOWidth->text().trimmed(),
+            this->ui.leOHeight->text().trimmed(),
+            this->ui.leODepth->text().trimmed())
             ) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
@@ -138,6 +140,42 @@ void SculptureUi::slotCloseDialog()
     this->close();
 }
 
+void SculptureUi::slotReductionWXY()
+{
+    if (!Helpers::isDecimal(this->ui.leTWidth->text()) || this->ui.leTWidth->text().toFloat() < 0) {
+        this->ui.lblRedXYVal->setText("---");
+        return;
+    }
+
+    float redXY = Helpers::scaleFactor(this->ui.leOWidth->text().toFloat(), this->ui.leTWidth->text().toFloat());
+
+    this->ui.lblRedXYVal->setText(QString::number(redXY));
+}
+
+void SculptureUi::slotReductionHXY()
+{
+    if (!Helpers::isDecimal(this->ui.leTHeight->text()) || this->ui.leTHeight->text().toFloat() < 0) {
+        this->ui.lblRedXYVal->setText("---");
+        return;
+    }
+
+    float redXY = Helpers::scaleFactor(this->ui.leOHeight->text().toFloat(), this->ui.leTHeight->text().toFloat());
+
+    this->ui.lblRedXYVal->setText(QString::number(redXY));
+}
+
+void SculptureUi::slotReductionZ()
+{
+    if (!Helpers::isDecimal(this->ui.leTDepth->text()) || this->ui.leTDepth->text().toFloat() < 0) {
+        this->ui.lblRedZVal->setText("---");
+        return;
+    }
+
+    float redXY = Helpers::scaleFactor(this->ui.leODepth->text().toFloat(), this->ui.leTDepth->text().toFloat());
+
+    this->ui.lblRedZVal->setText(QString::number(redXY));
+}
+
 /********** PRIVATE FUNCTIONS **********/
 
 void SculptureUi::updateForm()
@@ -148,6 +186,8 @@ void SculptureUi::updateForm()
 
     if (!sculpture_details.isEmpty()) {
         this->setWindowTitle("Modifica scultura");
+
+        Config* config = new Config();
 
         // Fill the form fields with the selected sculpture's data
         this->ui.leId->setText(sculpture_details["id"]);
@@ -164,6 +204,42 @@ void SculptureUi::updateForm()
         this->ui.leOHeight->setEnabled(false);
         this->ui.leODepth->setEnabled(false);
 
+        this->ui.leTWidth->setText("-");
+        this->ui.leTHeight->setText(QString::number(this->default_height));
+        this->ui.leTDepth->setText(QString::number(this->default_depth));
+
+        // Set the reduction values using the dafault parameters
+        float redZ = Helpers::scaleFactor(sculpture_details["depth"].toFloat(), this->default_depth);
+        float redXY = Helpers::scaleFactor(sculpture_details["height"].toFloat(), this->default_height);
+
+        this->ui.lblRedZVal->setText(QString::number(redZ));
+        this->ui.lblRedXYVal->setText(QString::number(redXY));
+
+        QString pic_path = config->getSculpturesPath() + "/" + sculpture_details["img"];
+
+        // Set the not found image if the provided one is missing
+        QFile img_file(pic_path);
+        if (!img_file.exists()) {
+            pic_path = "./assets/img/notfound.jpg";
+        }
+
+        QPixmap pic(pic_path);
+        QPixmap resized;
+
+        // If the image is vertical or squared
+        if (pic.height() >= pic.width()) {
+            // Resize the image to an height of 225px, the container size
+            resized = pic.scaledToHeight(225);
+        }
+        else {
+            // Resize the image to a width of 430px, the container size
+            resized = pic.scaledToWidth(430);
+        }
+
+        this->ui.lblImgPreview->setText("");
+        this->ui.lblImgPreview->setScaledContents(false);
+        this->ui.lblImgPreview->setPixmap(resized);
+
         // Set again chbAllowEdit as deselected to reset any previous change
         this->ui.chbAllowEdit->setChecked(false);
 
@@ -172,10 +248,15 @@ void SculptureUi::updateForm()
         // Disconnect previous bindings or multiple signals will be emitted
         this->ui.btnSave->disconnect();
         this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SculptureUi::slotUpdate);
+
+        delete config;
     }
     else {
         // Sculpture not found means we are asking to insert a new one
         this->setWindowTitle("Inserisci scultura");
+
+        // The image field must not be manually edited
+        this->ui.leImgPath->setEnabled(false);
 
         // Reset the form fields
         this->ui.leId->setText("0");
@@ -189,6 +270,8 @@ void SculptureUi::updateForm()
 
         // Set the save button text
         this->ui.btnSave->setText("Aggiungi");
+        // Disconnect previous bindings or multiple signals will be emitted
+        this->ui.btnSave->disconnect();
         this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SculptureUi::slotSave);
     }
 

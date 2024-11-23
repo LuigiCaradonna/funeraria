@@ -88,6 +88,27 @@ protected slots:
      */
     void slotCloseDialog();
 
+    /*
+     * Computes the reduction coefficient to get the target width
+     *
+     * @return  void
+     */
+    void slotReductionWXY();
+
+    /*
+     * Computes the reduction coefficient to get the target height
+     *
+     * @return  void
+     */
+    void slotReductionHXY();
+
+    /*
+     * Computes the reduction coefficient to get the target depth
+     *
+     * @return  void
+     */
+    void slotReductionZ();
+
 private:
     Ui::SculptureClass ui;
     const QString table = "sculptures";

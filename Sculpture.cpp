@@ -20,7 +20,7 @@ QList<QMap<QString, QString>> Sculpture::get()
     QList<QMap<QString, QString>> list{};
 
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT * FROM " + this->table);
+    query.prepare("SELECT * FROM " + this->table + " ORDER BY code");
 
     if (!query.exec()) {
         QMessageBox message;
@@ -125,9 +125,9 @@ bool Sculpture::remove(const int id)
 bool Sculpture::store(
     const QString& code,
     const QString& img,
-    const int width,
-    const int height,
-    const float depth
+    const QString& width,
+    const QString& height,
+    const QString& depth
 )
 {
     QString created_at = QDate::currentDate().toString("yyyy-MM-dd");
@@ -154,9 +154,9 @@ bool Sculpture::update(
     const int id,
     const QString& code,
     const QString& img,
-    const int width,
-    const int height,
-    const float depth
+    const QString& width,
+    const QString& height,
+    const QString& depth
 )
 {
     QString edited_at = QDate::currentDate().toString("yyyy-MM-dd");
