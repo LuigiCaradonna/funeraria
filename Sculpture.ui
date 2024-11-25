@@ -456,23 +456,22 @@
      </item>
      <item>
       <widget class="QLabel" name="lblImgPreview">
+       <property name="minimumSize">
+        <size>
+         <width>430</width>
+         <height>225</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>430</width>
+         <height>225</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Orientation::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <layout class="QHBoxLayout" name="BottomContainer">
