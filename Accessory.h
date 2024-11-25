@@ -67,9 +67,9 @@ public:
      * @param const QString& code   - Accessory's code
      * @param const QString& name   - Accessory's name
      *
-     * @return  QString - Empty on success, failure cause on failure
+     * @return  Boolean true on success, false on failure
      */
-    QString store(const QString& code, const QString& name);
+    bool store(const QString& code, const QString& name);
 
     /*
      * Updates an accessory into the database
@@ -78,18 +78,18 @@ public:
      * @param const QString& code       - Accessory's code
      * @param const QString& name       - Accessory's name
      *
-     * @return  QString - Empty on success, failure cause on failure
+     * @return  Boolean true on success, false on failure
      */
-    QString update(const QString& old_code, const QString& code, const QString& name);
+    bool update(const QString& old_code, const QString& code, const QString& name);
 
     /*
      * Removes a accessory from the database
      *
      * @param const QString& code - Accessory's code
      *
-     * @return  QString - Empty on success, failure cause on failure
+     * @return  Boolean true on success, false on failure
      */
-    QString remove(const QString& code);
+    bool remove(const QString& code);
 
 private:
     const QString table;

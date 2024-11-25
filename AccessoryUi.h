@@ -69,6 +69,7 @@ private:
     QSqlDatabase db;
     QWidget* parent;
     QString old_code = "";
+    const QString icons_folder = "assets\\icons\\";
 
     /********** PRIVATE FUNCTIONS **********/
 

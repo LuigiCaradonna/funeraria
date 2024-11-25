@@ -118,6 +118,7 @@ private:
     int id;
     int default_height = 200;
     int default_depth = 11;
+    const QString icons_folder = "assets\\icons\\";
 
     /********** PRIVATE FUNCTIONS **********/
 

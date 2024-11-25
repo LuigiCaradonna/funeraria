@@ -78,6 +78,7 @@ private:
     QWidget* parent;
     QString name;
     int id;
+    const QString icons_folder = "assets\\icons\\";
 
     /********** PRIVATE FUNCTIONS **********/
 

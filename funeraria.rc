@@ -10,7 +10,7 @@ IDB_PNG4                PNG                     "assets\\icons\\engrave-48.png"
 
 IDB_PNG5                PNG                     "assets\\icons\\flame-50.png"
 
-IDB_PNG6                PNG                     "funeraria.png"
+IDB_PNG6                PNG                     "assets\\icons\\funeraria.png"
 
 IDB_PNG7                PNG                     "assets\\icons\\lamp-50.png"
 
@@ -33,3 +33,5 @@ IDB_PNG15               PNG                     "assets\\icons\\client-list-48.p
 IDB_PNG16               PNG                     "assets\\icons\\add-50.png"
 
 IDB_PNG17               PNG                     "assets\\icons\\sculpture-list-50.png"
+
+IDB_PNG18               PNG                     "assets\\icons\\open-folder-50.png"

@@ -97,6 +97,7 @@ private:
     const QString btn_create_text = "Crea";
     const QString btn_update_text = "Aggiorna";
     const QString not_engraved = "No";
+    const QString icons_folder = "assets\\icons\\";
     QSqlDatabase db;
     QWidget* parent;
     int progressive;

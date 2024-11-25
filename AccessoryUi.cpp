@@ -8,7 +8,7 @@ AccessoryUi::AccessoryUi(const QSqlDatabase& db, const QString& table, QWidget* 
     this->ui.setupUi(this);
 
     // Sets an icon for the window
-    this->setWindowIcon(QIcon("funeraria.png"));
+    this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
 
     this->connect(this->ui.btnCancel, &QPushButton::clicked, this, &AccessoryUi::slotCloseDialog);
 }
@@ -22,8 +22,6 @@ AccessoryUi::~AccessoryUi()
 
 void AccessoryUi::updateForm(const QString& code, const QString& name)
 {
-    // TODO: non arriva l'old_code
-
     QString action = "";
     // No code means a new accessory to insert
     if (code == "") {
@@ -62,11 +60,11 @@ void AccessoryUi::slotSave()
     if (this->checkForm()) {
         Accessory* accessory = new Accessory(this->db, this->table);
 
-        QString result = accessory->store(this->ui.leCode->text().trimmed(), this->ui.leName->text().trimmed());
+        bool result = accessory->store(this->ui.leCode->text().trimmed(), this->ui.leName->text().trimmed());
 
         delete accessory;
 
-        if (result != "") {
+        if (!result) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
@@ -97,15 +95,15 @@ void AccessoryUi::slotEdit()
     if (this->checkForm()) {
         Accessory* accessory = new Accessory(this->db, this->table);
 
-        QString result = accessory->update(this->old_code.trimmed(), this->ui.leCode->text().trimmed(), this->ui.leName->text().trimmed());
+        bool result = accessory->update(this->old_code.trimmed(), this->ui.leCode->text().trimmed(), this->ui.leName->text().trimmed());
 
         delete accessory;
 
-        if (result != "") {
+        if (!result) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText(result);// "L'aggiornamento non è riuscito.");
+            message.setText("L'aggiornamento non è riuscito.");
             message.exec();
 
             return;

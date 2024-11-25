@@ -31,7 +31,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.setupUi(this);
 
         // Sets an icon for the window
-        this->setWindowIcon(QIcon("funeraria.png"));
+        this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
 
         // Set the font for the table
         QFont font("Calibri", 12);
@@ -40,7 +40,7 @@ Funeraria::Funeraria(QWidget* parent)
             this->ui.tableWidget->horizontalHeader(), 
             &QHeaderView::sectionClicked, 
             this, 
-            &Funeraria::slotHeaderClicked
+            &Funeraria::slotSortColumn
         );
 
         // Connect the customContextMenuRequested signal to a slot
@@ -235,7 +235,7 @@ void Funeraria::slotSumSelectedPrices() {
     float sum = 0;
     int prices = 0;
     for (int i = 0; i < items.size(); i++) {
-
+        // Check if among the selected cells there are not numeric values
         if (items[i]->data(Qt::DisplayRole).toString() != "0" && !items[i]->data(Qt::DisplayRole).toFloat()) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
@@ -280,8 +280,6 @@ void Funeraria::slotPrintToPayListTxt() {
 
     QFile list_file(filename);
 
-    QTextStream out(&list_file);
-
     if (!list_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
@@ -293,17 +291,19 @@ void Funeraria::slotPrintToPayListTxt() {
 
     double total = 0;
 
+    QTextStream out(&list_file);
+
     // For all the selections
     for (int i = 0; i < ranges.size(); i++) {
-        // Loop through the first and last row
+        // Loop from the first to the last row
         for (int j = ranges[i].topRow(); j <= ranges[i].bottomRow(); j++) {
             // If a name is defined, the material and the description are not necessary
             if (this->ui.tableWidget->item(j, 1)->data(Qt::DisplayRole).toString() != this->name_not_defined) {
-                // Print the data of each row
+                // Print the data
                 out << this->ui.tableWidget->item(j, 1)->data(Qt::DisplayRole).toString() + " "; // Name
             }
             else {
-                // Print the data of each row
+                // Print the data
                 out << this->ui.tableWidget->item(j, 2)->data(Qt::DisplayRole).toString() + " "; // Material
                 out << this->ui.tableWidget->item(j, 5)->data(Qt::DisplayRole).toString() + " "; // Notes
             }
@@ -342,7 +342,7 @@ void Funeraria::slotPrintToPayListPdf()
     // Get the top left and bottom right index of any selection made on the table
     QList<QTableWidgetSelectionRange> ranges = this->ui.tableWidget->selectedRanges();
 
-    // Filter to show only txt files
+    // Filter to show only pdf files
     QString filter = "pdf(*.pdf)";
     QString filename = QFileDialog::getSaveFileName(this, tr("save_to"), "", filter);
 
@@ -350,7 +350,7 @@ void Funeraria::slotPrintToPayListPdf()
     if (filename.trimmed() == "") return;
 
     // Load the font to be used inside the table
-    QString full_path_font(qApp->applicationDirPath() + "/" + "fonts/cour.ttf");
+    QString full_path_font(qApp->applicationDirPath() + "/" + this->fonts_folder + "cour.ttf");
     int font_ID = QFontDatabase::addApplicationFont(full_path_font);
     QString font_family = QFontDatabase::applicationFontFamilies(font_ID).at(0);
 
@@ -363,7 +363,7 @@ void Funeraria::slotPrintToPayListPdf()
 
     // For all the selections
     for (int i = 0; i < ranges.size(); i++) {
-        // Loop through the first and last row
+        // Loop from the first to the last row
         for (int j = ranges[i].topRow(); j <= ranges[i].bottomRow(); j++) {
             // If a name is defined, the material and the description are not necessary
             if (this->ui.tableWidget->item(j, 1)->data(Qt::DisplayRole).toString() != this->name_not_defined) {
@@ -417,7 +417,7 @@ void Funeraria::slotPrintToPayListPdf()
     document.print(&printer);
 }
 
-void Funeraria::slotHeaderClicked(int logical_index) {
+void Funeraria::slotSortColumn(int logical_index) {
     // Get the clicked label text
     QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logical_index, Qt::Horizontal).toString();
     QString sort_by = this->db->getSortableColumnName(label);
@@ -474,6 +474,7 @@ void Funeraria::slotShowSettings() {
 
 void Funeraria::slotFilterClientOrders()
 {
+    // If the tombs table is not shown
     if (this->current_table != "tombs") {
         return;
     }
@@ -516,6 +517,8 @@ void Funeraria::slotSearchByProgressive()
 
     QMap<QString, QString> tomb_found = tomb->getByProgressive(progressive);
 
+    delete tomb;
+
     if (tomb_found.isEmpty()) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
@@ -529,12 +532,11 @@ void Funeraria::slotSearchByProgressive()
     tombs.append(tomb_found);
 
     this->showClientOrders(tombs);
-
-    delete tomb;
 }
 
 void Funeraria::slotQuickClientOrders()
 {
+    // The button's text, it's the client's name
     QString button_text;
 
     // Get the sender of the signal
@@ -561,9 +563,9 @@ void Funeraria::slotQuickClientOrders()
     // Search params: client's id, current year, no filter for the deceased's name
     QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->ui.chbEngraved->isChecked());
 
-    this->showClientOrders(tombs);
-
     delete tomb;
+
+    this->showClientOrders(tombs);
 }
 
 void Funeraria::slotTombDetails()
@@ -943,16 +945,76 @@ void Funeraria::slotDeleteItem() {
         // Delete the item
 
         if (this->current_table == "vases") {
-            this->vase->remove(this->ui.tableWidget->item(row, 0)->text());
+            if (this->vase->remove(this->ui.tableWidget->item(row, 0)->text())) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Information);
+                message.setText("Eliminazione eseguita.");
+                message.exec();
+
+                this->slotShowItems(this->current_table);
+            }
+            else {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Critical);
+                message.setText("Eliminazione non riuscita.");
+                message.exec();
+            }
         }
         else if (this->current_table == "lamps") {
-            this->lamp->remove(this->ui.tableWidget->item(row, 0)->text());
+            if (this->lamp->remove(this->ui.tableWidget->item(row, 0)->text())) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Information);
+                message.setText("Eliminazione eseguita.");
+                message.exec();
+
+                this->slotShowItems(this->current_table);
+            }
+            else {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Critical);
+                message.setText("Eliminazione non riuscita.");
+                message.exec();
+            }
         }
         else if (this->current_table == "flames") {
-            this->flame->remove(this->ui.tableWidget->item(row, 0)->text());
+            if (this->flame->remove(this->ui.tableWidget->item(row, 0)->text())) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Information);
+                message.setText("Eliminazione eseguita.");
+                message.exec();
+
+                this->slotShowItems(this->current_table);
+            }
+            else {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Critical);
+                message.setText("Eliminazione non riuscita.");
+                message.exec();
+            }
         }
         else if (this->current_table == "materials") {
-            this->material->remove(this->ui.tableWidget->item(row, 0)->text());
+            if (this->material->remove(this->ui.tableWidget->item(row, 0)->text())) {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Information);
+                message.setText("Eliminazione eseguita.");
+                message.exec();
+
+                this->slotShowItems(this->current_table);
+            }
+            else {
+                QMessageBox message;
+                message.setWindowTitle("Funeraria");
+                message.setIcon(QMessageBox::Critical);
+                message.setText("Eliminazione non riuscita.");
+                message.exec();
+            }
         }
         else if (this->current_table == "clients") {
             if (this->client->remove(this->ui.tableWidget->item(row, 0)->text().toInt())) {
@@ -971,8 +1033,6 @@ void Funeraria::slotDeleteItem() {
                 message.setText("Eliminazione non riuscita.");
                 message.exec();
             }
-
-            return;
         }
         else if (this->current_table == "sculptures") {
             if (this->sculpture->remove(this->ui.tableWidget->item(row, 0)->text().toInt())) {
@@ -991,11 +1051,7 @@ void Funeraria::slotDeleteItem() {
                 message.setText("Eliminazione non riuscita.");
                 message.exec();
             }
-
-            return;
         }
-
-        this->slotShowItems(this->current_table);
     }
 }
 
@@ -1052,7 +1108,7 @@ void Funeraria::slotShowSculptures()
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
         if (!img_file.exists()) {
-            pic_path = "./assets/img/notfound.jpg";
+            pic_path = this->images_folder + "notfound.jpg";
         }
 
         QPixmap pic(pic_path);
@@ -1585,8 +1641,6 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
 
     this->ui.tableWidget->setRowCount(tombs_count);
     this->ui.tableWidget->setColumnCount(headers.size());
-    // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
@@ -1610,17 +1664,17 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
 {
     QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
     // pb_details->setText("Dettagli");
-    pb_details->setIcon(QIcon("assets\\icons\\detail-50.png"));
+    pb_details->setIcon(QIcon(this->icons_folder + "detail-50.png"));
     pb_details->setToolTip("Dettagli");
 
     QPushButton* pb_open_folder = new QPushButton(this->ui.tableWidget);
     // pb_open_folder->setText("Apri");
-    pb_open_folder->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FolderOpen));
+    pb_open_folder->setIcon(QIcon(this->icons_folder + "open-folder-50.png"));
     pb_open_folder->setToolTip("Apri");
 
     QPushButton* pb_set_paid = new QPushButton(this->ui.tableWidget);
     // pb_set_paid->setText("Pagata");
-    pb_set_paid->setIcon(QIcon("assets\\icons\\moneybag-64.png"));
+    pb_set_paid->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
     pb_set_paid->setToolTip("Pagata");
 
     // Generate the cells' content and set them as not editable

@@ -6,6 +6,9 @@ SettingsUi::SettingsUi(const QSqlDatabase& db, QWidget* parent)
     : db(db), parent(parent)
 {
     this->ui.setupUi(this);
+    // Sets an icon for the window
+    this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
+
     this->updateForm();
 
     this->connect(this->ui.btnDbPath, &QPushButton::clicked, this, &SettingsUi::slotChangeDbPath);

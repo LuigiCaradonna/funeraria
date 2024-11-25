@@ -103,7 +103,7 @@ QStringList Accessory::getNames()
     return accessories;
 }
 
-QString Accessory::store(const QString& code, const QString& name)
+bool Accessory::store(const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
@@ -114,16 +114,14 @@ QString Accessory::store(const QString& code, const QString& name)
     query.bindValue(":created_at", date);
     query.bindValue(":edited_at", date);
 
-    QString result = "";
-
     if (!query.exec()) {
-        result = query.lastError().text();
+        return false;
     }
 
-    return result;
+    return true;
 }
 
-QString Accessory::update(const QString& old_code, const QString& code, const QString& name)
+bool Accessory::update(const QString& old_code, const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
@@ -134,27 +132,23 @@ QString Accessory::update(const QString& old_code, const QString& code, const QS
     query.bindValue(":edited_at", date);
     query.bindValue(":old_code", old_code);
 
-    QString result = "";
-
     if (!query.exec()) {
-        result = query.lastError().text();
+        return false;
     }
 
-    return result;
+    return true;
 }
 
-QString Accessory::remove(const QString& code)
+bool Accessory::remove(const QString& code)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE code = :code; ");
     query.bindValue(":code", code);
 
-    QString result = "";
-
     if (!query.exec()) {
-        result = query.lastError().text();
+        return false;
     }
 
-    return result;
+    return true;
 }
 

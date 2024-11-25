@@ -80,6 +80,7 @@ private:
     QColor row_bg = QColor(255, 255, 255);
     QColor row_even = QColor(255, 255, 255);
     QColor row_odd = QColor(235, 235, 235);
+    const QString icons_folder = "assets\\icons\\";
 
     /********** PRIVATE FUNCTIONS **********/
 

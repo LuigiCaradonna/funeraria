@@ -8,7 +8,7 @@ SculptureUi::SculptureUi(const QSqlDatabase& db, QWidget* parent)
     this->ui.setupUi(this);
 
     // Sets an icon for the window
-    this->setWindowIcon(QIcon("funeraria.png"));
+    this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
 
     // id initialization
     this->id = 0;
