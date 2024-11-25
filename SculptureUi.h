@@ -89,21 +89,21 @@ protected slots:
     void slotCloseDialog();
 
     /*
-     * Computes the reduction coefficient to get the target width
+     * Computes the reduction coefficient to obtain the target width
      *
      * @return  void
      */
     void slotReductionWXY();
 
     /*
-     * Computes the reduction coefficient to get the target height
+     * Computes the reduction coefficient to obtain the target height
      *
      * @return  void
      */
     void slotReductionHXY();
 
     /*
-     * Computes the reduction coefficient to get the target depth
+     * Computes the reduction coefficient to obtain the target depth
      *
      * @return  void
      */
@@ -119,6 +119,7 @@ private:
     int default_height = 200;
     int default_depth = 11;
     const QString icons_folder = "assets\\icons\\";
+    const QString images_folder = "assets/img/";
 
     /********** PRIVATE FUNCTIONS **********/
 

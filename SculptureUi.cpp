@@ -142,25 +142,35 @@ void SculptureUi::slotCloseDialog()
 
 void SculptureUi::slotReductionWXY()
 {
+    // Prevent leTHight signals because its content will be changed by this function
+    const QSignalBlocker blocker(this->ui.leTHeight);
+
     if (!Helpers::isDecimal(this->ui.leTWidth->text()) || this->ui.leTWidth->text().toFloat() < 0) {
         this->ui.lblRedXYVal->setText("---");
         return;
     }
-
+    // XY reduction
     float redXY = Helpers::scaleFactor(this->ui.leOWidth->text().toFloat(), this->ui.leTWidth->text().toFloat());
-
+    // New height according to the target width
+    float height = round(this->ui.leOHeight->text().toFloat() * redXY);
+    this->ui.leTHeight->setText(QString::number(height));
     this->ui.lblRedXYVal->setText(QString::number(redXY));
 }
 
 void SculptureUi::slotReductionHXY()
 {
+    // Prevent leTWidth signals because its content will be changed by this function
+    const QSignalBlocker blocker(this->ui.leTWidth);
+
     if (!Helpers::isDecimal(this->ui.leTHeight->text()) || this->ui.leTHeight->text().toFloat() < 0) {
         this->ui.lblRedXYVal->setText("---");
         return;
     }
-
+    // XY reduction
     float redXY = Helpers::scaleFactor(this->ui.leOHeight->text().toFloat(), this->ui.leTHeight->text().toFloat());
-
+    // New width according to the target height
+    float width = round(this->ui.leOWidth->text().toFloat() * redXY);
+    this->ui.leTWidth->setText(QString::number(width));
     this->ui.lblRedXYVal->setText(QString::number(redXY));
 }
 
@@ -170,10 +180,10 @@ void SculptureUi::slotReductionZ()
         this->ui.lblRedZVal->setText("---");
         return;
     }
+    // Z reduction
+    float redZ = Helpers::scaleFactor(this->ui.leODepth->text().toFloat(), this->ui.leTDepth->text().toFloat());
 
-    float redXY = Helpers::scaleFactor(this->ui.leODepth->text().toFloat(), this->ui.leTDepth->text().toFloat());
-
-    this->ui.lblRedZVal->setText(QString::number(redXY));
+    this->ui.lblRedZVal->setText(QString::number(redZ));
 }
 
 /********** PRIVATE FUNCTIONS **********/
@@ -204,23 +214,25 @@ void SculptureUi::updateForm()
         this->ui.leOHeight->setEnabled(false);
         this->ui.leODepth->setEnabled(false);
 
-        this->ui.leTWidth->setText("-");
         this->ui.leTHeight->setText(QString::number(this->default_height));
         this->ui.leTDepth->setText(QString::number(this->default_depth));
+        /*
+            This will both set the target width field and the XY reduction label
+            Must be after that leTDepth has been set
+        */
+        this->slotReductionHXY();
 
         // Set the reduction values using the dafault parameters
         float redZ = Helpers::scaleFactor(sculpture_details["depth"].toFloat(), this->default_depth);
-        float redXY = Helpers::scaleFactor(sculpture_details["height"].toFloat(), this->default_height);
 
         this->ui.lblRedZVal->setText(QString::number(redZ));
-        this->ui.lblRedXYVal->setText(QString::number(redXY));
 
         QString pic_path = config->getSculpturesPath() + "/" + sculpture_details["img"];
 
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
         if (!img_file.exists()) {
-            pic_path = "./assets/img/notfound.jpg";
+            pic_path = this->images_folder + "notfound.jpg";
         }
 
         QPixmap pic(pic_path);
