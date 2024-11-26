@@ -217,15 +217,11 @@ void SculptureUi::updateForm()
         this->ui.leTHeight->setText(QString::number(this->default_height));
         this->ui.leTDepth->setText(QString::number(this->default_depth));
         /*
-            This will both set the target width field and the XY reduction label
-            Must be after that leTDepth has been set
+            These will set the target width field, the XY and Z reduction labels
+            Must be after that leTDepth and leTDepth have been set
         */
         this->slotReductionHXY();
-
-        // Set the reduction values using the dafault parameters
-        float redZ = Helpers::scaleFactor(sculpture_details["depth"].toFloat(), this->default_depth);
-
-        this->ui.lblRedZVal->setText(QString::number(redZ));
+        this->slotReductionZ();
 
         QString pic_path = config->getSculpturesPath() + "/" + sculpture_details["img"];
 
@@ -285,6 +281,17 @@ void SculptureUi::updateForm()
         // Disconnect previous bindings or multiple signals will be emitted
         this->ui.btnSave->disconnect();
         this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SculptureUi::slotSave);
+
+        this->ui.leTWidth->setText("");
+        this->ui.leTHeight->setText("");
+        this->ui.leTDepth->setText("");
+
+        this->ui.lblRedXYVal->setText("");
+        this->ui.lblRedZVal->setText("");
+
+        this->ui.lblImgPreview->setText("");
+        this->ui.lblImgPreview->setScaledContents(false);
+        this->ui.lblImgPreview->clear();
     }
 
     delete sculpture;

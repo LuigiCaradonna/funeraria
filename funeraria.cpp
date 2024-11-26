@@ -1188,8 +1188,8 @@ void Funeraria::slotNewSculpture()
 {
     this->current_table = "sculptures";
 
-    // Set the name property of the Sculpture object to an empty string
-    this->sculpture_ui->setCode("");
+    // Set the id property of the Sculpture object to 0
+    this->sculpture_ui->setId(0);
     this->sculpture_ui->setModal(true);
     this->sculpture_ui->exec();
 
