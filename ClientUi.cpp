@@ -86,15 +86,9 @@ void ClientUi::slotUpdate()
     if (this->checkForm()) {
         Client* client = new Client(this->db);
 
-        int active = 0;
-        if (this->ui.cbActive->isChecked()) {
-            active = 1;
-        }
+        int active = this->ui.cbActive->isChecked() ? 1 : 0;
 
-        int quick = 0;
-        if (this->ui.cbQuick->isChecked()) {
-            quick = 1;
-        }
+        int quick = this->ui.cbQuick->isChecked() ? 1 : 0;
 
         if (client->update(
             this->ui.leId->text().toInt(),
@@ -174,6 +168,8 @@ void ClientUi::updateForm()
 
         // Set the save button text
         this->ui.btnSave->setText("Aggiorna");
+        // Disconnect previous bindings or multiple signals will be emitted
+        this->ui.btnSave->disconnect();
         this->connect(this->ui.btnSave, &QPushButton::clicked, this, &ClientUi::slotUpdate);
     }
     else {
@@ -191,6 +187,8 @@ void ClientUi::updateForm()
 
         // Set the save button text
         this->ui.btnSave->setText("Crea");
+        // Disconnect previous bindings or multiple signals will be emitted
+        this->ui.btnSave->disconnect();
         this->connect(this->ui.btnSave, &QPushButton::clicked, this, &ClientUi::slotSave);
     }
 

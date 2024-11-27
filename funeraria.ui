@@ -373,7 +373,7 @@
      </layout>
     </item>
     <item row="3" column="0">
-     <layout class="QHBoxLayout" name="quickClientsAccess"/>
+     <layout class="QHBoxLayout" name="bottomBar"/>
     </item>
    </layout>
   </widget>

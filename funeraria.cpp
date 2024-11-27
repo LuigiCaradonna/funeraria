@@ -695,14 +695,14 @@ void Funeraria::slotShowClients()
         // get the maximum number of lines to calculate the row height
         int lines = std::max(num_emails, num_phones);
 
-        // If the client has no email and phone numbers
+        // If the client has no emails nor phone numbers
         if (lines == 0) {
             // set the lines value to 1
             lines = 1;
         }
 
-        // Set the row height to 21px multiplied by the number of lines
-        this->ui.tableWidget->setRowHeight(i, 30*lines);
+        // Set the row height
+        this->ui.tableWidget->setRowHeight(i, this->row_height*lines);
 
         QTableWidgetItem* id_widget = new QTableWidgetItem(clients[i]["id"]);
         // Set the field as not editable
@@ -801,8 +801,6 @@ void Funeraria::slotShowItems(const QString& type)
 
     this->ui.tableWidget->setRowCount(accessories.size());
     this->ui.tableWidget->setColumnCount(headers.size());
-    // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    //this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     this->ui.tableWidget->setColumnWidth(0, 70);
@@ -1519,24 +1517,19 @@ void Funeraria::slotReport()
 
 void Funeraria::clearTable()
 {
-    int row_number = 1;
-    for (int i = 0; i < this->ui.tableWidget->rowCount(); i++) {
-        this->ui.tableWidget->setRowHeight(i, 30);
-        for (int j = 0; j < this->ui.tableWidget->columnCount(); j++) {
-            // Usually the last column holds a button
-            if (j == this->ui.tableWidget->columnCount() - 1) {
-                QPushButton* pbutton = qobject_cast<QPushButton*>(this->ui.tableWidget->cellWidget(i, j));
-                if (pbutton) {
-                    pbutton->disconnect(); // Disconnect any connections
-                    pbutton->setParent(nullptr); // Reparent the button
-                    delete pbutton;
-                    pbutton = nullptr;
-                }
-                else {
-                    QTableWidgetItem* item = this->ui.tableWidget->item(i, j);
-                    delete item;
-                    item = nullptr;
-                }
+    int rows = this->ui.tableWidget->rowCount();
+    int columns = this->ui.tableWidget->columnCount();
+
+    for (int i = 0; i < rows; i++) {
+        this->ui.tableWidget->setRowHeight(i, this->row_height);
+        for (int j = 0; j < columns; j++) {
+            // Check if the cell's content is a pushbutton
+            QPushButton* pbutton = qobject_cast<QPushButton*>(this->ui.tableWidget->cellWidget(i, j));
+            if (pbutton) {
+                pbutton->disconnect(); // Disconnect any connections
+                pbutton->setParent(nullptr); // Reparent the button
+                delete pbutton;
+                pbutton = nullptr;
             }
             else {
                 QTableWidgetItem* item = this->ui.tableWidget->item(i, j);
@@ -1547,6 +1540,15 @@ void Funeraria::clearTable()
     }
 
     this->ui.tableWidget->clear();
+}
+
+void Funeraria::clearContainer(QBoxLayout* container)
+{
+    // Clear the bottom bar
+    QLayoutItem* item;
+    while ((item = container->takeAt(0)) != 0) {
+        delete item->widget();
+    }
 }
 
 void Funeraria::showClientOrders(const QList<QMap<QString, QString>> &tombs)
@@ -1580,11 +1582,7 @@ void Funeraria::updateQuickAccessNames() {
     QFont font;
     font.setPointSize(12);
 
-    // Clear the quick access buttons
-    QLayoutItem* item;
-    while ((item = this->ui.quickClientsAccess->takeAt(0)) != 0) {
-        delete item->widget();
-    }
+    this->clearContainer(this->ui.bottomBar);
 
     // Add the buttons to the bar
     for (const auto& item : std::as_const(quick_access_clients)) {
@@ -1592,14 +1590,14 @@ void Funeraria::updateQuickAccessNames() {
         btn->setFont(font);
         btn->setText(item);
         btn->setMinimumSize(QSize(0, 30));
-        this->ui.quickClientsAccess->addWidget(btn);
+        this->ui.bottomBar->addWidget(btn);
 
         this->connect(btn, &QPushButton::clicked, this, &Funeraria::slotQuickClientOrders);
     }
 
     // Add an horizontal spacer as last item to compact the buttons to the left
     QSpacerItem* spacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    this->ui.quickClientsAccess->addSpacerItem(spacer);
+    this->ui.bottomBar->addSpacerItem(spacer);
 }
 
 void Funeraria::closeWindow()

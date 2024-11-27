@@ -338,14 +338,26 @@ private:
     const QString not_engraved = "No";
     const QString name_not_defined = "Non definito";
 
+    // Single table's row height
+    const int row_height = 30;
+
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Clears the table content ans all the created pointers.
+     * Clears the table content and all the created pointers.
      *
      * @return void
      */
     void clearTable();
+
+    /*
+     * Removes all the content from a container.
+     *
+     * @param QBoxLayout* container   - Pointer to the container to clear
+     *
+     * @return void
+     */
+    void clearContainer(QBoxLayout* container);
 
     /*
      * Fills the table to show the client's orders.

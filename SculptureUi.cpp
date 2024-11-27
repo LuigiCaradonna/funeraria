@@ -114,7 +114,7 @@ void SculptureUi::slotUpdate()
             this->ui.leOWidth->text().trimmed(),
             this->ui.leOHeight->text().trimmed(),
             this->ui.leODepth->text().trimmed())
-            ) {
+        ) {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Information);
