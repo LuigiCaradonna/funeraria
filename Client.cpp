@@ -116,12 +116,19 @@ QStringList Client::getQuickAccessNames()
     return names;
 }
 
-QList<QMap<QString, QString>> Client::get()
+QList<QMap<QString, QString>> Client::get(const QString& name)
 {
     QList<QMap<QString, QString>> list{};
 
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT * FROM " + this->table);
+
+    QString query_string = "SELECT * FROM " + this->table + " WHERE 1=1 ";
+
+    if (name.trimmed() != "") {
+        query_string += " AND name LIKE \"%" + name + "%\"";
+    }
+
+    query.prepare(query_string);
 
     if (!query.exec()) {
         QMessageBox message;

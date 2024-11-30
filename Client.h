@@ -72,9 +72,11 @@ public:
     /*
      * Gets all the clients' data
      *
+     * @param   const QString& name - Optional, client's name to get
+     *
      * @return  QList<QMap<QString, QString>> - A list containing the clients' data
      */
-    QList<QMap<QString, QString>> get();
+    QList<QMap<QString, QString>> get(const QString& name = "");
 
     /*
      * Gets the given client's datails

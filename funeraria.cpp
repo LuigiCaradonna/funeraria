@@ -81,6 +81,12 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.actionScNew->setIcon(QIcon(this->icons_folder + "busto-48.png"));
         this->ui.actionScList->setIcon(QIcon(this->icons_folder + "sculpture-list-50.png"));
 
+        // Quick access
+        this->ui.btnReport->setIcon(QIcon(this->icons_folder + "report-80.png"));
+        this->ui.btnToEngrave->setIcon(QIcon(this->icons_folder + "engrave-48.png"));
+        this->ui.btnSculptures->setIcon(QIcon(this->icons_folder + "busto-48.png"));
+        this->ui.btnNewTomb->setIcon(QIcon(this->icons_folder + "add-50.png"));
+
         // Instantiate objects
         this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
@@ -95,26 +101,16 @@ Funeraria::Funeraria(QWidget* parent)
         this->flame = new Accessory(this->db->db, "flames");
         this->material = new Accessory(this->db->db, "materials");
 
-        // Insert the clients' names into the combobox
-        this->updateClientsCombobox();
-
-        // Populate the years combo box, years go back until 2020
-        this->ui.cbYear->addItem("Tutti");
-        QString this_year = QDate::currentDate().toString("yyyy");
-        for (int i = this_year.toInt(); i >= 2020; i--) {
-            this->ui.cbYear->addItem(QString::number(i));
-        }
-
-        // Set the current index to the current year (index 0 is "Tutti")
-        this->ui.cbYear->setCurrentIndex(1);
+        // Init the top bars, must be after the client object instantiation
+        this->initTombTopBar();
+        this->initSculpturesTopBar();
+        this->initClientsTopBar();
 
         // Set the event listeners for main UI's elements
         this->connect(this->ui.btnReport, &QPushButton::clicked, this, &Funeraria::slotReport);
         this->connect(this->ui.btnToEngrave, &QPushButton::clicked, this, &Funeraria::slotTombsToEngrave);
         this->connect(this->ui.btnNewTomb, &QPushButton::clicked, this, &Funeraria::slotNewTomb);
-        this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
-        this->connect(this->ui.leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
-        this->connect(this->ui.btnSearchByProgressive, &QPushButton::clicked, this, &Funeraria::slotSearchByProgressive);
+        this->connect(this->ui.btnSculptures, &QPushButton::clicked, this, &Funeraria::slotShowSculptures);
 
         // Signal emitted from the menu "Files"
         this->connect(this->ui.actionBackupCSV, SIGNAL(triggered()), this, SLOT(slotBackupDbToCSV()));
@@ -192,6 +188,27 @@ Funeraria::~Funeraria()
     delete this->material;
     delete this->show_items_mapper;
     delete this->new_item_mapper;
+
+    delete this->lblClient;
+    delete this->cbClient;
+    delete this->lblYear;
+    delete this->cbYear;
+    delete this->lblDeceased;
+    delete this->leDeceased;
+    delete this->chbEngraved;
+    delete this->btnSearch;
+    delete this->tombSpacer;
+    delete this->lblSearchByProgressive;
+    delete this->leSearchByProgressive;
+    delete this->btnSearchByProgressive;
+
+    delete this->lblScCode;
+    delete this->leScCode;
+    delete this->sculptureSpacer;
+
+    delete this->lblClName;
+    delete this->leClName;
+    delete this->clientSpacer;
 }
 
 /********** SLOTS **********/
@@ -434,19 +451,19 @@ void Funeraria::slotSortColumn(int logical_index) {
 
     this->current_table = "tombs";
 
-    int client_id = this->client->getId(this->ui.cbClient->currentText());
+    int client_id = this->client->getId(this->cbClient->currentText());
     int year;
-    QString name = this->ui.leDeceased->text().trimmed();
+    QString name = this->leDeceased->text().trimmed();
 
-    if (this->ui.cbYear->currentText() == "Tutti") {
+    if (this->cbYear->currentText() == "Tutti") {
         year = 0;
     }
     else {
-        year = this->ui.cbYear->currentText().toInt();
+        year = this->cbYear->currentText().toInt();
     }
 
     QList<QMap<QString, QString>> tombs = 
-        tomb->getList(client_id, year, this->ui.chbEngraved->isChecked(), name, sort_by, this->sort_column_direction);
+        tomb->getList(client_id, year, this->chbEngraved->isChecked(), name, sort_by, this->sort_column_direction);
 
     this->showClientOrders(tombs);
 
@@ -488,18 +505,18 @@ void Funeraria::slotClientOrders()
 
     this->current_table = "tombs";
 
-    int client_id = this->client->getId(this->ui.cbClient->currentText());
+    int client_id = this->client->getId(this->cbClient->currentText());
     int year;
-    QString name = this->ui.leDeceased->text().trimmed();
+    QString name = this->leDeceased->text().trimmed();
 
-    if (this->ui.cbYear->currentText() == "Tutti") {
+    if (this->cbYear->currentText() == "Tutti") {
         year = 0;
     }
     else {
-        year = this->ui.cbYear->currentText().toInt();
+        year = this->cbYear->currentText().toInt();
     }
 
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->ui.chbEngraved->isChecked(), name);
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->chbEngraved->isChecked(), name);
 
     this->showClientOrders(tombs);
 
@@ -513,7 +530,7 @@ void Funeraria::slotSearchByProgressive()
 
     this->current_table = "tombs";
 
-    int progressive = this->ui.leSearchByProgressive->text().trimmed().toInt();
+    int progressive = this->leSearchByProgressive->text().trimmed().toInt();
 
     QMap<QString, QString> tomb_found = tomb->getByProgressive(progressive);
 
@@ -556,12 +573,12 @@ void Funeraria::slotQuickClientOrders()
     int client_id = this->client->getId(button_text);
     int year = QDate::currentDate().toString("yyyy").toInt();
 
-    this->ui.cbClient->setCurrentText(button_text);
-    this->ui.cbYear->setCurrentText(QDate::currentDate().toString("yyyy"));
-    this->ui.leDeceased->setText("");
+    this->cbClient->setCurrentText(button_text);
+    this->cbYear->setCurrentText(QDate::currentDate().toString("yyyy"));
+    this->leDeceased->setText("");
 
     // Search params: client's id, current year, no filter for the deceased's name
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->ui.chbEngraved->isChecked());
+    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->chbEngraved->isChecked());
 
     delete tomb;
 
@@ -624,7 +641,7 @@ void Funeraria::slotClientDetails()
     this->client_ui->exec();
 
     // Clear the combobox content
-    this->ui.cbClient->clear();
+    this->cbClient->clear();
     // Update the combobox with the active clients
     this->updateClientsCombobox();
     // Update the quick access bar with the active clients
@@ -641,12 +658,16 @@ void Funeraria::slotShowClients()
 
     this->current_table = "clients";
 
+    this->showTopBar("clients");
+
     this->is_table_sortable = false;
 
     // Reset the table's content
     this->clearTable();
 
-    QList<QMap<QString, QString>> clients = this->client->get();
+    QString name = this->leClName->text().trimmed();
+
+    QList<QMap<QString, QString>> clients = this->client->get(name);
 
     QStringList headers{ "ID", "Posizione", "Nome", "Email", "Telefono", "", "" };
 
@@ -752,6 +773,16 @@ void Funeraria::slotShowClients()
     }
 }
 
+void Funeraria::slotFilterClients()
+{
+    // If the tombs table is not shown
+    if (this->current_table != "clients") {
+        return;
+    }
+
+    this->slotShowClients();
+}
+
 void Funeraria::slotNewClient()
 {
     this->current_table = "clients";
@@ -771,6 +802,8 @@ void Funeraria::slotShowItems(const QString& type)
     const QSignalBlocker blocker(this->ui.tableWidget);
 
     this->current_table = type;
+
+    this->showTopBar(type);
 
     this->is_table_sortable = false;
 
@@ -1058,6 +1091,8 @@ void Funeraria::slotShowSculptures()
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
+    this->showTopBar("sculptures");
+
     this->current_table = "sculptures";
 
     this->is_table_sortable = false;
@@ -1065,7 +1100,9 @@ void Funeraria::slotShowSculptures()
     // Reset the table's content
     this->clearTable();
 
-    QList<QMap<QString, QString>> sculptures = this->sculpture->get();
+    QString code = this->leScCode->text().trimmed();
+
+    QList<QMap<QString, QString>> sculptures = this->sculpture->get(code);
 
     QStringList headers{ "ID", "Img", "Codice", "Larghezza", "Altezza", "Profondità", "Rid Z", "Rid XY", "", ""};
 
@@ -1180,6 +1217,16 @@ void Funeraria::slotShowSculptures()
 
         row_number++;
     }
+}
+
+void Funeraria::slotFilterSculptures()
+{
+    // If the tombs table is not shown
+    if (this->current_table != "sculptures") {
+        return;
+    }
+
+    this->slotShowSculptures();
 }
 
 void Funeraria::slotNewSculpture()
@@ -1526,8 +1573,11 @@ void Funeraria::clearTable()
             // Check if the cell's content is a pushbutton
             QPushButton* pbutton = qobject_cast<QPushButton*>(this->ui.tableWidget->cellWidget(i, j));
             if (pbutton) {
-                pbutton->disconnect(); // Disconnect any connections
-                pbutton->setParent(nullptr); // Reparent the button
+                // Disconnect any connections
+                pbutton->disconnect();
+                // Reparent the button
+                pbutton->setParent(nullptr);
+
                 delete pbutton;
                 pbutton = nullptr;
             }
@@ -1547,12 +1597,28 @@ void Funeraria::clearContainer(QBoxLayout* container)
     // Clear the bottom bar
     QLayoutItem* item;
     while ((item = container->takeAt(0)) != 0) {
-        delete item->widget();
+        // If the item is a pushbutton
+        QPushButton* pbutton = qobject_cast<QPushButton*>(item->widget());
+        if (pbutton) {
+            // Disconnect any connections
+            pbutton->disconnect();
+            // Reparent the button
+            pbutton->setParent(nullptr); // Reparent the button
+
+            delete pbutton;
+            pbutton = nullptr;
+        }
+        else {
+            delete item->widget();
+        }
+        delete item;
     }
 }
 
 void Funeraria::showClientOrders(const QList<QMap<QString, QString>> &tombs)
 {
+   this->showTopBar("tombs");
+
     this->setupClientOrdersTable(tombs.size());
 
     for (int i = 0; i < tombs.size(); i++) {
@@ -1567,12 +1633,15 @@ void Funeraria::showClientOrder(const QMap<QString, QString>& tomb)
     this->addClientOrdersTableRow(tomb, 0);
 }
 
-void Funeraria::updateClientsCombobox() {
+void Funeraria::updateClientsCombobox()
+{
     // List of clients' names
     QStringList clients = this->client->getActiveNames();
+    // Clear the combobox
+    this->cbClient->clear();
     // Add the clients to the combo box
-    this->ui.cbClient->addItem(this->client_placeholder);
-    this->ui.cbClient->addItems(clients);
+    this->cbClient->addItem(this->client_placeholder);
+    this->cbClient->addItems(clients);
 }
 
 void Funeraria::updateQuickAccessNames() {
@@ -1809,8 +1878,6 @@ void Funeraria::setupAccessoriesToMountTable(int tombs_count)
 
     this->ui.tableWidget->setRowCount(tombs_count);
     this->ui.tableWidget->setColumnCount(headers.size());
-    // this->ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    // this->ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
@@ -1869,4 +1936,193 @@ void Funeraria::setupTombsToEngraveTable(int tombs_count)
     this->ui.tableWidget->setColumnWidth(3, 200);
     this->ui.tableWidget->setColumnWidth(4, 100);
     this->ui.tableWidget->setColumnWidth(5, 100);
+}
+
+void Funeraria::initTombTopBar()
+{
+    QFont font;
+    font.setPointSize(12);
+
+    // Client label
+    this->lblClient = new QLabel();
+    this->lblClient->setFont(font);
+    this->lblClient->setText("Cliente");
+
+    // Combobox containing the clients' list
+    this->cbClient = new QComboBox();
+    this->cbClient->setFont(font);
+    // List of clients' names
+    QStringList clients = this->client->getActiveNames();
+    // Add the clients to the combo box
+    this->cbClient->addItem(this->client_placeholder);
+    this->cbClient->addItems(clients);
+
+    // Year label
+    this->lblYear = new QLabel();
+    this->lblYear->setFont(font);
+    this->lblYear->setText("Anno");
+
+    // Combobox containing the years
+    this->cbYear = new QComboBox();
+    this->cbYear->setFont(font);
+    this->cbYear->addItem("Tutti");
+    QString this_year = QDate::currentDate().toString("yyyy");
+    for (int i = this_year.toInt(); i >= 2020; i--) {
+        this->cbYear->addItem(QString::number(i));
+    }
+    this->cbYear->setCurrentIndex(1);
+
+    // Deceased label
+    this->lblDeceased = new QLabel();
+    this->lblDeceased->setFont(font);
+    this->lblDeceased->setText("Defunto");
+
+    // Deceased line edit
+    this->leDeceased = new QLineEdit();
+    this->leDeceased->setFont(font);
+
+    // Engraved checkbox
+    this->chbEngraved = new QCheckBox();
+    this->chbEngraved->setFont(font);
+    this->chbEngraved->setText("Incise");
+    this->chbEngraved->setCheckable(true);
+    this->chbEngraved->setChecked(false);
+
+    // Search by client button
+    this->btnSearch = new QPushButton();
+    this->btnSearch->setMinimumSize(QSize(0, 30));
+    this->btnSearch->setFont(font);
+    this->btnSearch->setText("Cerca");
+
+    // Horizontal spacer
+    this->tombSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    // Progressive label
+    this->lblSearchByProgressive = new QLabel();
+    this->lblSearchByProgressive->setFont(font);
+    this->lblSearchByProgressive->setText("Numero");
+
+    // Progressive line edit
+    this->leSearchByProgressive = new QLineEdit();
+    this->leSearchByProgressive->setFont(font);
+    this->leSearchByProgressive->setMaximumWidth(100);
+
+    // Search by progressive button
+    this->btnSearchByProgressive = new QPushButton();
+    this->btnSearchByProgressive->setMinimumSize(QSize(0, 30));
+    this->btnSearchByProgressive->setFont(font);
+    this->btnSearchByProgressive->setText("Cerca");
+
+    // Horizontal layout containing the tombs top bar's elements
+    QHBoxLayout* tombsTopBarLayout = new QHBoxLayout(this->ui.tombsTopBarWidget);
+
+    // Add the elements to the layout
+    tombsTopBarLayout->addWidget(this->lblClient);
+    tombsTopBarLayout->addWidget(this->cbClient);
+    tombsTopBarLayout->addWidget(this->lblYear);
+    tombsTopBarLayout->addWidget(this->cbYear);
+    tombsTopBarLayout->addWidget(this->lblDeceased);
+    tombsTopBarLayout->addWidget(this->leDeceased);
+    tombsTopBarLayout->addWidget(this->chbEngraved);
+    tombsTopBarLayout->addWidget(this->btnSearch);
+    tombsTopBarLayout->addSpacerItem(this->tombSpacer);
+    tombsTopBarLayout->addWidget(this->lblSearchByProgressive);
+    tombsTopBarLayout->addWidget(this->leSearchByProgressive);
+    tombsTopBarLayout->addWidget(this->btnSearchByProgressive);
+
+    // Connect the buttons to the relative slot
+    this->connect(btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
+    this->connect(btnSearchByProgressive, &QPushButton::clicked, this, &Funeraria::slotSearchByProgressive);
+    // Connect the deceased line edit to the relative slot
+    this->connect(this->leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
+
+    // Set the widget as visible
+    this->ui.tombsTopBarWidget->setVisible(true);
+}
+
+void Funeraria::initSculpturesTopBar()
+{
+    QFont font;
+    font.setPointSize(12);
+
+    // Code label
+    this->lblScCode = new QLabel();
+    this->lblScCode->setFont(font);
+    this->lblScCode->setText("Codice");
+
+    // Deceased line edit
+    this->leScCode = new QLineEdit();
+    this->leScCode->setFont(font);
+    this->leScCode->setMaximumWidth(300);
+
+    // Horizontal spacer
+    this->sculptureSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    // Horizontal layout containing the tombs top bar's elements
+    QHBoxLayout* sculpturesTopBarLayout = new QHBoxLayout(this->ui.sculpturesTopBarWidget);
+
+    sculpturesTopBarLayout->addWidget(this->lblScCode);
+    sculpturesTopBarLayout->addWidget(this->leScCode);
+    sculpturesTopBarLayout->addSpacerItem(this->sculptureSpacer);
+    // Connect the code line edit to the relative slot
+    this->connect(this->leScCode, &QLineEdit::textChanged, this, &Funeraria::slotFilterSculptures);
+
+    // Set the widget as visible
+    this->ui.sculpturesTopBarWidget->setVisible(false);
+}
+
+void Funeraria::initClientsTopBar()
+{
+    QFont font;
+    font.setPointSize(12);
+
+    // Code label
+    this->lblClName = new QLabel();
+    this->lblClName->setFont(font);
+    this->lblClName->setText("Nome");
+
+    // Deceased line edit
+    this->leClName = new QLineEdit();
+    this->leClName->setFont(font);
+    this->leClName->setMaximumWidth(300);
+
+    // Horizontal spacer
+    this->clientSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    // Horizontal layout containing the tombs top bar's elements
+    QHBoxLayout* clientsTopBarLayout = new QHBoxLayout(this->ui.clientsTopBarWidget);
+
+    clientsTopBarLayout->addWidget(this->lblClName);
+    clientsTopBarLayout->addWidget(this->leClName);
+    clientsTopBarLayout->addSpacerItem(this->clientSpacer);
+    // Connect the code line edit to the relative slot
+    this->connect(this->leClName, &QLineEdit::textChanged, this, &Funeraria::slotFilterClients);
+
+    // Set the widget as visible
+    this->ui.clientsTopBarWidget->setVisible(false);
+}
+
+void Funeraria::showTopBar(const QString& bar)
+{
+    if (bar == "tombs") {
+        this->ui.clientsTopBarWidget->setVisible(false);
+        this->ui.sculpturesTopBarWidget->setVisible(false);
+        this->ui.tombsTopBarWidget->setVisible(true);
+    }
+    else if (bar == "sculptures") {
+        this->ui.tombsTopBarWidget->setVisible(false);
+        this->ui.clientsTopBarWidget->setVisible(false);
+        this->ui.sculpturesTopBarWidget->setVisible(true);
+    }
+    else if (bar == "clients") {
+        this->ui.tombsTopBarWidget->setVisible(false);
+        this->ui.sculpturesTopBarWidget->setVisible(false);
+        this->ui.clientsTopBarWidget->setVisible(true);
+    }
+    else {
+        // Hide all the top bars
+        this->ui.tombsTopBarWidget->setVisible(false);
+        this->ui.sculpturesTopBarWidget->setVisible(false);
+        this->ui.clientsTopBarWidget->setVisible(false);
+    }
 }

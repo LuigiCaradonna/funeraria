@@ -15,12 +15,21 @@ Sculpture::~Sculpture()
 
 /********** PUBLIC FUNCTIONS **********/
 
-QList<QMap<QString, QString>> Sculpture::get()
+QList<QMap<QString, QString>> Sculpture::get(const QString& code)
 {
     QList<QMap<QString, QString>> list{};
 
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT * FROM " + this->table + " ORDER BY code");
+
+    QString query_string = "SELECT * FROM " + this->table + " WHERE 1=1 ";
+
+    if (code.trimmed() != "") {
+        query_string += " AND code LIKE \"%" + code + "%\"";
+    }
+
+    query_string += " ORDER BY code ASC";
+
+    query.prepare(query_string);
 
     if (!query.exec()) {
         QMessageBox message;

@@ -35,3 +35,5 @@ IDB_PNG16               PNG                     "assets\\icons\\add-50.png"
 IDB_PNG17               PNG                     "assets\\icons\\sculpture-list-50.png"
 
 IDB_PNG18               PNG                     "assets\\icons\\open-folder-50.png"
+
+IDB_PNG19               PNG                     "assets\\icons\\report-80.png"

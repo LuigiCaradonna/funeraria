@@ -167,6 +167,13 @@ protected slots:
     void slotShowClients();
 
     /*
+     * Updates the clients' list applying the filter (client's name string)
+     *
+     * @return void
+     */
+    void slotFilterClients();
+
+    /*
      * Shows a dialog window containing the selected client's details
      *
      * @return void
@@ -282,6 +289,13 @@ protected slots:
      */
     void slotReport();
 
+    /*
+     * Updates the sculptures's orders list shown applying the filter (sculpture code/name string)
+     *
+     * @return void
+     */
+    void slotFilterSculptures();
+
 private:
     Ui::FunerariaClass ui;
 
@@ -340,6 +354,30 @@ private:
 
     // Single table's row height
     const int row_height = 30;
+
+    // Tombs top bar elements
+    QLabel* lblClient;
+    QComboBox* cbClient;
+    QLabel* lblYear;
+    QComboBox* cbYear;
+    QLabel* lblDeceased;
+    QLineEdit* leDeceased;
+    QCheckBox* chbEngraved;
+    QPushButton* btnSearch;
+    QSpacerItem* tombSpacer;
+    QLabel* lblSearchByProgressive;
+    QLineEdit* leSearchByProgressive;
+    QPushButton* btnSearchByProgressive;
+
+    // Sculptures top bar elements
+    QLabel* lblScCode;
+    QLineEdit* leScCode;
+    QSpacerItem* sculptureSpacer;
+
+    // Clients top bar elements
+    QLabel* lblClName;
+    QLineEdit* leClName;
+    QSpacerItem* clientSpacer;
 
     /********** PRIVATE FUNCTIONS **********/
 
@@ -452,4 +490,9 @@ private:
      * @return void
      */
     void setupTombsToEngraveTable(int tombs_count);
+
+    void initTombTopBar();
+    void initSculpturesTopBar();
+    void initClientsTopBar();
+    void showTopBar(const QString& bar);
 };
