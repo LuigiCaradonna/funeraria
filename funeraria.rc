@@ -6,7 +6,7 @@ IDB_PNG2                PNG                     "assets\\icons\\busto-48.png"
 
 IDB_PNG3                PNG                     "assets\\icons\\detail-50.png"
 
-IDB_PNG4                PNG                     "assets\\icons\\engrave-48.png"
+IDB_PNG4                PNG                     "assets\\icons\\engrave-64.png"
 
 IDB_PNG5                PNG                     "assets\\icons\\flame-50.png"
 
@@ -36,4 +36,4 @@ IDB_PNG17               PNG                     "assets\\icons\\sculpture-list-5
 
 IDB_PNG18               PNG                     "assets\\icons\\open-folder-50.png"
 
-IDB_PNG19               PNG                     "assets\\icons\\report-80.png"
+IDB_PNG19               PNG                     "assets\\icons\\report-64.png"

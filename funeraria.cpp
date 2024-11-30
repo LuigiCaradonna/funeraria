@@ -74,7 +74,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.actionMList->setIcon(QIcon(this->icons_folder + "list-50.png"));
         // Lapidi
         this->ui.actionTNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionTEngrave->setIcon(QIcon(this->icons_folder + "engrave-48.png"));
+        this->ui.actionTEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
         this->ui.actionTPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
         this->ui.actionMAccessories->setIcon(QIcon(this->icons_folder + "mount-50.png"));
         // Sculture
@@ -82,10 +82,14 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.actionScList->setIcon(QIcon(this->icons_folder + "sculpture-list-50.png"));
 
         // Quick access
-        this->ui.btnReport->setIcon(QIcon(this->icons_folder + "report-80.png"));
-        this->ui.btnToEngrave->setIcon(QIcon(this->icons_folder + "engrave-48.png"));
+        this->ui.btnReport->setIcon(QIcon(this->icons_folder + "report-64.png"));
+        this->ui.btnReport->setIconSize(QSize(32, 32));
+        this->ui.btnToEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
+        this->ui.btnToEngrave->setIconSize(QSize(32, 32));
         this->ui.btnSculptures->setIcon(QIcon(this->icons_folder + "busto-48.png"));
+        this->ui.btnSculptures->setIconSize(QSize(32, 32));
         this->ui.btnNewTomb->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.btnNewTomb->setIconSize(QSize(32, 32));
 
         // Instantiate objects
         this->context_menu = new QMenu(this);
