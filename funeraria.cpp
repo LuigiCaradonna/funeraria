@@ -492,16 +492,6 @@ void Funeraria::slotShowSettings() {
     this->settings_ui->exec();
 }
 
-void Funeraria::slotFilterClientOrders()
-{
-    // If the tombs table is not shown
-    if (this->current_table != "tombs") {
-        return;
-    }
-
-    this->slotClientOrders();
-}
-
 void Funeraria::slotClientOrders()
 {
     Tomb* tomb = new Tomb(this->db->db);
@@ -524,6 +514,16 @@ void Funeraria::slotClientOrders()
     this->showClientOrders(tombs);
 
     delete tomb;
+}
+
+void Funeraria::slotFilterClientOrders()
+{
+    // If the tombs table is not shown
+    if (this->current_table != "tombs") {
+        return;
+    }
+
+    this->slotClientOrders();
 }
 
 void Funeraria::slotSearchByProgressive()

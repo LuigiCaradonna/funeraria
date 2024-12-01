@@ -111,18 +111,18 @@ protected slots:
     void slotShowSettings();
 
     /*
-     * Updates the selected client's orders list shown applying the filter (deceased name string)
-     *
-     * @return void
-     */
-    void slotFilterClientOrders();
-
-    /*
      * Shows the selected client's orders
      *
      * @return void
      */
     void slotClientOrders();
+
+    /*
+     * Updates the selected client's orders list shown applying the filter (deceased name string)
+     *
+     * @return void
+     */
+    void slotFilterClientOrders();
 
     /*
      * Shows an order given its progressive number
@@ -227,6 +227,13 @@ protected slots:
     void slotShowSculptures();
 
     /*
+     * Updates the sculptures's orders list shown applying the filter (sculpture code/name string)
+     *
+     * @return void
+     */
+    void slotFilterSculptures();
+
+    /*
      * Shows the dialog to insert a new sculpture
      *
      * @return void
@@ -288,13 +295,6 @@ protected slots:
      * @return void
      */
     void slotReport();
-
-    /*
-     * Updates the sculptures's orders list shown applying the filter (sculpture code/name string)
-     *
-     * @return void
-     */
-    void slotFilterSculptures();
 
 private:
     Ui::FunerariaClass ui;
