@@ -2,8 +2,8 @@
 
 /********** CONSTRUCTOR **********/
 
-AccessoryUi::AccessoryUi(const QSqlDatabase& db, const QString& table, QWidget* parent)
-    : db(db), table(table), parent(parent)
+AccessoryUi::AccessoryUi(const QSqlDatabase& db, const QString& table, const QString& icons_folder, QWidget* parent)
+    : db(db), table(table), icons_folder(icons_folder), parent(parent)
 {
     this->ui.setupUi(this);
 

@@ -21,10 +21,11 @@ public:
     /*
      * Constructs the TombUi object.
      *
-     * @param	const QSqlDatabase*	db	    - Refrence to the database connection
-     * @param	QWidget*            parent	- Parent widget
+     * @param	const QSqlDatabase*	db	            - Refrence to the database connection
+     * @param	const QString&	    icons_folder	- Path to the icons folder
+     * @param	QWidget*            parent	        - Parent widget
      */
-    TombUi(const QSqlDatabase& db, QWidget* parent = nullptr);
+    TombUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -98,7 +99,7 @@ private:
     const QString btn_create_text = "Crea";
     const QString btn_update_text = "Aggiorna";
     const QString not_engraved = "No";
-    const QString icons_folder = "assets\\icons\\";
+    const QString icons_folder;
     QSqlDatabase db;
     QWidget* parent;
     int progressive;

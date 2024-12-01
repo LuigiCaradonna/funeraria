@@ -2,8 +2,8 @@
 
 /********** CONSTRUCTOR **********/
 
-SettingsUi::SettingsUi(const QSqlDatabase& db, QWidget* parent)
-    : db(db), parent(parent)
+SettingsUi::SettingsUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent)
+    : db(db), icons_folder(icons_folder), parent(parent)
 {
     this->ui.setupUi(this);
     // Sets an icon for the window

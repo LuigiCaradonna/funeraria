@@ -2,8 +2,8 @@
 
 /********** CONSTRUCTOR **********/
 
-SculptureUi::SculptureUi(const QSqlDatabase& db, QWidget* parent)
-    : db(db), parent(parent)
+SculptureUi::SculptureUi(const QSqlDatabase& db, const QString& icons_folder, const QString& images_folder, QWidget* parent)
+    : db(db), icons_folder(icons_folder), images_folder(images_folder), parent(parent)
 {
     this->ui.setupUi(this);
 

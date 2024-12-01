@@ -93,12 +93,12 @@ Funeraria::Funeraria(QWidget* parent)
         // Instantiate objects
         this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
-        this->client_ui = new ClientUi(this->db->db, this);
+        this->client_ui = new ClientUi(this->db->db, this->icons_folder, this);
         this->sculpture = new Sculpture(this->db->db);
-        this->sculpture_ui = new SculptureUi(this->db->db, this);
-        this->settings_ui = new SettingsUi(this->db->db, this);
-        this->report_ui = new ReportUi(this->db->db, this);
-        this->tomb_ui = new TombUi(this->db->db, this);
+        this->sculpture_ui = new SculptureUi(this->db->db, this->icons_folder, this->images_folder, this);
+        this->settings_ui = new SettingsUi(this->db->db, this->icons_folder, this);
+        this->report_ui = new ReportUi(this->db->db, this->icons_folder, this);
+        this->tomb_ui = new TombUi(this->db->db, this->icons_folder, this);
         this->vase = new Accessory(this->db->db, "vases");
         this->lamp = new Accessory(this->db->db, "lamps");
         this->flame = new Accessory(this->db->db, "flames");
@@ -885,7 +885,7 @@ void Funeraria::slotNewItem(const QString& type)
     this->current_table = type;
 
     if (type == "vases") {
-        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vases", this);
+        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vases", this->icons_folder, this);
         vase_ui->updateForm();
         vase_ui->setModal(true);
         vase_ui->exec();
@@ -893,7 +893,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete vase_ui;
     }
     else if (type == "lamps") {
-        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamps", this);
+        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamps", this->icons_folder, this);
         lamp_ui->updateForm();
         lamp_ui->setModal(true);
         lamp_ui->exec();
@@ -901,7 +901,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete lamp_ui;
     }
     else if (type == "flames") {
-        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flames", this);
+        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flames", this->icons_folder, this);
         flame_ui->updateForm();
         flame_ui->setModal(true);
         flame_ui->exec();
@@ -909,7 +909,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete flame_ui;
     }
     else if (type == "materials") {
-        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "materials", this);
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "materials", this->icons_folder, this);
         material_ui->updateForm();
         material_ui->setModal(true);
         material_ui->exec();
@@ -929,7 +929,7 @@ void Funeraria::slotEditItem() {
     int row = this->ui.tableWidget->currentRow();
     // Set the name property of the Client object to the name present in the clicked row
     if (this->current_table == "vases") {
-        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vases", this);
+        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vases", this->icons_folder, this);
         vase_ui->updateForm(this->ui.tableWidget->item(row, 0)->text(), this->ui.tableWidget->item(row, 1)->text());
         vase_ui->setModal(true);
         vase_ui->exec();
@@ -937,7 +937,7 @@ void Funeraria::slotEditItem() {
         delete vase_ui;
     }
     else if (this->current_table == "lamps") {
-        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamps", this);
+        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamps", this->icons_folder, this);
         lamp_ui->updateForm(this->ui.tableWidget->item(row, 0)->text(), this->ui.tableWidget->item(row, 1)->text());
         lamp_ui->setModal(true);
         lamp_ui->exec();
@@ -945,7 +945,7 @@ void Funeraria::slotEditItem() {
         delete lamp_ui;
     }
     else if (this->current_table == "flames") {
-        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flames", this);
+        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flames", this->icons_folder, this);
         flame_ui->updateForm(this->ui.tableWidget->item(row, 0)->text(), this->ui.tableWidget->item(row, 1)->text());
         flame_ui->setModal(true);
         flame_ui->exec();
@@ -953,7 +953,7 @@ void Funeraria::slotEditItem() {
         delete flame_ui;
     }
     else if (this->current_table == "materials") {
-        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "materials", this);
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "materials", this->icons_folder, this);
         material_ui->updateForm(this->ui.tableWidget->item(row, 0)->text(), this->ui.tableWidget->item(row, 1)->text());
         material_ui->setModal(true);
         material_ui->exec();

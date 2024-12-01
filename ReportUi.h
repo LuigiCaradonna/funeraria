@@ -29,10 +29,11 @@ public:
     /*
      * Constructs the TombUi object.
      *
-     * @param	const QSqlDatabase*	db	    - Refrence to the database connection
-     * @param	QWidget*            parent	- Parent widget
+     * @param	const QSqlDatabase*	db	            - Refrence to the database connection
+     * @param	const QString&	    icons_folder	- Path to the icons folder
+     * @param	QWidget*            parent	        - Parent widget
      */
-    ReportUi(const QSqlDatabase & db, QWidget * parent = nullptr);
+    ReportUi(const QSqlDatabase & db, const QString& icons_folder, QWidget * parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -81,7 +82,7 @@ private:
     QColor row_bg = QColor(255, 255, 255);
     QColor row_even = QColor(255, 255, 255);
     QColor row_odd = QColor(235, 235, 235);
-    const QString icons_folder = "assets\\icons\\";
+    const QString icons_folder;
 
     /********** PRIVATE FUNCTIONS **********/
 

@@ -19,10 +19,11 @@ public:
     /*
      * Constructs the SettingsUi object.
      *
-     * @param	const QSqlDatabase*	db	    - Refrence to the database connection
-     * @param	QWidget*            parent	- Parent widget
+     * @param	const QSqlDatabase*	db	            - Refrence to the database connection
+     * @param	const QString&	    icons_folder	- Path to the icons folder
+     * @param	QWidget*            parent	        - Parent widget
      */
-    SettingsUi(const QSqlDatabase& db, QWidget* parent = nullptr);
+    SettingsUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -75,7 +76,7 @@ private:
     Ui::SettingsClass ui;
     QSqlDatabase db;
     QWidget* parent;
-    const QString icons_folder = "assets\\icons\\";
+    const QString icons_folder;
 
     /********** PRIVATE FUNCTIONS **********/
 

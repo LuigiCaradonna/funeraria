@@ -17,10 +17,12 @@ public:
     /*
      * Constructs the SculptureUi object.
      *
-     * @param	const QSqlDatabase*	db	- Reference to the database connection
-     * @param	QWidget* parent	- Parent widget
+     * @param	const QSqlDatabase*	db	            - Reference to the database connection
+     * @param	const QString&	    icons_folder	- Path to the icons folder
+     * @param	const QString&	    images_folder	- Path to the images folder
+     * @param	QWidget*            parent	        - Parent widget
      */
-    SculptureUi(const QSqlDatabase& db, QWidget* parent = nullptr);
+    SculptureUi(const QSqlDatabase& db, const QString& icons_folder, const QString& images_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -118,8 +120,8 @@ private:
     int id;
     int default_height = 200;
     int default_depth = 11;
-    const QString icons_folder = "assets\\icons\\";
-    const QString images_folder = "assets/img/";
+    const QString icons_folder;
+    const QString images_folder;
 
     /********** PRIVATE FUNCTIONS **********/
 

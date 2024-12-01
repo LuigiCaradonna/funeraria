@@ -15,9 +15,10 @@ public:
      * Constructs the Client object.
      *
      * @param	const QSqlDatabase*	db	- Reference to the database connection
+     * @param	const QString&	    icons_folder	- Path to the icons folder
      * @param	QWidget* parent	- Parent widget
      */
-    ClientUi(const QSqlDatabase& db, QWidget* parent = nullptr);
+    ClientUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -78,7 +79,7 @@ private:
     QWidget* parent;
     QString name;
     int id;
-    const QString icons_folder = "assets\\icons\\";
+    const QString icons_folder;
 
     /********** PRIVATE FUNCTIONS **********/
 

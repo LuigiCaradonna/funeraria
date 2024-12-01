@@ -14,11 +14,12 @@ public:
     /*
      * Constructs the accessory object.
      *
-     * @param	const QSqlDatabase& db	    - Reference to the database connection
-     * @param	const QString&	    table	- Database table to use
-     * @param	QWidget*            parent	- Parent widget
+     * @param	const QSqlDatabase& db	            - Reference to the database connection
+     * @param	const QString&	    table	        - Database table to use
+     * @param	const QString&	    icons_folder	- Path to the icons folder
+     * @param	QWidget*            parent	        - Parent widget
      */
-    AccessoryUi(const QSqlDatabase& db, const QString& table, QWidget* parent = nullptr);
+    AccessoryUi(const QSqlDatabase& db, const QString& table, const QString& icons_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -70,7 +71,7 @@ private:
     QSqlDatabase db;
     QWidget* parent;
     QString old_code = "";
-    const QString icons_folder = "assets\\icons\\";
+    const QString icons_folder;
 
     /********** PRIVATE FUNCTIONS **********/
 

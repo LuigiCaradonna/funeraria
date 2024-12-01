@@ -2,8 +2,8 @@
 
 /********** CONSTRUCTOR **********/
 
-TombUi::TombUi(const QSqlDatabase& db, QWidget* parent)
-    : db(db), parent(parent)
+TombUi::TombUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent)
+    : db(db), icons_folder(icons_folder), parent(parent)
 {
     this->ui.setupUi(this);
 
