@@ -810,9 +810,6 @@ void Funeraria::slotShowItems(const QString& type)
 
     this->is_table_sortable = false;
 
-    // Reset the table's content
-    this->ui.tableWidget->clear();
-
     QList<QMap<QString, QString>> accessories;
 
     // Get the the list of the required accessories
