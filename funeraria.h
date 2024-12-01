@@ -491,8 +491,31 @@ private:
      */
     void setupTombsToEngraveTable(int tombs_count);
 
+    /*
+     * Initialize the top bar for the tombs view.
+     *
+     * @return void
+     */
     void initTombTopBar();
+
+    /*
+     * Initialize the top bar for the sculptures view.
+     *
+     * @return void
+     */
     void initSculpturesTopBar();
+
+    /*
+     * Initialize the top bar for the clients view.
+     *
+     * @return void
+     */
     void initClientsTopBar();
+
+    /*
+     * Swithces off all the top bars and shows the one required.
+     *
+     * @return void
+     */
     void showTopBar(const QString& bar);
 };

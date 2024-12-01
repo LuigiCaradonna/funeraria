@@ -41,7 +41,7 @@ public:
     /*
      * Gets the given sculpture's datails
      *
-     * @param   const int id - Sculpture's id
+     * @param   const int id - Id
      *
      * @return  QMap<QString, QString> - A map containing the sculpture's data
      */
@@ -50,7 +50,7 @@ public:
     /*
      * Gets the given sculpture's datails
      *
-     * @param   const QString& code - Sculpture's code
+     * @param   const QString& code - Code
      *
      * @return  QMap<QString, QString> - A map containing the sculpture's data
      */
@@ -59,7 +59,7 @@ public:
     /*
      * Deletes a sculpture from the database
      *
-     * @param   const int id - Sculpture's id
+     * @param   const int id - Id
      *
      * @return  boolean true on success, false on failure
      */
@@ -68,11 +68,11 @@ public:
     /*
      * Creates a new sculpture entry
      *
-     * @param const QString& code   -   Sculpture's code
-     * @param const QString& img    -   Sculpture's image
-     * @param const QString& width  -   Sculpture's width in mm
-     * @param const QString& height -   Sculpture's height in mm
-     * @param const QString& depth  -   Sculpture's depth in mm
+     * @param const QString& code   -   Code
+     * @param const QString& img    -   Image file name
+     * @param const QString& width  -   Width in mm
+     * @param const QString& height -   Height in mm
+     * @param const QString& depth  -   Depth in mm
      *
      * @return  boolean true if the creation succeeds, false otherwise
      */
@@ -87,12 +87,12 @@ public:
     /*
      * Updates the sculpture's data
      *
-     * @param const int id          -   Sculpture's id
-     * @param const QString& code   -   Sculpture's code
-     * @param const QString& img    -   Sculpture's image
-     * @param const QString& width  -   Sculpture's width in mm
-     * @param const QString& height -   Sculpture's height in mm
-     * @param const QString& depth  -   Sculpture's depth in mm
+     * @param const int id          -   Id
+     * @param const QString& code   -   Code
+     * @param const QString& img    -   Image file name
+     * @param const QString& width  -   Width in mm
+     * @param const QString& height -   Height in mm
+     * @param const QString& depth  -   Depth in mm
      *
      * @return  boolean true if the update succeeds, false otherwise
      */

@@ -34,7 +34,7 @@ public:
     /*
      * Sets the sculpture's id property and updates the content of the QDialog according
      *
-     * @param   int id - Sculpture's id
+     * @param   int id - Id
      *
      * @return  void
      */
@@ -43,7 +43,7 @@ public:
     /*
      * Sets the sculpture's code property and updates the content of the QDialog according
      *
-     * @param   const QString& code - Sculpture's code
+     * @param   const QString& code - Code
      *
      * @return  void
      */

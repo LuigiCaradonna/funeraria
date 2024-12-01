@@ -1,4 +1,5 @@
 #pragma once
+
 #include "qstring.h"
 #include "qstringlist.h"
 #include <QRegularExpression>

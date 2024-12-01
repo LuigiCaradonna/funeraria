@@ -1,4 +1,5 @@
 #pragma once
+
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
@@ -39,7 +40,7 @@ public:
     /*
      * Gets all the accessories' names
      *
-     * @param const QString& name   - The accessory's name
+     * @param const QString& name   - Name
      *
      * @return  QString - The accessory's code id found, empty string otherwise
      */
@@ -48,7 +49,7 @@ public:
     /*
      * Gets the accessory name given its code
      *
-     * @param const QString& code   - The accessory's code
+     * @param const QString& code   - Code
      *
      * @return  QString - The accessory's code id
      */
@@ -64,8 +65,8 @@ public:
     /*
      * Adds an accessory into the database
      *
-     * @param const QString& code   - Accessory's code
-     * @param const QString& name   - Accessory's name
+     * @param const QString& code   - Code
+     * @param const QString& name   - Name
      *
      * @return  Boolean true on success, false on failure
      */
@@ -74,9 +75,9 @@ public:
     /*
      * Updates an accessory into the database
      *
-     * @param const QString& old_code   - Accessory's previous code
-     * @param const QString& code       - Accessory's code
-     * @param const QString& name       - Accessory's name
+     * @param const QString& old_code   - Pprevious code
+     * @param const QString& code       - Code
+     * @param const QString& name       - Name
      *
      * @return  Boolean true on success, false on failure
      */
@@ -85,7 +86,7 @@ public:
     /*
      * Removes a accessory from the database
      *
-     * @param const QString& code - Accessory's code
+     * @param const QString& code - Code
      *
      * @return  Boolean true on success, false on failure
      */

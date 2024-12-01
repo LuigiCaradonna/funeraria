@@ -31,7 +31,7 @@ public:
     /*
      * Sets the client's id property and updates the content of the QDialog according
      *
-     * @param   int id - Client's id
+     * @param   int id - Id
      *
      * @return  void
      */
@@ -40,7 +40,7 @@ public:
     /*
      * Sets the client's name property and updates the content of the QDialog according
      *
-     * @param   const QString& name - Client's name
+     * @param   const QString& name - Name
      *
      * @return  void
      */

@@ -80,7 +80,6 @@ Funeraria::Funeraria(QWidget* parent)
         // Sculture
         this->ui.actionScNew->setIcon(QIcon(this->icons_folder + "busto-48.png"));
         this->ui.actionScList->setIcon(QIcon(this->icons_folder + "sculpture-list-50.png"));
-
         // Quick access
         this->ui.btnReport->setIcon(QIcon(this->icons_folder + "report-64.png"));
         this->ui.btnReport->setIconSize(QSize(32, 32));
@@ -105,7 +104,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->flame = new Accessory(this->db->db, "flames");
         this->material = new Accessory(this->db->db, "materials");
 
-        // Init the top bars, must be after the client object instantiation
+        // Init the top bars, must be after the objects instantiation, some of them are required to build the bars
         this->initTombTopBar();
         this->initSculpturesTopBar();
         this->initClientsTopBar();
@@ -2108,25 +2107,19 @@ void Funeraria::initClientsTopBar()
 
 void Funeraria::showTopBar(const QString& bar)
 {
+    // Hide all the top bars
+    this->ui.tombsTopBarWidget->setVisible(false);
+    this->ui.sculpturesTopBarWidget->setVisible(false);
+    this->ui.clientsTopBarWidget->setVisible(false);
+
+    // Show the one required
     if (bar == "tombs") {
-        this->ui.clientsTopBarWidget->setVisible(false);
-        this->ui.sculpturesTopBarWidget->setVisible(false);
         this->ui.tombsTopBarWidget->setVisible(true);
     }
     else if (bar == "sculptures") {
-        this->ui.tombsTopBarWidget->setVisible(false);
-        this->ui.clientsTopBarWidget->setVisible(false);
         this->ui.sculpturesTopBarWidget->setVisible(true);
     }
     else if (bar == "clients") {
-        this->ui.tombsTopBarWidget->setVisible(false);
-        this->ui.sculpturesTopBarWidget->setVisible(false);
         this->ui.clientsTopBarWidget->setVisible(true);
-    }
-    else {
-        // Hide all the top bars
-        this->ui.tombsTopBarWidget->setVisible(false);
-        this->ui.sculpturesTopBarWidget->setVisible(false);
-        this->ui.clientsTopBarWidget->setVisible(false);
     }
 }

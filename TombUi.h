@@ -1,4 +1,5 @@
 #pragma once
+
 #include <QDebug>
 #include <QSignalMapper>
 #include <QSqlError>
@@ -37,7 +38,7 @@ public:
     /*
      * Sets the tomb's progressive property and updates the content of the QDialog according
      *
-     * @param   int progressive - Tomb's progressive number
+     * @param   int progressive - Progressive number
      *
      * @return  void
      */

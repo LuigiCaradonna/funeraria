@@ -1,4 +1,5 @@
 #pragma once
+
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
@@ -81,7 +82,7 @@ public:
     /*
      * Gets the tombs matching the given progressive number
      *
-     * @param const int progressive     - Tomb's progressive number
+     * @param const int progressive     - Progressive number
      *
      * @return  QMap<QString, QString>  - The Tomb's details
      */
@@ -90,7 +91,7 @@ public:
     /*
      * Gets the given tomb's datails joined to the related tables
      *
-     * @param   int - Tomb's progressive number
+     * @param   int - Progressive number
      *
      * @return  QMap<QString, QString> - A map containing the tomb's  datails joined to the related tables
      */
@@ -225,7 +226,7 @@ public:
     /*
      * Deletes a tomb from the database
      *
-     * @param   const int progressive - Tomb's progressive number
+     * @param   const int progressive - Progressive number
      *
      * @return  void
      */
@@ -234,7 +235,7 @@ public:
     /*
      * Sets a tomb as paid
      *
-     * @param   const int progressive - Tomb's progressive number
+     * @param   const int progressive - Progressive number
      *
      * @return  bool - True on success, false on failure
      */
@@ -243,7 +244,7 @@ public:
     /*
      * Sets a tomb's accessories as mounted
      *
-     * @param   const int progressive - Tomb's progressive number
+     * @param   const int progressive - Progressive number
      *
      * @return  bool - True on success, false on failure
      */

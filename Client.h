@@ -33,7 +33,7 @@ public:
     /*
      * Gets the clients' id
      *
-     * @param   const QString& name - Client's name
+     * @param   const QString& name - Name
      *
      * @return  int - The clients' id, 0 if not found, also meaning "all"
      */
@@ -42,7 +42,7 @@ public:
     /*
      * Gets the client's name
      *
-     * @param   const int - Client's id
+     * @param   const int - Id
      *
      * @return  QString - The clients' id, 0 if not found, also meaning "all"
      */
@@ -81,7 +81,7 @@ public:
     /*
      * Gets the given client's datails
      *
-     * @param   int id - Client's id
+     * @param   int id - Id
      *
      * @return  QMap<QString, QString> - A map containing the client's data
      */
@@ -90,7 +90,7 @@ public:
     /*
      * Gets the given client's datails
      *
-     * @param   const QString& name - Client's name
+     * @param   const QString& name - Name
      *
      * @return  QMap<QString, QString> - A map containing the client's data
      */
@@ -99,7 +99,7 @@ public:
     /*
      * Deletes a client from the database
      *
-     * @param   const int id - Client's id
+     * @param   const int id - Id
      *
      * @return  boolean true on success, false on failure
      */
@@ -108,13 +108,13 @@ public:
     /*
      * Creates a new client entry
      *
-     * @param const int position        -   Client's ordering position
-     * @param const QString& name       -   Client's name
-     * @param const QString& emails     -   Client's email(s)
-     * @param const QString& address    -   Client's address
-     * @param const QString& phones     -   Client's phone number(s)
-     * @param const int active          -   Client's active status (0/1)
-     * @param const int quick           -   Client's quick access status (0/1)
+     * @param const int position        -   Ordering position
+     * @param const QString& name       -   Name
+     * @param const QString& emails     -   Eemail(s)
+     * @param const QString& address    -   Address
+     * @param const QString& phones     -   Phone number(s)
+     * @param const int active          -   Active status (0/1)
+     * @param const int quick           -   Quick access status (0/1)
      *
      * @return  boolean true if the creation succeeds, false otherwise
      */
@@ -131,14 +131,14 @@ public:
     /*
      * Updates the client's data
      *
-     * @param const int id              -   Client's id
-     * @param const int position        -   Client's ordering position
-     * @param const QString& name       -   Client's name
-     * @param const QString& emails     -   Client's email(s)
-     * @param const QString& address    -   Client's address
-     * @param const QString& phones     -   Client's phone number(s)
-     * @param const int active          -   Client's active status (0/1)
-     * @param const int quick           -   Client's quick access status (0/1)
+     * @param const int id              -   Id
+     * @param const int position        -   Ordering position
+     * @param const QString& name       -   Name
+     * @param const QString& emails     -   Eemail(s)
+     * @param const QString& address    -   Address
+     * @param const QString& phones     -   Phone number(s)
+     * @param const int active          -   Active status (0/1)
+     * @param const int quick           -   Quick access status (0/1)
      *
      * @return  boolean true if the update succeeds, false otherwise
      */
@@ -163,9 +163,9 @@ public:
     /*
      * Given a client's id, name and wanted position, rearranges all the clients' position if necessary
      *
-     * @param const int     id          -   Client's id
-     * @param const QString& name       -   Client's name
-     * @param const int     position    -   Client's ordering position to set. -1 when a client must be deleted
+     * @param const int     id          -   Id
+     * @param const QString& name       -   Name
+     * @param const int     position    -   Ordering position to set. -1 when a client must be deleted
      *
      * @return  boolean true if the operation succeeds, false otherwise
      */
@@ -194,7 +194,7 @@ public:
     /*
      * Sets the given client's position to a not valid value to allow positions rearranging
      *
-     * @param const int    client_id    -   Client's id
+     * @param const int    client_id    -   Id
      *
      * @return  boolean true if the operation succeeds, false otherwise
      */

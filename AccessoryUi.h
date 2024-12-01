@@ -1,4 +1,5 @@
 #pragma once
+
 #include <QDebug>
 #include "Accessory.h"
 #include "ui_Accessory.h"
@@ -31,8 +32,8 @@ public:
     /*
      * Updates the form fields
      *
-     * @param const QString& code   - The accessory's code
-     * @param const QString& name   - The accessory's name
+     * @param const QString& code   - Code
+     * @param const QString& name   - Name
      *
      * @return  void
      */
@@ -76,7 +77,7 @@ private:
     /*
      * Sets the code field
      *
-     * @param const QString& code   - The accessory's code
+     * @param const QString& code   - Code
      * 
      * @return  void
      */
@@ -85,7 +86,7 @@ private:
     /*
      * Sets the name field
      *
-     * @param const QString& name   - The accessory's name
+     * @param const QString& name   - Name
      * 
      * @return  void
      */
