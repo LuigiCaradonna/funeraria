@@ -833,6 +833,9 @@ void Funeraria::slotShowItems(const QString& type)
         return;
     }
 
+    // Reset the table's content
+    this->clearTable();
+
     QStringList headers{ "Codice", "Nome", "", ""};
 
     this->ui.tableWidget->setRowCount(accessories.size());
