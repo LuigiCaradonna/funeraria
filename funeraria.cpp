@@ -774,6 +774,8 @@ void Funeraria::slotShowClients()
 
         row_number++;
     }
+
+    this->leClName->setFocus();
 }
 
 void Funeraria::slotFilterClients()
@@ -1220,6 +1222,8 @@ void Funeraria::slotShowSculptures()
 
         row_number++;
     }
+
+    this->leScCode->setFocus();
 }
 
 void Funeraria::slotFilterSculptures()
@@ -1627,6 +1631,8 @@ void Funeraria::showClientOrders(const QList<QMap<QString, QString>> &tombs)
     for (int i = 0; i < tombs.size(); i++) {
         this->addClientOrdersTableRow(tombs[i], i);
     }
+
+    this->leDeceased->setFocus();
 }
 
 void Funeraria::showClientOrder(const QMap<QString, QString>& tomb)
