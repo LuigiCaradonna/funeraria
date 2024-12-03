@@ -1129,7 +1129,9 @@ void Funeraria::slotShowSculptures()
     this->ui.tableWidget->setColumnWidth(8, 90);  // Details button
     this->ui.tableWidget->setColumnWidth(9, 90);  // Delete button
 
+    QFont rid_font("Calibri", 16);
     int row_number = 1;
+
     for (int i = 0; i < sculptures.size(); i++) {
         QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
         pb_details->setText("Dettagli");
@@ -1174,22 +1176,29 @@ void Funeraria::slotShowSculptures()
 
         QTableWidgetItem* width_widget = new QTableWidgetItem(sculptures[i]["width"]);
         width_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        width_widget->setTextAlignment(Qt::AlignCenter);
 
         QTableWidgetItem* height_widget = new QTableWidgetItem(sculptures[i]["height"]);
         height_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        height_widget->setTextAlignment(Qt::AlignCenter);
 
         QTableWidgetItem* depth_widget = new QTableWidgetItem(sculptures[i]["depth"]);
         depth_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        depth_widget->setTextAlignment(Qt::AlignCenter);
 
         QTableWidgetItem* rid_z_widget = new QTableWidgetItem(
             QString::number(Helpers::scaleFactor(sculptures[i]["depth"].toFloat(), 11.0))
         );
         rid_z_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        rid_z_widget->setTextAlignment(Qt::AlignCenter);
+        rid_z_widget->setFont(rid_font);
 
         QTableWidgetItem* rid_xy_widget = new QTableWidgetItem(
             QString::number(Helpers::scaleFactor(sculptures[i]["height"].toFloat(), 200.0))
         );
         rid_xy_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        rid_xy_widget->setTextAlignment(Qt::AlignCenter);
+        rid_xy_widget->setFont(rid_font);
 
         if (row_number % 2 == 0) {
             this->row_bg = this->row_even;
