@@ -2113,6 +2113,13 @@ void Funeraria::initClientsTopBar()
 
 void Funeraria::showTopBar(const QString& bar)
 {
+    /*
+        If the bar string is equal to the current table set
+        there is no need to switch the top bar, the correct
+        one is already visible
+     */
+    if (bar == this->current_table) return;
+
     // Hide all the top bars
     this->ui.tombsTopBarWidget->setVisible(false);
     this->ui.sculpturesTopBarWidget->setVisible(false);
