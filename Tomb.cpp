@@ -957,7 +957,7 @@ void Tomb::remove(const int progressive)
     else {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
+        message.setIcon(QMessageBox::Information);
         message.setText("Lapide eliminata");
         message.exec();
     }

@@ -36,6 +36,7 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* par
 
     this->connect(this->ui.btnNoEngraving, &QPushButton::clicked, this, &TombUi::slotSetNoEngraving);
     this->connect(this->ui.btnDelivered, &QPushButton::clicked, this, &TombUi::slotSetDelivered);
+    this->connect(this->ui.btnDelete, &QPushButton::clicked, this, &TombUi::slotDelete);
 }
 
 /********** DESTRUCTOR **********/
