@@ -954,6 +954,13 @@ void Tomb::remove(const int progressive)
         message.setText(query.lastError().text());
         message.exec();
     }
+    else {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Lapide eliminata");
+        message.exec();
+    }
 }
 
 bool Tomb::setPaid(const int progressive)

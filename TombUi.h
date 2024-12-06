@@ -87,6 +87,13 @@ protected slots:
     void slotSave();
 
     /*
+     * Deletes a tomb
+     *
+     * @return  void
+     */
+    void slotDelete();
+
+    /*
      * Closes the dialog window
      *
      * @return  void

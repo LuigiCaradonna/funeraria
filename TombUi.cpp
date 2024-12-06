@@ -159,6 +159,26 @@ void TombUi::slotSave()
     }
 }
 
+void TombUi::slotDelete()
+{
+    Tomb* tomb = new Tomb(this->db);
+
+    QMessageBox message;
+    QPushButton* proceed_btn = message.addButton("Elimina", QMessageBox::ActionRole);
+    QPushButton* abort_btn = message.addButton("Annulla", QMessageBox::ActionRole);
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Warning);
+    message.setText("Vuoi eliminare questa lapide?");
+    message.exec();
+
+    if (message.clickedButton() == proceed_btn) {
+        tomb->remove(this->ui.leProgressive->text().toInt());
+    }
+
+    delete tomb;
+    this->close();
+}
+
 void TombUi::slotCloseDialog()
 {
     this->close();
