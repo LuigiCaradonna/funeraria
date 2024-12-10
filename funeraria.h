@@ -283,6 +283,27 @@ protected slots:
     void slotSetPaidTomb();
 
     /*
+     * Sets a tomb as confirmed
+     *
+     * @return void
+     */
+    void slotSetConfirmedTomb();
+
+    /*
+     * Sets a tomb as Engraved
+     *
+     * @return void
+     */
+    void slotSetEngravedTomb();
+
+    /*
+     * Sets a tomb as delivered
+     *
+     * @return void
+     */
+    void slotSetDeliveredTomb();
+
+    /*
      * Sets the tomb's accessories as mounted
      *
      * @return void

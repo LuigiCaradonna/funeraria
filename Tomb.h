@@ -233,6 +233,33 @@ public:
     void remove(const int progressive);
 
     /*
+     * Sets a tomb as confirmed
+     *
+     * @param   const int progressive - Progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
+    bool setConfirmed(const int progressive);
+
+    /*
+     * Sets a tomb as engraved
+     *
+     * @param   const int progressive - Progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
+    bool setEngraved(const int progressive);
+
+    /*
+     * Sets a tomb as delivered
+     *
+     * @param   const int progressive - Progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
+    bool setDelivered(const int progressive);
+
+    /*
      * Sets a tomb as paid
      *
      * @param   const int progressive - Progressive number
@@ -274,10 +301,46 @@ public:
     bool isProgressiveInUse(const int progressive);
 
     /*
+     * Checks if the tomb with the given progressive number has been confirmed
+     *
+     * @param   const int progressive - Tomb's progressive number
+     *
+     * @return  boolean true if the tomb has been confirmed, false otherwise
+     */
+    bool isConfirmed(const int progressive);
+
+    /*
+     * Checks if the tomb with the given progressive number has been engraved
+     *
+     * @param   const int progressive - Tomb's progressive number
+     *
+     * @return  boolean true if the tomb has been engraved, false otherwise
+     */
+    bool isEngraved(const int progressive);
+
+    /*
+     * Checks if the tomb with the given progressive number has been delivered
+     *
+     * @param   const int progressive - Tomb's progressive number
+     *
+     * @return  boolean true if the tomb has been delivered, false otherwise
+     */
+    bool isDelivered(const int progressive);
+
+    /*
+     * Checks if the tomb with the given progressive number has been paied
+     *
+     * @param   const int progressive - Tomb's progressive number
+     *
+     * @return  boolean true if the tomb has been paied, false otherwise
+     */
+    bool isPaied(const int progressive);
+
+    /*
      * Given the progressive number of the tomb, calculates its range and then the folder where it belongs.
      * E.G.: progressive 2140, it belongs to 2100-2199
      *
-     * @param   const int - progressive number of the tomb
+     * @param   const int - Progressive number of the tomb
      *
      * @return  QString - The folder where the tomb belongs.
      */
@@ -286,7 +349,7 @@ public:
     /*
      * Provides the full path to the folder of a given tomb
      *
-     * @param   const int       - progressive number of the tomb
+     * @param   const int       - Progressive number of the tomb
      * @param   const QString&  - Deceased's name
      *
      * @return  QString - The full path to the tomb's folder.

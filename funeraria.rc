@@ -37,3 +37,11 @@ IDB_PNG17               PNG                     "assets\\icons\\sculpture-list-5
 IDB_PNG18               PNG                     "assets\\icons\\open-folder-50.png"
 
 IDB_PNG19               PNG                     "assets\\icons\\report-64.png"
+
+IDB_PNG20               PNG                     "assets\\icons\\approved-64.png"
+
+IDB_PNG21               PNG                     "assets\\icons\\engraved-64.png"
+
+IDB_PNG22               PNG                     "assets\\icons\\delivered-80.png"
+
+IDB_PNG23               PNG                     "assets\\icons\\ok-64.png"

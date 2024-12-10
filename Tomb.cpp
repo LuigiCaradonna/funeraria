@@ -963,6 +963,61 @@ void Tomb::remove(const int progressive)
     }
 }
 
+bool Tomb::setConfirmed(const int progressive)
+{
+    QString today = QDate::currentDate().toString("yyyy-MM-dd");
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare(
+        "UPDATE " + this->table + " "
+        "SET confirmed_at = '" + today + "' "
+        "WHERE progressive = :progressive;"
+    );
+
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Tomb::setEngraved(const int progressive)
+{
+    QString today = QDate::currentDate().toString("yyyy-MM-dd");
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare(
+        "UPDATE " + this->table + " "
+        "SET engraved_at = '" + today + "' "
+        "WHERE progressive = :progressive;"
+    );
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Tomb::setDelivered(const int progressive)
+{
+    QString today = QDate::currentDate().toString("yyyy-MM-dd");
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare(
+        "UPDATE " + this->table + " "
+        "SET delivered_at = '" + today + "' "
+        "WHERE progressive = :progressive;"
+    );
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        return false;
+    }
+
+    return true;
+}
+
 bool Tomb::setPaid(const int progressive)
 {
     QSqlQuery query = QSqlQuery(this->db);
@@ -1030,8 +1085,6 @@ QList<int> Tomb::getNotInUseProgressives()
         message.exec();
     }
     else {
-        qDebug() << "getNotInUseProgressives nell'else";
-        
         while (query.next()) {
             progressives.append(query.value("progressive").toInt());
         }
@@ -1076,6 +1129,94 @@ bool Tomb::isProgressiveInUse(const int progressive)
     return false;
 }
 
+bool Tomb::isConfirmed(const int progressive)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT confirmed_at FROM " + this->table + " WHERE progressive = :progressive");
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+        return true;
+    }
+    else if (query.next()) {
+        return query.value("confirmed_at").toString().trimmed() != "";
+    }
+
+    return false;
+}
+
+bool Tomb::isEngraved(const int progressive)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT engraved_at FROM " + this->table + " WHERE progressive = :progressive");
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+        return true;
+    }
+    else if (query.next()) {
+        return query.value("engraved_at").toString().trimmed() != "";
+    }
+
+    return false;
+}
+
+bool Tomb::isDelivered(const int progressive)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT delivered_at FROM " + this->table + " WHERE progressive = :progressive");
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+        return true;
+    }
+    else if (query.next()) {
+        return query.value("delivered_at").toString().trimmed() != "";
+    }
+
+    return false;
+}
+
+bool Tomb::isPaied(const int progressive)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT price, paid FROM " + this->table + " WHERE progressive = :progressive");
+    query.bindValue(":progressive", progressive);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+        return true;
+    }
+    else if (query.next()) {
+        if (query.value("price").toString().trimmed() == "0" || query.value("paid").toString().trimmed() == "1") {
+            return true;
+        }
+
+        return false;
+    }
+
+    return false;
+}
+
 QString Tomb::getGroupingFolder(const int progressive)
 {
     // last 2 digit of the progressive number
@@ -1098,7 +1239,7 @@ QString Tomb::getFolderPath(const int progressive, const QString& name)
 
     delete config;
 
-    return "file:///" + path_to_archive + "/" + this->getGroupingFolder(progressive) + "/" + QString::number(progressive) + " - " + name.trimmed();
+    return "file:///" + path_to_archive + "/" + 
+        this->getGroupingFolder(progressive) + "/" + 
+        QString::number(progressive) + " - " + name.trimmed();
 }
-
-

@@ -9,9 +9,11 @@ Funeraria::Funeraria(QWidget* parent)
      * Before to setup the application: check the config file and the database
      */
 
-    // Check the config file before to instantiate the DatabaseManager object,
-    // DatabaseManager needs to read the configuration file and we want to be sure
-    // that the configuration is correctly set.
+    /*
+     * Check the config file before to instantiate the DatabaseManager object,
+     * DatabaseManager needs to read the configuration file and we want to be sure
+     * that the configuration is correctly set.
+     */
     this->config = new Config();
     
     // The config file is not valid
@@ -43,7 +45,7 @@ Funeraria::Funeraria(QWidget* parent)
             &Funeraria::slotSortColumn
         );
 
-        // Connect the customContextMenuRequested signal to a slot
+        // Connect the customContextMenuRequested signal to the relative slot
         this->connect(
             this->ui.tableWidget, 
             &QTableWidget::customContextMenuRequested, 
@@ -217,6 +219,7 @@ Funeraria::~Funeraria()
 }
 
 /********** SLOTS **********/
+
 void Funeraria::slotShowContextMenu(const QPoint& pos) {
     // Clear from the menu the eventual entries shown before
     this->context_menu->clear();
@@ -425,7 +428,9 @@ void Funeraria::slotPrintToPayListPdf()
         spaces += "&nbsp;";
     }
 
-    html += "<tr><td>Totale</td><td style='text-align:right'>€" + spaces + QString::number(total) + "</td></tr></table>"; // Total price
+    html += "<tr><td>Totale</td><td style='text-align:right'>€" + 
+            spaces + QString::number(total) + 
+            "</td></tr></table>"; // Total price
 
     QTextDocument document;
     document.setHtml(html);
@@ -1589,6 +1594,78 @@ void Funeraria::slotSetPaidTomb()
     delete tomb;
 }
 
+void Funeraria::slotSetConfirmedTomb()
+{
+    Tomb* tomb = new Tomb(this->db->db);
+
+    // Row index of the clicked button
+    int row = this->ui.tableWidget->currentRow();
+    // Set the progressive property of the Tomb object to the progressive number present in the clicked row
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
+
+    if (!tomb->setConfirmed(progressive)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Non è stato possibile impostare la lapide come confermata.");
+        message.exec();
+    }
+    else {
+        // Reload the table
+        this->slotClientOrders();
+    }
+
+    delete tomb;
+}
+
+void Funeraria::slotSetEngravedTomb()
+{
+    Tomb* tomb = new Tomb(this->db->db);
+
+    // Row index of the clicked button
+    int row = this->ui.tableWidget->currentRow();
+    // Set the progressive property of the Tomb object to the progressive number present in the clicked row
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
+
+    if (!tomb->setEngraved(progressive)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Non è stato possibile impostare la lapide come incisa.");
+        message.exec();
+    }
+    else {
+        // Reload the table
+        this->slotClientOrders();
+    }
+
+    delete tomb;
+}
+
+void Funeraria::slotSetDeliveredTomb()
+{
+    Tomb* tomb = new Tomb(this->db->db);
+
+    // Row index of the clicked button
+    int row = this->ui.tableWidget->currentRow();
+    // Set the progressive property of the Tomb object to the progressive number present in the clicked row
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
+
+    if (!tomb->setDelivered(progressive)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Non è stato possibile impostare la lapide come consegnata.");
+        message.exec();
+    }
+    else {
+        // Reload the table
+        this->slotClientOrders();
+    }
+
+    delete tomb;
+}
+
 void Funeraria::slotSetAccessoriesMounted()
 {
     Tomb* tomb = new Tomb(this->db->db);
@@ -1768,7 +1845,7 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
     this->clearTable();
 
     QStringList headers{ "Numero", "Nome", "Materiale", "€", "Pagata", "Note", "Accessori",
-        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "", "", "" };
+        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "", "", "", "" };
 
     this->ui.tableWidget->setRowCount(tombs_count);
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -1776,10 +1853,10 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
 
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
     this->ui.tableWidget->setColumnWidth(1, 210);   // Name
-    this->ui.tableWidget->setColumnWidth(2, 155);   // Material
+    this->ui.tableWidget->setColumnWidth(2, 150);   // Material
     this->ui.tableWidget->setColumnWidth(3, 45);    // Price
     this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
-    this->ui.tableWidget->setColumnWidth(5, 680);   // Notes
+    this->ui.tableWidget->setColumnWidth(5, 645);   // Notes
     this->ui.tableWidget->setColumnWidth(6, 80);    // Accessories mounted
     this->ui.tableWidget->setColumnWidth(7, 90);    // Ordered at
     this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
@@ -1789,24 +1866,59 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
     this->ui.tableWidget->setColumnWidth(12, 40);   // Details Button
     this->ui.tableWidget->setColumnWidth(13, 40);   // Open folder Button
     this->ui.tableWidget->setColumnWidth(14, 40);   // Set paid tomb button
+    this->ui.tableWidget->setColumnWidth(15, 40);   // Dynamc Button, changes according to the tomb's status
 }
 
 void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row)
 {
     QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
-    // pb_details->setText("Dettagli");
     pb_details->setIcon(QIcon(this->icons_folder + "detail-50.png"));
     pb_details->setToolTip("Dettagli");
+    this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
 
     QPushButton* pb_open_folder = new QPushButton(this->ui.tableWidget);
-    // pb_open_folder->setText("Apri");
     pb_open_folder->setIcon(QIcon(this->icons_folder + "open-folder-50.png"));
     pb_open_folder->setToolTip("Apri");
+    this->connect(pb_open_folder, &QPushButton::clicked, this, &Funeraria::slotTombFolder);
+
+    Tomb* tomb_to_check = new Tomb(this->db->db);
 
     QPushButton* pb_set_paid = new QPushButton(this->ui.tableWidget);
-    // pb_set_paid->setText("Pagata");
-    pb_set_paid->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
-    pb_set_paid->setToolTip("Pagata");
+    if (tomb_to_check->isPaied(tomb["progressive"].toInt())) {
+        pb_set_paid->setIcon(QIcon(this->icons_folder + "ok-64.png"));
+        pb_set_paid->setToolTip("Pagata");
+        pb_set_paid->setEnabled(false);
+    }
+    else {
+        pb_set_paid->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
+        pb_set_paid->setToolTip("Conferma pagamento");
+        this->connect(pb_set_paid, &QPushButton::clicked, this, &Funeraria::slotSetPaidTomb);
+    }
+
+    QPushButton* pb_dynamic = new QPushButton(this->ui.tableWidget);
+
+    if (!tomb_to_check->isConfirmed(tomb["progressive"].toInt())) {
+        pb_dynamic->setIcon(QIcon(this->icons_folder + "approved-64.png"));
+        pb_dynamic->setToolTip("Imposta confermata");
+        this->connect(pb_dynamic, &QPushButton::clicked, this, &Funeraria::slotSetConfirmedTomb);
+    }
+    else if (!tomb_to_check->isEngraved(tomb["progressive"].toInt())) {
+        pb_dynamic->setIcon(QIcon(this->icons_folder + "engraved-64.png"));
+        pb_dynamic->setToolTip("Conferma incisione");
+        this->connect(pb_dynamic, &QPushButton::clicked, this, &Funeraria::slotSetEngravedTomb);
+    }
+    else if (!tomb_to_check->isDelivered(tomb["progressive"].toInt())) {
+        pb_dynamic->setIcon(QIcon(this->icons_folder + "delivered-80.png"));
+        pb_dynamic->setToolTip("Conferma consegna");
+        this->connect(pb_dynamic, &QPushButton::clicked, this, &Funeraria::slotSetDeliveredTomb);
+    }
+    else if (tomb_to_check->isDelivered(tomb["progressive"].toInt())) {
+        pb_dynamic->setIcon(QIcon(this->icons_folder + "ok-64.png"));
+        pb_dynamic->setToolTip("Ordine completo");
+        pb_dynamic->setEnabled(false);
+    }
+
+    delete tomb_to_check;
 
     // Generate the cells' content and set them as not editable
     QTableWidgetItem* progressive = new QTableWidgetItem(tomb["progressive"]);
@@ -1921,11 +2033,8 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     this->ui.tableWidget->setItem(row, 11, delivered_at);
     this->ui.tableWidget->setCellWidget(row, 12, pb_details); // Details button
     this->ui.tableWidget->setCellWidget(row, 13, pb_open_folder); // Open folder button
-    this->ui.tableWidget->setCellWidget(row, 14, pb_set_paid); // Set paid tomb button
-
-    this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
-    this->connect(pb_open_folder, &QPushButton::clicked, this, &Funeraria::slotTombFolder);
-    this->connect(pb_set_paid, &QPushButton::clicked, this, &Funeraria::slotSetPaidTomb);
+    this->ui.tableWidget->setCellWidget(row, 14, pb_set_paid); // Paid tomb button
+    this->ui.tableWidget->setCellWidget(row, 15, pb_dynamic); // Dynamic tomb button
 }
 
 void Funeraria::setupAccessoriesToMountTable(int tombs_count)
