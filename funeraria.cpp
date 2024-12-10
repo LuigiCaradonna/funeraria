@@ -104,7 +104,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->flame = new Accessory(this->db->db, "flames");
         this->material = new Accessory(this->db->db, "materials");
 
-        // Init the top bars, must be after the objects instantiation, some of them are required to build the bars
+        // Top bars' init, must be after the objects instantiation, some of them are required to build the bars
         this->initTombTopBar();
         this->initSculpturesTopBar();
         this->initClientsTopBar();
@@ -120,8 +120,8 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionSettings, SIGNAL(triggered()), this, SLOT(slotShowSettings()));
 
         // Signal emitted from the menu "Clienti"
-        this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
         this->connect(this->ui.actionCNew, SIGNAL(triggered()), this, SLOT(slotNewClient()));
+        this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
 
         // Signal emitted from the menu "Lapidi"
         this->connect(this->ui.actionTNew, SIGNAL(triggered()), this, SLOT(slotNewTomb()));
@@ -176,7 +176,6 @@ Funeraria::~Funeraria()
     // Delete the table content
     this->clearTable();
 
-    delete this->db;
     delete this->context_menu;
     delete this->client;
     delete this->client_ui;
@@ -212,6 +211,9 @@ Funeraria::~Funeraria()
     delete this->lblClName;
     delete this->leClName;
     delete this->clientSpacer;
+
+    delete this->config;
+    delete this->db;
 }
 
 /********** SLOTS **********/
@@ -452,6 +454,13 @@ void Funeraria::slotSortColumn(int logical_index) {
 
     Tomb* tomb = new Tomb(this->db->db);
 
+    this->showTopBar("tombs");
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
     this->current_table = "tombs";
 
     int client_id = this->client->getId(this->cbClient->currentText());
@@ -496,6 +505,13 @@ void Funeraria::slotClientOrders()
 {
     Tomb* tomb = new Tomb(this->db->db);
 
+    this->showTopBar("tombs");
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
     this->current_table = "tombs";
 
     int client_id = this->client->getId(this->cbClient->currentText());
@@ -531,6 +547,13 @@ void Funeraria::slotSearchByProgressive()
     Tomb* tomb = new Tomb(this->db->db);
     QList<QMap<QString, QString>> tombs;
 
+    this->showTopBar("tombs");
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
     this->current_table = "tombs";
 
     int progressive = this->leSearchByProgressive->text().trimmed().toInt();
@@ -571,6 +594,13 @@ void Funeraria::slotQuickClientOrders()
 
     Tomb* tomb = new Tomb(this->db->db);
 
+    this->showTopBar("tombs");
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
     this->current_table = "tombs";
 
     int client_id = this->client->getId(button_text);
@@ -659,9 +689,14 @@ void Funeraria::slotShowClients()
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
-    this->current_table = "clients";
-
     this->showTopBar("clients");
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
+    this->current_table = "clients";
 
     this->is_table_sortable = false;
 
@@ -806,9 +841,14 @@ void Funeraria::slotShowItems(const QString& type)
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
-    this->current_table = type;
-
     this->showTopBar(type);
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
+    this->current_table = type;
 
     this->is_table_sortable = false;
 
@@ -1098,6 +1138,11 @@ void Funeraria::slotShowSculptures()
 
     this->showTopBar("sculptures");
 
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
     this->current_table = "sculptures";
 
     this->is_table_sortable = false;
@@ -1627,13 +1672,14 @@ void Funeraria::clearContainer(QBoxLayout* container)
         else {
             delete item->widget();
         }
+
         delete item;
     }
 }
 
-void Funeraria::showClientOrders(const QList<QMap<QString, QString>> &tombs)
+void Funeraria::showClientOrders(const QList<QMap<QString, QString>>& tombs)
 {
-   this->showTopBar("tombs");
+    this->showTopBar("tombs");
 
     this->setupClientOrdersTable(tombs.size());
 
@@ -2094,12 +2140,12 @@ void Funeraria::initClientsTopBar()
     QFont font;
     font.setPointSize(12);
 
-    // Code label
+    // Client's name label
     this->lblClName = new QLabel();
     this->lblClName->setFont(font);
     this->lblClName->setText("Nome");
 
-    // Deceased line edit
+    // Client's name line edit
     this->leClName = new QLineEdit();
     this->leClName->setFont(font);
     this->leClName->setMaximumWidth(300);

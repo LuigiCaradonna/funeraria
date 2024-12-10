@@ -34,6 +34,7 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* par
     currentDateMapper->setMapping(this->ui.btnDeliveredAt, "deliver");
     this->connect(currentDateMapper, &QSignalMapper::mappedString, this, &TombUi::slotSetCurrentDate);
 
+    this->connect(this->ui.btnMissing, &QPushButton::clicked, this, &TombUi::slotNotInUseProgressives);
     this->connect(this->ui.btnNoEngraving, &QPushButton::clicked, this, &TombUi::slotSetNoEngraving);
     this->connect(this->ui.btnDelivered, &QPushButton::clicked, this, &TombUi::slotSetDelivered);
     this->connect(this->ui.btnDelete, &QPushButton::clicked, this, &TombUi::slotDelete);
@@ -47,6 +48,7 @@ TombUi::~TombUi()
     delete this->vase;
     delete this->lamp;
     delete this->flame;
+    delete this->currentDateMapper;
 }
 
 /********** PUBLIC FUNCTIONS **********/
@@ -98,6 +100,15 @@ void TombUi::slotSetDelivered()
 void TombUi::slotSetNoEngraving()
 {
     this->ui.leEngravedAt->setText(this->not_engraved);
+}
+
+void TombUi::slotNotInUseProgressives()
+{
+    Tomb* tomb = new Tomb(this->db);
+    tomb->getNotInUseProgressives();
+
+
+    delete tomb;
 }
 
 void TombUi::slotSave()

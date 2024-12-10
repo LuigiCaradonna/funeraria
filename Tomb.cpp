@@ -1015,6 +1015,46 @@ int Tomb::getLastProgresive() {
     return 0;
 }
 
+QList<int> Tomb::getNotInUseProgressives()
+{
+    qDebug() << "getNotInUseProgressives";
+    QList<int> progressives;
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT progressive FROM " + this->table);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+    else {
+        qDebug() << "getNotInUseProgressives nell'else";
+        
+        while (query.next()) {
+            progressives.append(query.value("progressive").toInt());
+        }
+
+        int i = 0;
+        int length = progressives.length();
+
+        for (int n = 1; n <= 10; n++) {
+            if (i >= length) break;   // all array entries checked
+
+            if (progressives[i] == n) {
+                qDebug() << "Continue.";
+                i += 1;  // Matched i'th, move on to next
+            }
+            else {
+                qDebug() << "The value of " << n << " is missing.";
+            }
+        }
+    }
+
+    return progressives;
+}
+
 bool Tomb::isProgressiveInUse(const int progressive)
 {
     QSqlQuery query = QSqlQuery(this->db);

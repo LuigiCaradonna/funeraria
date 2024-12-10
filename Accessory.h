@@ -16,7 +16,7 @@ public:
     /*
      * Constructs the accessory object.
      *
-     * @param	QSqlDatabase*	db	    - Pointer to the database connection
+     * @param	const QSqlDatabase&	db  - Reference to the database connection
      * @param	const QString&	table	- Database table to use
      */
     Accessory(const QSqlDatabase& db, const QString& table);

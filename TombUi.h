@@ -80,6 +80,13 @@ protected slots:
     void slotSetNoEngraving();
 
     /*
+     * Replaces the tomb's progressive number with the one selected among those not in use
+     *
+     * @return  void
+     */
+    void slotNotInUseProgressives();
+
+    /*
      * Saves a tomb's data
      *
      * @return  void

@@ -43,9 +43,10 @@ DatabaseManager::DatabaseManager(QWidget* parent)
 
 DatabaseManager::~DatabaseManager()
 {
-    this->db.close();
-    QSqlDatabase::removeDatabase(this->db.connectionName());
     delete this->settings;
+
+    // This must be the last thing to do
+    this->closeDb();
 }
 
 /********** PUBLIC FUNCTIONS **********/
@@ -150,7 +151,7 @@ bool DatabaseManager::backupToCSV()
 bool DatabaseManager::reloadDatabase()
 {
     // Close the currently open DB
-    this->db.close();
+    this->closeDb();
 
     return this->openDatabase();
 }
@@ -168,7 +169,7 @@ bool DatabaseManager::openDatabase()
         return this->solveDatabaseConnectionFailure();
     }
     else {
-        this->db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
+        this->db = QSqlDatabase::addDatabase("QSQLITE", this->connection_name);
         this->db.setDatabaseName(this->db_file);
 
         if (!this->db.open()) {
@@ -213,7 +214,7 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
             // Find the last backup created
             QString max_date = "00000000";
             QString backup_file = "";
-            foreach(QString filename, files) {
+            for (QString filename : files) {
                 QStringList date = filename.split("-");
 
                 if (date[0].compare(max_date) > 0) {
@@ -291,7 +292,7 @@ bool DatabaseManager::createDatabase()
 {
     // Can't use the code inside openDatabase() method, because at this point no DB yet exists
     // thus a new one must be created here before to execute the queries from the sql file
-    this->db = QSqlDatabase::addDatabase("QSQLITE", "funerariadb");
+    this->db = QSqlDatabase::addDatabase("QSQLITE", this->connection_name);
     this->db.setDatabaseName(this->db_file);
 
     if (!this->db.open()) {
@@ -299,11 +300,17 @@ bool DatabaseManager::createDatabase()
     }
     else {
         // Ask for the sql file to open to generate the new database
-        QString sqlFile = QFileDialog::getOpenFileName(this->parent, "Selezione file sql per generare il database", "./", "Database (*.sql)");
+        QString sqlFile = QFileDialog::getOpenFileName(
+            this->parent, 
+            "Selezione file sql per generare il database", 
+            "./", 
+            "Database (*.sql)"
+        );
 
         // If no file is selected or if the sql execution fails
         if (!QFile::exists(sqlFile) || sqlFile.isEmpty() || !this->executeQueryFile(sqlFile)) {
-            this->db.close();
+            this->closeDb();
+
             return this->solveDatabaseConnectionFailure();
         }
 
@@ -381,7 +388,7 @@ bool DatabaseManager::executeQueryFile(const QString& file_name) {
         }
 
         // Execute the queries
-        foreach(const QString & s, qList) {
+        for(const QString & s : qList) {
             if (re_transaction.match(s).hasMatch())    // Special query detected
                 this->db.transaction();
             else if (re_commit.match(s).hasMatch())    // Special query detected
@@ -418,7 +425,7 @@ bool DatabaseManager::executeQueryFile(const QString& file_name) {
         // Execute each individual queries
         QStringList qList = query_string.split(';', Qt::SkipEmptyParts);
 
-        foreach(const QString & s, qList) {
+        for(const QString & s : qList) {
             query.exec(s);
             if (query.lastError().type() != QSqlError::NoError) {
                 return false;
@@ -529,7 +536,7 @@ bool DatabaseManager::isBackupRequired() {
     }
 
     QString max_date = "00000000";
-    foreach(QString filename, files) {
+    for (QString filename : files) {
         QStringList date = filename.split("-");
         
         if (date[0].compare(max_date) > 0) {
@@ -564,4 +571,16 @@ void DatabaseManager::deleteOldBackups()
             QFile::remove(backup_path + "/" + files[i]);
         }
     }
+}
+
+void DatabaseManager::closeDb()
+{
+    {
+        if (this->db.isOpen()) {
+            this->db.close();
+        }
+    }
+
+    this->db = QSqlDatabase::database();
+    QSqlDatabase::removeDatabase(this->connection_name);
 }

@@ -63,6 +63,7 @@ public:
     bool reloadDatabase();
 
 private:
+    QString connection_name = "funerariadb";
     QWidget* parent;
     Settings* settings;
     QString db_file = "./funeraria.db";
@@ -132,5 +133,12 @@ private:
      * @return void
      */
     void deleteOldBackups();
+
+    /*
+     * Closes the database
+     *
+     * @return void
+     */
+    void closeDb();
 };
 

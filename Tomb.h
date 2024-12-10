@@ -258,6 +258,13 @@ public:
     int getLastProgresive();
 
     /*
+     * Gets the last progressive number in use
+     *
+     * @return  QList<int> - The list of progressive numbers not in use
+     */
+    QList<int> getNotInUseProgressives();
+
+    /*
      * Checks if the given progressive number is in use
      *
      * @param   const int progressive - Tomb's progressive number
