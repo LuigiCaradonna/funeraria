@@ -376,6 +376,16 @@ private:
     // Single table's row height
     const int row_height = 30;
 
+    // Top quick access bar elements
+    QPushButton* btnQuickReports;
+    QPushButton* btnQuickClients;
+    QPushButton* btnQuickSculptures;
+    QPushButton* btnQuickToEngrave;
+    QPushButton* btnQuickToPay;
+    QPushButton* btnQuickToMount;
+    QPushButton* btnQuickNewTomb;
+    QSpacerItem* topQuickAccessSpacer;
+
     // Tombs top bar elements
     QLabel* lblClient;
     QComboBox* cbClient;
@@ -511,6 +521,13 @@ private:
      * @return void
      */
     void setupTombsToEngraveTable(int tombs_count);
+
+    /*
+     * Initialize the top quick access bar.
+     *
+     * @return void
+     */
+    void initTopBarQuickAccess();
 
     /*
      * Initialize the top bar for the tombs view.

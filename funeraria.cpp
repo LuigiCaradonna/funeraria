@@ -83,22 +83,6 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.actionScNew->setIcon(QIcon(this->icons_folder + "busto-48.png"));
         this->ui.actionScList->setIcon(QIcon(this->icons_folder + "sculpture-list-50.png"));
 
-        // Quick access buttons
-        this->ui.btnQuickReport->setIcon(QIcon(this->icons_folder + "report-64.png"));
-        this->ui.btnQuickReport->setIconSize(QSize(32, 32));
-        this->ui.btnQuickClients->setIcon(QIcon(this->icons_folder + "client-list-48.png"));
-        this->ui.btnQuickClients->setIconSize(QSize(32, 32));
-        this->ui.btnQuickToEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
-        this->ui.btnQuickToEngrave->setIconSize(QSize(32, 32));
-        this->ui.btnQuickSculptures->setIcon(QIcon(this->icons_folder + "busto-48.png"));
-        this->ui.btnQuickSculptures->setIconSize(QSize(32, 32));
-        this->ui.btnQuickToPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
-        this->ui.btnQuickToPay->setIconSize(QSize(32, 32));
-        this->ui.btnQuickToMount->setIcon(QIcon(this->icons_folder + "mount-50.png"));
-        this->ui.btnQuickToMount->setIconSize(QSize(32, 32));
-        this->ui.btnQuickNewTomb->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.btnQuickNewTomb->setIconSize(QSize(32, 32));
-
         // Instantiate objects
         this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
@@ -114,18 +98,10 @@ Funeraria::Funeraria(QWidget* parent)
         this->material = new Accessory(this->db->db, "materials");
 
         // Top bars' init, must be after the objects instantiation, some of them are required to build the bars
+        this->initTopBarQuickAccess();
         this->initTombTopBar();
         this->initSculpturesTopBar();
         this->initClientsTopBar();
-
-        // Connect the top bar's quick buttons to the corresponding slots
-        this->connect(this->ui.btnQuickReport,     &QPushButton::clicked, this, &Funeraria::slotReport);
-        this->connect(this->ui.btnQuickClients,    &QPushButton::clicked, this, &Funeraria::slotShowClients);
-        this->connect(this->ui.btnQuickToEngrave,  &QPushButton::clicked, this, &Funeraria::slotTombsToEngrave);
-        this->connect(this->ui.btnQuickNewTomb,    &QPushButton::clicked, this, &Funeraria::slotNewTomb);
-        this->connect(this->ui.btnQuickToPay,      &QPushButton::clicked, this, &Funeraria::slotTombsNotPaid);
-        this->connect(this->ui.btnQuickToMount,    &QPushButton::clicked, this, &Funeraria::slotAccessoriesToMount);
-        this->connect(this->ui.btnQuickSculptures, &QPushButton::clicked, this, &Funeraria::slotShowSculptures);
 
         // Signal emitted from the menu "Files"
         this->connect(this->ui.actionBackupCSV, SIGNAL(triggered()), this, SLOT(slotBackupDbToCSV()));
@@ -202,6 +178,15 @@ Funeraria::~Funeraria()
     delete this->material;
     delete this->show_items_mapper;
     delete this->new_item_mapper;
+
+    delete this->btnQuickReports;
+    delete this->btnQuickClients;
+    delete this->btnQuickSculptures;
+    delete this->btnQuickToEngrave;
+    delete this->btnQuickToMount;
+    delete this->btnQuickToPay;
+    delete this->btnQuickNewTomb;
+    delete this->topQuickAccessSpacer;
 
     delete this->lblClient;
     delete this->cbClient;
@@ -2119,6 +2104,76 @@ void Funeraria::setupTombsToEngraveTable(int tombs_count)
     this->ui.tableWidget->setColumnWidth(3, 200);
     this->ui.tableWidget->setColumnWidth(4, 100);
     this->ui.tableWidget->setColumnWidth(5, 100);
+}
+
+void Funeraria::initTopBarQuickAccess()
+{
+    // Reports button
+    this->btnQuickReports = new QPushButton();
+    this->btnQuickReports->setMinimumSize(QSize(48, 48));
+    this->btnQuickReports->setIcon(QIcon(this->icons_folder + "report-64.png"));
+    this->btnQuickReports->setIconSize(QSize(32, 32));
+
+    // Clients button
+    this->btnQuickClients = new QPushButton();
+    this->btnQuickClients->setMinimumSize(QSize(48, 48));
+    this->btnQuickClients->setIcon(QIcon(this->icons_folder + "client-list-48.png"));
+    this->btnQuickClients->setIconSize(QSize(32, 32));
+
+    // Tombs to engrave button
+    this->btnQuickSculptures = new QPushButton();
+    this->btnQuickSculptures->setMinimumSize(QSize(48, 48));
+    this->btnQuickSculptures->setIcon(QIcon(this->icons_folder + "busto-48.png"));
+    this->btnQuickSculptures->setIconSize(QSize(32, 32));
+
+    // Tombs to engrave button
+    this->btnQuickToEngrave = new QPushButton();
+    this->btnQuickToEngrave->setMinimumSize(QSize(48, 48));
+    this->btnQuickToEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
+    this->btnQuickToEngrave->setIconSize(QSize(32, 32));
+
+    // Tombs to mount button
+    this->btnQuickToMount = new QPushButton();
+    this->btnQuickToMount->setMinimumSize(QSize(48, 48));
+    this->btnQuickToMount->setIcon(QIcon(this->icons_folder + "mount-50.png"));
+    this->btnQuickToMount->setIconSize(QSize(32, 32));
+
+    // Tombs to pay button
+    this->btnQuickToPay = new QPushButton();
+    this->btnQuickToPay->setMinimumSize(QSize(48, 48));
+    this->btnQuickToPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
+    this->btnQuickToPay->setIconSize(QSize(32, 32));
+
+    // Tombs to pay button
+    this->btnQuickNewTomb = new QPushButton();
+    this->btnQuickNewTomb->setMinimumSize(QSize(48, 48));
+    this->btnQuickNewTomb->setIcon(QIcon(this->icons_folder + "add-50.png"));
+    this->btnQuickNewTomb->setIconSize(QSize(32, 32));
+
+    // Horizontal spacer
+    this->topQuickAccessSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    // Horizontal layout containing the tombs top bar's elements
+    QHBoxLayout* topBarQuickAccessLayout = new QHBoxLayout(this->ui.topBarQuickAccess);
+
+    // Add the elements to the layout
+    topBarQuickAccessLayout->addWidget(this->btnQuickReports);
+    topBarQuickAccessLayout->addWidget(this->btnQuickClients);
+    topBarQuickAccessLayout->addWidget(this->btnQuickSculptures);
+    topBarQuickAccessLayout->addWidget(this->btnQuickToEngrave);
+    topBarQuickAccessLayout->addWidget(this->btnQuickToMount);
+    topBarQuickAccessLayout->addWidget(this->btnQuickToPay);
+    topBarQuickAccessLayout->addWidget(this->btnQuickNewTomb);
+    topBarQuickAccessLayout->addSpacerItem(this->topQuickAccessSpacer);
+
+    // Connect the top bar's quick buttons to the corresponding slots
+    this->connect(this->btnQuickReports,    &QPushButton::clicked, this, &Funeraria::slotReport);
+    this->connect(this->btnQuickClients,    &QPushButton::clicked, this, &Funeraria::slotShowClients);
+    this->connect(this->btnQuickSculptures, &QPushButton::clicked, this, &Funeraria::slotShowSculptures);
+    this->connect(this->btnQuickToEngrave,  &QPushButton::clicked, this, &Funeraria::slotTombsToEngrave);
+    this->connect(this->btnQuickToMount,    &QPushButton::clicked, this, &Funeraria::slotAccessoriesToMount);
+    this->connect(this->btnQuickToPay,      &QPushButton::clicked, this, &Funeraria::slotTombsNotPaid);
+    this->connect(this->btnQuickNewTomb,    &QPushButton::clicked, this, &Funeraria::slotNewTomb);
 }
 
 void Funeraria::initTombTopBar()
