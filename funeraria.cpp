@@ -2153,7 +2153,7 @@ void Funeraria::initTopBarQuickAccess()
     // Horizontal spacer
     this->topQuickAccessSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    // Horizontal layout containing the tombs top bar's elements
+    // Horizontal layout containing the top quick access bar's elements
     QHBoxLayout* topBarQuickAccessLayout = new QHBoxLayout(this->ui.topBarQuickAccess);
 
     // Add the elements to the layout
