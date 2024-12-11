@@ -82,15 +82,22 @@ Funeraria::Funeraria(QWidget* parent)
         // Sculture
         this->ui.actionScNew->setIcon(QIcon(this->icons_folder + "busto-48.png"));
         this->ui.actionScList->setIcon(QIcon(this->icons_folder + "sculpture-list-50.png"));
-        // Quick access
-        this->ui.btnReport->setIcon(QIcon(this->icons_folder + "report-64.png"));
-        this->ui.btnReport->setIconSize(QSize(32, 32));
-        this->ui.btnToEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
-        this->ui.btnToEngrave->setIconSize(QSize(32, 32));
-        this->ui.btnSculptures->setIcon(QIcon(this->icons_folder + "busto-48.png"));
-        this->ui.btnSculptures->setIconSize(QSize(32, 32));
-        this->ui.btnNewTomb->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.btnNewTomb->setIconSize(QSize(32, 32));
+
+        // Quick access buttons
+        this->ui.btnQuickReport->setIcon(QIcon(this->icons_folder + "report-64.png"));
+        this->ui.btnQuickReport->setIconSize(QSize(32, 32));
+        this->ui.btnQuickClients->setIcon(QIcon(this->icons_folder + "client-list-48.png"));
+        this->ui.btnQuickClients->setIconSize(QSize(32, 32));
+        this->ui.btnQuickToEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
+        this->ui.btnQuickToEngrave->setIconSize(QSize(32, 32));
+        this->ui.btnQuickSculptures->setIcon(QIcon(this->icons_folder + "busto-48.png"));
+        this->ui.btnQuickSculptures->setIconSize(QSize(32, 32));
+        this->ui.btnQuickToPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
+        this->ui.btnQuickToPay->setIconSize(QSize(32, 32));
+        this->ui.btnQuickToMount->setIcon(QIcon(this->icons_folder + "mount-50.png"));
+        this->ui.btnQuickToMount->setIconSize(QSize(32, 32));
+        this->ui.btnQuickNewTomb->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.btnQuickNewTomb->setIconSize(QSize(32, 32));
 
         // Instantiate objects
         this->context_menu = new QMenu(this);
@@ -111,30 +118,33 @@ Funeraria::Funeraria(QWidget* parent)
         this->initSculpturesTopBar();
         this->initClientsTopBar();
 
-        // Set the event listeners for main UI's elements
-        this->connect(this->ui.btnReport, &QPushButton::clicked, this, &Funeraria::slotReport);
-        this->connect(this->ui.btnToEngrave, &QPushButton::clicked, this, &Funeraria::slotTombsToEngrave);
-        this->connect(this->ui.btnNewTomb, &QPushButton::clicked, this, &Funeraria::slotNewTomb);
-        this->connect(this->ui.btnSculptures, &QPushButton::clicked, this, &Funeraria::slotShowSculptures);
+        // Connect the top bar's quick buttons to the corresponding slots
+        this->connect(this->ui.btnQuickReport,     &QPushButton::clicked, this, &Funeraria::slotReport);
+        this->connect(this->ui.btnQuickClients,    &QPushButton::clicked, this, &Funeraria::slotShowClients);
+        this->connect(this->ui.btnQuickToEngrave,  &QPushButton::clicked, this, &Funeraria::slotTombsToEngrave);
+        this->connect(this->ui.btnQuickNewTomb,    &QPushButton::clicked, this, &Funeraria::slotNewTomb);
+        this->connect(this->ui.btnQuickToPay,      &QPushButton::clicked, this, &Funeraria::slotTombsNotPaid);
+        this->connect(this->ui.btnQuickToMount,    &QPushButton::clicked, this, &Funeraria::slotAccessoriesToMount);
+        this->connect(this->ui.btnQuickSculptures, &QPushButton::clicked, this, &Funeraria::slotShowSculptures);
 
         // Signal emitted from the menu "Files"
         this->connect(this->ui.actionBackupCSV, SIGNAL(triggered()), this, SLOT(slotBackupDbToCSV()));
-        this->connect(this->ui.actionSettings, SIGNAL(triggered()), this, SLOT(slotShowSettings()));
+        this->connect(this->ui.actionSettings,  SIGNAL(triggered()), this, SLOT(slotShowSettings()));
 
         // Signal emitted from the menu "Clienti"
-        this->connect(this->ui.actionCNew, SIGNAL(triggered()), this, SLOT(slotNewClient()));
+        this->connect(this->ui.actionCNew,  SIGNAL(triggered()), this, SLOT(slotNewClient()));
         this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
 
         // Signal emitted from the menu "Lapidi"
-        this->connect(this->ui.actionTNew, SIGNAL(triggered()), this, SLOT(slotNewTomb()));
-        this->connect(this->ui.actionTEngrave, SIGNAL(triggered()), this, SLOT(slotTombsToEngrave()));
-        this->connect(this->ui.actionMAccessories, SIGNAL(triggered()), this, SLOT(slotAccessoriesToMount()));
-        this->connect(this->ui.actionTPay, SIGNAL(triggered()), this, SLOT(slotTombsNotPaid()));
+        this->connect(this->ui.actionTNew,                SIGNAL(triggered()), this, SLOT(slotNewTomb()));
+        this->connect(this->ui.actionTEngrave,            SIGNAL(triggered()), this, SLOT(slotTombsToEngrave()));
+        this->connect(this->ui.actionMAccessories,        SIGNAL(triggered()), this, SLOT(slotAccessoriesToMount()));
+        this->connect(this->ui.actionTPay,                SIGNAL(triggered()), this, SLOT(slotTombsNotPaid()));
         this->connect(this->ui.actionSearchByProgressive, SIGNAL(triggered()), this, SLOT(slotTombByProgressive()));
 
         // Signal emitted from the menu "Sculture"
         this->connect(this->ui.actionScList, SIGNAL(triggered()), this, SLOT(slotShowSculptures()));
-        this->connect(this->ui.actionScNew, SIGNAL(triggered()), this, SLOT(slotNewSculpture()));
+        this->connect(this->ui.actionScNew,  SIGNAL(triggered()), this, SLOT(slotNewSculpture()));
 
         /* 
          * Map the signal coming from the menu "Accessori" to call the same function (slotNewItem) 
@@ -237,7 +247,7 @@ void Funeraria::slotShowContextMenu(const QPoint& pos) {
     print_listPdf->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentPrintPreview));
     
     // Connect actions to slots
-    connect(sum_prices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
+    connect(sum_prices,    &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
     connect(print_listTxt, &QAction::triggered, this, &Funeraria::slotPrintToPayListTxt);
     connect(print_listPdf, &QAction::triggered, this, &Funeraria::slotPrintToPayListPdf);
 
@@ -1159,7 +1169,7 @@ void Funeraria::slotShowSculptures()
 
     QList<QMap<QString, QString>> sculptures = this->sculpture->get(code);
 
-    QStringList headers{ "ID", "Img", "Codice", "Larghezza", "Altezza", "Profondità", "Rid Z", "Rid XY", "", ""};
+    QStringList headers{ "ID", "Img", "Codice", "Larghezza", "Altezza", "Profondità", "Rid Z", "Rid XY", "", "" };
 
     int img_cell_width = 150;
     int img_cell_height = 100;

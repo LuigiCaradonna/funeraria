@@ -47,7 +47,7 @@
       <item>
        <layout class="QHBoxLayout" name="quickAccessBar">
         <item>
-         <widget class="QPushButton" name="btnReport">
+         <widget class="QPushButton" name="btnQuickReport">
           <property name="minimumSize">
            <size>
             <width>48</width>
@@ -74,7 +74,31 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnToEngrave">
+         <widget class="QPushButton" name="btnQuickClients">
+          <property name="minimumSize">
+           <size>
+            <width>48</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>48</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnQuickToEngrave">
           <property name="minimumSize">
            <size>
             <width>48</width>
@@ -101,7 +125,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnSculptures">
+         <widget class="QPushButton" name="btnQuickSculptures">
           <property name="minimumSize">
            <size>
             <width>48</width>
@@ -128,7 +152,50 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnNewTomb">
+         <widget class="QPushButton" name="btnQuickToPay">
+          <property name="minimumSize">
+           <size>
+            <width>48</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>48</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnQuickToMount">
+          <property name="minimumSize">
+           <size>
+            <width>48</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>48</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnQuickNewTomb">
           <property name="minimumSize">
            <size>
             <width>48</width>
@@ -210,7 +277,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAccessories">
