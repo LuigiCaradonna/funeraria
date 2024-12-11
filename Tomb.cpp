@@ -1070,10 +1070,12 @@ int Tomb::getLastProgresive() {
     return 0;
 }
 
-QList<int> Tomb::getNotInUseProgressives()
+QStringList Tomb::getNotInUseProgressives()
 {
-    qDebug() << "getNotInUseProgressives";
     QList<int> progressives;
+    QStringList missing;
+    int last_progressive = this->getLastProgresive();
+
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT progressive FROM " + this->table);
 
@@ -1092,20 +1094,27 @@ QList<int> Tomb::getNotInUseProgressives()
         int i = 0;
         int length = progressives.length();
 
-        for (int n = 1; n <= 10; n++) {
-            if (i >= length) break;   // all array entries checked
+        for (int expected = 1; expected <= length; expected++) {
+            // All array entries checked
+            if (i >= length) break;
 
-            if (progressives[i] == n) {
-                qDebug() << "Continue.";
-                i += 1;  // Matched i'th, move on to next
+            if (progressives[i] == expected) {
+                // Matched i'th, move on to next
+                i += 1;
             }
             else {
-                qDebug() << "The value of " << n << " is missing.";
+                // Missing progressive found
+
+                // If it is not too old compared to the current last progressive
+                if (expected > last_progressive - 300) {
+                    // Add the missing progressive to the list
+                    missing.append(QString::number(expected));
+                }
             }
         }
     }
 
-    return progressives;
+    return missing;
 }
 
 bool Tomb::isProgressiveInUse(const int progressive)

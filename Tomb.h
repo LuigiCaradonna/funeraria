@@ -289,7 +289,7 @@ public:
      *
      * @return  QList<int> - The list of progressive numbers not in use
      */
-    QList<int> getNotInUseProgressives();
+    QStringList getNotInUseProgressives();
 
     /*
      * Checks if the given progressive number is in use

@@ -4,6 +4,7 @@
 #include <QSignalMapper>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QInputDialog>
 #include "ui_Tomb.h"
 #include "ClientUi.h"
 #include "Client.h"

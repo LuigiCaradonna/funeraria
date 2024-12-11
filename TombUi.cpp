@@ -105,10 +105,33 @@ void TombUi::slotSetNoEngraving()
 void TombUi::slotNotInUseProgressives()
 {
     Tomb* tomb = new Tomb(this->db);
-    tomb->getNotInUseProgressives();
-
+    QStringList not_in_use = tomb->getNotInUseProgressives();
 
     delete tomb;
+
+    if (not_in_use.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Non ci sono numeri progressivi utilizzabili.");
+        message.exec();
+
+        return;
+    }
+
+    bool ok;
+    QString progressive = QInputDialog::getItem(
+        this,                 // Parent widget
+        "Numero progressivo", // Dialog title
+        "Numeri",             // Label text
+        not_in_use,           // Items for the combo box
+        0,                    // Index of the default item
+        false,                // Editable combo box (set to true if you want user to type custom text)
+        &ok                   // To check if "OK" was clicked
+    );
+
+    if (ok && !progressive.isEmpty())
+        this->ui.leProgressive->setText(progressive);
 }
 
 void TombUi::slotSave()
@@ -173,8 +196,6 @@ void TombUi::slotSave()
 
 void TombUi::slotDelete()
 {
-    Tomb* tomb = new Tomb(this->db);
-
     QMessageBox message;
     QPushButton* proceed_btn = message.addButton("Elimina", QMessageBox::ActionRole);
     QPushButton* abort_btn = message.addButton("Annulla", QMessageBox::ActionRole);
@@ -184,10 +205,11 @@ void TombUi::slotDelete()
     message.exec();
 
     if (message.clickedButton() == proceed_btn) {
+        Tomb* tomb = new Tomb(this->db);
         tomb->remove(this->ui.leProgressive->text().toInt());
+        delete tomb;
     }
 
-    delete tomb;
     this->close();
 }
 
