@@ -112,6 +112,9 @@ void ReportUi::slotGenerateReport()
     else if (this->ui.rbByMonth->isChecked()) {
         group = "month";
     }
+    else {
+        group = "by_client";
+    }
 
     // All the clients, all the years
     if (this->ui.cbClient->currentText() == "Tutti" && year == 0) {
@@ -216,7 +219,7 @@ void ReportUi::slotGenerateReport()
 
     // All the clients, specific year
     else if (this->ui.cbClient->currentText() == "Tutti" && year != 0) {
-        bool by_client = group == "month" ? false : true;
+        bool by_client = group == "by_client";
 
         QList<QMap<QString, QString>> report =
             tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, by_client);
@@ -395,7 +398,7 @@ void ReportUi::showReportGraph(
 
     int max = 0;
     for (int i = 0; i < report.size(); i++) {
-        if (category == "client_id" || group == "") {
+        if (category == "client_id" || group == "by_client") {
             cat = this->client->getName(report[i]["client_id"].toInt());
         }
 

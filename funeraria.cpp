@@ -2108,47 +2108,62 @@ void Funeraria::setupTombsToEngraveTable(int tombs_count)
 
 void Funeraria::initTopBarQuickAccess()
 {
+    int tooltip_duration = 2500;
     // Reports button
     this->btnQuickReports = new QPushButton();
     this->btnQuickReports->setMinimumSize(QSize(48, 48));
     this->btnQuickReports->setIcon(QIcon(this->icons_folder + "report-64.png"));
     this->btnQuickReports->setIconSize(QSize(32, 32));
+    this->btnQuickReports->setToolTip("Reports");
+    this->btnQuickReports->setToolTipDuration(tooltip_duration);
 
     // Clients button
     this->btnQuickClients = new QPushButton();
     this->btnQuickClients->setMinimumSize(QSize(48, 48));
     this->btnQuickClients->setIcon(QIcon(this->icons_folder + "client-list-48.png"));
     this->btnQuickClients->setIconSize(QSize(32, 32));
+    this->btnQuickClients->setToolTip("Clienti");
+    this->btnQuickClients->setToolTipDuration(tooltip_duration);
 
     // Tombs to engrave button
     this->btnQuickSculptures = new QPushButton();
     this->btnQuickSculptures->setMinimumSize(QSize(48, 48));
     this->btnQuickSculptures->setIcon(QIcon(this->icons_folder + "busto-48.png"));
     this->btnQuickSculptures->setIconSize(QSize(32, 32));
+    this->btnQuickSculptures->setToolTip("Sculture");
+    this->btnQuickSculptures->setToolTipDuration(tooltip_duration);
 
     // Tombs to engrave button
     this->btnQuickToEngrave = new QPushButton();
     this->btnQuickToEngrave->setMinimumSize(QSize(48, 48));
     this->btnQuickToEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
     this->btnQuickToEngrave->setIconSize(QSize(32, 32));
+    this->btnQuickToEngrave->setToolTip("Lapidi da incidere");
+    this->btnQuickToEngrave->setToolTipDuration(tooltip_duration);
 
     // Tombs to mount button
     this->btnQuickToMount = new QPushButton();
     this->btnQuickToMount->setMinimumSize(QSize(48, 48));
     this->btnQuickToMount->setIcon(QIcon(this->icons_folder + "mount-50.png"));
     this->btnQuickToMount->setIconSize(QSize(32, 32));
+    this->btnQuickToMount->setToolTip("Lapidi da montare");
+    this->btnQuickToMount->setToolTipDuration(tooltip_duration);
 
     // Tombs to pay button
     this->btnQuickToPay = new QPushButton();
     this->btnQuickToPay->setMinimumSize(QSize(48, 48));
     this->btnQuickToPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
     this->btnQuickToPay->setIconSize(QSize(32, 32));
+    this->btnQuickToPay->setToolTip("Lapidi da saldare");
+    this->btnQuickToPay->setToolTipDuration(tooltip_duration);
 
     // Tombs to pay button
     this->btnQuickNewTomb = new QPushButton();
     this->btnQuickNewTomb->setMinimumSize(QSize(48, 48));
     this->btnQuickNewTomb->setIcon(QIcon(this->icons_folder + "add-50.png"));
     this->btnQuickNewTomb->setIconSize(QSize(32, 32));
+    this->btnQuickNewTomb->setToolTip("Nuova lapide");
+    this->btnQuickNewTomb->setToolTipDuration(tooltip_duration);
 
     // Horizontal spacer
     this->topQuickAccessSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
