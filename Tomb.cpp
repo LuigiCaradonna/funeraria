@@ -137,8 +137,8 @@ QList<QMap<QString, QString>> Tomb::getReport(
         query_string += " AND ordered_at LIKE '" + QString::number(year) + "%'";
     }
 
-    // Only delivered tombs to have only those actually made
-    query_string += " AND delivered_at != ''";
+    // Only engraved tombs to have only those actually made
+    query_string += " AND engraved_at != ''";
 
     if (by_client && group == "year") {
         query_string += " GROUP BY client_id, year";

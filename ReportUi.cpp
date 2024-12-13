@@ -114,7 +114,7 @@ void ReportUi::slotGenerateReport()
     }
 
     // All the clients, all the years
-    if (this->ui.cbClient->currentText() == "Tutti" && this->ui.cbYear->currentText() == "Tutti") {
+    if (this->ui.cbClient->currentText() == "Tutti" && year == 0) {
         QList<QMap<QString, QString>> report =
             tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, false);
 
@@ -143,7 +143,7 @@ void ReportUi::slotGenerateReport()
     }
 
     // Specific client, all the years
-    if (this->ui.cbClient->currentText() != "Tutti" && this->ui.cbYear->currentText() == "Tutti") {
+    else if (this->ui.cbClient->currentText() != "Tutti" && year == 0) {
         QList<QMap<QString, QString>> report =
             tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, false);
 
@@ -191,7 +191,7 @@ void ReportUi::slotGenerateReport()
     }
 
     // Specific client, specific year
-    if (this->ui.cbClient->currentText() != "Tutti" && this->ui.cbYear->currentText() != "Tutti") {
+    else if (this->ui.cbClient->currentText() != "Tutti" && year != 0) {
         QList<QMap<QString, QString>> report =
             tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, false);
 
@@ -215,12 +215,12 @@ void ReportUi::slotGenerateReport()
     }
 
     // All the clients, specific year
-    if (this->ui.cbClient->currentText() == "Tutti" && this->ui.cbYear->currentText() != "Tutti") {
+    else if (this->ui.cbClient->currentText() == "Tutti" && year != 0) {
         bool by_client = group == "month" ? false : true;
 
         QList<QMap<QString, QString>> report =
             tomb->getReport(client_id, year, this->ui.chbEngraved->isChecked(), group, by_client);
-
+        
         if (this->ui.rbGraph->isChecked()) {
             // Total of all the tombs
             int total = 0;
@@ -395,7 +395,7 @@ void ReportUi::showReportGraph(
 
     int max = 0;
     for (int i = 0; i < report.size(); i++) {
-        if (category == "client_id") {
+        if (category == "client_id" || group == "") {
             cat = this->client->getName(report[i]["client_id"].toInt());
         }
 
