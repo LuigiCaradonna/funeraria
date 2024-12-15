@@ -616,7 +616,7 @@ void Funeraria::slotQuickClientOrders()
     delete tomb;
 
     // No specific row must be at the center
-    this->current_row_selected = 0;
+    this->current_row_selected = 1;
 
     this->showClientOrders(tombs);
 }
@@ -1774,14 +1774,11 @@ void Funeraria::showClientOrders(const QList<QMap<QString, QString>>& tombs)
         this->addClientOrdersTableRow(tombs[i], i);
     }
 
-    // If a spedcific row must be ensured to be visible
-    if (this->current_row_selected != 0) {
-        // Set the table scroll to have that row positioned at the center
-        this->ui.tableWidget->scrollToItem(
-            this->ui.tableWidget->item(this->current_row_selected, 0),
-            QAbstractItemView::PositionAtCenter
-        );
-    }
+    // Set the table scroll to have that row positioned at the center
+    this->ui.tableWidget->scrollToItem(
+        this->ui.tableWidget->item(this->current_row_selected, 0),
+        QAbstractItemView::PositionAtCenter
+    );
 
     this->leDeceased->setFocus();
 }
