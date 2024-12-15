@@ -410,6 +410,9 @@ private:
     QLineEdit* leClName;
     QSpacerItem* clientSpacer;
 
+    // Contains the index of the last selected row in a table
+    int current_row_selected;
+
     /********** PRIVATE FUNCTIONS **********/
 
     /*
