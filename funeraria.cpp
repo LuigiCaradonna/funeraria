@@ -501,7 +501,7 @@ void Funeraria::slotShowSettings() {
     this->settings_ui->exec();
 }
 
-void Funeraria::slotClientOrders()
+void Funeraria::slotClientOrders(int row)
 {
     Tomb* tomb = new Tomb(this->db->db);
 
@@ -527,7 +527,7 @@ void Funeraria::slotClientOrders()
 
     QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->chbEngraved->isChecked(), name);
 
-    this->showClientOrders(tombs);
+    this->showClientOrders(tombs, row);
 
     delete tomb;
 }
@@ -615,23 +615,20 @@ void Funeraria::slotQuickClientOrders()
 
     delete tomb;
 
-    // No specific row must be at the center
-    this->current_row_selected = 1;
-
     this->showClientOrders(tombs);
 }
 
 void Funeraria::slotTombDetails()
 {
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
     // Set the progressive property of the Tomb object to the progressive number present in the clicked row
-    this->tomb_ui->setProgressive(this->ui.tableWidget->item(current_row_selected, 0)->text().toInt());
+    this->tomb_ui->setProgressive(this->ui.tableWidget->item(row, 0)->text().toInt());
     this->tomb_ui->setModal(true);
     this->tomb_ui->exec();
 
     // Reload the table when the popup is closed, the user could have made some changes
-    this->slotClientOrders();
+    this->slotClientOrders(row);
 }
 
 void Funeraria::slotTombFolder()
@@ -639,10 +636,10 @@ void Funeraria::slotTombFolder()
     Tomb* tomb = new Tomb(this->db->db);
 
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
 
-    int progressive = this->ui.tableWidget->item(this->current_row_selected, 0)->text().toInt();
-    QString name = this->ui.tableWidget->item(this->current_row_selected, 1)->text();
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
+    QString name = this->ui.tableWidget->item(row, 1)->text();
 
     QString path = tomb->getFolderPath(progressive, name);
 
@@ -669,10 +666,10 @@ void Funeraria::slotNewTomb()
 void Funeraria::slotClientDetails()
 {
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
     // Set the name property of the Client object to the name present in the clicked row
-    this->client_ui->setId(this->ui.tableWidget->item(this->current_row_selected, 0)->text().toInt());
-    this->client_ui->setName(this->ui.tableWidget->item(this->current_row_selected, 1)->text());
+    this->client_ui->setId(this->ui.tableWidget->item(row, 0)->text().toInt());
+    this->client_ui->setName(this->ui.tableWidget->item(row, 1)->text());
     this->client_ui->setModal(true);
     this->client_ui->exec();
 
@@ -684,10 +681,10 @@ void Funeraria::slotClientDetails()
     this->updateQuickAccessNames();
 
     // Reload the table when the popup is closed, the user could have made some changes
-    this->slotShowClients();
+    this->slotShowClients(row);
 }
 
-void Funeraria::slotShowClients()
+void Funeraria::slotShowClients(int row)
 {
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
@@ -841,88 +838,7 @@ void Funeraria::slotNewClient()
 
 void Funeraria::slotShowItems(const QString& type)
 {
-    // Block the signals while building the table
-    const QSignalBlocker blocker(this->ui.tableWidget);
-
-    this->showTopBar(type);
-
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = type;
-
-    this->is_table_sortable = false;
-
-    QList<QMap<QString, QString>> accessories;
-
-    // Get the the list of the required accessories
-    if (type == "vases") {
-        accessories = this->vase->get();
-    }
-    else if (type == "lamps") {
-        accessories = this->lamp->get();
-    }
-    else if (type == "flames") {
-        accessories = this->flame->get();
-    }
-    else if (type == "materials") {
-        accessories = this->material->get();
-    }
-    else {
-        // The type requested is not valid
-        return;
-    }
-
-    // Reset the table's content
-    this->clearTable();
-
-    QStringList headers{ "Codice", "Nome", "", ""};
-
-    this->ui.tableWidget->setRowCount(accessories.size());
-    this->ui.tableWidget->setColumnCount(headers.size());
-    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
-
-    this->ui.tableWidget->setColumnWidth(0, 70);
-    this->ui.tableWidget->setColumnWidth(1, 300);
-    this->ui.tableWidget->setColumnWidth(2, 90);
-
-    int row_number = 1;
-    for (int i = 0; i < accessories.size(); i++) {
-        QTableWidgetItem* code = new QTableWidgetItem(accessories[i]["code"]);
-        // Set the field as not editable
-        code->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-        QTableWidgetItem* name = new QTableWidgetItem(accessories[i]["name"]);
-        // Set the field as not editable
-        name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-        QPushButton* pb_edit = new QPushButton(this->ui.tableWidget);
-        pb_edit->setText("Dettagli");
-
-        QPushButton* pb_del = new QPushButton(this->ui.tableWidget);
-        pb_del->setText("Elimina");
-
-        if (row_number % 2 == 0) {
-            this->row_bg = this->row_even;
-        }
-        else {
-            this->row_bg = this->row_odd;
-        }
-
-        code->setBackground(QBrush(row_bg));
-        name->setBackground(QBrush(row_bg));
-
-        this->ui.tableWidget->setItem(i, 0, code);
-        this->ui.tableWidget->setItem(i, 1, name);
-        this->ui.tableWidget->setCellWidget(i, 2, pb_edit); // Edit button
-        this->ui.tableWidget->setCellWidget(i, 3, pb_del); // Delete button
-        this->connect(pb_edit, &QPushButton::clicked, this, &Funeraria::slotEditItem);
-        this->connect(pb_del, &QPushButton::clicked, this, &Funeraria::slotDeleteItem);
-
-        row_number++;
-    }
+    this->showItems(type, 1);
 }
 
 void Funeraria::slotNewItem(const QString& type)
@@ -971,13 +887,13 @@ void Funeraria::slotNewItem(const QString& type)
 
 void Funeraria::slotEditItem() {
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
     // Set the name property of the Client object to the name present in the clicked row
     if (this->current_table == "vases") {
         AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vases", this->icons_folder, this);
         vase_ui->updateForm(
-            this->ui.tableWidget->item(this->current_row_selected, 0)->text(), 
-            this->ui.tableWidget->item(this->current_row_selected, 1)->text()
+            this->ui.tableWidget->item(row, 0)->text(), 
+            this->ui.tableWidget->item(row, 1)->text()
         );
         vase_ui->setModal(true);
         vase_ui->exec();
@@ -987,8 +903,8 @@ void Funeraria::slotEditItem() {
     else if (this->current_table == "lamps") {
         AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamps", this->icons_folder, this);
         lamp_ui->updateForm(
-            this->ui.tableWidget->item(this->current_row_selected, 0)->text(), 
-            this->ui.tableWidget->item(this->current_row_selected, 1)->text()
+            this->ui.tableWidget->item(row, 0)->text(), 
+            this->ui.tableWidget->item(row, 1)->text()
         );
         lamp_ui->setModal(true);
         lamp_ui->exec();
@@ -998,8 +914,8 @@ void Funeraria::slotEditItem() {
     else if (this->current_table == "flames") {
         AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flames", this->icons_folder, this);
         flame_ui->updateForm(
-            this->ui.tableWidget->item(this->current_row_selected, 0)->text(), 
-            this->ui.tableWidget->item(this->current_row_selected, 1)->text()
+            this->ui.tableWidget->item(row, 0)->text(), 
+            this->ui.tableWidget->item(row, 1)->text()
         );
         flame_ui->setModal(true);
         flame_ui->exec();
@@ -1009,8 +925,8 @@ void Funeraria::slotEditItem() {
     else if (this->current_table == "materials") {
         AccessoryUi* material_ui = new AccessoryUi(this->db->db, "materials", this->icons_folder, this);
         material_ui->updateForm(
-            this->ui.tableWidget->item(this->current_row_selected, 0)->text(), 
-            this->ui.tableWidget->item(this->current_row_selected, 1)->text()
+            this->ui.tableWidget->item(row, 0)->text(), 
+            this->ui.tableWidget->item(row, 1)->text()
         );
         material_ui->setModal(true);
         material_ui->exec();
@@ -1018,7 +934,7 @@ void Funeraria::slotEditItem() {
         delete material_ui;
     }
 
-    this->slotShowItems(this->current_table);
+    this->showItems(this->current_table, row);
 }
 
 void Funeraria::slotDeleteItem() {
@@ -1146,7 +1062,7 @@ void Funeraria::slotDeleteItem() {
     }
 }
 
-void Funeraria::slotShowSculptures()
+void Funeraria::slotShowSculptures(int row)
 {
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
@@ -1292,6 +1208,12 @@ void Funeraria::slotShowSculptures()
         row_number++;
     }
 
+    // Set the table scroll to have the current row positioned at the center
+    this->ui.tableWidget->scrollToItem(
+        this->ui.tableWidget->item(row, 0),
+        QAbstractItemView::PositionAtCenter
+    );
+
     this->leScCode->setFocus();
 }
 
@@ -1321,15 +1243,15 @@ void Funeraria::slotNewSculpture()
 void Funeraria::slotSculptureDetails()
 {
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
     // Set the id property of the Sculpture object to the code present in the clicked row
-    this->sculpture_ui->setId(this->ui.tableWidget->item(this->current_row_selected, 0)->text().toInt());
-    this->sculpture_ui->setCode(this->ui.tableWidget->item(this->current_row_selected, 2)->text());
+    this->sculpture_ui->setId(this->ui.tableWidget->item(row, 0)->text().toInt());
+    this->sculpture_ui->setCode(this->ui.tableWidget->item(row, 2)->text());
     this->sculpture_ui->setModal(true);
     this->sculpture_ui->exec();
 
     // Reload the table when the popup is closed, the user could have made some changes
-    this->slotShowSculptures();
+    this->slotShowSculptures(row);
 }
 
 void Funeraria::slotTombsToEngrave()
@@ -1585,9 +1507,9 @@ void Funeraria::slotSetPaidTomb()
     Tomb* tomb = new Tomb(this->db->db);
 
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
     // Set the progressive property of the Tomb object to the progressive number present in the clicked row
-    int progressive = this->ui.tableWidget->item(this->current_row_selected, 0)->text().toInt();
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
 
     if (!tomb->setPaid(progressive)) {
         QMessageBox message;
@@ -1595,13 +1517,15 @@ void Funeraria::slotSetPaidTomb()
         message.setIcon(QMessageBox::Warning);
         message.setText("Non è stato possibile impostare la lapide come pagata.");
         message.exec();
+        delete tomb;
+
     }
     else {
+        delete tomb;
+
         // Reload the table
-        this->slotClientOrders();
+        this->slotClientOrders(row);
     }
-    
-    delete tomb;
 }
 
 void Funeraria::slotSetConfirmedTomb()
@@ -1609,9 +1533,9 @@ void Funeraria::slotSetConfirmedTomb()
     Tomb* tomb = new Tomb(this->db->db);
 
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
     // Set the progressive property of the Tomb object to the progressive number present in the clicked row
-    int progressive = this->ui.tableWidget->item(this->current_row_selected, 0)->text().toInt();
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
 
     if (!tomb->setConfirmed(progressive)) {
         QMessageBox message;
@@ -1619,13 +1543,16 @@ void Funeraria::slotSetConfirmedTomb()
         message.setIcon(QMessageBox::Warning);
         message.setText("Non è stato possibile impostare la lapide come confermata.");
         message.exec();
+        delete tomb;
+
     }
     else {
+        delete tomb;
+
         // Reload the table
-        this->slotClientOrders();
+        this->slotClientOrders(row);
     }
 
-    delete tomb;
 }
 
 void Funeraria::slotSetEngravedTomb()
@@ -1633,9 +1560,9 @@ void Funeraria::slotSetEngravedTomb()
     Tomb* tomb = new Tomb(this->db->db);
 
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
     // Set the progressive property of the Tomb object to the progressive number present in the clicked row
-    int progressive = this->ui.tableWidget->item(this->current_row_selected, 0)->text().toInt();
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
 
     if (!tomb->setEngraved(progressive)) {
         QMessageBox message;
@@ -1643,13 +1570,15 @@ void Funeraria::slotSetEngravedTomb()
         message.setIcon(QMessageBox::Warning);
         message.setText("Non è stato possibile impostare la lapide come incisa.");
         message.exec();
+        delete tomb;
+
     }
     else {
-        // Reload the table
-        this->slotClientOrders();
-    }
+        delete tomb;
 
-    delete tomb;
+        // Reload the table
+        this->slotClientOrders(row);
+    }
 }
 
 void Funeraria::slotSetDeliveredTomb()
@@ -1657,9 +1586,9 @@ void Funeraria::slotSetDeliveredTomb()
     Tomb* tomb = new Tomb(this->db->db);
 
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
     // Set the progressive property of the Tomb object to the progressive number present in the clicked row
-    int progressive = this->ui.tableWidget->item(this->current_row_selected, 0)->text().toInt();
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
 
     if (!tomb->setDelivered(progressive)) {
         QMessageBox message;
@@ -1667,13 +1596,15 @@ void Funeraria::slotSetDeliveredTomb()
         message.setIcon(QMessageBox::Warning);
         message.setText("Non è stato possibile impostare la lapide come consegnata.");
         message.exec();
+        delete tomb;
+
     }
     else {
-        // Reload the table
-        this->slotClientOrders();
-    }
+        delete tomb;
 
-    delete tomb;
+        // Reload the table
+        this->slotClientOrders(row);
+    }
 }
 
 void Funeraria::slotSetAccessoriesMounted()
@@ -1681,9 +1612,9 @@ void Funeraria::slotSetAccessoriesMounted()
     Tomb* tomb = new Tomb(this->db->db);
 
     // Row index of the clicked button
-    this->current_row_selected = this->ui.tableWidget->currentRow();
+    int row = this->ui.tableWidget->currentRow();
     // Set the progressive property of the Tomb object to the progressive number present in the clicked row
-    int progressive = this->ui.tableWidget->item(this->current_row_selected, 0)->text().toInt();
+    int progressive = this->ui.tableWidget->item(row, 0)->text().toInt();
 
     if (!tomb->setAccessoriesMounted(progressive)) {
         QMessageBox message;
@@ -1691,13 +1622,15 @@ void Funeraria::slotSetAccessoriesMounted()
         message.setIcon(QMessageBox::Warning);
         message.setText("Non è stato possibile impostare gli accessori come montati.");
         message.exec();
+        delete tomb;
+
     }
     else {
+        delete tomb;
+
         // Reload the table
         this->slotAccessoriesToMount();
     }
-
-    delete tomb;
 }
 
 void Funeraria::slotReport()
@@ -1764,7 +1697,7 @@ void Funeraria::clearContainer(QBoxLayout* container)
     }
 }
 
-void Funeraria::showClientOrders(const QList<QMap<QString, QString>>& tombs)
+void Funeraria::showClientOrders(const QList<QMap<QString, QString>>& tombs, int row)
 {
     this->showTopBar("tombs");
 
@@ -1774,9 +1707,9 @@ void Funeraria::showClientOrders(const QList<QMap<QString, QString>>& tombs)
         this->addClientOrdersTableRow(tombs[i], i);
     }
 
-    // Set the table scroll to have that row positioned at the center
+    // Set the table scroll to have the current row positioned at the center
     this->ui.tableWidget->scrollToItem(
-        this->ui.tableWidget->item(this->current_row_selected, 0),
+        this->ui.tableWidget->item(row, 0),
         QAbstractItemView::PositionAtCenter
     );
 
@@ -1788,6 +1721,98 @@ void Funeraria::showClientOrder(const QMap<QString, QString>& tomb)
     this->setupClientOrdersTable(1);
 
     this->addClientOrdersTableRow(tomb, 0);
+}
+
+void Funeraria::showItems(const QString& type, int row)
+{
+    // Block the signals while building the table
+    const QSignalBlocker blocker(this->ui.tableWidget);
+
+    this->showTopBar(type);
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
+    this->current_table = type;
+
+    this->is_table_sortable = false;
+
+    QList<QMap<QString, QString>> accessories;
+
+    // Get the the list of the required accessories
+    if (type == "vases") {
+        accessories = this->vase->get();
+    }
+    else if (type == "lamps") {
+        accessories = this->lamp->get();
+    }
+    else if (type == "flames") {
+        accessories = this->flame->get();
+    }
+    else if (type == "materials") {
+        accessories = this->material->get();
+    }
+    else {
+        // The type requested is not valid
+        return;
+    }
+
+    // Reset the table's content
+    this->clearTable();
+
+    QStringList headers{ "Codice", "Nome", "", "" };
+
+    this->ui.tableWidget->setRowCount(accessories.size());
+    this->ui.tableWidget->setColumnCount(headers.size());
+    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+    this->ui.tableWidget->setColumnWidth(0, 70);
+    this->ui.tableWidget->setColumnWidth(1, 300);
+    this->ui.tableWidget->setColumnWidth(2, 90);
+
+    int row_number = 1;
+    for (int i = 0; i < accessories.size(); i++) {
+        QTableWidgetItem* code = new QTableWidgetItem(accessories[i]["code"]);
+        // Set the field as not editable
+        code->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QTableWidgetItem* name = new QTableWidgetItem(accessories[i]["name"]);
+        // Set the field as not editable
+        name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QPushButton* pb_edit = new QPushButton(this->ui.tableWidget);
+        pb_edit->setText("Dettagli");
+
+        QPushButton* pb_del = new QPushButton(this->ui.tableWidget);
+        pb_del->setText("Elimina");
+
+        if (row_number % 2 == 0) {
+            this->row_bg = this->row_even;
+        }
+        else {
+            this->row_bg = this->row_odd;
+        }
+
+        code->setBackground(QBrush(row_bg));
+        name->setBackground(QBrush(row_bg));
+
+        this->ui.tableWidget->setItem(i, 0, code);
+        this->ui.tableWidget->setItem(i, 1, name);
+        this->ui.tableWidget->setCellWidget(i, 2, pb_edit); // Edit button
+        this->ui.tableWidget->setCellWidget(i, 3, pb_del); // Delete button
+        this->connect(pb_edit, &QPushButton::clicked, this, &Funeraria::slotEditItem);
+        this->connect(pb_del, &QPushButton::clicked, this, &Funeraria::slotDeleteItem);
+
+        row_number++;
+    }
+
+    // Set the table scroll to have the current row positioned at the center
+    this->ui.tableWidget->scrollToItem(
+        this->ui.tableWidget->item(row, 0),
+        QAbstractItemView::PositionAtCenter
+    );
 }
 
 void Funeraria::updateClientsCombobox()

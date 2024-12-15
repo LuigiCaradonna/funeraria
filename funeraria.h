@@ -113,9 +113,11 @@ protected slots:
     /*
      * Shows the selected client's orders
      *
+     * @param int row - Row where to center the scroll view
+     * 
      * @return void
      */
-    void slotClientOrders();
+    void slotClientOrders(int row = 1);
 
     /*
      * Updates the selected client's orders list shown applying the filter (deceased name string)
@@ -162,9 +164,11 @@ protected slots:
     /*
      * Shows the clients' list
      *
+     * @param int row - Row where to center the scroll view
+     * 
      * @return void
      */
-    void slotShowClients();
+    void slotShowClients(int row = 1);
 
     /*
      * Updates the clients' list applying the filter (client's name string)
@@ -188,10 +192,10 @@ protected slots:
     void slotNewClient();
 
     /*
-     * Shows the accessories' list
+     * Calls the showItem method passing it the required parameters
      *
      * @param   const QString& type - Name of the accessories type to show
-     *
+     * 
      * @return void
      */
     void slotShowItems(const QString& type);
@@ -222,9 +226,11 @@ protected slots:
     /*
      * Shows the sculptures' list
      *
+     * @param int row - Row where to center the scroll view
+     * 
      * @return void
      */
-    void slotShowSculptures();
+    void slotShowSculptures(int row = 1);
 
     /*
      * Updates the sculptures's orders list shown applying the filter (sculpture code/name string)
@@ -410,9 +416,6 @@ private:
     QLineEdit* leClName;
     QSpacerItem* clientSpacer;
 
-    // Contains the index of the last selected row in a table
-    int current_row_selected = 1;
-
     /********** PRIVATE FUNCTIONS **********/
 
     /*
@@ -435,10 +438,11 @@ private:
      * Fills the table to show the client's orders.
      *
      * @param const QList<QMap<QString, QString>> &tombs   - List of the client's orders
+     * @param int row - Row where to center the scroll view
      *
      * @return void
      */
-    void showClientOrders(const QList<QMap<QString, QString>>& tombs);
+    void showClientOrders(const QList<QMap<QString, QString>>& tombs, int row = 1);
 
     /*
      * Shows a single client's order.
@@ -448,6 +452,16 @@ private:
      * @return void
      */
     void showClientOrder(const QMap<QString, QString>& tomb);
+
+    /*
+     * Shows a list of items of the given type.
+     *
+     * @param const QString &type   - List of the client's orders
+     * @param int row               - Row where to center the scroll view
+     *
+     * @return void
+     */
+    void showItems(const QString& type, int row = 1);
 
     /*
      * Updates the combobox containing the clients.
