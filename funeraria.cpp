@@ -1313,7 +1313,9 @@ void Funeraria::slotTombsToEngrave()
             this->ui.tableWidget->setItem(i, 3, client);
             this->ui.tableWidget->setItem(i, 4, confirmed_at);
             this->ui.tableWidget->setCellWidget(i, 5, pb_details); // Details button
+            this->ui.tableWidget->setCellWidget(i, 6, pb_set_engraved); // Details button
             this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
+            this->connect(pb_set_engraved, &QPushButton::clicked, this, &Funeraria::slotSetEngravedTomb);
 
             row_number++;
         }
@@ -2138,7 +2140,7 @@ void Funeraria::setupTombsToEngraveTable(int tombs_count)
     // Reset the table's content
     this->clearTable();
 
-    QStringList headers{ "Numero", "Nome", "Materiale", "Cliente", "Conferma", "" };
+    QStringList headers{ "Numero", "Nome", "Materiale", "Cliente", "Conferma", "", ""};
 
     this->ui.tableWidget->setRowCount(tombs_count);
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -2150,6 +2152,7 @@ void Funeraria::setupTombsToEngraveTable(int tombs_count)
     this->ui.tableWidget->setColumnWidth(3, 200);
     this->ui.tableWidget->setColumnWidth(4, 100);
     this->ui.tableWidget->setColumnWidth(5, 100);
+    this->ui.tableWidget->setColumnWidth(6, 100);
 }
 
 void Funeraria::initTopBarQuickAccess()
