@@ -133,4 +133,11 @@ private:
      * @return void
      */
     void updateForm();
+
+    /*
+     * Gets the css for the UI
+     *
+     * @return QString css string containing the style for the UI, an empty string if the css file is not found
+     */
+    QString getStyle();
 };

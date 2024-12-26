@@ -10,6 +10,13 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* par
     // Sets an icon for the window
     this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
 
+    // Load the stylesheet for the UI
+    QString style = this->getStyle();
+
+    if (!style.isEmpty()) {
+        this->setStyleSheet(style);
+    }
+
     this->progressive = 0;
     this->material = new Accessory(this->db, "materials");
     this->vase = new Accessory(this->db, "vases");
@@ -390,4 +397,25 @@ void TombUi::updateForm()
 
     delete tomb;
     delete client;
+}
+
+QString TombUi::getStyle()
+{
+    QString filename = "assets/css/tombui.css";
+    QFile file(filename);
+    QString css = "";
+    if (file.exists()) {
+        QString line;
+
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream stream(&file);
+            while (!stream.atEnd()) {
+                line = stream.readLine();
+                css += line + "\n";
+            }
+        }
+    }
+    file.close();
+
+    return css;
 }
