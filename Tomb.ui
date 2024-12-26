@@ -320,6 +320,9 @@
            <pointsize>12</pointsize>
           </font>
          </property>
+         <property name="toolTip">
+          <string>Numero epigrafi</string>
+         </property>
          <property name="text">
           <string>1</string>
          </property>
@@ -1567,6 +1570,9 @@
             <width>0</width>
             <height>30</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>Altezza in cm</string>
           </property>
           <property name="placeholderText">
            <string>Altezza (cm)</string>
