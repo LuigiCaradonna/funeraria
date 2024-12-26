@@ -91,7 +91,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->sculpture_ui = new SculptureUi(this->db->db, this->icons_folder, this->images_folder, this);
         this->settings_ui = new SettingsUi(this->db->db, this->icons_folder, this);
         this->report_ui = new ReportUi(this->db->db, this->icons_folder, this);
-        this->tomb_ui = new TombUi(this->db->db, this->icons_folder, this);
+        this->tomb_ui = new TombUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->vase = new Accessory(this->db->db, "vases");
         this->lamp = new Accessory(this->db->db, "lamps");
         this->flame = new Accessory(this->db->db, "flames");
