@@ -8,12 +8,14 @@ QGroupBox::title {
 	margin-top: -22px;
 	left: 10px;
 	padding:5px;
-}	
+}
+
 QRadioButton::indicator {
 	width: 11px; 
 	height: 11px; 
 	border-radius: 5px;
-} 
+}
+
 QRadioButton::indicator::unchecked {
     border: 1px solid;
 	border-color: #848484;
@@ -25,9 +27,30 @@ QRadioButton::indicator::unchecked {
 
 QRadioButton::indicator::checked {
     border: 3px solid;
-	border-color: #0074bc;
+	border-color: #0074BC;
 	border-radius: 6px;
 	background-color: white; 
     width: 7px;
 	height: 7px; 
+}
+
+QCheckBox::indicator {
+	width: 15px; 
+	height: 15px;
+}
+
+QCheckBox::indicator::unchecked {
+    border: 1px solid;
+	border-color: #848484;
+	background-color: white; 
+    width: 14px;
+	height: 14px; 
 } 
+
+QCheckBox::indicator::checked {
+    border: 4px solid;
+	border-color: #0074BC;
+	background-color: white; 
+    width: 8px;
+	height: 8px; 
+}
