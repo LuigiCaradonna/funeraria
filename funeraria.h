@@ -376,6 +376,7 @@ private:
     const QString fonts_folder = "assets/fonts/";
     const QString icons_folder = "assets/icons/";
     const QString images_folder = "assets/img/";
+    const QString css_folder = "assets/css/";
     const QString not_engraved = "No";
     const QString name_not_defined = "Non definito";
 

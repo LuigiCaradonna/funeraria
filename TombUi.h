@@ -23,10 +23,11 @@ public:
      * Constructs the TombUi object.
      *
      * @param	const QSqlDatabase*	db	            - Refrence to the database connection
+     * @param	const QString&	    css_folder	    - Path to the css folder
      * @param	const QString&	    icons_folder	- Path to the icons folder
      * @param	QWidget*            parent	        - Parent widget
      */
-    TombUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent = nullptr);
+    TombUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -122,6 +123,8 @@ private:
     Accessory* lamp;
     Accessory* flame;
     Accessory* material;
+
+    const QString css_folder;
 
     QSignalMapper* currentDateMapper;
 

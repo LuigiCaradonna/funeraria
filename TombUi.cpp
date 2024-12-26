@@ -2,8 +2,8 @@
 
 /********** CONSTRUCTOR **********/
 
-TombUi::TombUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent)
-    : db(db), icons_folder(icons_folder), parent(parent)
+TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, QWidget* parent)
+    : db(db), css_folder(css_folder), icons_folder(icons_folder), parent(parent)
 {
     this->ui.setupUi(this);
 
@@ -401,9 +401,9 @@ void TombUi::updateForm()
 
 QString TombUi::getStyle()
 {
-    QString filename = "assets/css/tombui.css";
-    QFile file(filename);
+    QFile file(this->css_folder + "tombui.css");
     QString css = "";
+
     if (file.exists()) {
         QString line;
 
