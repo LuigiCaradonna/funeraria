@@ -93,19 +93,6 @@ public:
     QList<QMap<QString, QString>> tombsToPay();
 
     /*
-     * Checks if the dates inserted into the form are congruent
-     *
-     * @param const QString& order         - Order date
-     * @param const QString& proof         - Proof date
-     * @param const QString& confirmation  - Confirmation date
-     * @param const QString& engraving     - Engraving date
-     * @param const QString& delivery      - Delivery date
-     *
-     * @return  boolean true on success, false otherwise
-     */
-    bool checkDates(const QString& order, const QString& proof, const QString& confirmation, const QString& engraving, const QString& delivery);
-
-    /*
      * Updates a tomb into the database
      *
      * @param const int progressive             - Tomb's progressive number
