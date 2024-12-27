@@ -25,6 +25,8 @@ QList<QMap<QString, QString>> Accessory::get()
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
+
+        return accessories;
     }
 
     while (query.next()) {
@@ -51,6 +53,8 @@ QString Accessory::getCode(const QString& name)
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
+
+        return "";
     }
 
     if (query.next()) {
@@ -73,6 +77,8 @@ QString Accessory::getNameFromCode(const QString& code)
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
+
+        return "";
     }
 
     if (query.next()) {
@@ -94,6 +100,8 @@ QStringList Accessory::getNames()
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
+
+        return accessories;
     }
 
     while (query.next()) {

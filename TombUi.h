@@ -9,7 +9,14 @@
 #include "ClientUi.h"
 #include "Client.h"
 #include "Accessory.h"
+#include "Sculpture.h"
 #include "Tomb.h"
+#include "TombType.h"
+#include "TombFormat.h"
+#include "PitType.h"
+#include "PitFormat.h"
+#include "Cross.h"
+#include "Sacred.h"
 #include "Helpers.h"
 
 class TombUi : public QDialog
@@ -50,13 +57,6 @@ public:
 protected slots:
 
     /********** PROTECTED SLOTS **********/
-
-    /*
-     * Changes the enabled state for the generally disabled fields
-     *
-     * @return  void
-     */
-    void slotSwitchEnableState();
 
     /*
      * Sets the current date to the proper input field
@@ -109,9 +109,37 @@ protected slots:
      */
     void slotCloseDialog();
 
+    /*
+     * Updates the notes field according to the other UI form fields
+     *
+     * @return  void
+     */
+    void slotUpdateNotes();
+
+    /*
+     * Updates the epigraph quantity line edit state
+     *
+     * @return  void
+     */
+    void slotUpdateEpNumState();
+
+    /*
+     * Updates the pit combobox enabled state
+     *
+     * @return  void
+     */
+    void slotUpdatePitState();
+
+    /*
+     * Updates the sculpture hight line edit enabled state
+     *
+     * @return  void
+     */
+    void slotUpdateScHightState();
+
 private:
     Ui::TombClass ui;
-    const QString table = "tombs";
+    const QString table = "tomb";
     const QString btn_create_text = "Crea";
     const QString btn_update_text = "Aggiorna";
     const QString not_engraved = "No";
@@ -119,16 +147,32 @@ private:
     QSqlDatabase db;
     QWidget* parent;
     int progressive;
+    Sculpture* sculpture;
+    Accessory* material;
     Accessory* vase;
     Accessory* lamp;
     Accessory* flame;
-    Accessory* material;
+    Tomb* tomb;
+    TombType* tomb_type;
+    TombFormat* tomb_format;
+    PitType* pit_type;
+    PitFormat* pit_format;
+    Cross* cross;
+    Sacred* sacred;
 
     const QString css_folder;
 
     QSignalMapper* currentDateMapper;
 
     /********** PRIVATE FUNCTIONS **********/
+
+
+    /*
+     * Validates the form's data.
+     * 
+     * @return bool - True if the validation passes, false if it fails
+     */
+    bool validateForm();
 
     /*
      * Updates the dialog interface with the proper data.

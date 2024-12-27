@@ -137,14 +137,34 @@ public:
      * @param const int progressive             - Tomb's progressive number
      * @param const int client_id               - Client's id
      * @param const QString& name               - Deceased's name
-     * @param const QString& additional_names   - Additional names
-     * @param const bool engraved               - Whether the tomb must be engraved or only the material was requested
+     * @param const QString& engraved_names     - Additional names
+     * @param const int ep_amount               - Amount of epigraphs engraved
+     * @param const int engraved                - 0 not engraved, 1 engraved, 2 bronze
      * @param const double& price               - Price
      * @param const bool paid                   - Paid or not
      * @param const QString& material_code      - Material's code
+     * @param const QString& tomb_type          - Tomb type
+     * @param const QString& tomb_format        - Tomb format
      * @param const QString& vase_code          - Vase's code
      * @param const QString& lamp_code          - Lamp's code
      * @param const QString& flame_code         - Flame's code
+     * @param const bool mounted                - Whether the tomb have to be mounted or not
+     * @param const bool ep_relief              - Whether the tomb have a relief engraved epigraph or not
+     * @param const bool inscription            - Whether the tomb have an inscription or not
+     * @param const QString& sculpture_code     - Sculpture's code
+     * @param const& float sculpture_height     - The sculpture height, 0 if the tomb has no sculpture
+     * @param const QString& pit_format_one     - Pit one format
+     * @param const QString& pit_type_one       - Pit one type
+     * @param const QString& pit_format_two     - Pit two format
+     * @param const QString& pit_type_two       - Pit two type
+     * @param const QString& pit_format_three   - Pit three format
+     * @param const QString& pit_type_three     - Pit three type
+     * @param const QString& pit_format_four    - Pit four format
+     * @param const QString& pit_type_four      - Pit four type
+     * @param const QString& pit_format_five    - Pit five format
+     * @param const QString& pit_type_five      - Pit five type
+     * @param const QString& pit_format_six     - Pit six format
+     * @param const QString& pit_type_six       - Pit six type
      * @param const QString& notes              - Notes
      * @param const bool accessories_mounted    - Accessories mounted or not
      * @param const QString& ordered_at         - Order date
@@ -159,14 +179,36 @@ public:
         const int progressive,
         const int client_id,
         const QString& name,
-        const QString& additional_names,
-        const bool engraved,
+        const QString& engraved_names,
+        const int ep_amount,
+        const int engraved,
         const double& price,
         const bool paid,
         const QString& material_code,
+        const QString& tomb_type,
+        const QString& tomb_format,
         const QString& vase_code,
         const QString& lamp_code,
         const QString& flame_code,
+        const QString& cross_code,
+        const QString& sacred_code,
+        const QString& sculpture_code,
+        const float& sculpture_height,
+        const bool mounted,
+        const bool ep_relief,
+        const bool inscription,
+        const QString& pit_format_one,
+        const QString& pit_type_one,
+        const QString& pit_format_two,
+        const QString& pit_type_two,
+        const QString& pit_format_three,
+        const QString& pit_type_three,
+        const QString& pit_format_four,
+        const QString& pit_type_four,
+        const QString& pit_format_five,
+        const QString& pit_type_five,
+        const QString& pit_format_six,
+        const QString& pit_type_six,
         const QString& notes,
         const bool accessories_mounted,
         const QString& ordered_at,
@@ -183,14 +225,34 @@ public:
      * @param const int progressive             - Tomb's new progressive number
      * @param const int client_id               - Client's id
      * @param const QString& name               - Deceased's name
-     * @param const QString& additional_names   - Additional names
-     * @param const bool engraved               - Whether the tomb must be engraved or only the material was requested
+     * @param const QString& engraved_names     - Additional names
+     * @param const int ep_amount               - Amount of epigraphs engraved
+     * @param const int engraved                - 0 not engraved, 1 engraved, 2 bronze
      * @param const double& price               - Price
      * @param const bool paid                   - Paid or not
      * @param const QString& material_code      - Material's code
+     * @param const QString& tomb_type          - Tomb type
+     * @param const QString& tomb_format        - Tomb format
      * @param const QString& vase_code          - Vase's code
      * @param const QString& lamp_code          - Lamp's code
      * @param const QString& flame_code         - Flame's code
+     * @param const bool mounted                - Whether the tomb have to be mounted or not
+     * @param const bool ep_relief              - Whether the tomb have a relief engraved epigraph or not
+     * @param const bool inscription            - Whether the tomb have an inscription or not
+     * @param const QString& sculpture_code     - Sculpture's code
+     * @param const float& sculpture_height     - The sculpture height, 0 if the tomb has no sculpture
+     * @param const QString& pit_format_one     - Pit one format
+     * @param const QString& pit_type_one       - Pit one type
+     * @param const QString& pit_format_two     - Pit two format
+     * @param const QString& pit_type_two       - Pit two type
+     * @param const QString& pit_format_three   - Pit three format
+     * @param const QString& pit_type_three     - Pit three type
+     * @param const QString& pit_format_four    - Pit four format
+     * @param const QString& pit_type_four      - Pit four type
+     * @param const QString& pit_format_five    - Pit five format
+     * @param const QString& pit_type_five      - Pit five type
+     * @param const QString& pit_format_six     - Pit six format
+     * @param const QString& pit_type_six       - Pit six type
      * @param const QString& notes              - Notes
      * @param const bool accessories_mounted    - Accessories mounted or not
      * @param const QString& ordered_at         - Order date
@@ -206,14 +268,36 @@ public:
         const int progressive,
         const int client_id,
         const QString& name,
-        const QString& additional_names,
-        const bool engraved,
+        const QString& engraved_names,
+        const int ep_amount,
+        const int engraved,
         const double& price,
         const bool paid,
         const QString& material_code,
+        const QString& tomb_type,
+        const QString& tomb_format,
         const QString& vase_code,
         const QString& lamp_code,
         const QString& flame_code,
+        const QString& cross_code,
+        const QString& sacred_code,
+        const QString& sculpture_code,
+        const float& sculpture_height,
+        const bool mounted,
+        const bool ep_relief,
+        const bool inscription,
+        const QString& pit_format_one,
+        const QString& pit_type_one,
+        const QString& pit_format_two,
+        const QString& pit_type_two,
+        const QString& pit_format_three,
+        const QString& pit_type_three,
+        const QString& pit_format_four,
+        const QString& pit_type_four,
+        const QString& pit_format_five,
+        const QString& pit_type_five,
+        const QString& pit_format_six,
+        const QString& pit_type_six,
         const QString& notes,
         const bool accessories_mounted,
         const QString& ordered_at,
@@ -357,7 +441,7 @@ public:
     QString getFolderPath(const int progressive, const QString& name);
 
 private:
-    const QString table = "tombs";
+    const QString table = "tomb";
     QSqlDatabase db;
     Settings* settings;
 

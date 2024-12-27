@@ -74,7 +74,7 @@ protected slots:
 
 private:
     Ui::ClientClass ui;
-    const QString table = "clients";
+    const QString table = "client";
     QSqlDatabase db;
     QWidget* parent;
     QString name;

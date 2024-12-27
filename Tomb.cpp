@@ -636,13 +636,35 @@ bool Tomb::store(
     const int client_id,
     const QString& name,
     const QString& engraved_names,
-    const bool engraved,
+    const int ep_amount,
+    const int engraved,
     const double& price,
     const bool paid,
     const QString& material_code,
+    const QString& tomb_type,
+    const QString& tomb_format,
     const QString& vase_code,
     const QString& lamp_code,
     const QString& flame_code,
+    const QString& cross_code,
+    const QString& sacred_code,
+    const QString& sculpture_code,
+    const float& sculpture_height,
+    const bool mounted,
+    const bool ep_relief,
+    const bool inscription,
+    const QString& pit_format_one,
+    const QString& pit_type_one,
+    const QString& pit_format_two,
+    const QString& pit_type_two,
+    const QString& pit_format_three,
+    const QString& pit_type_three,
+    const QString& pit_format_four,
+    const QString& pit_type_four,
+    const QString& pit_format_five,
+    const QString& pit_type_five,
+    const QString& pit_format_six,
+    const QString& pit_type_six,
     const QString& notes,
     const bool accessories_mounted,
     const QString& ordered_at,
@@ -747,24 +769,52 @@ bool Tomb::store(
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare(
         "INSERT INTO " + this->table + " "
-        "(progressive, client_id, name, engraved_names, engraved, price, paid, material_code, vase_code, lamp_code, "
-        "flame_code, notes, accessories_mounted, ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at, "
+        "(progressive, client_id, name, engraved_names, ep_amount, engraved, price, paid, material_code, type_code, format_code, "
+        "vase_code, lamp_code, flame_code, cross_code, sacred_code, sculpture_code, sculpture_h, mounted, ep_relief, inscription, "
+        "pit_format_one, pit_type_one, pit_format_two, pit_type_two, pit_format_three, pit_type_three, "
+        "pit_format_four, pit_type_four, pit_format_five, pit_type_five, pit_format_six, pit_type_six, "
+        "notes, accessories_mounted, ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at, "
         "created_at, edited_at) "
-        "VALUES (:progressive, :client_id, :name, :engraved_names, :engraved, :price, :paid, :material_code, :vase_code, :lamp_code, "
-        ":flame_code, :notes, :accessories_mounted, :ordered_at, :proofed_at, :confirmed_at, :engraved_at, :delivered_at, "
+        "VALUES (:progressive, :client_id, :name, :engraved_names, :ep_amount, :engraved, :price, :paid, :material_code, :type_code, :format_code, "
+        ":vase_code, :lamp_code, :flame_code, cross_code, :sacred_code, :sculpture_code, :sculpture_h, :mounted, :ep_relief, :inscription, "
+        ":pit_format_one, :pit_type_one, :pit_format_two, :pit_type_two, :pit_format_three, :pit_type_three, "
+        ":pit_format_four, :pit_type_four, :pit_format_five, :pit_type_five, :pit_format_six, :pit_type_six, "
+        ":notes, : accessories_mounted, : ordered_at, : proofed_at, : confirmed_at, : engraved_at, : delivered_at, "
         ":created_at, :edited_at)"
     );
     query.bindValue(":progressive", progressive);
     query.bindValue(":client_id", client_id);
     query.bindValue(":name", name.trimmed());
     query.bindValue(":engraved_names", (engraved_names.trimmed() == "") ? name.trimmed() : engraved_names.trimmed());
+    query.bindValue(":ep_amount", ep_amount);
     query.bindValue(":engraved", engraved);
     query.bindValue(":price", price);
     query.bindValue(":paid", paid);
     query.bindValue(":material_code", material_code);
+    query.bindValue(":type_code", tomb_type);
+    query.bindValue(":format_code", tomb_format);
     query.bindValue(":vase_code", vase_code);
     query.bindValue(":lamp_code", lamp_code);
     query.bindValue(":flame_code", flame_code);
+    query.bindValue(":cross_code", cross_code);
+    query.bindValue(":sacred_code", sacred_code);
+    query.bindValue(":sculpture_code", sculpture_code);
+    query.bindValue(":sculpture_h", sculpture_height);
+    query.bindValue(":mounted", mounted);
+    query.bindValue(":ep_relief", ep_relief);
+    query.bindValue(":inscription", inscription);
+    query.bindValue(":pit_format_one", pit_format_one);
+    query.bindValue(":pit_type_one", pit_type_one);
+    query.bindValue(":pit_format_two", pit_format_two);
+    query.bindValue(":pit_type_two", pit_type_two);
+    query.bindValue(":pit_format_three", pit_format_three);
+    query.bindValue(":pit_type_three", pit_type_three);
+    query.bindValue(":pit_format_four", pit_format_four);
+    query.bindValue(":pit_type_four", pit_type_four);
+    query.bindValue(":pit_format_five", pit_format_five);
+    query.bindValue(":pit_type_five", pit_type_five);
+    query.bindValue(":pit_format_six", pit_format_six);
+    query.bindValue(":pit_type_six", pit_type_six);
     query.bindValue(":notes", notes.trimmed());
     query.bindValue(":accessories_mounted", accessories_mounted);
     query.bindValue(":ordered_at", QDate::fromString(ordered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
@@ -812,13 +862,35 @@ bool Tomb::update(
     const int client_id,
     const QString& name,
     const QString& engraved_names,
-    const bool engraved,
+    const int ep_amount,
+    const int engraved,
     const double& price,
     const bool paid,
     const QString& material_code,
+    const QString& tomb_type,
+    const QString& tomb_format,
     const QString& vase_code,
     const QString& lamp_code,
     const QString& flame_code,
+    const QString& cross_code,
+    const QString& sacred_code,
+    const QString& sculpture_code,
+    const float& sculpture_height,
+    const bool mounted,
+    const bool ep_relief,
+    const bool inscription,
+    const QString& pit_format_one,
+    const QString& pit_type_one,
+    const QString& pit_format_two,
+    const QString& pit_type_two,
+    const QString& pit_format_three,
+    const QString& pit_type_three,
+    const QString& pit_format_four,
+    const QString& pit_type_four,
+    const QString& pit_format_five,
+    const QString& pit_type_five,
+    const QString& pit_format_six,
+    const QString& pit_type_six,
     const QString& notes,
     const bool accessories_mounted,
     const QString& ordered_at,
@@ -884,8 +956,14 @@ bool Tomb::update(
     query.prepare(
         "UPDATE " + this->table + " "
         "SET progressive = :progressive, client_id = :client_id, name = :name, engraved_names = :engraved_names, "
-        "engraved = :engraved, price = :price, paid = :paid, material_code = :material_code, vase_code = :vase_code, "
-        "lamp_code = :lamp_code, flame_code = :flame_code, notes = :notes, accessories_mounted = :accessories_mounted, "
+        "ep_amount = :ep_amount, engraved = :engraved, price = :price, paid = :paid, material_code = :material_code, "
+        "type_code = :type_code, format_code = :format_code, vase_code = :vase_code, lamp_code = :lamp_code,  flame_code = :flame_code, "
+        "cross_code = :cross_code, sacred_code = :sacred_code,  sculpture_code = :sculpture_code, sculpture_h = :sculpture_h, "
+        "mounted = :mounted, ep_relief = :ep_relief, inscription = :inscription, "
+        "pit_format_one = :pit_format_one, pit_type_one = :pit_type_one, pit_format_two = :pit_format_two, pit_type_two = :pit_type_two, "
+        "pit_format_three = :pit_format_three, pit_type_three = :pit_type_three, pit_format_four = :pit_format_four, pit_type_four = :pit_type_four, "
+        "pit_format_five = :pit_format_five, pit_type_five = :pit_type_five, pit_format_six = :pit_format_six, pit_type_six = :pit_type_six, "
+        "notes = :notes, accessories_mounted = :accessories_mounted, "
         "ordered_at = :ordered_at, proofed_at = :proofed_at, confirmed_at = :confirmed_at, engraved_at = :engraved_at, "
         "delivered_at = :delivered_at, edited_at = :edited_at "
         "WHERE progressive = :old_progressive;"
@@ -894,13 +972,35 @@ bool Tomb::update(
     query.bindValue(":client_id", client_id);
     query.bindValue(":name", name.trimmed());
     query.bindValue(":engraved_names", engraved_names.trimmed());
+    query.bindValue(":ep_amount", ep_amount);
     query.bindValue(":engraved", engraved);
     query.bindValue(":price", price);
     query.bindValue(":paid", paid);
     query.bindValue(":material_code", material_code);
+    query.bindValue(":type_code", tomb_type);
+    query.bindValue(":format_code", tomb_format);
     query.bindValue(":vase_code", vase_code);
     query.bindValue(":lamp_code", lamp_code);
     query.bindValue(":flame_code", flame_code);
+    query.bindValue(":cross_code", cross_code);
+    query.bindValue(":sacred_code", sacred_code);
+    query.bindValue(":sculpture_code", sculpture_code);
+    query.bindValue(":sculpture_h", sculpture_height);
+    query.bindValue(":mounted", mounted);
+    query.bindValue(":ep_relief", ep_relief);
+    query.bindValue(":inscription", inscription);
+    query.bindValue(":pit_format_one", pit_format_one);
+    query.bindValue(":pit_type_one", pit_type_one);
+    query.bindValue(":pit_format_two", pit_format_two);
+    query.bindValue(":pit_type_two", pit_type_two);
+    query.bindValue(":pit_format_three", pit_format_three);
+    query.bindValue(":pit_type_three", pit_type_three);
+    query.bindValue(":pit_format_four", pit_format_four);
+    query.bindValue(":pit_type_four", pit_type_four);
+    query.bindValue(":pit_format_five", pit_format_five);
+    query.bindValue(":pit_type_five", pit_type_five);
+    query.bindValue(":pit_format_six", pit_format_six);
+    query.bindValue(":pit_type_six", pit_type_six);
     query.bindValue(":notes", notes.trimmed());
     query.bindValue(":accessories_mounted", accessories_mounted);
     query.bindValue(":ordered_at", QDate::fromString(ordered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));

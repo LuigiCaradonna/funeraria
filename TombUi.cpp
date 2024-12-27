@@ -18,12 +18,58 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     }
 
     this->progressive = 0;
+    this->tomb = new Tomb(this->db);
+    this->sculpture = new Sculpture(this->db);
     this->material = new Accessory(this->db, "materials");
     this->vase = new Accessory(this->db, "vases");
     this->lamp = new Accessory(this->db, "lamps");
     this->flame = new Accessory(this->db, "flames");
+    this->tomb_type = new TombType(this->db);
+    this->tomb_format = new TombFormat(this->db);
+    this->pit_type = new PitType(this->db);
+    this->pit_format = new PitFormat(this->db);
 
-    this->connect(this->ui.chbAllowEdit, &QCheckBox::stateChanged, this, &TombUi::slotSwitchEnableState);
+    // Connect the UI elements
+    this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbEngraveNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.leEpigraphAmount, &QLineEdit::textChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbMaterial, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbType, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbFormat, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbVase, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbLamp, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbFlame, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitFormatOne, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitTypeOne, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitFormatTwo, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitTypeTwo, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitFormatThree, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitTypeThree, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitFormatFour, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitTypeFour, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitFormatFive, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitTypeFive, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitFormatSix, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbPitTypeSix, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbMountYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbMountNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbEpReliefYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbEpReliefNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbInscriptionYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbInscriptionNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.leScHeight, &QLineEdit::textChanged, this, &TombUi::slotUpdateNotes);
+
+    this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateEpNumState);
+    this->connect(this->ui.rbEngraveNo, &QRadioButton::clicked, this, &TombUi::slotUpdateEpNumState);
+
+    this->connect(this->ui.cbPitFormatOne, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
+    this->connect(this->ui.cbPitFormatTwo, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
+    this->connect(this->ui.cbPitFormatThree, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
+    this->connect(this->ui.cbPitFormatFour, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
+    this->connect(this->ui.cbPitFormatFive, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
+    this->connect(this->ui.cbPitFormatSix, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
+
+
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &TombUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &TombUi::slotCloseDialog);
 
@@ -51,10 +97,18 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
 
 TombUi::~TombUi()
 {
+    delete this->tomb;
+    delete this->sculpture;
     delete this->material;
     delete this->vase;
     delete this->lamp;
     delete this->flame;
+    delete this->tomb_type;
+    delete this->tomb_format;
+    delete this->pit_type;
+    delete this->pit_format;
+    delete this->cross;
+    delete this->sacred;
     delete this->currentDateMapper;
 }
 
@@ -67,16 +121,6 @@ void TombUi::setProgressive(const int& progressive)
 }
 
 /********** PROTECTED SLOTS **********/
-
-void TombUi::slotSwitchEnableState()
-{
-    this->ui.leProgressive->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbClient->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbMaterial->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbVase->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbLamp->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.cbFlame->setEnabled(this->ui.chbAllowEdit->isChecked());
-}
 
 void TombUi::slotSetCurrentDate(const QString& field)
 {
@@ -111,10 +155,7 @@ void TombUi::slotSetNoEngraving()
 
 void TombUi::slotNotInUseProgressives()
 {
-    Tomb* tomb = new Tomb(this->db);
-    QStringList not_in_use = tomb->getNotInUseProgressives();
-
-    delete tomb;
+    QStringList not_in_use = this->tomb->getNotInUseProgressives();
 
     if (not_in_use.isEmpty()) {
         QMessageBox message;
@@ -143,21 +184,59 @@ void TombUi::slotNotInUseProgressives()
 
 void TombUi::slotSave()
 {
-    Tomb* tomb = new Tomb(this->db);
+    // TODO: Validate the form data
+    if (!this->validateForm()) {
+        return;
+    }
+
     Client* client = new Client(this->db);
+    int engraved;
+
+    if (this->ui.rbEngraveYes->isChecked()) {
+        engraved = 1;
+    }
+    else if (this->ui.rbEngraveNo->isChecked()) {
+        engraved = 0;
+    }
+    else if (this->ui.rbEngraveBronze->isChecked()) {
+        engraved = 2;
+    }
+
     if (this->ui.btnSave->text() == this->btn_create_text) {
-        if (tomb->store(
+        if (this->tomb->store(
             this->ui.leProgressive->text().toInt(),
             client->getId(this->ui.cbClient->currentText()),
             this->ui.leName->text(),
             this->ui.leEngravedNames->text(),
-            this->ui.rbToEngrave->isChecked(),
+            this->ui.leEpigraphAmount->text().toInt(),
+            engraved,
             this->ui.lePrice->text().toDouble(),
             this->ui.chbPaid->isChecked(),
             this->material->getCode(this->ui.cbMaterial->currentText()),
+            this->tomb_type->getCode(this->ui.cbType->currentText()),
+            this->tomb_format->getCode(this->ui.cbFormat->currentText()),
             this->vase->getCode(this->ui.cbVase->currentText()),
             this->lamp->getCode(this->ui.cbLamp->currentText()),
             this->flame->getCode(this->ui.cbFlame->currentText()),
+            this->cross->getCode(this->ui.cbCross->currentText()),
+            this->sacred->getCode(this->ui.cbSacred->currentText()),
+            this->sculpture->getCode(this->ui.cbSculpture->currentText()),
+            this->ui.leScHeight->text().toInt(),
+            this->ui.rbMountYes->isChecked(),
+            this->ui.rbEpReliefYes->isChecked(),
+            this->ui.rbInscriptionYes->isChecked(),
+            this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeOne->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeTwo->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeThree->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeFour->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeFive->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatSix->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeSix->currentText()),
             this->ui.ptNote->toPlainText(),
             this->ui.chbAccessoriesMounted->isChecked(),
             this->ui.leOrderedAt->text(),
@@ -167,7 +246,6 @@ void TombUi::slotSave()
             this->ui.leDeliveredAt->text()
         )
             ) {
-            delete tomb;
             this->close();
         }
     }
@@ -178,13 +256,35 @@ void TombUi::slotSave()
             client->getId(this->ui.cbClient->currentText()),
             this->ui.leName->text(),
             this->ui.leEngravedNames->text(),
-            this->ui.rbToEngrave->isChecked(),
+            this->ui.leEpigraphAmount->text().toInt(),
+            engraved,
             this->ui.lePrice->text().toDouble(),
             this->ui.chbPaid->isChecked(),
             this->material->getCode(this->ui.cbMaterial->currentText()),
+            this->tomb_type->getCode(this->ui.cbType->currentText()),
+            this->tomb_format->getCode(this->ui.cbFormat->currentText()),
             this->vase->getCode(this->ui.cbVase->currentText()),
             this->lamp->getCode(this->ui.cbLamp->currentText()),
             this->flame->getCode(this->ui.cbFlame->currentText()),
+            this->cross->getCode(this->ui.cbCross->currentText()),
+            this->sacred->getCode(this->ui.cbSacred->currentText()),
+            this->sculpture->getCode(this->ui.cbSculpture->currentText()),
+            this->ui.leScHeight->text().toInt(),
+            this->ui.rbMountYes->isChecked(),
+            this->ui.rbEpReliefYes->isChecked(),
+            this->ui.rbInscriptionYes->isChecked(),
+            this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeOne->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeTwo->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeThree->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeFour->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeFive->currentText()),
+            this->pit_format->getCode(this->ui.cbPitFormatSix->currentText()),
+            this->pit_type->getCode(this->ui.cbPitTypeSix->currentText()),
             this->ui.ptNote->toPlainText(),
             this->ui.chbAccessoriesMounted->isChecked(),
             this->ui.leOrderedAt->text(),
@@ -194,7 +294,6 @@ void TombUi::slotSave()
             this->ui.leDeliveredAt->text()
         )
             ) {
-            delete tomb;
             delete client;
             this->close();
         }
@@ -212,9 +311,7 @@ void TombUi::slotDelete()
     message.exec();
 
     if (message.clickedButton() == proceed_btn) {
-        Tomb* tomb = new Tomb(this->db);
-        tomb->remove(this->ui.leProgressive->text().toInt());
-        delete tomb;
+        this->tomb->remove(this->ui.leProgressive->text().toInt());
     }
 
     this->close();
@@ -225,37 +322,83 @@ void TombUi::slotCloseDialog()
     this->close();
 }
 
+void TombUi::slotUpdateNotes()
+{
+
+}
+
+void TombUi::slotUpdateEpNumState()
+{
+}
+
+void TombUi::slotUpdatePitState()
+{
+}
+
+void TombUi::slotUpdateScHightState()
+{
+}
+
+/********** PRIVATE FUNCTIONS **********/
+
+bool TombUi::validateForm()
+{
+    return false;
+}
+
 void TombUi::updateForm()
 {
-    Tomb* tomb = new Tomb(this->db);
     Client* client = new Client(this->db);
     // Get the selected tomb's data
-    QMap<QString, QString> tomb_details = tomb->getDetails(this->progressive);
+    QMap<QString, QString> tomb_details = this->tomb->getDetails(this->progressive);
 
     QList<QMap<QString, QString>> clients = client->get();
     QList<QMap<QString, QString>> materials = this->material->get();
+    QList<QMap<QString, QString>> tomb_types = this->tomb_type->get();
     QList<QMap<QString, QString>> vases = this->vase->get();
     QList<QMap<QString, QString>> lamps = this->lamp->get();
     QList<QMap<QString, QString>> flames = this->flame->get();
+    QList<QMap<QString, QString>> tomb_formats = this->tomb_format->get();
+    QList<QMap<QString, QString>> pit_types = this->pit_type->get();
+    QList<QMap<QString, QString>> pit_formats = this->pit_format->get();
 
     int client_index = 0;
     int material_index = 0;
+    int type_index = 0;
     int vase_index = 0;
     int lamp_index = 0;
     int flame_index = 0;
 
     QList<QString> client_names = client->getActiveNames();
     QList<QString> material_names = this->material->getNames();
+    QList<QString> tomb_type_names = this->tomb_type->getNames();
+    QList<QString> tomb_format_names = this->tomb_format->getNames();
     QList<QString> vase_names = this->vase->getNames();
     QList<QString> lamp_names = this->lamp->getNames();
     QList<QString> flame_names = this->flame->getNames();
+    QList<QString> pit_format_names = this->pit_format->getNames();
+    QList<QString> pit_type_names = this->pit_type->getNames();
 
     // Clear the combo boxes
     this->ui.cbClient->clear();
     this->ui.cbMaterial->clear();
+    this->ui.cbType->clear();
+    this->ui.cbFormat->clear();
     this->ui.cbVase->clear();
     this->ui.cbLamp->clear();
     this->ui.cbFlame->clear();
+    this->ui.cbPitFormatOne->clear();
+    this->ui.cbPitTypeOne->clear();
+    this->ui.cbPitFormatTwo->clear();
+    this->ui.cbPitTypeTwo->clear();
+    this->ui.cbPitFormatThree->clear();
+    this->ui.cbPitTypeThree->clear();
+    this->ui.cbPitFormatFour->clear();
+    this->ui.cbPitTypeFour->clear();
+    this->ui.cbPitFormatFive->clear();
+    this->ui.cbPitTypeFive->clear();
+    this->ui.cbPitFormatSix->clear();
+    this->ui.cbPitTypeSix->clear();
 
     if (!tomb_details.isEmpty()) {
         this->setWindowTitle("Modifica lapide");
@@ -271,6 +414,13 @@ void TombUi::updateForm()
         for (int i = 0; i < materials.size(); i++) {
             if (materials[i]["code"] == tomb_details["material_code"]) {
                 material_index = i;
+                break;
+            }
+        }
+
+        for (int i = 0; i < tomb_types.size(); i++) {
+            if (tomb_types[i]["code"] == tomb_details["type_code"]) {
+                type_index = i;
                 break;
             }
         }
@@ -311,15 +461,30 @@ void TombUi::updateForm()
         this->ui.cbClient->addItems(client_names);
         this->ui.leName->setText(tomb_details["name"]);
         this->ui.leEngravedNames->setText(tomb_details["engraved_names"]);
-        this->ui.rbToEngrave->setChecked(tomb_details["engraved"] == "1");
-        this->ui.rbNotToEngrave->setChecked(tomb_details["engraved"] == "0");
+        this->ui.leEpigraphAmount->setText(tomb_details["ep_amount"]);
+        this->ui.rbEngraveYes->setChecked(tomb_details["engraved"] == "1");
+        this->ui.rbEngraveNo->setChecked(tomb_details["engraved"] == "0");
         this->ui.lePrice->setText(tomb_details["price"]);
         this->ui.chbPaid->setChecked(tomb_details["paid"] == "1");
+        this->ui.chbAccessoriesMounted->setChecked(tomb_details["accessories_mounted"] == "1");
         this->ui.cbMaterial->addItems(material_names);
+        this->ui.cbType->addItems(tomb_type_names);
+        this->ui.cbFormat->addItems(tomb_format_names);
         this->ui.cbVase->addItems(vase_names);
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
-        this->ui.chbAccessoriesMounted->setChecked(tomb_details["accessories_mounted"] == "1");
+        this->ui.cbPitFormatOne->addItems(pit_format_names);
+        this->ui.cbPitTypeOne->addItems(pit_type_names);
+        this->ui.cbPitFormatTwo->addItems(pit_format_names);
+        this->ui.cbPitTypeTwo->addItems(pit_type_names);
+        this->ui.cbPitFormatThree->addItems(pit_format_names);
+        this->ui.cbPitTypeThree->addItems(pit_type_names);
+        this->ui.cbPitFormatFour->addItems(pit_format_names);
+        this->ui.cbPitTypeFour->addItems(pit_type_names);
+        this->ui.cbPitFormatFive->addItems(pit_format_names);
+        this->ui.cbPitTypeFive->addItems(pit_type_names);
+        this->ui.cbPitFormatSix->addItems(pit_format_names);
+        this->ui.cbPitTypeSix->addItems(pit_type_names);
         this->ui.ptNote->setPlainText(tomb_details["notes"]);
         this->ui.leOrderedAt->setText(Helpers::dateSqlToIta(tomb_details["ordered_at"]));
         this->ui.leProofedAt->setText(Helpers::dateSqlToIta(tomb_details["proofed_at"]));
@@ -334,25 +499,13 @@ void TombUi::updateForm()
             this->ui.leDeliveredAt->setText(Helpers::dateSqlToIta(tomb_details["delivered_at"]));
         }
 
-        // Disable the fields which should not generally be edited
-        this->ui.leProgressive->setEnabled(false);
-        this->ui.cbClient->setEnabled(false);
-        this->ui.cbMaterial->setEnabled(false);
-        this->ui.cbVase->setEnabled(false);
-        this->ui.cbLamp->setEnabled(false);
-        this->ui.cbFlame->setEnabled(false);
-
         // Set the item to show inside the combo boxes
         this->ui.cbClient->setCurrentIndex(client_index);
         this->ui.cbMaterial->setCurrentIndex(material_index);
+        this->ui.cbType->setCurrentIndex(type_index);
         this->ui.cbVase->setCurrentIndex(vase_index);
         this->ui.cbLamp->setCurrentIndex(lamp_index);
         this->ui.cbFlame->setCurrentIndex(flame_index);
-
-        // Set the "Allow edit" checkbox unchecked
-        this->ui.chbAllowEdit->setChecked(false);
-        // Set the "Allow edit" checkbox enabled
-        this->ui.chbAllowEdit->setEnabled(true);
 
         // Set the save button text
         this->ui.btnSave->setText(this->btn_update_text);
@@ -361,27 +514,35 @@ void TombUi::updateForm()
         // Tomb not found means we are asking to insert a new one
         this->setWindowTitle("Crea nuova");
 
-        this->ui.leProgressive->setEnabled(true);
-        this->ui.cbClient->setEnabled(true);
-        this->ui.cbMaterial->setEnabled(true);
-        this->ui.cbVase->setEnabled(true);
-        this->ui.cbLamp->setEnabled(true);
-        this->ui.cbFlame->setEnabled(true);
-
         // Reset the form fields
-        this->ui.leProgressive->setText(QString::number(tomb->getLastProgresive() + 1));
+        this->ui.leProgressive->setText(QString::number(this->tomb->getLastProgresive() + 1));
         this->ui.cbClient->addItems(client_names);
         this->ui.leName->setText("");
         this->ui.leEngravedNames->setText("");
-        this->ui.rbToEngrave->setChecked(true);
-        this->ui.rbNotToEngrave->setChecked(false);
+        this->ui.leEpigraphAmount->setText("1");
+        this->ui.rbEngraveYes->setChecked(true);
+        this->ui.rbEngraveNo->setChecked(false);
         this->ui.lePrice->setText("0");
         this->ui.chbPaid->setChecked(false);
+        this->ui.chbAccessoriesMounted->setChecked(false);
         this->ui.cbMaterial->addItems(material_names);
+        this->ui.cbType->addItems(tomb_type_names);
+        this->ui.cbFormat->addItems(tomb_format_names);
         this->ui.cbVase->addItems(vase_names);
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
-        this->ui.chbAccessoriesMounted->setChecked(false);
+        this->ui.cbPitFormatOne->addItems(pit_format_names);
+        this->ui.cbPitTypeOne->addItems(pit_type_names);
+        this->ui.cbPitFormatTwo->addItems(pit_format_names);
+        this->ui.cbPitTypeTwo->addItems(pit_type_names);
+        this->ui.cbPitFormatThree->addItems(pit_format_names);
+        this->ui.cbPitTypeThree->addItems(pit_type_names);
+        this->ui.cbPitFormatFour->addItems(pit_format_names);
+        this->ui.cbPitTypeFour->addItems(pit_type_names);
+        this->ui.cbPitFormatFive->addItems(pit_format_names);
+        this->ui.cbPitTypeFive->addItems(pit_type_names);
+        this->ui.cbPitFormatSix->addItems(pit_format_names);
+        this->ui.cbPitTypeSix->addItems(pit_type_names);
         this->ui.ptNote->setPlainText("");
         this->ui.leOrderedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
         this->ui.leProofedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
@@ -389,13 +550,10 @@ void TombUi::updateForm()
         this->ui.leEngravedAt->setText("");
         this->ui.leDeliveredAt->setText("");
 
-        this->ui.chbAllowEdit->setEnabled(false);
-
         // Set the save button text
         this->ui.btnSave->setText(this->btn_create_text);
     }
 
-    delete tomb;
     delete client;
 }
 

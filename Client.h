@@ -201,7 +201,7 @@ public:
     bool setInvalidPosition(const int client_id);
 
 private:
-    const QString table = "clients";
+    const QString table = "client";
     QSqlDatabase db;
     QString name;
     // Temporary id for a client to be inserted

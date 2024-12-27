@@ -38,11 +38,11 @@ public:
     QList<QMap<QString, QString>> get();
 
     /*
-     * Gets all the accessories' names
+     * Gets the accessorie's code given its name
      *
      * @param const QString& name   - Name
      *
-     * @return  QString - The accessory's code id found, empty string otherwise
+     * @return  QString - The accessory's code if found, empty string otherwise
      */
     QString getCode(const QString& name);
 
@@ -75,7 +75,7 @@ public:
     /*
      * Updates an accessory into the database
      *
-     * @param const QString& old_code   - Pprevious code
+     * @param const QString& old_code   - Previous code
      * @param const QString& code       - Code
      * @param const QString& name       - Name
      *

@@ -41,29 +41,43 @@ public:
     /*
      * Gets the given sculpture's datails
      *
-     * @param   const int id - Id
-     *
-     * @return  QMap<QString, QString> - A map containing the sculpture's data
-     */
-    QMap<QString, QString> getDetailsById(const int id);
-
-    /*
-     * Gets the given sculpture's datails
-     *
      * @param   const QString& code - Code
      *
      * @return  QMap<QString, QString> - A map containing the sculpture's data
      */
-    QMap<QString, QString> getDetailsByCode(const QString& code);
+    QMap<QString, QString> getByCode(const QString& code);
 
     /*
-     * Deletes a sculpture from the database
+     * Gets all pit types' names
      *
-     * @param   const int id - Id
-     *
-     * @return  boolean true on success, false on failure
+     * @return QList<QString> - A list of all the pit types' names
      */
-    bool remove(const int id);
+    QList<QString> getNames();
+
+    /*
+     * Gets a pit type's codes given its name
+     *
+     * @param const QString& code   - Pit type's code
+     *
+     * @return QString - A pit type's code given its name
+     */
+    QString getName(const QString& code);
+
+    /*
+     * Gets all pit types' codes
+     *
+     * @return QList<QString> - A list of all the pit types' codes
+     */
+    QList<QString> getCodes();
+
+    /*
+     * Gets the sculpture's code given its name
+     *
+     * @param   const QString& name - Sculpture's name
+     *
+     * @return  QString - Sculpture's code
+     */
+    QString getCode(const QString& name);
 
     /*
      * Creates a new sculpture entry
@@ -105,8 +119,17 @@ public:
         const QString& depth
     );
 
+    /*
+     * Deletes a sculpture from the database
+     *
+     * @param   const int id - Id
+     *
+     * @return  boolean true on success, false on failure
+     */
+    bool remove(const int id);
+
 private:
-    const QString table = "sculptures";
+    const QString table = "sculpture";
     QSqlDatabase db;
     QString name;
     // Temporary id for a sculpture to be inserted

@@ -57,36 +57,7 @@ QList<QMap<QString, QString>> Sculpture::get(const QString& code)
     return list;
 }
 
-QMap<QString, QString> Sculpture::getDetailsById(int id)
-{
-    QMap<QString, QString> map;
-
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT * FROM " + this->table + " WHERE id = :id;");
-    query.bindValue(":id", id);
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
-        message.exec();
-    }
-    else if (query.next()) {
-        map["id"] = query.value("id").toString();
-        map["code"] = query.value("code").toString();
-        map["img"] = query.value("img").toString();
-        map["width"] = query.value("width").toString();
-        map["height"] = query.value("height").toString();
-        map["depth"] = query.value("depth").toString();
-        map["created_at"] = query.value("created_at").toString();
-        map["edited_at"] = query.value("edited_at").toString();
-    }
-
-    return map;
-}
-
-QMap<QString, QString> Sculpture::getDetailsByCode(const QString& code)
+QMap<QString, QString> Sculpture::getByCode(const QString& code)
 {
     QMap<QString, QString> map;
 
@@ -118,17 +89,96 @@ QMap<QString, QString> Sculpture::getDetailsByCode(const QString& code)
     return map;
 }
 
-bool Sculpture::remove(const int id)
+QList<QString> Sculpture::getNames()
 {
+    QStringList names = {};
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("DELETE FROM " + this->table + " WHERE id = :id;");
-    query.bindValue(":id", id);
+    query.prepare("SELECT name FROM " + this->table);
 
     if (!query.exec()) {
-        return false;
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+
+        return names;
     }
 
-    return true;
+    while (query.next()) {
+        names.append(query.value("name").toString());
+    }
+
+    return names;
+}
+
+QString Sculpture::getName(const QString& code)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " WHERE code = :code");
+    query.bindValue(":code", code);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+
+        return "";
+    }
+
+    if (query.next()) {
+        return query.value("name").toString();
+    }
+
+    return "";
+}
+
+QList<QString> Sculpture::getCodes()
+{
+    QStringList codes = {};
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT code FROM " + this->table);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+
+        return codes;
+    }
+
+    while (query.next()) {
+        codes.append(query.value("name").toString());
+    }
+
+    return codes;
+}
+
+QString Sculpture::getCode(const QString& name)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT code FROM " + this->table + " WHERE name = :name");
+    query.bindValue(":name", name);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+
+        return "";
+    }
+
+    if (query.next()) {
+        return query.value("name").toString();
+    }
+
+    return "";
 }
 
 bool Sculpture::store(
@@ -181,6 +231,19 @@ bool Sculpture::update(
     query.bindValue(":height", height);
     query.bindValue(":depth", depth);
     query.bindValue(":edited_at", edited_at);
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Sculpture::remove(const int id)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("DELETE FROM " + this->table + " WHERE id = :id;");
     query.bindValue(":id", id);
 
     if (!query.exec()) {

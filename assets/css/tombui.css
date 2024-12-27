@@ -10,6 +10,10 @@ QGroupBox::title {
 	padding:5px;
 }
 
+#contEngravedYesNo {
+	border: 0px;
+}
+
 QRadioButton::indicator {
 	width: 11px; 
 	height: 11px; 
