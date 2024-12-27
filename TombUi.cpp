@@ -184,18 +184,15 @@ void TombUi::slotNotInUseProgressives()
 
 void TombUi::slotSave()
 {
-    // TODO: Validate the form data
     if (!this->validateForm()) {
         return;
     }
 
     Client* client = new Client(this->db);
-    int engraved;
+    // Default value, usually the tombs are engraved
+    int engraved = 1;
 
-    if (this->ui.rbEngraveYes->isChecked()) {
-        engraved = 1;
-    }
-    else if (this->ui.rbEngraveNo->isChecked()) {
+    if (this->ui.rbEngraveNo->isChecked()) {
         engraved = 0;
     }
     else if (this->ui.rbEngraveBronze->isChecked()) {
@@ -246,6 +243,7 @@ void TombUi::slotSave()
             this->ui.leDeliveredAt->text()
         )
             ) {
+            delete client;
             this->close();
         }
     }
@@ -343,7 +341,57 @@ void TombUi::slotUpdateScHightState()
 
 bool TombUi::validateForm()
 {
-    return false;
+    int current_last = this->tomb->getLastProgresive();
+
+    if (this->tomb->isProgressiveInUse(progressive)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il numero assegnato alla lapide è già in uso");
+        message.exec();
+        return false;
+    }
+
+    if (progressive > current_last + 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il numero assegnato alla lapide non può essere maggiore di " + QString::number(current_last + 1));
+        message.exec();
+        return false;
+    }
+
+    Client* client = new Client(this->db);
+    int client_id = client->getId(this->ui.cbClient->currentText());
+    delete client;
+    if (client_id == 0) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il cliente selezionato non è valido");
+        message.exec();
+        return false;
+    }
+
+    if (this->ui.leName->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il nome del defunto è obbligatorio");
+        message.exec();
+        return false;
+    }
+
+    if (!this->tomb->checkDates(
+        this->ui.leOrderedAt->text(), 
+        this->ui.leProofedAt->text(), 
+        this->ui.leConfirmedAt->text(),
+        this->ui.leEngravedAt->text(),
+        this->ui.leDeliveredAt->text())
+    ) {
+        return false;
+    }
+
 }
 
 void TombUi::updateForm()
