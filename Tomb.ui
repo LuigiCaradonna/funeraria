@@ -792,7 +792,7 @@
               </size>
              </property>
              <property name="placeholderText">
-              <string>Altezza (cm)</string>
+              <string>Alt. (cm)</string>
              </property>
             </widget>
            </item>

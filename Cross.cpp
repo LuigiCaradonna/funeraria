@@ -70,7 +70,7 @@ QList<QMap<QString, QString>> Cross::get()
 {
     QList<QMap<QString, QString>> crosses;
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT code, name FROM " + this->table);
+    query.prepare("SELECT code, name FROM " + this->table + " ORDER BY name ASC");
 
     if (!query.exec()) {
         QMessageBox message;
@@ -98,7 +98,7 @@ QList<QString> Cross::getNames()
 {
     QStringList names = {};
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table);
+    query.prepare("SELECT name FROM " + this->table + " ORDER BY name ASC");
 
     if (!query.exec()) {
         QMessageBox message;

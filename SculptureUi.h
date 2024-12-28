@@ -34,15 +34,6 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Sets the sculpture's id property and updates the content of the QDialog according
-     *
-     * @param   int id - Id
-     *
-     * @return  void
-     */
-    void setId(int id);
-
-    /*
      * Sets the sculpture's code property and updates the content of the QDialog according
      *
      * @param   const QString& code - Code
@@ -117,7 +108,6 @@ private:
     QSqlDatabase db;
     QWidget* parent;
     QString code;
-    int id;
     int default_height = 200;
     int default_depth = 11;
     const QString icons_folder;

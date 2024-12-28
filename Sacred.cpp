@@ -70,7 +70,7 @@ QList<QMap<QString, QString>> Sacred::get()
 {
     QList<QMap<QString, QString>> sacred_images;
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT code, name FROM " + this->table);
+    query.prepare("SELECT code, name FROM " + this->table + " ORDER BY name ASC");
 
     if (!query.exec()) {
         QMessageBox message;
@@ -98,7 +98,7 @@ QList<QString> Sacred::getNames()
 {
     QStringList names = {};
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table);
+    query.prepare("SELECT name FROM " + this->table + " ORDER BY name ASC");
 
     if (!query.exec()) {
         QMessageBox message;

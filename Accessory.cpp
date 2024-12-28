@@ -17,7 +17,7 @@ QList<QMap<QString, QString>> Accessory::get()
 {
     QList<QMap<QString, QString>> accessories;
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT code, name FROM " + this->table);
+    query.prepare("SELECT code, name FROM " + this->table + " ORDER BY name ASC");
 
     if (!query.exec()) {
         QMessageBox message;
@@ -92,7 +92,7 @@ QStringList Accessory::getNames()
 {
     QStringList accessories = {};
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table);
+    query.prepare("SELECT name FROM " + this->table + " ORDER BY name ASC");
 
     if (!query.exec()) {
         QMessageBox message;

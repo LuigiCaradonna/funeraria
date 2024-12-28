@@ -1085,7 +1085,7 @@ void Funeraria::slotShowSculptures(int row)
 
     QList<QMap<QString, QString>> sculptures = this->sculpture->get(code);
 
-    QStringList headers{ "ID", "Img", "Codice", "Larghezza", "Altezza", "Profondità", "Rid Z", "Rid XY", "", "" };
+    QStringList headers{ "Codice", "Img", "Nome", "Larghezza", "Altezza", "Profondità", "Rid Z", "Rid XY", "", "" };
 
     int img_cell_width = 150;
     int img_cell_height = 100;
@@ -1094,9 +1094,9 @@ void Funeraria::slotShowSculptures(int row)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 50);  // ID
+    this->ui.tableWidget->setColumnWidth(0, 120); // Code
     this->ui.tableWidget->setColumnWidth(1, img_cell_width);  // Img
-    this->ui.tableWidget->setColumnWidth(2, 300); // Code
+    this->ui.tableWidget->setColumnWidth(2, 300); // Name
     this->ui.tableWidget->setColumnWidth(3, 80);  // Width
     this->ui.tableWidget->setColumnWidth(4, 80);  // Height
     this->ui.tableWidget->setColumnWidth(5, 80);  // Depth
@@ -1117,9 +1117,8 @@ void Funeraria::slotShowSculptures(int row)
         // Specific row height to contain the image
         this->ui.tableWidget->setRowHeight(i, img_cell_height);
 
-        QTableWidgetItem* id_widget = new QTableWidgetItem(sculptures[i]["id"]);
-        // Set the field as not editable
-        id_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem* code_widget = new QTableWidgetItem(sculptures[i]["code"]);
+        code_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
         QString pic_path = this->config->getSculpturesPath() + "/" + sculptures[i]["img"];
 
@@ -1146,9 +1145,10 @@ void Funeraria::slotShowSculptures(int row)
         image_widget->setText("");
         image_widget->setScaledContents(false);
         image_widget->setPixmap(resized);
-        
-        QTableWidgetItem* code_widget = new QTableWidgetItem(sculptures[i]["code"]);
-        code_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QTableWidgetItem* name_widget = new QTableWidgetItem(sculptures[i]["name"]);
+        // Set the field as not editable
+        name_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
         QTableWidgetItem* width_widget = new QTableWidgetItem(sculptures[i]["width"]);
         width_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -1183,17 +1183,17 @@ void Funeraria::slotShowSculptures(int row)
             this->row_bg = this->row_odd;
         }
 
-        id_widget->setBackground(QBrush(row_bg));
         code_widget->setBackground(QBrush(row_bg));
+        name_widget->setBackground(QBrush(row_bg));
         width_widget->setBackground(QBrush(row_bg));
         height_widget->setBackground(QBrush(row_bg));
         depth_widget->setBackground(QBrush(row_bg));
         rid_z_widget->setBackground(QBrush(row_bg));
         rid_xy_widget->setBackground(QBrush(row_bg));
 
-        this->ui.tableWidget->setItem(i, 0, id_widget);
+        this->ui.tableWidget->setItem(i, 0, code_widget);
         this->ui.tableWidget->setCellWidget(i, 1, image_widget);
-        this->ui.tableWidget->setItem(i, 2, code_widget);
+        this->ui.tableWidget->setItem(i, 2, name_widget);
         this->ui.tableWidget->setItem(i, 3, width_widget);
         this->ui.tableWidget->setItem(i, 4, height_widget);
         this->ui.tableWidget->setItem(i, 5, depth_widget);
@@ -1232,7 +1232,7 @@ void Funeraria::slotNewSculpture()
     this->current_table = "sculpture";
 
     // Set the id property of the Sculpture object to 0
-    this->sculpture_ui->setId(0);
+    this->sculpture_ui->setCode("0");
     this->sculpture_ui->setModal(true);
     this->sculpture_ui->exec();
 
@@ -1244,9 +1244,7 @@ void Funeraria::slotSculptureDetails()
 {
     // Row index of the clicked button
     int row = this->ui.tableWidget->currentRow();
-    // Set the id property of the Sculpture object to the code present in the clicked row
-    this->sculpture_ui->setId(this->ui.tableWidget->item(row, 0)->text().toInt());
-    this->sculpture_ui->setCode(this->ui.tableWidget->item(row, 2)->text());
+    this->sculpture_ui->setCode(this->ui.tableWidget->item(row, 1)->text());
     this->sculpture_ui->setModal(true);
     this->sculpture_ui->exec();
 

@@ -20,25 +20,39 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->progressive = 0;
     this->tomb = new Tomb(this->db);
     this->sculpture = new Sculpture(this->db);
-    this->material = new Accessory(this->db, "materials");
-    this->vase = new Accessory(this->db, "vases");
-    this->lamp = new Accessory(this->db, "lamps");
-    this->flame = new Accessory(this->db, "flames");
+    this->material = new Accessory(this->db, "material");
+    this->vase = new Accessory(this->db, "vase");
+    this->lamp = new Accessory(this->db, "lamp");
+    this->flame = new Accessory(this->db, "flame");
     this->tomb_type = new TombType(this->db);
     this->tomb_format = new TombFormat(this->db);
     this->pit_type = new PitType(this->db);
     this->pit_format = new PitFormat(this->db);
+    this->cross = new Cross(this->db);
+    this->sacred = new Sacred(this->db);
 
     // Connect the UI elements
-    this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbEngraveNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.leEpigraphAmount, &QLineEdit::textChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbMaterial, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbType, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbFormat, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbVase, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbLamp, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbFlame, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbCross, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbSacred, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbSculpture, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.leScHeight, &QLineEdit::textChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbEngraveNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbEngraveBronze, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbMountYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbMountNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbEpReliefYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbEpReliefNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbInscriptionYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbInscriptionNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.leEpigraphAmount, &QLineEdit::textChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbPitFormatOne, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbPitTypeOne, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbPitFormatTwo, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
@@ -51,16 +65,12 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->connect(this->ui.cbPitTypeFive, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbPitFormatSix, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbPitTypeSix, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbMountYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbMountNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbEpReliefYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbEpReliefNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbInscriptionYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbInscriptionNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.leScHeight, &QLineEdit::textChanged, this, &TombUi::slotUpdateNotes);
 
     this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateEpNumState);
     this->connect(this->ui.rbEngraveNo, &QRadioButton::clicked, this, &TombUi::slotUpdateEpNumState);
+    this->connect(this->ui.rbEngraveBronze, &QRadioButton::clicked, this, &TombUi::slotUpdateEpNumState);
+
+    this->connect(this->ui.cbSculpture, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateScHightState);
 
     this->connect(this->ui.cbPitFormatOne, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
     this->connect(this->ui.cbPitFormatTwo, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
@@ -68,7 +78,6 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->connect(this->ui.cbPitFormatFour, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
     this->connect(this->ui.cbPitFormatFive, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
     this->connect(this->ui.cbPitFormatSix, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
-
 
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &TombUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &TombUi::slotCloseDialog);
@@ -327,6 +336,14 @@ void TombUi::slotUpdateNotes()
 
 void TombUi::slotUpdateEpNumState()
 {
+    if (this->ui.rbEngraveYes->isChecked()) {
+        this->ui.leEpigraphAmount->setEnabled(true);
+        this->ui.leEpigraphAmount->setText("1");
+    }
+    else {
+        this->ui.leEpigraphAmount->setEnabled(false);
+        this->ui.leEpigraphAmount->setText("0");
+    }
 }
 
 void TombUi::slotUpdatePitState()
@@ -335,6 +352,14 @@ void TombUi::slotUpdatePitState()
 
 void TombUi::slotUpdateScHightState()
 {
+    if (this->ui.cbSculpture->currentIndex() != 0) {
+        this->ui.leScHeight->setEnabled(true);
+        this->ui.leScHeight->setText("20");
+    }
+    else {
+        this->ui.leScHeight->setEnabled(false);
+        this->ui.leScHeight->setText("");
+    }
 }
 
 /********** PRIVATE FUNCTIONS **********/
@@ -348,7 +373,7 @@ bool TombUi::validateForm(const QString& op)
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("Il numero assegnato alla lapide Ë gi‡ in uso");
+            message.setText("Il numero assegnato alla lapide √® gi√† in uso");
             message.exec();
             return false;
         }
@@ -361,7 +386,7 @@ bool TombUi::validateForm(const QString& op)
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("Il numero assegnato alla lapide Ë gi‡ in uso");
+            message.setText("Il numero assegnato alla lapide √® gi√† in uso");
             message.exec();
             return false;
         }
@@ -371,7 +396,7 @@ bool TombUi::validateForm(const QString& op)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Il numero assegnato alla lapide non puÚ essere maggiore di " + QString::number(current_last + 1));
+        message.setText("Il numero assegnato alla lapide non pu√≤ essere maggiore di " + QString::number(current_last + 1));
         message.exec();
         return false;
     }
@@ -383,7 +408,7 @@ bool TombUi::validateForm(const QString& op)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Il cliente selezionato non Ë valido");
+        message.setText("Il cliente selezionato non √® valido");
         message.exec();
         return false;
     }
@@ -392,7 +417,7 @@ bool TombUi::validateForm(const QString& op)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Il nome del defunto Ë obbligatorio");
+        message.setText("Il nome del defunto √® obbligatorio");
         message.exec();
         return false;
     }
@@ -402,7 +427,7 @@ bool TombUi::validateForm(const QString& op)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("L'altezza della scultura non Ë corretta");
+        message.setText("L'altezza della scultura non √® corretta");
         message.exec();
         return false;
     }
@@ -412,7 +437,7 @@ bool TombUi::validateForm(const QString& op)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Il numero di epigrafi non Ë corretto");
+        message.setText("Il numero di epigrafi non √® corretto");
         message.exec();
         return false;
     }
@@ -462,7 +487,7 @@ bool TombUi::validateForm(const QString& op)
     return true;
 }
 
-bool Tomb::checkDates(const QString& order, const QString& proof, const QString& confirmation, const QString& engraving, const QString& delivery)
+bool TombUi::checkDates(const QString& order, const QString& proof, const QString& confirmation, const QString& engraving, const QString& delivery)
 {
     // About the dates when updating a tomb, check for the "-" character which is set when a NULL is found
     // in the database when retrieving the dates (NULLs are related to the data loss in the past)
@@ -474,7 +499,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data dell'ordine non Ë valida");
+            message.setText("La data dell'ordine non √® valida");
             message.exec();
             return false;
         }
@@ -486,7 +511,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data del provino non Ë valida");
+            message.setText("La data del provino non √® valida");
             message.exec();
             return false;
         }
@@ -500,7 +525,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
 
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data del provino Ë antecedente a quella dell'ordine");
+            message.setText("La data del provino √® antecedente a quella dell'ordine");
             message.exec();
 
             // The user has been notified about the inconsistency, 
@@ -518,7 +543,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data del provino non Ë impostata");
+            message.setText("La data del provino non √® impostata");
             message.exec();
             return false;
         }
@@ -527,7 +552,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data della conferma non Ë valida");
+            message.setText("La data della conferma non √® valida");
             message.exec();
             return false;
         }
@@ -541,7 +566,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
 
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data della conferma Ë antecedente a quella del provino");
+            message.setText("La data della conferma √® antecedente a quella del provino");
             message.exec();
 
             // The user has been notified about the inconsistency, 
@@ -559,7 +584,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data della conferma non Ë impostata");
+            message.setText("La data della conferma non √® impostata");
             message.exec();
             return false;
         }
@@ -571,7 +596,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
                 QMessageBox message;
                 message.setWindowTitle("Funeraria");
                 message.setIcon(QMessageBox::Warning);
-                message.setText("La data dell'incisione non Ë valida");
+                message.setText("La data dell'incisione non √® valida");
                 message.exec();
                 return false;
             }
@@ -585,7 +610,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
 
                 message.setWindowTitle("Funeraria");
                 message.setIcon(QMessageBox::Warning);
-                message.setText("La data dell'incisione Ë antecedente a quella della conferma");
+                message.setText("La data dell'incisione √® antecedente a quella della conferma");
                 message.exec();
 
                 // The user has been notified about the inconsistency, 
@@ -607,7 +632,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data dell'incisione non Ë impostata");
+            message.setText("La data dell'incisione non √® impostata");
             message.exec();
             return false;
         }
@@ -616,7 +641,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data della consegna non Ë valida");
+            message.setText("La data della consegna non √® valida");
             message.exec();
             return false;
         }
@@ -630,7 +655,7 @@ bool Tomb::checkDates(const QString& order, const QString& proof, const QString&
 
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
-            message.setText("La data della consegna Ë antecedente a quella dell'incisione");
+            message.setText("La data della consegna √® antecedente a quella dell'incisione");
             message.exec();
 
             // The user has been notified about the inconsistency, 
@@ -659,6 +684,9 @@ void TombUi::updateForm()
     QList<QMap<QString, QString>> tomb_formats = this->tomb_format->get();
     QList<QMap<QString, QString>> pit_types = this->pit_type->get();
     QList<QMap<QString, QString>> pit_formats = this->pit_format->get();
+    QList<QMap<QString, QString>> crosses = this->cross->get();
+    QList<QMap<QString, QString>> sacreds = this->sacred->get();
+    QList<QMap<QString, QString>> sculptures = this->sculpture->get();
 
     int client_index = 0;
     int material_index = 0;
@@ -666,6 +694,9 @@ void TombUi::updateForm()
     int vase_index = 0;
     int lamp_index = 0;
     int flame_index = 0;
+    int cross_index = 0;
+    int sacred_index = 0;
+    int sculpture_index = 0;
 
     QList<QString> client_names = client->getActiveNames();
     QList<QString> material_names = this->material->getNames();
@@ -676,6 +707,9 @@ void TombUi::updateForm()
     QList<QString> flame_names = this->flame->getNames();
     QList<QString> pit_format_names = this->pit_format->getNames();
     QList<QString> pit_type_names = this->pit_type->getNames();
+    QList<QString> cross_names = this->cross->getNames();
+    QList<QString> sacred_names = this->sacred->getNames();
+    QList<QString> sculpture_names = this->sculpture->getNames();
 
     // Clear the combo boxes
     this->ui.cbClient->clear();
@@ -685,6 +719,9 @@ void TombUi::updateForm()
     this->ui.cbVase->clear();
     this->ui.cbLamp->clear();
     this->ui.cbFlame->clear();
+    this->ui.cbCross->clear();
+    this->ui.cbSacred->clear();
+    this->ui.cbSculpture->clear();
     this->ui.cbPitFormatOne->clear();
     this->ui.cbPitTypeOne->clear();
     this->ui.cbPitFormatTwo->clear();
@@ -699,11 +736,12 @@ void TombUi::updateForm()
     this->ui.cbPitTypeSix->clear();
 
     if (!tomb_details.isEmpty()) {
+        // Tomb found means we are asking to update an existing one
         this->setWindowTitle("Modifica lapide");
 
         /*********** Get the index to select for the comboboxes *************/
         for (int i = 0; i < clients.size(); i++) {
-            if (client_names[i] == tomb_details["client"]) {
+            if (clients[i]["id"] == tomb_details["client_id"]) {
                 client_index = i;
                 break;
             }
@@ -743,6 +781,27 @@ void TombUi::updateForm()
                 break;
             }
         }
+
+        for (int i = 0; i < crosses.size(); i++) {
+            if (crosses[i]["code"] == tomb_details["cross_code"]) {
+                cross_index = i;
+                break;
+            }
+        }
+
+        for (int i = 0; i < sacreds.size(); i++) {
+            if (sacreds[i]["code"] == tomb_details["sacred_code"]) {
+                sacred_index = i;
+                break;
+            }
+        }
+
+        for (int i = 0; i < sculptures.size(); i++) {
+            if (sculptures[i]["code"] == tomb_details["sculpture_code"]) {
+                sculpture_index = i;
+                break;
+            }
+        }
         /******************************************************/
 
         QString engraved_at;
@@ -771,6 +830,9 @@ void TombUi::updateForm()
         this->ui.cbVase->addItems(vase_names);
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
+        this->ui.cbCross->addItems(cross_names);
+        this->ui.cbSacred->addItems(sacred_names);
+        this->ui.cbSculpture->addItems(sculpture_names);
         this->ui.cbPitFormatOne->addItems(pit_format_names);
         this->ui.cbPitTypeOne->addItems(pit_type_names);
         this->ui.cbPitFormatTwo->addItems(pit_format_names);
@@ -829,6 +891,9 @@ void TombUi::updateForm()
         this->ui.cbVase->addItems(vase_names);
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
+        this->ui.cbCross->addItems(cross_names);
+        this->ui.cbSacred->addItems(sacred_names);
+        this->ui.cbSculpture->addItems(sculpture_names);
         this->ui.cbPitFormatOne->addItems(pit_format_names);
         this->ui.cbPitTypeOne->addItems(pit_type_names);
         this->ui.cbPitFormatTwo->addItems(pit_format_names);

@@ -10,8 +10,8 @@ SculptureUi::SculptureUi(const QSqlDatabase& db, const QString& icons_folder, co
     // Sets an icon for the window
     this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
 
-    // id initialization
-    this->id = 0;
+    // code initialization
+    this->code = "0";
 
     // Set chbAllowEdit as deselected by default
     this->ui.chbAllowEdit->setChecked(false);
@@ -33,12 +33,6 @@ SculptureUi::~SculptureUi()
 }
 
 /********** PUBLIC FUNCTIONS **********/
-
-void SculptureUi::setId(int id)
-{
-    this->id = id;
-    this->updateForm();
-}
 
 void SculptureUi::setCode(const QString& code)
 {
@@ -108,7 +102,7 @@ void SculptureUi::slotUpdate()
         Sculpture* sculpture = new Sculpture(this->db);
 
         if (sculpture->update(
-            this->id,
+            this->code,
             this->ui.leCode->text().trimmed(),
             this->ui.leImgPath->text().trimmed(),
             this->ui.leOWidth->text().trimmed(),
@@ -192,7 +186,7 @@ void SculptureUi::updateForm()
 {
     Sculpture* sculpture = new Sculpture(this->db);
     // Get the selected sculpture's data
-    QMap<QString, QString> sculpture_details = sculpture->getDetailsById(this->id);
+    QMap<QString, QString> sculpture_details = sculpture->getByCode(this->code);
 
     if (!sculpture_details.isEmpty()) {
         this->setWindowTitle("Modifica scultura");
@@ -200,15 +194,15 @@ void SculptureUi::updateForm()
         Config* config = new Config();
 
         // Fill the form fields with the selected sculpture's data
-        this->ui.leId->setText(sculpture_details["id"]);
         this->ui.leCode->setText(sculpture_details["code"]);
+        this->ui.leName->setText(sculpture_details["name"]);
         this->ui.leImgPath->setText(sculpture_details["img"]);
         this->ui.leOWidth->setText(sculpture_details["width"]);
         this->ui.leOHeight->setText(sculpture_details["height"]);
         this->ui.leODepth->setText(sculpture_details["depth"]);
 
-        this->ui.leId->setEnabled(false);
         this->ui.leCode->setEnabled(false);
+        this->ui.leName->setEnabled(false);
         this->ui.leImgPath->setEnabled(false);
         this->ui.leOWidth->setEnabled(false);
         this->ui.leOHeight->setEnabled(false);
@@ -267,14 +261,12 @@ void SculptureUi::updateForm()
         this->ui.leImgPath->setEnabled(false);
 
         // Reset the form fields
-        this->ui.leId->setText("0");
-        this->ui.leCode->setText("");
+        this->ui.leCode->setText("0");
+        this->ui.leName->setText("");
         this->ui.leImgPath->setText("");
         this->ui.leOWidth->setText("");
         this->ui.leOHeight->setText("");
         this->ui.leODepth->setText("");
-
-        this->ui.leId->setEnabled(false);
 
         // Set the save button text
         this->ui.btnSave->setText("Aggiungi");
@@ -303,7 +295,17 @@ bool SculptureUi::checkForm()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Il codice o nome della scultura è obbligatorio.");
+        message.setText("Il codice della scultura è obbligatorio.");
+        message.exec();
+
+        return false;
+    }
+
+    if (this->ui.leName->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il nome della scultura è obbligatorio.");
         message.exec();
 
         return false;

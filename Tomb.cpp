@@ -205,6 +205,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
 {
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
+
     query.prepare("SELECT "
         "tomb.progressive, tomb.client_id, client.name AS client_name, tomb.name, tomb.engraved_names,tomb.ep_amount, "
         "tomb.engraved, tomb.price, tomb.paid, tomb.material_code, material.name AS material_name, "
@@ -212,12 +213,12 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         "tomb.vase_code, vase.name AS vase_name, tomb.lamp_code, lamp.name AS lamp_name, tomb.flame_code, flame.name AS flame_name, "
         "tomb.cross_code, cross.name AS cross_name, tomb.sacred_code, sacred.name AS sacred_name, "
         "tomb.sculpture_code, sculpture.name AS sculpture_name, tomb.sculpture_h, tomb.mounted, tomb.ep_relief, tomb.inscription, "
-        "tomb.pit_format_one, pit_format.name AS pit_format_name_one, tomb.pit_type_one, pit_type.name AS pit_type_name_one, "
-        "tomb.pit_format_two, pit_format.name AS pit_format_name_two, tomb.pit_type_two, pit_type.name AS pit_type_name_two, "
-        "tomb.pit_format_three, pit_format.name AS pit_format_name_three, tomb.pit_type_three, pit_type.name AS pit_type_name_three, "
-        "tomb.pit_format_four, pit_format.name AS pit_format_name_four, tomb.pit_type_four, pit_type.name AS pit_type_name_four, "
-        "tomb.pit_format_five, pit_format.name AS pit_format_name_five, tomb.pit_type_five, pit_type.name AS pit_type_name_five, "
-        "tomb.pit_format_six, pit_format.name AS pit_format_name_six, tomb.pit_type_six, pit_type.name AS pit_type_name_six, "
+        "tomb.pit_format_one, tomb.pit_type_one, "
+        "tomb.pit_format_two, tomb.pit_type_two, "
+        "tomb.pit_format_three, tomb.pit_type_three, "
+        "tomb.pit_format_four, tomb.pit_type_four, "
+        "tomb.pit_format_five, tomb.pit_type_five, "
+        "tomb.pit_format_six, tomb.pit_type_six, "
         "tomb.notes, tomb.accessories_mounted, "
         "tomb.ordered_at, tomb.proofed_at, tomb.confirmed_at, tomb.engraved_at, "
         "tomb.delivered_at, tomb.created_at, tomb.edited_at "
@@ -228,22 +229,10 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         "JOIN lamp ON tomb.lamp_code = lamp.code "
         "JOIN flame ON tomb.flame_code = flame.code "
         "JOIN cross ON tomb.cross_code = cross.code "
-        "JOIN sacred ON tomb.sacred_code = scared.code "
+        "JOIN sacred ON tomb.sacred_code = sacred.code "
         "JOIN sculpture ON tomb.sculpture_code = sculpture.code "
         "JOIN tomb_type ON tomb.type_code = tomb_type.code "
         "JOIN tomb_format ON tomb.format_code = tomb_format.code "
-        "JOIN pit_format ON tomb.pit_format_one = pit_format.code "
-        "JOIN pit_type ON tomb.pit_type_one = pit_type.code "
-        "JOIN pit_format ON tomb.pit_format_two = pit_format.code "
-        "JOIN pit_type ON tomb.pit_type_two = pit_type.code "
-        "JOIN pit_format ON tomb.pit_format_three = pit_format.code "
-        "JOIN pit_type ON tomb.pit_type_three = pit_type.code "
-        "JOIN pit_format ON tomb.pit_format_four = pit_format.code "
-        "JOIN pit_type ON tomb.pit_type_four = pit_type.code "
-        "JOIN pit_format ON tomb.pit_format_five = pit_format.code "
-        "JOIN pit_type ON tomb.pit_type_five = pit_type.code "
-        "JOIN pit_format ON tomb.pit_format_six = pit_format.code "
-        "JOIN pit_type ON tomb.pit_type_six = pit_type.code "
         "WHERE tomb.progressive = :progressive;");
 
     query.bindValue(":progressive", progressive);
@@ -258,7 +247,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
     else if (query.next()) {
         tomb["progressive"] = QString::number(query.value("progressive").toInt());
         tomb["client_id"] = query.value("client_id").toString();
-        tomb["name"] = query.value("name").toString();
+        tomb["client_name"] = query.value("client_name").toString();
         tomb["engraved_names"] = query.value("engraved_names").toString();
         tomb["ep_amount"] = query.value("ep_amount").toString();
         tomb["engraved"] = query.value("engraved").toString();

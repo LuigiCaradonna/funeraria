@@ -103,7 +103,7 @@ public:
     QString getCode(const QString& name);
 
 private:
-    const QString table = "pit_type";
+    const QString table = "sacred";
     QSqlDatabase db;
     Settings* settings;
 };

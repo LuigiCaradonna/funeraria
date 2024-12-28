@@ -128,6 +128,8 @@ QList<QMap<QString, QString>> Client::get(const QString& name)
         query_string += " AND name LIKE \"%" + name + "%\"";
     }
 
+    query_string += " ORDER BY position ASC";
+
     query.prepare(query_string);
 
     if (!query.exec()) {

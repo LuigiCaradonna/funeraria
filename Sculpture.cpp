@@ -27,7 +27,7 @@ QList<QMap<QString, QString>> Sculpture::get(const QString& code)
         query_string += " AND code LIKE \"%" + code + "%\"";
     }
 
-    query_string += " ORDER BY code ASC";
+    query_string += " ORDER BY name ASC";
 
     query.prepare(query_string);
 
@@ -42,9 +42,9 @@ QList<QMap<QString, QString>> Sculpture::get(const QString& code)
     while (query.next()) {
         QMap<QString, QString> row;
 
-        row["id"] = query.value("id").toString();
         row["code"] = query.value("code").toString();
         row["img"] = query.value("img").toString();
+        row["name"] = query.value("name").toString();
         row["width"] = query.value("width").toString();
         row["height"] = query.value("height").toString();
         row["depth"] = query.value("depth").toString();
@@ -93,7 +93,7 @@ QList<QString> Sculpture::getNames()
 {
     QStringList names = {};
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table);
+    query.prepare("SELECT name FROM " + this->table + " ORDER BY name ASC");
 
     if (!query.exec()) {
         QMessageBox message;
@@ -210,7 +210,7 @@ bool Sculpture::store(
 }
 
 bool Sculpture::update(
-    const int id,
+    const QString& old_code,
     const QString& code,
     const QString& img,
     const QString& width,
@@ -231,7 +231,7 @@ bool Sculpture::update(
     query.bindValue(":height", height);
     query.bindValue(":depth", depth);
     query.bindValue(":edited_at", edited_at);
-    query.bindValue(":id", id);
+    query.bindValue(":code", old_code);
 
     if (!query.exec()) {
         return false;

@@ -101,17 +101,17 @@ public:
     /*
      * Updates the sculpture's data
      *
-     * @param const int id          -   Id
-     * @param const QString& code   -   Code
-     * @param const QString& img    -   Image file name
-     * @param const QString& width  -   Width in mm
-     * @param const QString& height -   Height in mm
-     * @param const QString& depth  -   Depth in mm
+     * @param const QString& old_code   -   Old code
+     * @param const QString& code       -   Code
+     * @param const QString& img        -   Image file name
+     * @param const QString& width      -   Width in mm
+     * @param const QString& height     -   Height in mm
+     * @param const QString& depth      -   Depth in mm
      *
      * @return  boolean true if the update succeeds, false otherwise
      */
     bool update(
-        const int id,
+        const QString& old_code,
         const QString& code,
         const QString& img,
         const QString& width,
