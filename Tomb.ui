@@ -90,6 +90,9 @@
          <property name="text">
           <string>Cerca mancanti</string>
          </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -790,6 +793,9 @@
                <width>100</width>
                <height>30</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>Altezza scultura</string>
              </property>
              <property name="placeholderText">
               <string>Alt. (cm)</string>
@@ -1753,6 +1759,9 @@
              <property name="text">
               <string>Oggi</string>
              </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
             </widget>
            </item>
           </layout>
@@ -1826,6 +1835,9 @@
              <property name="text">
               <string>Oggi</string>
              </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
             </widget>
            </item>
            <item>
@@ -1849,6 +1861,9 @@
              </property>
              <property name="text">
               <string>No</string>
+             </property>
+             <property name="autoDefault">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -1927,6 +1942,9 @@
              <property name="text">
               <string>Oggi</string>
              </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
             </widget>
            </item>
           </layout>
@@ -2000,6 +2018,9 @@
              <property name="text">
               <string>Oggi</string>
              </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
             </widget>
            </item>
            <item>
@@ -2023,6 +2044,9 @@
              </property>
              <property name="text">
               <string>Cons.</string>
+             </property>
+             <property name="autoDefault">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -2101,6 +2125,9 @@
              <property name="text">
               <string>Oggi</string>
              </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
             </widget>
            </item>
           </layout>
@@ -2127,6 +2154,9 @@
          </property>
          <property name="text">
           <string>Elimina</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -2165,6 +2195,9 @@
          <property name="text">
           <string>Salva</string>
          </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -2188,6 +2221,9 @@
          </property>
          <property name="text">
           <string>Chiudi</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
