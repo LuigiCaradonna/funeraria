@@ -67,9 +67,9 @@ QList<QMap<QString, QString>> Tomb::getList(
 
         // Accessories should result to be mounted also if the field is set to 0, but there were no accessories to be mounted
         if (query.value("accessories_mounted").toString() == "1" || 
-            (query.value("vase_code").toString() == "NV" &&
-            query.value("lamp_code").toString() == "NL" &&
-            query.value("flame_code").toString() == "NF"
+            (query.value("vase_code").toString() == "NO" &&
+            query.value("lamp_code").toString() == "NO" &&
+            query.value("flame_code").toString() == "NO"
             )) 
         {
             accessories_mounted = "1";
@@ -147,9 +147,9 @@ QMap<QString, QString> Tomb::getByProgressive(const int progressive)
 
         // Accessories should result to be mounted also if the field is set to 0, but there were no accessories to be mounted
         if (query.value("accessories_mounted").toString() == "1" ||
-            (query.value("vase_code").toString() == "NV" &&
-                query.value("lamp_code").toString() == "NL" &&
-                query.value("flame_code").toString() == "NF"
+            (query.value("vase_code").toString() == "NO" &&
+                query.value("lamp_code").toString() == "NO" &&
+                query.value("flame_code").toString() == "NO"
                 )) {
             accessories_mounted = "1";
         }
