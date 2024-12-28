@@ -348,6 +348,64 @@ void TombUi::slotUpdateEpNumState()
 
 void TombUi::slotUpdatePitState()
 {
+    if (this->ui.cbPitFormatOne->currentIndex() != 0) {
+        this->ui.cbPitFormatTwo->setEnabled(true);
+        this->ui.cbPitTypeTwo->setEnabled(true);
+    }
+    else {
+        this->ui.cbPitFormatTwo->setEnabled(false);
+        this->ui.cbPitFormatTwo->setCurrentIndex(0);
+        this->ui.cbPitTypeTwo->setEnabled(false);
+        this->ui.cbPitTypeTwo->setCurrentIndex(0);
+    }
+
+    if (this->ui.cbPitFormatTwo->currentIndex() != 0) {
+        this->ui.cbPitFormatThree->setEnabled(true);
+        this->ui.cbPitTypeThree->setEnabled(true);
+    }
+    else {
+        this->ui.cbPitTypeTwo->setCurrentIndex(0);
+        this->ui.cbPitFormatThree->setEnabled(false);
+        this->ui.cbPitFormatThree->setCurrentIndex(0);
+        this->ui.cbPitTypeThree->setEnabled(false);
+        this->ui.cbPitTypeThree->setCurrentIndex(0);
+    }
+
+    if (this->ui.cbPitFormatThree->currentIndex() != 0) {
+        this->ui.cbPitFormatFour->setEnabled(true);
+        this->ui.cbPitTypeFour->setEnabled(true);
+    }
+    else {
+        this->ui.cbPitTypeThree->setCurrentIndex(0);
+        this->ui.cbPitFormatFour->setEnabled(false);
+        this->ui.cbPitFormatFour->setCurrentIndex(0);
+        this->ui.cbPitTypeFour->setEnabled(false);
+        this->ui.cbPitTypeFour->setCurrentIndex(0);
+    }
+
+    if (this->ui.cbPitFormatFour->currentIndex() != 0) {
+        this->ui.cbPitFormatFive->setEnabled(true);
+        this->ui.cbPitTypeFive->setEnabled(true);
+    }
+    else {
+        this->ui.cbPitTypeFour->setCurrentIndex(0);
+        this->ui.cbPitFormatFive->setEnabled(false);
+        this->ui.cbPitFormatFive->setCurrentIndex(0);
+        this->ui.cbPitTypeFive->setEnabled(false);
+        this->ui.cbPitTypeFive->setCurrentIndex(0);
+    }
+
+    if (this->ui.cbPitFormatFive->currentIndex() != 0) {
+        this->ui.cbPitFormatSix->setEnabled(true);
+        this->ui.cbPitTypeSix->setEnabled(true);
+    }
+    else {
+        this->ui.cbPitTypeFive->setCurrentIndex(0);
+        this->ui.cbPitFormatSix->setEnabled(false);
+        this->ui.cbPitFormatSix->setCurrentIndex(0);
+        this->ui.cbPitTypeSix->setEnabled(false);
+        this->ui.cbPitTypeSix->setCurrentIndex(0);
+    }
 }
 
 void TombUi::slotUpdateScHightState()
