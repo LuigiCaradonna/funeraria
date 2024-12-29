@@ -408,8 +408,8 @@ private:
     QPushButton* btnSearchByProgressive;
 
     // Sculptures top bar elements
-    QLabel* lblScCode;
-    QLineEdit* leScCode;
+    QLabel* lblScName;
+    QLineEdit* leScName;
     QSpacerItem* sculptureSpacer;
 
     // Clients top bar elements

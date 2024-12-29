@@ -298,6 +298,7 @@ QList<QMap<QString, QString>> Tomb::tombsToEngrave()
     QList<QMap<QString, QString>> tombs;
     QMap<QString, QString> tomb;
     QSqlQuery query = QSqlQuery(this->db);
+
     query.prepare("SELECT tomb.progressive AS progressive, tomb.name AS name, "
         "tomb.confirmed_at AS confirmed_at, client.name AS client_name, material.name AS material "
         "FROM " + this->table + " "
@@ -343,8 +344,8 @@ QList<QMap<QString, QString>> Tomb::accessoriesToMount()
         "JOIN lamp ON tomb.lamp_code = lamp.code "
         "JOIN flame ON tomb.flame_code = flame.code "
         "JOIN client ON tomb.client_id = client.id "
-        "WHERE tomb.accessories_accessories_mounted = 0 AND (tomb.confirmed_at != '' AND tomb.confirmed_at IS NOT NULL) "
-        "AND (tomb.vase_code != 'NV' OR tomb.lamp_code != 'NL' OR tomb.flame_code != 'NF');"
+        "WHERE tomb.accessories_mounted = 0 AND (tomb.confirmed_at != '' AND tomb.confirmed_at IS NOT NULL) "
+        "AND (tomb.vase_code != 'NO' OR tomb.lamp_code != 'NO' OR tomb.flame_code != 'NO');"
     );
 
     if (!query.exec()) {

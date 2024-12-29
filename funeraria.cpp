@@ -35,6 +35,13 @@ Funeraria::Funeraria(QWidget* parent)
         // Sets an icon for the window
         this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
 
+        // Load the stylesheet for the UI
+        QString style = Helpers::getStyle(this->css_folder);
+
+        if (!style.isEmpty()) {
+            this->setStyleSheet(style);
+        }
+
         // Set the font for the table
         QFont font("Calibri", 12);
         this->ui.tableWidget->setFont(font);
@@ -201,8 +208,8 @@ Funeraria::~Funeraria()
     delete this->leSearchByProgressive;
     delete this->btnSearchByProgressive;
 
-    delete this->lblScCode;
-    delete this->leScCode;
+    delete this->lblScName;
+    delete this->leScName;
     delete this->sculptureSpacer;
 
     delete this->lblClName;
@@ -1081,9 +1088,9 @@ void Funeraria::slotShowSculptures(int row)
     // Reset the table's content
     this->clearTable();
 
-    QString code = this->leScCode->text().trimmed();
+    QString name = this->leScName->text().trimmed();
 
-    QList<QMap<QString, QString>> sculptures = this->sculpture->get(code);
+    QList<QMap<QString, QString>> sculptures = this->sculpture->getListByName(name);
 
     QStringList headers{ "Codice", "Img", "Nome", "Larghezza", "Altezza", "Profondità", "Rid Z", "Rid XY", "", "" };
 
@@ -1214,7 +1221,7 @@ void Funeraria::slotShowSculptures(int row)
         QAbstractItemView::PositionAtCenter
     );
 
-    this->leScCode->setFocus();
+    this->leScName->setFocus();
 }
 
 void Funeraria::slotFilterSculptures()
@@ -2345,14 +2352,14 @@ void Funeraria::initSculpturesTopBar()
     font.setPointSize(12);
 
     // Code label
-    this->lblScCode = new QLabel();
-    this->lblScCode->setFont(font);
-    this->lblScCode->setText("Codice");
+    this->lblScName = new QLabel();
+    this->lblScName->setFont(font);
+    this->lblScName->setText("Nome");
 
     // Deceased line edit
-    this->leScCode = new QLineEdit();
-    this->leScCode->setFont(font);
-    this->leScCode->setMaximumWidth(300);
+    this->leScName = new QLineEdit();
+    this->leScName->setFont(font);
+    this->leScName->setMaximumWidth(300);
 
     // Horizontal spacer
     this->sculptureSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -2360,11 +2367,11 @@ void Funeraria::initSculpturesTopBar()
     // Horizontal layout containing the tombs top bar's elements
     QHBoxLayout* sculpturesTopBarLayout = new QHBoxLayout(this->ui.sculpturesTopBarWidget);
 
-    sculpturesTopBarLayout->addWidget(this->lblScCode);
-    sculpturesTopBarLayout->addWidget(this->leScCode);
+    sculpturesTopBarLayout->addWidget(this->lblScName);
+    sculpturesTopBarLayout->addWidget(this->leScName);
     sculpturesTopBarLayout->addSpacerItem(this->sculptureSpacer);
     // Connect the code line edit to the relative slot
-    this->connect(this->leScCode, &QLineEdit::textChanged, this, &Funeraria::slotFilterSculptures);
+    this->connect(this->leScName, &QLineEdit::textChanged, this, &Funeraria::slotFilterSculptures);
 
     // Set the widget as visible
     this->ui.sculpturesTopBarWidget->setVisible(false);

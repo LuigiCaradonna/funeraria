@@ -32,11 +32,20 @@ public:
     /*
      * Gets all the sculptures' data
      *
-     * @param   const QString& code - Optional, code or name of the sculputre to get
+     * @param   const QString& code - Optional, code of the sculputre to get
      *
      * @return  QList<QMap<QString, QString>> - A list containing the sculptures' data
      */
-    QList<QMap<QString, QString>> get(const QString& code = "");
+    QList<QMap<QString, QString>> getListByCode(const QString& code = "");
+
+    /*
+     * Gets all the sculptures' data
+     *
+     * @param   const QString& code - Optional, name of the sculputre to get
+     *
+     * @return  QList<QMap<QString, QString>> - A list containing the sculptures' data
+     */
+    QList<QMap<QString, QString>> getListByName(const QString& name = "");
 
     /*
      * Gets the given sculpture's datails

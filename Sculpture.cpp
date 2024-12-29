@@ -15,7 +15,7 @@ Sculpture::~Sculpture()
 
 /********** PUBLIC FUNCTIONS **********/
 
-QList<QMap<QString, QString>> Sculpture::get(const QString& code)
+QList<QMap<QString, QString>> Sculpture::getListByCode(const QString& code)
 {
     QList<QMap<QString, QString>> list{};
 
@@ -25,6 +25,48 @@ QList<QMap<QString, QString>> Sculpture::get(const QString& code)
 
     if (code.trimmed() != "") {
         query_string += " AND code LIKE \"%" + code + "%\"";
+    }
+
+    query_string += " ORDER BY name ASC";
+
+    query.prepare(query_string);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        QMap<QString, QString> row;
+
+        row["code"] = query.value("code").toString();
+        row["img"] = query.value("img").toString();
+        row["name"] = query.value("name").toString();
+        row["width"] = query.value("width").toString();
+        row["height"] = query.value("height").toString();
+        row["depth"] = query.value("depth").toString();
+        row["created_at"] = query.value("created_at").toString();
+        row["edited_at"] = query.value("edited_at").toString();
+
+        list.append(row);
+    }
+
+    return list;
+}
+
+QList<QMap<QString, QString>> Sculpture::getListByName(const QString& name)
+{
+    QList<QMap<QString, QString>> list{};
+
+    QSqlQuery query = QSqlQuery(this->db);
+
+    QString query_string = "SELECT * FROM " + this->table + " WHERE 1=1 ";
+
+    if (name.trimmed() != "") {
+        query_string += " AND name LIKE \"%" + name + "%\"";
     }
 
     query_string += " ORDER BY name ASC";

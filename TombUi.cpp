@@ -797,7 +797,7 @@ void TombUi::updateForm()
     QList<QMap<QString, QString>> flames = this->flame->get();
     QList<QMap<QString, QString>> crosses = this->cross->get();
     QList<QMap<QString, QString>> sacreds = this->sacred->get();
-    QList<QMap<QString, QString>> sculptures = this->sculpture->get();
+    QList<QMap<QString, QString>> sculptures = this->sculpture->getListByCode();
     QList<QMap<QString, QString>> pit_types = this->pit_type->get();
     QList<QMap<QString, QString>> pit_formats = this->pit_format->get();
 
