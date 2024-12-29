@@ -248,6 +248,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         tomb["progressive"] = QString::number(query.value("progressive").toInt());
         tomb["client_id"] = query.value("client_id").toString();
         tomb["client_name"] = query.value("client_name").toString();
+        tomb["name"] = query.value("name").toString();
         tomb["engraved_names"] = query.value("engraved_names").toString();
         tomb["ep_amount"] = query.value("ep_amount").toString();
         tomb["engraved"] = query.value("engraved").toString();
@@ -632,11 +633,11 @@ bool Tomb::update(
         "ep_amount = :ep_amount, engraved = :engraved, price = :price, paid = :paid, material_code = :material_code, "
         "type_code = :type_code, format_code = :format_code, vase_code = :vase_code, lamp_code = :lamp_code,  flame_code = :flame_code, "
         "cross_code = :cross_code, sacred_code = :sacred_code,  sculpture_code = :sculpture_code, sculpture_h = :sculpture_h, "
-        "accessories_mounted = :mounted, ep_relief = :ep_relief, inscription = :inscription, "
+        "mounted = :mounted, ep_relief = :ep_relief, inscription = :inscription, "
         "pit_format_one = :pit_format_one, pit_type_one = :pit_type_one, pit_format_two = :pit_format_two, pit_type_two = :pit_type_two, "
         "pit_format_three = :pit_format_three, pit_type_three = :pit_type_three, pit_format_four = :pit_format_four, pit_type_four = :pit_type_four, "
         "pit_format_five = :pit_format_five, pit_type_five = :pit_type_five, pit_format_six = :pit_format_six, pit_type_six = :pit_type_six, "
-        "notes = :notes, accessories_accessories_mounted = :accessories_mounted, "
+        "notes = :notes, accessories_mounted = :accessories_mounted, "
         "ordered_at = :ordered_at, proofed_at = :proofed_at, confirmed_at = :confirmed_at, engraved_at = :engraved_at, "
         "delivered_at = :delivered_at, edited_at = :edited_at "
         "WHERE progressive = :old_progressive;"
