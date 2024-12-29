@@ -89,3 +89,24 @@ float Helpers::scaledSize(const float original, const float scale_factor)
 {
     return floorf((original * scale_factor) * 1000) / 1000;
 }
+
+QString Helpers::getStyle(const QString& css_folder)
+{
+    QFile file(css_folder + "style.css");
+    QString css = "";
+
+    if (file.exists()) {
+        QString line;
+
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream stream(&file);
+            while (!stream.atEnd()) {
+                line = stream.readLine();
+                css += line + "\n";
+            }
+        }
+    }
+    file.close();
+
+    return css;
+}

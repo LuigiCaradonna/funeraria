@@ -81,4 +81,14 @@ public:
      * @return  float the scaled size truncated to 3 decimal digits.
      */
     static float scaledSize(const float original, const float scale_factor);
+
+    /*
+     * Gets the css file's content.
+     *
+     * @param   const QString&  css_folder - Path to the css folder
+     *
+     * @return  QString - Content of the css file.
+     */
+    static QString getStyle(const QString& css_folder);
+
 };

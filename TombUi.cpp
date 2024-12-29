@@ -11,7 +11,7 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
 
     // Load the stylesheet for the UI
-    QString style = this->getStyle();
+    QString style = Helpers::getStyle(this->css_folder);
 
     if (!style.isEmpty()) {
         this->setStyleSheet(style);
@@ -1151,25 +1151,4 @@ void TombUi::updateForm()
     }
 
     delete client;
-}
-
-QString TombUi::getStyle()
-{
-    QFile file(this->css_folder + "tombui.css");
-    QString css = "";
-
-    if (file.exists()) {
-        QString line;
-
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream stream(&file);
-            while (!stream.atEnd()) {
-                line = stream.readLine();
-                css += line + "\n";
-            }
-        }
-    }
-    file.close();
-
-    return css;
 }
