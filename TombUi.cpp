@@ -547,20 +547,26 @@ bool TombUi::validateForm(const QString& op)
     }
 
     if (
-        (this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) != "NO" && this->ui.cbPitFormatOne->currentText() == "NO") ||
+        (
+            this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) != "NO" && 
+			this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+        )
+        ||
         (this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) != "NO" &&
             (
                 this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" || 
                 this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
             )
-        ) ||
+        ) 
+        ||
         (this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()) != "NO" &&
             (
                 this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
                 this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
                 this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
             )
-        ) ||
+        ) 
+        ||
         (this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()) != "NO" &&
             (
                 this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()) == "NO" ||
@@ -568,7 +574,8 @@ bool TombUi::validateForm(const QString& op)
                 this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
                 this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
             )
-        ) ||
+        ) 
+        ||
         (this->pit_format->getCode(this->ui.cbPitFormatSix->currentText()) != "NO" &&
             (
                 this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()) == "NO" ||
