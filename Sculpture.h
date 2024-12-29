@@ -83,6 +83,7 @@ public:
      * Creates a new sculpture entry
      *
      * @param const QString& code   -   Code
+     * @param const QString& name   -   Name
      * @param const QString& img    -   Image file name
      * @param const QString& width  -   Width in mm
      * @param const QString& height -   Height in mm
@@ -92,6 +93,7 @@ public:
      */
     bool store(
         const QString& code,
+        const QString& name,
         const QString& img,
         const QString& width,
         const QString& height,
@@ -103,6 +105,7 @@ public:
      *
      * @param const QString& old_code   -   Old code
      * @param const QString& code       -   Code
+     * @param const QString& name       -   Name
      * @param const QString& img        -   Image file name
      * @param const QString& width      -   Width in mm
      * @param const QString& height     -   Height in mm
@@ -113,6 +116,7 @@ public:
     bool update(
         const QString& old_code,
         const QString& code,
+        const QString& name,
         const QString& img,
         const QString& width,
         const QString& height,

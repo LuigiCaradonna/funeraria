@@ -71,6 +71,7 @@ void SculptureUi::slotSave()
 
         if (sculpture->store(
             this->ui.leCode->text().trimmed(),
+            this->ui.leName->text().trimmed(),
             this->ui.leImgPath->text().trimmed(),
             this->ui.leOWidth->text().trimmed(),
             this->ui.leOHeight->text().trimmed(),
@@ -104,6 +105,7 @@ void SculptureUi::slotUpdate()
         if (sculpture->update(
             this->code,
             this->ui.leCode->text().trimmed(),
+            this->ui.leName->text().trimmed(),
             this->ui.leImgPath->text().trimmed(),
             this->ui.leOWidth->text().trimmed(),
             this->ui.leOHeight->text().trimmed(),

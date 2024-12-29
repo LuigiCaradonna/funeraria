@@ -1244,7 +1244,7 @@ void Funeraria::slotSculptureDetails()
 {
     // Row index of the clicked button
     int row = this->ui.tableWidget->currentRow();
-    this->sculpture_ui->setCode(this->ui.tableWidget->item(row, 1)->text());
+    this->sculpture_ui->setCode(this->ui.tableWidget->item(row, 0)->text());
     this->sculpture_ui->setModal(true);
     this->sculpture_ui->exec();
 

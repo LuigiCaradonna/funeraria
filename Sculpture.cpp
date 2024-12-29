@@ -66,7 +66,7 @@ QMap<QString, QString> Sculpture::getByCode(const QString& code)
 
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT * FROM " + this->table + " WHERE code = :code;");
-    query.bindValue(":name", name);
+    query.bindValue(":code", code);
 
     if (!query.exec()) {
         QMessageBox message;
@@ -76,9 +76,9 @@ QMap<QString, QString> Sculpture::getByCode(const QString& code)
         message.exec();
     }
     else if (query.next()) {
-        map["id"] = query.value("id").toString();
         map["code"] = query.value("code").toString();
         map["img"] = query.value("img").toString();
+        map["name"] = query.value("name").toString();
         map["width"] = query.value("width").toString();
         map["height"] = query.value("height").toString();
         map["depth"] = query.value("depth").toString();
@@ -183,6 +183,7 @@ QString Sculpture::getCode(const QString& name)
 
 bool Sculpture::store(
     const QString& code,
+    const QString& name,
     const QString& img,
     const QString& width,
     const QString& height,
@@ -193,9 +194,10 @@ bool Sculpture::store(
 
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("INSERT INTO " + this->table + " "
-        " (code, img, width, height, depth, created_at, edited_at)"
+        " (code, name, img, width, height, depth, created_at, edited_at)"
         " VALUES (:code, :img, :width, :height, :depth, :created_at, :edited_at)");
     query.bindValue(":code", code);
+    query.bindValue(":name", name);
     query.bindValue(":img", img);
     query.bindValue(":width", width);
     query.bindValue(":height", height);
@@ -212,6 +214,7 @@ bool Sculpture::store(
 bool Sculpture::update(
     const QString& old_code,
     const QString& code,
+    const QString& name,
     const QString& img,
     const QString& width,
     const QString& height,
@@ -222,10 +225,11 @@ bool Sculpture::update(
 
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("UPDATE " + this->table + ""
-        " SET code = :code, img = :img, width = :width,"
+        " SET code = :code, name = :name, img = :img, width = :width,"
         " height = :height, depth = :depth, edited_at = :edited_at "
         " WHERE id = :id;");
     query.bindValue(":code", code);
+    query.bindValue(":name", name);
     query.bindValue(":img", img);
     query.bindValue(":width", width);
     query.bindValue(":height", height);
