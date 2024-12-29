@@ -8,6 +8,7 @@
 #include <QTableWidget>
 #include "ui_Report.h"
 #include "Client.h"
+#include "Helpers.h"
 #include "Tomb.h"
 #include <QtCharts/QChartView>
 #include <QtCharts/QValueAxis>
@@ -30,10 +31,11 @@ public:
      * Constructs the TombUi object.
      *
      * @param	const QSqlDatabase*	db	            - Refrence to the database connection
+     * @param	const QString&	    css_folder	    - Path to the css folder
      * @param	const QString&	    icons_folder	- Path to the icons folder
      * @param	QWidget*            parent	        - Parent widget
      */
-    ReportUi(const QSqlDatabase & db, const QString& icons_folder, QWidget * parent = nullptr);
+    ReportUi(const QSqlDatabase & db, const QString& css_folder, const QString& icons_folder, QWidget * parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -83,6 +85,7 @@ private:
     QColor row_even = QColor(255, 255, 255);
     QColor row_odd = QColor(235, 235, 235);
     const QString icons_folder;
+    const QString css_folder;
 
     /********** PRIVATE FUNCTIONS **********/
 

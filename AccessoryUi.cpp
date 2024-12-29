@@ -2,13 +2,20 @@
 
 /********** CONSTRUCTOR **********/
 
-AccessoryUi::AccessoryUi(const QSqlDatabase& db, const QString& table, const QString& icons_folder, QWidget* parent)
-    : db(db), table(table), icons_folder(icons_folder), parent(parent)
+AccessoryUi::AccessoryUi(const QSqlDatabase& db, const QString& table, const QString& css_folder, const QString& icons_folder, QWidget* parent)
+    : db(db), table(table), css_folder(css_folder), icons_folder(icons_folder), parent(parent)
 {
     this->ui.setupUi(this);
 
     // Sets an icon for the window
     this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
+
+    // Load the stylesheet for the UI
+    QString style = Helpers::getStyle(this->css_folder);
+
+    if (!style.isEmpty()) {
+        this->setStyleSheet(style);
+    }
 
     this->connect(this->ui.btnCancel, &QPushButton::clicked, this, &AccessoryUi::slotCloseDialog);
 }

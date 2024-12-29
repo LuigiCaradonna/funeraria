@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDebug>
+#include "Helpers.h"
 #include "Accessory.h"
 #include "ui_Accessory.h"
 
@@ -16,10 +17,11 @@ public:
      *
      * @param	const QSqlDatabase& db	            - Reference to the database connection
      * @param	const QString&	    table	        - Database table to use
+     * @param	const QString&	    css_folder	    - Path to the css folder
      * @param	const QString&	    icons_folder	- Path to the icons folder
      * @param	QWidget*            parent	        - Parent widget
      */
-    AccessoryUi(const QSqlDatabase& db, const QString& table, const QString& icons_folder, QWidget* parent = nullptr);
+    AccessoryUi(const QSqlDatabase& db, const QString& table, const QString& css_folder, const QString& icons_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -72,6 +74,7 @@ private:
     QWidget* parent;
     QString old_code = "";
     const QString icons_folder;
+    const QString css_folder;
 
     /********** PRIVATE FUNCTIONS **********/
 

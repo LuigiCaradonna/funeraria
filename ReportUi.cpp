@@ -2,14 +2,21 @@
 
 /********** CONSTRUCTOR **********/
 
-ReportUi::ReportUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent)
-    : db(db), icons_folder(icons_folder), parent(parent)
+ReportUi::ReportUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, QWidget* parent)
+    : db(db), css_folder(css_folder), icons_folder(icons_folder), parent(parent)
 {
     this->ui.setupUi(this);
 
     // Sets an icon for the window
     this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
     this->setWindowTitle("Report");
+
+    // Load the stylesheet for the UI
+    QString style = Helpers::getStyle(this->css_folder);
+
+    if (!style.isEmpty()) {
+        this->setStyleSheet(style);
+    }
 
     // Bind the UI's elements to the corresponding slot
     this->connect(this->ui.btnReport, &QPushButton::clicked, this, &ReportUi::slotGenerateReport);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDebug>
+#include "Helpers.h"
 #include "Client.h"
 #include "ui_Client.h"
 
@@ -14,11 +15,12 @@ public:
     /*
      * Constructs the Client object.
      *
-     * @param	const QSqlDatabase*	db	- Reference to the database connection
+     * @param	const QSqlDatabase*	db	            - Reference to the database connection
+     * @param	const QString&	    css_folder	    - Path to the css folder
      * @param	const QString&	    icons_folder	- Path to the icons folder
-     * @param	QWidget* parent	- Parent widget
+     * @param	QWidget*            parent	        - Parent widget
      */
-    ClientUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent = nullptr);
+    ClientUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -80,6 +82,7 @@ private:
     QString name;
     int id;
     const QString icons_folder;
+    const QString css_folder;
 
     /********** PRIVATE FUNCTIONS **********/
 

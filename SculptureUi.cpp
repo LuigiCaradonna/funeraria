@@ -2,13 +2,20 @@
 
 /********** CONSTRUCTOR **********/
 
-SculptureUi::SculptureUi(const QSqlDatabase& db, const QString& icons_folder, const QString& images_folder, QWidget* parent)
-    : db(db), icons_folder(icons_folder), images_folder(images_folder), parent(parent)
+SculptureUi::SculptureUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, const QString& images_folder, QWidget* parent)
+    : db(db), css_folder(css_folder), icons_folder(icons_folder), images_folder(images_folder), parent(parent)
 {
     this->ui.setupUi(this);
 
     // Sets an icon for the window
     this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
+
+    // Load the stylesheet for the UI
+    QString style = Helpers::getStyle(this->css_folder);
+
+    if (!style.isEmpty()) {
+        this->setStyleSheet(style);
+    }
 
     // code initialization
     this->code = "0";

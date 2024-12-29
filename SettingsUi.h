@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "Settings.h"
+#include "Helpers.h"
 #include "Config.h"
 #include "ui_Settings.h"
 
@@ -20,6 +21,7 @@ public:
      * Constructs the SettingsUi object.
      *
      * @param	const QSqlDatabase*	db	            - Refrence to the database connection
+     * @param	const QString&	    css_folder	    - Path to the css folder
      * @param	const QString&	    icons_folder	- Path to the icons folder
      * @param	QWidget*            parent	        - Parent widget
      */
@@ -77,6 +79,7 @@ private:
     QSqlDatabase db;
     QWidget* parent;
     const QString icons_folder;
+    const QString css_folder;
 
     /********** PRIVATE FUNCTIONS **********/
 
