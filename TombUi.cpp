@@ -193,10 +193,6 @@ void TombUi::slotNotInUseProgressives()
 
 void TombUi::slotSave()
 {
-    if (!this->validateForm("store")) {
-        return;
-    }
-
     Client* client = new Client(this->db);
     // Default value, usually the tombs are engraved
     int engraved = 1;
@@ -209,6 +205,10 @@ void TombUi::slotSave()
     }
 
     if (this->ui.btnSave->text() == this->btn_create_text) {
+        if (!this->validateForm("store")) {
+            return;
+        }
+
         if (this->tomb->store(
             this->ui.leProgressive->text().toInt(),
             client->getId(this->ui.cbClient->currentText()),
@@ -257,6 +257,10 @@ void TombUi::slotSave()
         }
     }
     else if (this->ui.btnSave->text() == this->btn_update_text) {
+        if (!this->validateForm("update")) {
+            return;
+        }
+
         if (tomb->update(
             this->progressive,
             this->ui.leProgressive->text().toInt(),
@@ -522,7 +526,7 @@ bool TombUi::validateForm(const QString& op)
         return false;
     }
 
-    if (this->ui.cbSculpture->currentText() != "NO" && 
+    if (this->sculpture->getCode(this->ui.cbSculpture->currentText()) != "NO" &&
         (this->ui.leScHeight->text().trimmed() == "" || this->ui.leScHeight->text().toInt() <= 0)) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
@@ -543,27 +547,36 @@ bool TombUi::validateForm(const QString& op)
     }
 
     if (
-        (this->ui.cbPitFormatTwo->currentText() != "NO" && this->ui.cbPitFormatOne->currentText() == "NO") ||
-        (this->ui.cbPitFormatThree->currentText() != "NO"  &&
-            (this->ui.cbPitFormatTwo->currentText() == "NO" || this->ui.cbPitFormatOne->currentText() == "NO")
+        (this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) != "NO" && this->ui.cbPitFormatOne->currentText() == "NO") ||
+        (this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) != "NO" &&
+            (
+                this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" || 
+                this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+            )
         ) ||
-        (this->ui.cbPitFormatFour->currentText() != "NO" &&
-            (this->ui.cbPitFormatThree->currentText() == "NO" || 
-             this->ui.cbPitFormatTwo->currentText() == "NO" ||
-             this->ui.cbPitFormatOne->currentText() == "NO")
+        (this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()) != "NO" &&
+            (
+                this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
+                this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
+                this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+            )
         ) ||
-        (this->ui.cbPitFormatFive->currentText() != "NO" &&
-            (this->ui.cbPitFormatFour->currentText() == "NO" ||
-             this->ui.cbPitFormatThree->currentText() == "NO" ||
-             this->ui.cbPitFormatTwo->currentText() == "NO" ||
-             this->ui.cbPitFormatOne->currentText() == "NO")
+        (this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()) != "NO" &&
+            (
+                this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()) == "NO" ||
+                this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
+                this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
+                this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+            )
         ) ||
-        (this->ui.cbPitFormatSix->currentText() != "NO" &&
-            (this->ui.cbPitFormatFive->currentText() == "NO" ||
-             this->ui.cbPitFormatFour->currentText() == "NO" ||
-             this->ui.cbPitFormatThree->currentText() == "NO" ||
-             this->ui.cbPitFormatTwo->currentText() == "NO" ||
-             this->ui.cbPitFormatOne->currentText() == "NO")
+        (this->pit_format->getCode(this->ui.cbPitFormatSix->currentText()) != "NO" &&
+            (
+                this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()) == "NO" ||
+                this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()) == "NO" ||
+                this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
+                this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
+                this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+            )
         )
     ) {
         QMessageBox message;

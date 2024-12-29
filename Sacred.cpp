@@ -157,7 +157,7 @@ QList<QString> Sacred::getCodes()
     }
 
     while (query.next()) {
-        codes.append(query.value("name").toString());
+        codes.append(query.value("code").toString());
     }
 
     return codes;
@@ -180,7 +180,7 @@ QString Sacred::getCode(const QString& name)
     }
 
     if (query.next()) {
-        return query.value("name").toString();
+        return query.value("code").toString();
     }
 
     return "";

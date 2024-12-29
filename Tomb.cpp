@@ -491,6 +491,28 @@ bool Tomb::store(
     // Store the tomb into the database
 
     QSqlQuery query = QSqlQuery(this->db);
+
+    QString q = "INSERT INTO " + this->table + " "
+        "(progressive, client_id, name, engraved_names, ep_amount, engraved, price, paid, material_code, type_code, format_code, "
+        "vase_code, lamp_code, flame_code, cross_code, sacred_code, sculpture_code, sculpture_h, mounted, ep_relief, inscription, "
+        "pit_format_one, pit_type_one, pit_format_two, pit_type_two, pit_format_three, pit_type_three, "
+        "pit_format_four, pit_type_four, pit_format_five, pit_type_five, pit_format_six, pit_type_six, "
+        "notes, accessories_mounted, ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at, "
+        "created_at, edited_at) "
+        "VALUES (" + QString::number(progressive) + ", " + QString::number(client_id) + ", " + name + ", "+ name.trimmed() +", "
+        "" + QString::number(ep_amount) + ", " + QString::number(engraved) + ", " + QString::number(price) + ", " + QString::number(paid) + ","
+        "" +material_code+", "+tomb_type+", "+tomb_format+", "
+        "" +vase_code+", " + lamp_code + ", " + flame_code + ", " + cross_code + ", " + sacred_code + ", " + sculpture_code + ", "
+        "" + QString::number(sculpture_height) + ", " + QString::number(mounted) + ", " + QString::number(ep_relief) + ", "
+        "" + QString::number(inscription) + ", "
+        "" + pit_format_one + ", " + pit_type_one + ", " + pit_format_two + ", " + pit_type_two + ", " + pit_format_three + ", " + pit_type_three + ", "
+        "" + pit_format_four + ", " + pit_type_four + ", " + pit_format_five + ", " + pit_type_five + ", " + pit_format_six + ", " + pit_type_six + ", "
+        "" + notes + ", " + QString::number(accessories_mounted) + ", "
+        "" + QDate::currentDate().toString("yyyy-MM-dd") + ", " + QDate::currentDate().toString("yyyy-MM-dd") + ", "
+        "" + QDate::currentDate().toString("yyyy-MM-dd") + ", " + QDate::currentDate().toString("yyyy-MM-dd") + ", "
+        "" + QDate::currentDate().toString("yyyy-MM-dd") + ", "
+        "" + QDate::currentDate().toString("yyyy-MM-dd")+", "+ QDate::currentDate().toString("yyyy-MM-dd")+")";
+    qDebug() << q;
     query.prepare(
         "INSERT INTO " + this->table + " "
         "(progressive, client_id, name, engraved_names, ep_amount, engraved, price, paid, material_code, type_code, format_code, "

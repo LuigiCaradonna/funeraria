@@ -134,7 +134,7 @@ QString TombFormat::getName(const QString& code)
     }
 
     if (query.next()) {
-        return query.value("name").toString();
+        return query.value("code").toString();
     }
 
     return "";
@@ -157,7 +157,7 @@ QList<QString> TombFormat::getCodes()
     }
 
     while (query.next()) {
-        codes.append(query.value("name").toString());
+        codes.append(query.value("code").toString());
     }
 
     return codes;
@@ -180,7 +180,7 @@ QString TombFormat::getCode(const QString& name)
     }
 
     if (query.next()) {
-        return query.value("name").toString();
+        return query.value("code").toString();
     }
 
     return "";
