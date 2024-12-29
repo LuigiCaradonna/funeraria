@@ -340,10 +340,10 @@ void TombUi::slotUpdateNotes()
     QString notes = "";
 
     if (this->ui.rbMountYes->isChecked()) notes += "Montaggio, ";
-
+    /*
     if (this->ui.cbType->currentIndex() != 0) notes += this->ui.cbType->currentText() + ", ";
     if (this->ui.cbFormat->currentIndex() != 0) notes += this->ui.cbFormat->currentText() + ", ";
-
+    */
     if (this->ui.rbEngraveYes->isChecked()) {
         QString epigrafi = "epigrafe";
         if (this->ui.leEpigraphAmount->text().toInt() > 1) epigrafi = "epigrafi";
