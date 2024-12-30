@@ -1231,8 +1231,8 @@ void Funeraria::slotShowCrosses(int row)
 
     QStringList headers{ "Codice", "Img", "Nome", "Larghezza", "Altezza", "", "" };
 
-    int img_cell_width = 150;
-    int img_cell_height = 100;
+    int img_cell_width = 100;
+    int img_cell_height = 150;
 
     this->ui.tableWidget->setRowCount(crosses.size());
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -1262,7 +1262,7 @@ void Funeraria::slotShowCrosses(int row)
         code_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
         QString pic_path = this->config->getCrossesPath() + "/" + crosses[i]["img"];
-
+        qDebug() << pic_path;
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
         if (!img_file.exists()) {

@@ -147,6 +147,11 @@ void SettingsUi::slotSave()
         config->setSculpturesPath(sculptures_path);
     }
 
+    QString crosses_path = this->ui.lblCrossesFolder->text();
+    if (crosses_path != config->getSculpturesPath()) {
+        config->setCrossesPath(crosses_path);
+    }
+
     delete config;
 
     setting["name"] = "backup_interval";
