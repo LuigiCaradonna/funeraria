@@ -1078,7 +1078,7 @@ void Funeraria::slotShowSculptures(int row)
 
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
-        if (!img_file.exists()) {
+        if (!img_file.exists() || sculptures[i]["img"] == "") {
             pic_path = this->images_folder + "notfound.jpg";
         }
 
@@ -1262,10 +1262,10 @@ void Funeraria::slotShowCrosses(int row)
         code_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
         QString pic_path = this->config->getCrossesPath() + "/" + crosses[i]["img"];
-        qDebug() << pic_path;
+        
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
-        if (!img_file.exists()) {
+        if (!img_file.exists() || crosses[i]["img"] == "") {
             pic_path = this->images_folder + "notfound.jpg";
         }
 
