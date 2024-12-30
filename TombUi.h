@@ -13,8 +13,8 @@
 #include "Tomb.h"
 #include "TombType.h"
 #include "TombFormat.h"
-#include "PitType.h"
-#include "PitFormat.h"
+#include "Frame.h"
+#include "Pit.h"
 #include "Cross.h"
 #include "Sacred.h"
 #include "Helpers.h"
@@ -155,8 +155,8 @@ private:
     Tomb* tomb;
     TombType* tomb_type;
     TombFormat* tomb_format;
-    PitType* pit_type;
-    PitFormat* pit_format;
+    Frame* frame;
+    Pit* pit;
     Cross* cross;
     Sacred* sacred;
 

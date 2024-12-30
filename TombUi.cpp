@@ -26,8 +26,8 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->flame = new Accessory(this->db, "flame");
     this->tomb_type = new TombType(this->db);
     this->tomb_format = new TombFormat(this->db);
-    this->pit_type = new PitType(this->db);
-    this->pit_format = new PitFormat(this->db);
+    this->frame = new Frame(this->db);
+    this->pit = new Pit(this->db);
     this->cross = new Cross(this->db);
     this->sacred = new Sacred(this->db);
 
@@ -114,8 +114,8 @@ TombUi::~TombUi()
     delete this->flame;
     delete this->tomb_type;
     delete this->tomb_format;
-    delete this->pit_type;
-    delete this->pit_format;
+    delete this->frame;
+    delete this->pit;
     delete this->cross;
     delete this->sacred;
     delete this->currentDateMapper;
@@ -231,18 +231,18 @@ void TombUi::slotSave()
             this->ui.rbMountYes->isChecked(),
             this->ui.rbEpReliefYes->isChecked(),
             this->ui.rbInscriptionYes->isChecked(),
-            this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeOne->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeTwo->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeThree->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeFour->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeFive->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatSix->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeSix->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatOne->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeOne->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatTwo->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeTwo->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatThree->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeThree->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatFour->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeFour->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatFive->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeFive->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatSix->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeSix->currentText()),
             this->ui.ptNote->toPlainText(),
             this->ui.chbAccessoriesMounted->isChecked(),
             this->ui.leOrderedAt->text(),
@@ -284,18 +284,18 @@ void TombUi::slotSave()
             this->ui.rbMountYes->isChecked(),
             this->ui.rbEpReliefYes->isChecked(),
             this->ui.rbInscriptionYes->isChecked(),
-            this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeOne->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeTwo->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeThree->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeFour->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeFive->currentText()),
-            this->pit_format->getCode(this->ui.cbPitFormatSix->currentText()),
-            this->pit_type->getCode(this->ui.cbPitTypeSix->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatOne->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeOne->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatTwo->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeTwo->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatThree->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeThree->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatFour->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeFour->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatFive->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeFive->currentText()),
+            this->pit->getCode(this->ui.cbPitFormatSix->currentText()),
+            this->frame->getCode(this->ui.cbPitTypeSix->currentText()),
             this->ui.ptNote->toPlainText(),
             this->ui.chbAccessoriesMounted->isChecked(),
             this->ui.leOrderedAt->text(),
@@ -548,41 +548,41 @@ bool TombUi::validateForm(const QString& op)
 
     if (
         (
-            this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) != "NO" && 
-			this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+            this->pit->getCode(this->ui.cbPitFormatTwo->currentText()) != "NO" && 
+			this->pit->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
         )
         ||
-        (this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) != "NO" &&
+        (this->pit->getCode(this->ui.cbPitFormatThree->currentText()) != "NO" &&
             (
-                this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" || 
-                this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+                this->pit->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" || 
+                this->pit->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
             )
         ) 
         ||
-        (this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()) != "NO" &&
+        (this->pit->getCode(this->ui.cbPitFormatFour->currentText()) != "NO" &&
             (
-                this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
-                this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
-                this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+                this->pit->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
+                this->pit->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
+                this->pit->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
             )
         ) 
         ||
-        (this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()) != "NO" &&
+        (this->pit->getCode(this->ui.cbPitFormatFive->currentText()) != "NO" &&
             (
-                this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()) == "NO" ||
-                this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
-                this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
-                this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+                this->pit->getCode(this->ui.cbPitFormatFour->currentText()) == "NO" ||
+                this->pit->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
+                this->pit->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
+                this->pit->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
             )
         ) 
         ||
-        (this->pit_format->getCode(this->ui.cbPitFormatSix->currentText()) != "NO" &&
+        (this->pit->getCode(this->ui.cbPitFormatSix->currentText()) != "NO" &&
             (
-                this->pit_format->getCode(this->ui.cbPitFormatFive->currentText()) == "NO" ||
-                this->pit_format->getCode(this->ui.cbPitFormatFour->currentText()) == "NO" ||
-                this->pit_format->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
-                this->pit_format->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
-                this->pit_format->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
+                this->pit->getCode(this->ui.cbPitFormatFive->currentText()) == "NO" ||
+                this->pit->getCode(this->ui.cbPitFormatFour->currentText()) == "NO" ||
+                this->pit->getCode(this->ui.cbPitFormatThree->currentText()) == "NO" ||
+                this->pit->getCode(this->ui.cbPitFormatTwo->currentText()) == "NO" ||
+                this->pit->getCode(this->ui.cbPitFormatOne->currentText()) == "NO"
             )
         )
     ) {
@@ -805,8 +805,8 @@ void TombUi::updateForm()
     QList<QMap<QString, QString>> crosses = this->cross->getListByCode();
     QList<QMap<QString, QString>> sacreds = this->sacred->get();
     QList<QMap<QString, QString>> sculptures = this->sculpture->getListByCode();
-    QList<QMap<QString, QString>> pit_types = this->pit_type->get();
-    QList<QMap<QString, QString>> pit_formats = this->pit_format->get();
+    QList<QMap<QString, QString>> frames = this->frame->get();
+    QList<QMap<QString, QString>> pits = this->pit->get();
 
     int client_index = 0;
     int material_index = 0;
@@ -841,8 +841,8 @@ void TombUi::updateForm()
     QList<QString> cross_names = this->cross->getNames();
     QList<QString> sacred_names = this->sacred->getNames();
     QList<QString> sculpture_names = this->sculpture->getNames();
-    QList<QString> pit_format_names = this->pit_format->getNames();
-    QList<QString> pit_type_names = this->pit_type->getNames();
+    QList<QString> pit_names = this->pit->getNames();
+    QList<QString> frame_names = this->frame->getNames();
 
     // Clear the combo boxes
     this->ui.cbClient->clear();
@@ -943,85 +943,85 @@ void TombUi::updateForm()
             }
         }
 
-        for (int i = 0; i < pit_formats.size(); i++) {
-            if (pit_formats[i]["code"] == tomb_details["pit_format_one"]) {
+        for (int i = 0; i < pits.size(); i++) {
+            if (pits[i]["code"] == tomb_details["pit_one"]) {
                 pf1_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_types.size(); i++) {
-            if (pit_types[i]["code"] == tomb_details["pit_type_one"]) {
+        for (int i = 0; i < frames.size(); i++) {
+            if (frames[i]["code"] == tomb_details["frame_one"]) {
                 pt1_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_formats.size(); i++) {
-            if (pit_formats[i]["code"] == tomb_details["pit_format_two"]) {
+        for (int i = 0; i < pits.size(); i++) {
+            if (pits[i]["code"] == tomb_details["pit_two"]) {
                 pf2_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_types.size(); i++) {
-            if (pit_types[i]["code"] == tomb_details["pit_type_two"]) {
+        for (int i = 0; i < frames.size(); i++) {
+            if (frames[i]["code"] == tomb_details["frame_two"]) {
                 pt2_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_formats.size(); i++) {
-            if (pit_formats[i]["code"] == tomb_details["pit_format_three"]) {
+        for (int i = 0; i < pits.size(); i++) {
+            if (pits[i]["code"] == tomb_details["pit_three"]) {
                 pf3_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_types.size(); i++) {
-            if (pit_types[i]["code"] == tomb_details["pit_type_three"]) {
+        for (int i = 0; i < frames.size(); i++) {
+            if (frames[i]["code"] == tomb_details["frame_three"]) {
                 pt3_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_formats.size(); i++) {
-            if (pit_formats[i]["code"] == tomb_details["pit_format_four"]) {
+        for (int i = 0; i < pits.size(); i++) {
+            if (pits[i]["code"] == tomb_details["pit_four"]) {
                 pf4_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_types.size(); i++) {
-            if (pit_types[i]["code"] == tomb_details["pit_type_four"]) {
+        for (int i = 0; i < frames.size(); i++) {
+            if (frames[i]["code"] == tomb_details["frame_four"]) {
                 pt4_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_formats.size(); i++) {
-            if (pit_formats[i]["code"] == tomb_details["pit_format_five"]) {
+        for (int i = 0; i < pits.size(); i++) {
+            if (pits[i]["code"] == tomb_details["pit_five"]) {
                 pf5_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_types.size(); i++) {
-            if (pit_types[i]["code"] == tomb_details["pit_type_five"]) {
+        for (int i = 0; i < frames.size(); i++) {
+            if (frames[i]["code"] == tomb_details["frame_five"]) {
                 pt5_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_formats.size(); i++) {
-            if (pit_formats[i]["code"] == tomb_details["pit_format_six"]) {
+        for (int i = 0; i < pits.size(); i++) {
+            if (pits[i]["code"] == tomb_details["pit_six"]) {
                 pf6_index = i;
                 break;
             }
         }
 
-        for (int i = 0; i < pit_types.size(); i++) {
-            if (pit_types[i]["code"] == tomb_details["pit_type_six"]) {
+        for (int i = 0; i < frames.size(); i++) {
+            if (frames[i]["code"] == tomb_details["frame_six"]) {
                 pt6_index = i;
                 break;
             }
@@ -1057,18 +1057,18 @@ void TombUi::updateForm()
         this->ui.cbCross->addItems(cross_names);
         this->ui.cbSacred->addItems(sacred_names);
         this->ui.cbSculpture->addItems(sculpture_names);
-        this->ui.cbPitFormatOne->addItems(pit_format_names);
-        this->ui.cbPitTypeOne->addItems(pit_type_names);
-        this->ui.cbPitFormatTwo->addItems(pit_format_names);
-        this->ui.cbPitTypeTwo->addItems(pit_type_names);
-        this->ui.cbPitFormatThree->addItems(pit_format_names);
-        this->ui.cbPitTypeThree->addItems(pit_type_names);
-        this->ui.cbPitFormatFour->addItems(pit_format_names);
-        this->ui.cbPitTypeFour->addItems(pit_type_names);
-        this->ui.cbPitFormatFive->addItems(pit_format_names);
-        this->ui.cbPitTypeFive->addItems(pit_type_names);
-        this->ui.cbPitFormatSix->addItems(pit_format_names);
-        this->ui.cbPitTypeSix->addItems(pit_type_names);
+        this->ui.cbPitFormatOne->addItems(pit_names);
+        this->ui.cbPitTypeOne->addItems(frame_names);
+        this->ui.cbPitFormatTwo->addItems(pit_names);
+        this->ui.cbPitTypeTwo->addItems(frame_names);
+        this->ui.cbPitFormatThree->addItems(pit_names);
+        this->ui.cbPitTypeThree->addItems(frame_names);
+        this->ui.cbPitFormatFour->addItems(pit_names);
+        this->ui.cbPitTypeFour->addItems(frame_names);
+        this->ui.cbPitFormatFive->addItems(pit_names);
+        this->ui.cbPitTypeFive->addItems(frame_names);
+        this->ui.cbPitFormatSix->addItems(pit_names);
+        this->ui.cbPitTypeSix->addItems(frame_names);
         this->ui.ptNote->setPlainText(tomb_details["notes"]);
         this->ui.leOrderedAt->setText(Helpers::dateSqlToIta(tomb_details["ordered_at"]));
         this->ui.leProofedAt->setText(Helpers::dateSqlToIta(tomb_details["proofed_at"]));
@@ -1134,18 +1134,18 @@ void TombUi::updateForm()
         this->ui.cbCross->addItems(cross_names);
         this->ui.cbSacred->addItems(sacred_names);
         this->ui.cbSculpture->addItems(sculpture_names);
-        this->ui.cbPitFormatOne->addItems(pit_format_names);
-        this->ui.cbPitTypeOne->addItems(pit_type_names);
-        this->ui.cbPitFormatTwo->addItems(pit_format_names);
-        this->ui.cbPitTypeTwo->addItems(pit_type_names);
-        this->ui.cbPitFormatThree->addItems(pit_format_names);
-        this->ui.cbPitTypeThree->addItems(pit_type_names);
-        this->ui.cbPitFormatFour->addItems(pit_format_names);
-        this->ui.cbPitTypeFour->addItems(pit_type_names);
-        this->ui.cbPitFormatFive->addItems(pit_format_names);
-        this->ui.cbPitTypeFive->addItems(pit_type_names);
-        this->ui.cbPitFormatSix->addItems(pit_format_names);
-        this->ui.cbPitTypeSix->addItems(pit_type_names);
+        this->ui.cbPitFormatOne->addItems(pit_names);
+        this->ui.cbPitTypeOne->addItems(frame_names);
+        this->ui.cbPitFormatTwo->addItems(pit_names);
+        this->ui.cbPitTypeTwo->addItems(frame_names);
+        this->ui.cbPitFormatThree->addItems(pit_names);
+        this->ui.cbPitTypeThree->addItems(frame_names);
+        this->ui.cbPitFormatFour->addItems(pit_names);
+        this->ui.cbPitTypeFour->addItems(frame_names);
+        this->ui.cbPitFormatFive->addItems(pit_names);
+        this->ui.cbPitTypeFive->addItems(frame_names);
+        this->ui.cbPitFormatSix->addItems(pit_names);
+        this->ui.cbPitTypeSix->addItems(frame_names);
         this->ui.ptNote->setPlainText("");
         this->ui.leOrderedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
         this->ui.leProofedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));

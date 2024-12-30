@@ -1,8 +1,8 @@
-#include "PitFormat.h"
+#include "Pit.h"
 
 /********** CONSTRUCTOR **********/
 
-PitFormat::PitFormat(const QSqlDatabase& db)
+Pit::Pit(const QSqlDatabase& db)
     : db(db)
 {
     this->settings = new Settings(db);
@@ -10,14 +10,14 @@ PitFormat::PitFormat(const QSqlDatabase& db)
 
 /********** DESTRUCTOR **********/
 
-PitFormat::~PitFormat()
+Pit::~Pit()
 {
     delete this->settings;
 }
 
 /********** PUBLIC FUNCTIONS **********/
 
-bool PitFormat::store(const QString& code, const QString& name)
+bool Pit::store(const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
@@ -35,7 +35,7 @@ bool PitFormat::store(const QString& code, const QString& name)
     return true;
 }
 
-bool PitFormat::update(const QString& old_code, const QString& code, const QString& name)
+bool Pit::update(const QString& old_code, const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
@@ -53,7 +53,7 @@ bool PitFormat::update(const QString& old_code, const QString& code, const QStri
     return true;
 }
 
-bool PitFormat::remove(const QString& code)
+bool Pit::remove(const QString& code)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE code = :code; ");
@@ -66,7 +66,7 @@ bool PitFormat::remove(const QString& code)
     return true;
 }
 
-QList<QMap<QString, QString>> PitFormat::get()
+QList<QMap<QString, QString>> Pit::get()
 {
     QList<QMap<QString, QString>> formats;
     QSqlQuery query = QSqlQuery(this->db);
@@ -94,7 +94,7 @@ QList<QMap<QString, QString>> PitFormat::get()
     return formats;
 }
 
-QList<QString> PitFormat::getNames()
+QList<QString> Pit::getNames()
 {
     QStringList names = {};
     QSqlQuery query = QSqlQuery(this->db);
@@ -117,7 +117,7 @@ QList<QString> PitFormat::getNames()
     return names;
 }
 
-QString PitFormat::getName(const QString& code)
+QString Pit::getName(const QString& code)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT name FROM " + this->table + " WHERE code = :code");
@@ -140,7 +140,7 @@ QString PitFormat::getName(const QString& code)
     return "";
 }
 
-QList<QString> PitFormat::getCodes()
+QList<QString> Pit::getCodes()
 {
     QStringList codes = {};
     QSqlQuery query = QSqlQuery(this->db);
@@ -163,7 +163,7 @@ QList<QString> PitFormat::getCodes()
     return codes;
 }
 
-QString PitFormat::getCode(const QString& name)
+QString Pit::getCode(const QString& name)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT code FROM " + this->table + " WHERE name = :name");

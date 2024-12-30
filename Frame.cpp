@@ -1,8 +1,8 @@
-#include "PitType.h"
+#include "Frame.h"
 
 /********** CONSTRUCTOR **********/
 
-PitType::PitType(const QSqlDatabase& db)
+Frame::Frame(const QSqlDatabase& db)
     : db(db)
 {
     this->settings = new Settings(db);
@@ -10,14 +10,14 @@ PitType::PitType(const QSqlDatabase& db)
 
 /********** DESTRUCTOR **********/
 
-PitType::~PitType()
+Frame::~Frame()
 {
     delete this->settings;
 }
 
 /********** PUBLIC FUNCTIONS **********/
 
-bool PitType::store(const QString& code, const QString& name)
+bool Frame::store(const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
@@ -35,7 +35,7 @@ bool PitType::store(const QString& code, const QString& name)
     return true;
 }
 
-bool PitType::update(const QString& old_code, const QString& code, const QString& name)
+bool Frame::update(const QString& old_code, const QString& code, const QString& name)
 {
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
 
@@ -53,7 +53,7 @@ bool PitType::update(const QString& old_code, const QString& code, const QString
     return true;
 }
 
-bool PitType::remove(const QString& code)
+bool Frame::remove(const QString& code)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE code = :code; ");
@@ -66,7 +66,7 @@ bool PitType::remove(const QString& code)
     return true;
 }
 
-QList<QMap<QString, QString>> PitType::get()
+QList<QMap<QString, QString>> Frame::get()
 {
     QList<QMap<QString, QString>> types;
     QSqlQuery query = QSqlQuery(this->db);
@@ -94,7 +94,7 @@ QList<QMap<QString, QString>> PitType::get()
     return types;
 }
 
-QList<QString> PitType::getNames()
+QList<QString> Frame::getNames()
 {
     QStringList names = {};
     QSqlQuery query = QSqlQuery(this->db);
@@ -117,7 +117,7 @@ QList<QString> PitType::getNames()
     return names;
 }
 
-QString PitType::getName(const QString& code)
+QString Frame::getName(const QString& code)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT name FROM " + this->table + " WHERE code = :code");
@@ -140,7 +140,7 @@ QString PitType::getName(const QString& code)
     return "";
 }
 
-QList<QString> PitType::getCodes()
+QList<QString> Frame::getCodes()
 {
     QStringList codes = {};
     QSqlQuery query = QSqlQuery(this->db);
@@ -163,7 +163,7 @@ QList<QString> PitType::getCodes()
     return codes;
 }
 
-QString PitType::getCode(const QString& name)
+QString Frame::getCode(const QString& name)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT code FROM " + this->table + " WHERE name = :name");

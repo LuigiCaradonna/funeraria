@@ -9,7 +9,7 @@
 #include "Helpers.h"
 #include "Config.h"
 
-class PitFormat : public QObject
+class Pit : public QObject
 {
     Q_OBJECT
 
@@ -18,23 +18,23 @@ public:
     /********** CONSTRUCTOR **********/
 
     /*
-     * Constructs the PitFormat object.
+     * Constructs the Pit object.
      *
      * @param	const QSqlDatabase*	db	- Reference to the database connection
      */
-    PitFormat(const QSqlDatabase& db);
+    Pit(const QSqlDatabase& db);
 
     /********** DESTRUCTOR **********/
 
     /*
-     * Destructs the PitFormat object.
+     * Destructs the Pit object.
      */
-    ~PitFormat();
+    ~Pit();
 
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Stores a new pit format
+     * Stores a new pit
      * 
      * @param const QString& code   - Pit format's code
      * @param const QString& name   - Pit format's name
@@ -44,7 +44,7 @@ public:
     bool store(const QString& code, const QString& name);
 
     /*
-     *  Updates a new pit format
+     *  Updates a new pit
      *
      * @param const QString& old_code   - Pit format's previous code
      * @param const QString& code   - Pit format's code
@@ -55,7 +55,7 @@ public:
     bool update(const QString& old_code, const QString& code, const QString& name);
 
     /*
-     * Updates a new pit format
+     * Updates a new pit
      *
      * @param const QString& code   - Pit format's code
      *
@@ -64,46 +64,46 @@ public:
     bool remove(const QString& code);
 
     /*
-     * Gets all pit formats
+     * Gets all pits
      *
-     * @return QList<QMap<QString, QString>> - A list of all the pit formats
+     * @return QList<QMap<QString, QString>> - A list of all the pits
      */
     QList<QMap<QString, QString>> get();
 
     /*
-     * Gets all pit formats' names
+     * Gets all pits' names
      *
-     * @return QList<QString> - A list of all the pit formats' names
+     * @return QList<QString> - A list of all the pits' names
      */
     QList<QString> getNames();
 
     /*
-     * Gets a pit format's codes given its name
+     * Gets a pit's codes given its name
      *
      * @param const QString& code   - Pit format's code
      *
-     * @return QString - A pit format's code given its name
+     * @return QString - A pit's code given its name
      */
     QString getName(const QString& code);
 
     /*
-     * Gets all pit formats' codes
+     * Gets all pits' codes
      *
-     * @return QList<QString> - A list of all the pit formats' codes
+     * @return QList<QString> - A list of all the pits' codes
      */
     QList<QString> getCodes();
 
     /*
-     * Gets a pit format's codes given its name
+     * Gets a pit's codes given its name
      *
      * @param const QString& name   - Pit format's name
      *
-     * @return QString - A pit format's code given its name
+     * @return QString - A pit's code given its name
      */
     QString getCode(const QString& name);
 
 private:
-    const QString table = "pit_format";
+    const QString table = "pit";
     QSqlDatabase db;
     Settings* settings;
 };
