@@ -25,7 +25,7 @@ public:
      * @param	const QString&	    icons_folder	- Path to the icons folder
      * @param	QWidget*            parent	        - Parent widget
      */
-    SettingsUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent = nullptr);
+    SettingsUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
@@ -58,6 +58,13 @@ protected slots:
      * @return  void
      */
     void slotChangeSculpturesPath();
+
+    /*
+     * Asks the user to provide a new path for the crosses' file
+     *
+     * @return  void
+     */
+    void slotChangeCrossesPath();
 
     /*
      * Saves a settings
@@ -97,6 +104,6 @@ private:
      *
      * @return bool true on success, false on failure
      */
-    bool store(const QMap<QString, QString>& setting);
+    const bool store(const QMap<QString, QString>& setting);
 };
 

@@ -802,7 +802,7 @@ void TombUi::updateForm()
     QList<QMap<QString, QString>> vases = this->vase->get();
     QList<QMap<QString, QString>> lamps = this->lamp->get();
     QList<QMap<QString, QString>> flames = this->flame->get();
-    QList<QMap<QString, QString>> crosses = this->cross->get();
+    QList<QMap<QString, QString>> crosses = this->cross->getListByCode();
     QList<QMap<QString, QString>> sacreds = this->sacred->get();
     QList<QMap<QString, QString>> sculptures = this->sculpture->getListByCode();
     QList<QMap<QString, QString>> pit_types = this->pit_type->get();

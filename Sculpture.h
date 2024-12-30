@@ -57,25 +57,25 @@ public:
     QMap<QString, QString> getByCode(const QString& code);
 
     /*
-     * Gets all pit types' names
+     * Gets all sculptures' names
      *
-     * @return QList<QString> - A list of all the pit types' names
+     * @return QList<QString> - A list of all the sculptures' names
      */
     QList<QString> getNames();
 
     /*
-     * Gets a pit type's codes given its name
+     * Gets a sculpture's codes given its name
      *
      * @param const QString& code   - Pit type's code
      *
-     * @return QString - A pit type's code given its name
+     * @return QString - A sculpture's code given its name
      */
     QString getName(const QString& code);
 
     /*
-     * Gets all pit types' codes
+     * Gets all sculptures' codes
      *
-     * @return QList<QString> - A list of all the pit types' codes
+     * @return QList<QString> - A list of all the sculptures' codes
      */
     QList<QString> getCodes();
 
@@ -135,11 +135,11 @@ public:
     /*
      * Deletes a sculpture from the database
      *
-     * @param   const int id - Id
+     * @param   const QString& code - Code
      *
      * @return  boolean true on success, false on failure
      */
-    bool remove(const int id);
+    bool remove(const QString& code);
 
 private:
     const QString table = "sculpture";

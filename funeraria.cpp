@@ -96,7 +96,9 @@ Funeraria::Funeraria(QWidget* parent)
         this->client_ui = new ClientUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->sculpture = new Sculpture(this->db->db);
         this->sculpture_ui = new SculptureUi(this->db->db, this->css_folder, this->icons_folder, this->images_folder, this);
-        this->settings_ui = new SettingsUi(this->db->db, this->icons_folder, this);
+        this->cross = new Cross(this->db->db);
+        this->cross_ui = new CrossUi(this->db->db, this->css_folder, this->icons_folder, this->images_folder, this);
+        this->settings_ui = new SettingsUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->report_ui = new ReportUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->tomb_ui = new TombUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->vase = new Accessory(this->db->db, "vase");
@@ -108,6 +110,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->initTopBarQuickAccess();
         this->initTombTopBar();
         this->initSculpturesTopBar();
+        this->initCrossesTopBar();
         this->initClientsTopBar();
 
         // Signal emitted from the menu "Files"
@@ -176,6 +179,8 @@ Funeraria::~Funeraria()
     delete this->client_ui;
     delete this->sculpture;
     delete this->sculpture_ui;
+    delete this->cross;
+    delete this->cross_ui;
     delete this->settings_ui;
     delete this->report_ui;
     delete this->tomb_ui;
@@ -211,6 +216,10 @@ Funeraria::~Funeraria()
     delete this->lblScName;
     delete this->leScName;
     delete this->sculptureSpacer;
+
+    delete this->lblCrName;
+    delete this->leCrName;
+    delete this->crossSpacer;
 
     delete this->lblClName;
     delete this->leClName;
@@ -958,113 +967,45 @@ void Funeraria::slotDeleteItem() {
     if (message.clickedButton() == proceed_btn) {
         // Delete the item
 
-        if (this->current_table == "vase") {
-            if (this->vase->remove(this->ui.tableWidget->item(row, 0)->text())) {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Information);
-                message.setText("Eliminazione eseguita.");
-                message.exec();
+        bool errors = false;
 
-                this->slotShowItems(this->current_table);
-            }
-            else {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Critical);
-                message.setText("Eliminazione non riuscita.");
-                message.exec();
-            }
+        if (this->current_table == "vase") {
+            if (!this->vase->remove(this->ui.tableWidget->item(row, 0)->text())) errors = true;
         }
         else if (this->current_table == "lamp") {
-            if (this->lamp->remove(this->ui.tableWidget->item(row, 0)->text())) {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Information);
-                message.setText("Eliminazione eseguita.");
-                message.exec();
-
-                this->slotShowItems(this->current_table);
-            }
-            else {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Critical);
-                message.setText("Eliminazione non riuscita.");
-                message.exec();
-            }
+            if (!this->lamp->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
         }
         else if (this->current_table == "flame") {
-            if (this->flame->remove(this->ui.tableWidget->item(row, 0)->text())) {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Information);
-                message.setText("Eliminazione eseguita.");
-                message.exec();
-
-                this->slotShowItems(this->current_table);
-            }
-            else {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Critical);
-                message.setText("Eliminazione non riuscita.");
-                message.exec();
-            }
+            if (!this->flame->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
         }
         else if (this->current_table == "material") {
-            if (this->material->remove(this->ui.tableWidget->item(row, 0)->text())) {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Information);
-                message.setText("Eliminazione eseguita.");
-                message.exec();
-
-                this->slotShowItems(this->current_table);
-            }
-            else {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Critical);
-                message.setText("Eliminazione non riuscita.");
-                message.exec();
-            }
+            if (!this->material->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
         }
         else if (this->current_table == "client") {
-            if (this->client->remove(this->ui.tableWidget->item(row, 0)->text().toInt())) {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Information);
-                message.setText("Eliminazione eseguita.");
-                message.exec();
-
-                this->slotShowClients();
-            }
-            else {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Critical);
-                message.setText("Eliminazione non riuscita.");
-                message.exec();
-            }
+            if (!this->client->remove(this->ui.tableWidget->item(row, 0)->text().toInt()))  errors = true;
         }
         else if (this->current_table == "sculpture") {
-            if (this->sculpture->remove(this->ui.tableWidget->item(row, 0)->text().toInt())) {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Information);
-                message.setText("Eliminazione eseguita.");
-                message.exec();
+            if (!this->sculpture->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
+        }
+        else if (this->current_table == "cross") {
+            if (!this->cross->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
+        }
 
-                this->slotShowSculptures();
-            }
-            else {
-                QMessageBox message;
-                message.setWindowTitle("Funeraria");
-                message.setIcon(QMessageBox::Critical);
-                message.setText("Eliminazione non riuscita.");
-                message.exec();
-            }
+        if (!errors) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Information);
+            message.setText("Eliminazione eseguita.");
+            message.exec();
+
+            this->slotShowItems(this->current_table);
+        }
+        else {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Eliminazione non riuscita.");
+            message.exec();
         }
     }
 }
@@ -1257,6 +1198,169 @@ void Funeraria::slotSculptureDetails()
 
     // Reload the table when the popup is closed, the user could have made some changes
     this->slotShowSculptures(row);
+}
+
+void Funeraria::slotShowCrosses(int row)
+{
+    // Block the signals while building the table
+    const QSignalBlocker blocker(this->ui.tableWidget);
+
+    this->showTopBar("cross");
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
+    this->current_table = "cross";
+
+    this->is_table_sortable = false;
+
+    // Reset the table's content
+    this->clearTable();
+
+    QString name = this->leCrName->text().trimmed();
+
+    QList<QMap<QString, QString>> crosses = this->sculpture->getListByName(name);
+
+    QStringList headers{ "Codice", "Img", "Nome", "Larghezza", "Altezza", "", "" };
+
+    int img_cell_width = 150;
+    int img_cell_height = 100;
+
+    this->ui.tableWidget->setRowCount(crosses.size());
+    this->ui.tableWidget->setColumnCount(headers.size());
+    this->ui.tableWidget->setHorizontalHeaderLabels(headers);
+
+    this->ui.tableWidget->setColumnWidth(0, 120); // Code
+    this->ui.tableWidget->setColumnWidth(1, img_cell_width);  // Img
+    this->ui.tableWidget->setColumnWidth(2, 300); // Name
+    this->ui.tableWidget->setColumnWidth(3, 80);  // Width
+    this->ui.tableWidget->setColumnWidth(4, 80);  // Height
+    this->ui.tableWidget->setColumnWidth(5, 90);  // Details button
+    this->ui.tableWidget->setColumnWidth(6, 90);  // Delete button
+
+    QFont rid_font("Calibri", 16);
+    int row_number = 1;
+
+    for (int i = 0; i < crosses.size(); i++) {
+        QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
+        pb_details->setText("Dettagli");
+        QPushButton* pb_delete = new QPushButton(this->ui.tableWidget);
+        pb_delete->setText("Elimina");
+
+        // Specific row height to contain the image
+        this->ui.tableWidget->setRowHeight(i, img_cell_height);
+
+        QTableWidgetItem* code_widget = new QTableWidgetItem(crosses[i]["code"]);
+        code_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QString pic_path = this->config->getCrossesPath() + "/" + crosses[i]["img"];
+
+        // Set the not found image if the provided one is missing
+        QFile img_file(pic_path);
+        if (!img_file.exists()) {
+            pic_path = this->images_folder + "notfound.jpg";
+        }
+
+        QPixmap pic(pic_path);
+        QPixmap resized;
+
+        // If the image is vertical or squared
+        if (pic.height() >= pic.width()) {
+            // Resize the image according to the cell height
+            resized = pic.scaledToHeight(img_cell_height);
+        }
+        else {
+            // Resize the image according to the cell width
+            resized = pic.scaledToWidth(img_cell_width);
+        }
+
+        QLabel* image_widget = new QLabel(this->ui.tableWidget);
+        image_widget->setText("");
+        image_widget->setScaledContents(false);
+        image_widget->setPixmap(resized);
+
+        QTableWidgetItem* name_widget = new QTableWidgetItem(crosses[i]["name"]);
+        // Set the field as not editable
+        name_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        QTableWidgetItem* width_widget = new QTableWidgetItem(crosses[i]["width"]);
+        width_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        width_widget->setTextAlignment(Qt::AlignCenter);
+
+        QTableWidgetItem* height_widget = new QTableWidgetItem(crosses[i]["height"]);
+        height_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        height_widget->setTextAlignment(Qt::AlignCenter);
+
+        if (row_number % 2 == 0) {
+            this->row_bg = this->row_even;
+        }
+        else {
+            this->row_bg = this->row_odd;
+        }
+
+        code_widget->setBackground(QBrush(row_bg));
+        name_widget->setBackground(QBrush(row_bg));
+        width_widget->setBackground(QBrush(row_bg));
+        height_widget->setBackground(QBrush(row_bg));
+
+        this->ui.tableWidget->setItem(i, 0, code_widget);
+        this->ui.tableWidget->setCellWidget(i, 1, image_widget);
+        this->ui.tableWidget->setItem(i, 2, name_widget);
+        this->ui.tableWidget->setItem(i, 3, width_widget);
+        this->ui.tableWidget->setItem(i, 4, height_widget);
+        this->ui.tableWidget->setCellWidget(i, 5, pb_details);
+        this->ui.tableWidget->setCellWidget(i, 6, pb_delete);
+
+        this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotCrossDetails);
+        this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDeleteItem);
+
+        row_number++;
+    }
+
+    // Set the table scroll to have the current row positioned at the center
+    this->ui.tableWidget->scrollToItem(
+        this->ui.tableWidget->item(row, 0),
+        QAbstractItemView::PositionAtCenter
+    );
+
+    this->leCrName->setFocus();
+}
+
+void Funeraria::slotFilterCrosses()
+{
+    // If the cross table is not shown
+    if (this->current_table != "cross") {
+        return;
+    }
+
+    this->slotShowCrosses();
+}
+
+void Funeraria::slotNewCross()
+{
+    this->current_table = "cross";
+
+    // Set the id property of the Cross object to 0
+    this->cross_ui->setCode("0");
+    this->cross_ui->setModal(true);
+    this->cross_ui->exec();
+
+    // Reload the table when the popup is closed, the user could have made some changes
+    this->slotShowCrosses();
+}
+
+void Funeraria::slotCrossDetails()
+{
+    // Row index of the clicked button
+    int row = this->ui.tableWidget->currentRow();
+    this->cross_ui->setCode(this->ui.tableWidget->item(row, 0)->text());
+    this->cross_ui->setModal(true);
+    this->cross_ui->exec();
+
+    // Reload the table when the popup is closed, the user could have made some changes
+    this->slotShowCrosses(row);
 }
 
 void Funeraria::slotTombsToEngrave()
@@ -2375,6 +2479,37 @@ void Funeraria::initSculpturesTopBar()
 
     // Set the widget as visible
     this->ui.sculpturesTopBarWidget->setVisible(false);
+}
+
+void Funeraria::initCrossesTopBar()
+{
+    QFont font;
+    font.setPointSize(12);
+
+    // Code label
+    this->lblCrName = new QLabel();
+    this->lblCrName->setFont(font);
+    this->lblCrName->setText("Nome");
+
+    // Deceased line edit
+    this->leCrName = new QLineEdit();
+    this->leCrName->setFont(font);
+    this->leCrName->setMaximumWidth(300);
+
+    // Horizontal spacer
+    this->crossSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    // Horizontal layout containing the tombs top bar's elements
+    QHBoxLayout* crossesTopBarLayout = new QHBoxLayout(this->ui.crossesTopBarWidget);
+
+    crossesTopBarLayout->addWidget(this->lblCrName);
+    crossesTopBarLayout->addWidget(this->leCrName);
+    crossesTopBarLayout->addSpacerItem(this->crossSpacer);
+    // Connect the code line edit to the relative slot
+    this->connect(this->leScName, &QLineEdit::textChanged, this, &Funeraria::slotFilterCrosses);
+
+    // Set the widget as visible
+    this->ui.crossesTopBarWidget->setVisible(false);
 }
 
 void Funeraria::initClientsTopBar()

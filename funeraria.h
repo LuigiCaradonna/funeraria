@@ -16,6 +16,8 @@
 #include "Client.h"
 #include "Sculpture.h"
 #include "SculptureUi.h"
+#include "Cross.h"
+#include "CrossUi.h"
 #include "SettingsUi.h"
 #include "Settings.h"
 #include "ReportUi.h"
@@ -254,6 +256,36 @@ protected slots:
     void slotSculptureDetails();
 
     /*
+     * Shows the crosses' list
+     *
+     * @param int row - Row where to center the scroll view
+     *
+     * @return void
+     */
+    void slotShowCrosses(int row = 1);
+
+    /*
+     * Updates the crosses' orders list shown applying the filter (sculpture code/name string)
+     *
+     * @return void
+     */
+    void slotFilterCrosses();
+
+    /*
+     * Shows the dialog to insert a new cross
+     *
+     * @return void
+     */
+    void slotNewCross();
+
+    /*
+     * Shows a dialog window containing the selected cross's details
+     *
+     * @return void
+     */
+    void slotCrossDetails();
+
+    /*
      * Shows the tombs needed which can be engraved
      *
      * @return void
@@ -346,6 +378,8 @@ private:
     TombUi* tomb_ui;
     Sculpture* sculpture;
     SculptureUi* sculpture_ui;
+    Cross* cross;
+    CrossUi* cross_ui;
     ReportUi* report_ui;
     Accessory* vase;
     Accessory* lamp;
@@ -411,6 +445,11 @@ private:
     QLabel* lblScName;
     QLineEdit* leScName;
     QSpacerItem* sculptureSpacer;
+
+    // Crosses top bar elements
+    QLabel* lblCrName;
+    QLineEdit* leCrName;
+    QSpacerItem* crossSpacer;
 
     // Clients top bar elements
     QLabel* lblClName;
@@ -560,6 +599,13 @@ private:
      * @return void
      */
     void initSculpturesTopBar();
+
+    /*
+     * Initialize the top bar for the crosses view.
+     *
+     * @return void
+     */
+    void initCrossesTopBar();
 
     /*
      * Initialize the top bar for the clients view.

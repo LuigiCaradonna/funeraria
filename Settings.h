@@ -51,14 +51,14 @@ public:
      *
      * @return  int - The backup interval on success, -1 on failure
      */
-    int getBackupInterval();
+    const int getBackupInterval();
 
     /*
      * Gets the number of backups to keep
      *
      * @return  int - The backups to keep on success, -1 on failure
      */
-    int getBackupsToKeep();
+    const int getBackupsToKeep();
 
 private:
     const QString table = "settings";

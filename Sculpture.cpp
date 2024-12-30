@@ -286,11 +286,11 @@ bool Sculpture::update(
     return true;
 }
 
-bool Sculpture::remove(const int id)
+bool Sculpture::remove(const QString& code)
 {
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("DELETE FROM " + this->table + " WHERE id = :id;");
-    query.bindValue(":id", id);
+    query.prepare("DELETE FROM " + this->table + " WHERE code = :code;");
+    query.bindValue(":code", code);
 
     if (!query.exec()) {
         return false;

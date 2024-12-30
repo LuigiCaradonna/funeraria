@@ -81,7 +81,7 @@ bool Settings::store(const QMap<QString, QString>& setting)
     return true;
 }
 
-int Settings::getBackupInterval()
+const int Settings::getBackupInterval()
 {
     QSqlQuery query = QSqlQuery(this->db);
 
@@ -94,7 +94,7 @@ int Settings::getBackupInterval()
     return query.value("value").toInt();
 }
 
-int Settings::getBackupsToKeep()
+const int Settings::getBackupsToKeep()
 {
     QSqlQuery query = QSqlQuery(this->db);
 

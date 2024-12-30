@@ -5,72 +5,31 @@
 Cross::Cross(const QSqlDatabase& db)
     : db(db)
 {
-    this->settings = new Settings(db);
 }
 
 /********** DESTRUCTOR **********/
 
 Cross::~Cross()
 {
-    delete this->settings;
 }
 
 /********** PUBLIC FUNCTIONS **********/
 
-bool Cross::store(const QString& code, const QString& name)
+QList<QMap<QString, QString>> Cross::getListByCode(const QString& code)
 {
-    QString date = QDate::currentDate().toString("yyyy-MM-dd");
+    QList<QMap<QString, QString>> list{};
 
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("INSERT INTO " + this->table + " (code, name, created_at, edited_at) VALUES (:code, :name, :created_at, :edited_at);");
-    query.bindValue(":code", code);
-    query.bindValue(":name", name);
-    query.bindValue(":created_at", date);
-    query.bindValue(":edited_at", date);
 
-    if (!query.exec()) {
-        return false;
+    QString query_string = "SELECT * FROM " + this->table + " WHERE 1=1 ";
+
+    if (code.trimmed() != "") {
+        query_string += " AND code LIKE \"%" + code + "%\"";
     }
 
-    return true;
-}
+    query_string += " ORDER BY name ASC";
 
-bool Cross::update(const QString& old_code, const QString& code, const QString& name)
-{
-    QString date = QDate::currentDate().toString("yyyy-MM-dd");
-
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("UPDATE " + this->table + " SET code = :code, name = :name, edited_at = :edited_at WHERE code = :old_code; ");
-    query.bindValue(":code", code);
-    query.bindValue(":name", name);
-    query.bindValue(":edited_at", date);
-    query.bindValue(":old_code", old_code);
-
-    if (!query.exec()) {
-        return false;
-    }
-
-    return true;
-}
-
-bool Cross::remove(const QString& code)
-{
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("DELETE FROM " + this->table + " WHERE code = :code; ");
-    query.bindValue(":code", code);
-
-    if (!query.exec()) {
-        return false;
-    }
-
-    return true;
-}
-
-QList<QMap<QString, QString>> Cross::get()
-{
-    QList<QMap<QString, QString>> crosses;
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT code, name FROM " + this->table + " ORDER BY name ASC");
+    query.prepare(query_string);
 
     if (!query.exec()) {
         QMessageBox message;
@@ -78,20 +37,95 @@ QList<QMap<QString, QString>> Cross::get()
         message.setIcon(QMessageBox::Critical);
         message.setText(query.lastError().text());
         message.exec();
-
-        return crosses;
     }
 
     while (query.next()) {
         QMap<QString, QString> row;
 
         row["code"] = query.value("code").toString();
+        row["img"] = query.value("img").toString();
         row["name"] = query.value("name").toString();
+        row["width"] = query.value("width").toString();
+        row["height"] = query.value("height").toString();
+        row["created_at"] = query.value("created_at").toString();
+        row["edited_at"] = query.value("edited_at").toString();
 
-        crosses.append(row);
+        list.append(row);
     }
 
-    return crosses;
+    return list;
+}
+
+QList<QMap<QString, QString>> Cross::getListByName(const QString& name)
+{
+    QList<QMap<QString, QString>> list{};
+
+    QSqlQuery query = QSqlQuery(this->db);
+
+    QString query_string = "SELECT * FROM " + this->table + " WHERE 1=1 ";
+
+    if (name.trimmed() != "") {
+        query_string += " AND name LIKE \"%" + name + "%\"";
+    }
+
+    query_string += " ORDER BY name ASC";
+
+    query.prepare(query_string);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        QMap<QString, QString> row;
+
+        row["code"] = query.value("code").toString();
+        row["img"] = query.value("img").toString();
+        row["name"] = query.value("name").toString();
+        row["width"] = query.value("width").toString();
+        row["height"] = query.value("height").toString();
+        row["created_at"] = query.value("created_at").toString();
+        row["edited_at"] = query.value("edited_at").toString();
+
+        list.append(row);
+    }
+
+    return list;
+}
+
+QMap<QString, QString> Cross::getByCode(const QString& code)
+{
+    QMap<QString, QString> map;
+
+    // If no name is provided, just return the empty map
+    if (code == "") return map;
+
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT * FROM " + this->table + " WHERE code = :code;");
+    query.bindValue(":code", code);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText(query.lastError().text());
+        message.exec();
+    }
+    else if (query.next()) {
+        map["code"] = query.value("code").toString();
+        map["img"] = query.value("img").toString();
+        map["name"] = query.value("name").toString();
+        map["width"] = query.value("width").toString();
+        map["height"] = query.value("height").toString();
+        map["created_at"] = query.value("created_at").toString();
+        map["edited_at"] = query.value("edited_at").toString();
+    }
+
+    return map;
 }
 
 QList<QString> Cross::getNames()
@@ -184,4 +218,76 @@ QString Cross::getCode(const QString& name)
     }
 
     return "";
+}
+
+bool Cross::store(
+    const QString& code,
+    const QString& name,
+    const QString& img,
+    const QString& width,
+    const QString& height
+)
+{
+    QString created_at = QDate::currentDate().toString("yyyy-MM-dd");
+
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("INSERT INTO " + this->table + " "
+        " (code, name, img, width, height, created_at, edited_at)"
+        " VALUES (:code, :img, :width, :height, :created_at, :edited_at)");
+    query.bindValue(":code", code);
+    query.bindValue(":name", name);
+    query.bindValue(":img", img);
+    query.bindValue(":width", width);
+    query.bindValue(":height", height);
+    query.bindValue(":created_at", created_at);
+    query.bindValue(":edited_at", created_at);
+
+    if (!query.exec()) {
+        return false;
+    }
+    return true;
+}
+
+bool Cross::update(
+    const QString& old_code,
+    const QString& code,
+    const QString& name,
+    const QString& img,
+    const QString& width,
+    const QString& height
+)
+{
+    QString edited_at = QDate::currentDate().toString("yyyy-MM-dd");
+
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("UPDATE " + this->table + ""
+        " SET code = :code, name = :name, img = :img, width = :width,"
+        " height = :height, edited_at = :edited_at "
+        " WHERE id = :id;");
+    query.bindValue(":code", code);
+    query.bindValue(":name", name);
+    query.bindValue(":img", img);
+    query.bindValue(":width", width);
+    query.bindValue(":height", height);
+    query.bindValue(":edited_at", edited_at);
+    query.bindValue(":code", old_code);
+
+    if (!query.exec()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Cross::remove(const QString& code)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("DELETE FROM " + this->table + " WHERE code = :code;");
+    query.bindValue(":code", code);
+
+    if (!query.exec()) {
+        return false;
+    }
+
+    return true;
 }

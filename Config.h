@@ -78,6 +78,22 @@ public:
     QString getSculpturesPath();
 
     /*
+     * Sets the crosses' folder path into the config file
+     *
+     * @param   const QString& crosses_path    - Crosses folder path
+     *
+     * @return void
+     */
+    void setCrossesPath(const QString& crosses_path);
+
+    /*
+     * Gets the crosses' folder path from the config file
+     *
+     * @return QString the crosses' folder path
+     */
+    QString getCrossesPath();
+
+    /*
      * Initializes a new configuration file
      * 
      * @return bool true on success, false on failure

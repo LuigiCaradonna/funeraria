@@ -2,10 +2,11 @@
 
 /********** CONSTRUCTOR **********/
 
-SettingsUi::SettingsUi(const QSqlDatabase& db, const QString& icons_folder, QWidget* parent)
+SettingsUi::SettingsUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, QWidget* parent)
     : db(db), css_folder(css_folder), icons_folder(icons_folder), parent(parent)
 {
     this->ui.setupUi(this);
+
     // Sets an icon for the window
     this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
 
@@ -20,6 +21,7 @@ SettingsUi::SettingsUi(const QSqlDatabase& db, const QString& icons_folder, QWid
 
     this->connect(this->ui.btnDbPath, &QPushButton::clicked, this, &SettingsUi::slotChangeDbPath);
     this->connect(this->ui.btnArchiveFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeArchivePath);
+    this->connect(this->ui.btnCrossesFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeCrossesPath);
     this->connect(this->ui.btnSculpturesFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeSculpturesPath);
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SettingsUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &SettingsUi::slotCloseDialog);
@@ -94,6 +96,23 @@ void SettingsUi::slotChangeSculpturesPath()
     }
 
     this->ui.lblSculpturesFolder->setText(new_sculptures_path);
+}
+
+void SettingsUi::slotChangeCrossesPath()
+{
+    // Prompt the user to select the archive folder
+    QString new_crosses_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
+
+    if (new_crosses_path.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("La cartella indicata risulta inesistente.");
+        message.exec();
+        return;
+    }
+
+    this->ui.lblCrossesFolder->setText(new_crosses_path);
 }
 
 void SettingsUi::slotSave()
@@ -182,12 +201,13 @@ void SettingsUi::updateForm() {
     this->ui.lblDbFile->setText(config->getDbFile());
     this->ui.lblArchiveFolder->setText(config->getArchivePath());
     this->ui.lblSculpturesFolder->setText(config->getSculpturesPath());
+    this->ui.lblCrossesFolder->setText(config->getCrossesPath());
 
     delete config;
     delete settings;
 }
 
-bool SettingsUi::store(const QMap<QString, QString>& setting) {
+const bool SettingsUi::store(const QMap<QString, QString>& setting) {
 
     Settings* settings = new Settings(this->db);
     bool result;

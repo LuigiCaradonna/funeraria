@@ -103,6 +103,28 @@ QString Config::getSculpturesPath()
     return db_path;
 }
 
+void Config::setCrossesPath(const QString& crosses_path)
+{
+    QJsonObject config;
+
+    config = this->getConfigFileContent();
+    config.remove("crosses_path");
+    config.insert("crosses_path", crosses_path);
+
+    this->storeConfig(config);
+}
+
+QString Config::getCrossesPath()
+{
+    //Then get the main JSON object and get the datas in it
+    QJsonObject config_content = this->getConfigFileContent();
+
+    //Access the wanted value
+    QString db_path = config_content.value("crosses_path").toString();
+
+    return db_path;
+}
+
 /********** PRIVATE FUNCTIONS **********/
 
 bool Config::initConfig()

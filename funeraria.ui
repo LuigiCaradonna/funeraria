@@ -51,6 +51,9 @@
        <widget class="QWidget" name="tombsTopBarWidget" native="true"/>
       </item>
       <item>
+       <widget class="QWidget" name="crossesTopBarWidget" native="true"/>
+      </item>
+      <item>
        <widget class="QWidget" name="sculpturesTopBarWidget" native="true"/>
       </item>
       <item>
