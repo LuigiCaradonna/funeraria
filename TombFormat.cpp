@@ -76,7 +76,7 @@ QList<QMap<QString, QString>> TombFormat::get()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("TombFormat: " + query.lastError().text());
         message.exec();
 
         return formats;
@@ -104,7 +104,7 @@ QList<QString> TombFormat::getNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("TombFormat: " + query.lastError().text());
         message.exec();
 
         return names;
@@ -127,7 +127,7 @@ QString TombFormat::getName(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("TombFormat: " + query.lastError().text());
         message.exec();
 
         return "";
@@ -150,7 +150,7 @@ QList<QString> TombFormat::getCodes()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("TombFormat: " + query.lastError().text());
         message.exec();
 
         return codes;
@@ -173,7 +173,7 @@ QString TombFormat::getCode(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("TombFormat: " + query.lastError().text());
         message.exec();
 
         return "";

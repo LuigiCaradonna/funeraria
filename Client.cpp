@@ -23,7 +23,7 @@ int Client::getId(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -43,7 +43,7 @@ QString Client::getName(const int id)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -63,7 +63,7 @@ QStringList Client::getNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
     }
 
@@ -84,7 +84,7 @@ QStringList Client::getActiveNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
     }
 
@@ -105,7 +105,7 @@ QStringList Client::getQuickAccessNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
     }
 
@@ -136,7 +136,7 @@ QList<QMap<QString, QString>> Client::get(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
     }
 
@@ -172,7 +172,7 @@ QMap<QString, QString> Client::getDetailsById(int id)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -206,7 +206,7 @@ QMap<QString, QString> Client::getDetailsByName(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -399,7 +399,7 @@ int Client::getLastPosition()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -494,7 +494,7 @@ bool Client::shiftPositionsUp(const int from, const int last_position)
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText(query.lastError().text());
+            message.setText("Client: " + query.lastError().text());
             message.exec();
 
             return false;
@@ -516,7 +516,7 @@ bool Client::shiftPositionsDown(const int from, const int last_position)
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText(query.lastError().text());
+            message.setText("Client: " + query.lastError().text());
             message.exec();
 
             return false;
@@ -536,7 +536,7 @@ bool Client::setInvalidPosition(const int client_id)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Client: " + query.lastError().text());
         message.exec();
 
         return false;

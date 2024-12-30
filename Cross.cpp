@@ -35,7 +35,7 @@ QList<QMap<QString, QString>> Cross::getListByCode(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Cross: " + query.lastError().text());
         message.exec();
     }
 
@@ -76,7 +76,7 @@ QList<QMap<QString, QString>> Cross::getListByName(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Cross: " + query.lastError().text());
         message.exec();
     }
 
@@ -112,7 +112,7 @@ QMap<QString, QString> Cross::getByCode(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Cross: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -138,7 +138,7 @@ QList<QString> Cross::getNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Cross: " + query.lastError().text());
         message.exec();
 
         return names;
@@ -161,7 +161,7 @@ QString Cross::getName(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Cross: " + query.lastError().text());
         message.exec();
 
         return "";
@@ -184,7 +184,7 @@ QList<QString> Cross::getCodes()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Cross: " + query.lastError().text());
         message.exec();
 
         return codes;
@@ -207,7 +207,7 @@ QString Cross::getCode(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Cross: " + query.lastError().text());
         message.exec();
 
         return "";

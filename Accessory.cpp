@@ -23,7 +23,7 @@ QList<QMap<QString, QString>> Accessory::get()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Accessory: " + query.lastError().text());
         message.exec();
 
         return accessories;
@@ -51,7 +51,7 @@ QString Accessory::getCode(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Accessory: " + query.lastError().text());
         message.exec();
 
         return "";
@@ -75,7 +75,7 @@ QString Accessory::getNameFromCode(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Accessory: " + query.lastError().text());
         message.exec();
 
         return "";
@@ -98,7 +98,7 @@ QStringList Accessory::getNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Accessory: " + query.lastError().text());
         message.exec();
 
         return accessories;

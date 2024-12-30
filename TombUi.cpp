@@ -818,18 +818,18 @@ void TombUi::updateForm()
     int cross_index = 0;
     int sacred_index = 0;
     int sculpture_index = 0;
-    int pf1_index = 0;
-    int pt1_index = 0;
-    int pf2_index = 0;
-    int pt2_index = 0;
-    int pf3_index = 0;
-    int pt3_index = 0;
-    int pf4_index = 0;
-    int pt4_index = 0;
-    int pf5_index = 0;
-    int pt5_index = 0;
-    int pf6_index = 0;
-    int pt6_index = 0;
+    int pit1_index = 0;
+    int frame1_index = 0;
+    int pit2_index = 0;
+    int frame2_index = 0;
+    int pit3_index = 0;
+    int frame3_index = 0;
+    int pit4_index = 0;
+    int frame4_index = 0;
+    int pit5_index = 0;
+    int frame5_index = 0;
+    int pit6_index = 0;
+    int frame6_index = 0;
 
     QList<QString> client_names = client->getActiveNames();
     QList<QString> material_names = this->material->getNames();
@@ -945,84 +945,84 @@ void TombUi::updateForm()
 
         for (int i = 0; i < pits.size(); i++) {
             if (pits[i]["code"] == tomb_details["pit_one"]) {
-                pf1_index = i;
+                pit1_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < frames.size(); i++) {
             if (frames[i]["code"] == tomb_details["frame_one"]) {
-                pt1_index = i;
+                frame1_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < pits.size(); i++) {
             if (pits[i]["code"] == tomb_details["pit_two"]) {
-                pf2_index = i;
+                pit2_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < frames.size(); i++) {
             if (frames[i]["code"] == tomb_details["frame_two"]) {
-                pt2_index = i;
+                frame2_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < pits.size(); i++) {
             if (pits[i]["code"] == tomb_details["pit_three"]) {
-                pf3_index = i;
+                pit3_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < frames.size(); i++) {
             if (frames[i]["code"] == tomb_details["frame_three"]) {
-                pt3_index = i;
+                frame3_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < pits.size(); i++) {
             if (pits[i]["code"] == tomb_details["pit_four"]) {
-                pf4_index = i;
+                pit4_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < frames.size(); i++) {
             if (frames[i]["code"] == tomb_details["frame_four"]) {
-                pt4_index = i;
+                frame4_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < pits.size(); i++) {
             if (pits[i]["code"] == tomb_details["pit_five"]) {
-                pf5_index = i;
+                pit5_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < frames.size(); i++) {
             if (frames[i]["code"] == tomb_details["frame_five"]) {
-                pt5_index = i;
+                frame5_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < pits.size(); i++) {
             if (pits[i]["code"] == tomb_details["pit_six"]) {
-                pf6_index = i;
+                pit6_index = i;
                 break;
             }
         }
 
         for (int i = 0; i < frames.size(); i++) {
             if (frames[i]["code"] == tomb_details["frame_six"]) {
-                pt6_index = i;
+                frame6_index = i;
                 break;
             }
         }
@@ -1094,18 +1094,18 @@ void TombUi::updateForm()
         this->ui.cbCross->setCurrentIndex(cross_index);
         this->ui.cbSacred->setCurrentIndex(sacred_index);
         this->ui.cbSculpture->setCurrentIndex(sculpture_index);
-        this->ui.cbPitFormatOne->setCurrentIndex(pf1_index);
-        this->ui.cbPitTypeOne->setCurrentIndex(pt1_index);
-        this->ui.cbPitFormatTwo->setCurrentIndex(pf2_index);
-        this->ui.cbPitTypeTwo->setCurrentIndex(pt2_index);
-        this->ui.cbPitFormatThree->setCurrentIndex(pf3_index);
-        this->ui.cbPitTypeThree->setCurrentIndex(pt3_index);
-        this->ui.cbPitFormatFour->setCurrentIndex(pf4_index);
-        this->ui.cbPitTypeFour->setCurrentIndex(pt4_index);
-        this->ui.cbPitFormatFive->setCurrentIndex(pf5_index);
-        this->ui.cbPitTypeFive->setCurrentIndex(pt5_index);
-        this->ui.cbPitFormatSix->setCurrentIndex(pf6_index);
-        this->ui.cbPitTypeSix->setCurrentIndex(pt6_index);
+        this->ui.cbPitFormatOne->setCurrentIndex(pit1_index);
+        this->ui.cbPitTypeOne->setCurrentIndex(frame1_index);
+        this->ui.cbPitFormatTwo->setCurrentIndex(pit2_index);
+        this->ui.cbPitTypeTwo->setCurrentIndex(frame2_index);
+        this->ui.cbPitFormatThree->setCurrentIndex(pit3_index);
+        this->ui.cbPitTypeThree->setCurrentIndex(frame3_index);
+        this->ui.cbPitFormatFour->setCurrentIndex(pit4_index);
+        this->ui.cbPitTypeFour->setCurrentIndex(frame4_index);
+        this->ui.cbPitFormatFive->setCurrentIndex(pit5_index);
+        this->ui.cbPitTypeFive->setCurrentIndex(frame5_index);
+        this->ui.cbPitFormatSix->setCurrentIndex(pit6_index);
+        this->ui.cbPitTypeSix->setCurrentIndex(frame6_index);
 
         // Set the save button text
         this->ui.btnSave->setText(this->btn_update_text);

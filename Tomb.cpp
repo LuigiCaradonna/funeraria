@@ -55,7 +55,7 @@ QList<QMap<QString, QString>> Tomb::getList(
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return list;
     }
@@ -96,18 +96,18 @@ QList<QMap<QString, QString>> Tomb::getList(
         tomb["mounted"] = query.value("mounted").toString();
         tomb["ep_relief"] = query.value("ep_relief").toString();
         tomb["inscription"] = query.value("inscription").toString();
-        tomb["pit_format_one"] = query.value("pit_format_one").toString();
-        tomb["pit_type_one"] = query.value("pit_type_one").toString();
-        tomb["pit_format_two"] = query.value("pit_format_two").toString();
-        tomb["pit_type_two"] = query.value("pit_type_two").toString();
-        tomb["pit_format_three"] = query.value("pit_format_three").toString();
-        tomb["pit_type_three"] = query.value("pit_type_three").toString();
-        tomb["pit_format_four"] = query.value("pit_format_four").toString();
-        tomb["pit_type_four"] = query.value("pit_type_four").toString();
-        tomb["pit_format_five"] = query.value("pit_format_five").toString();
-        tomb["pit_type_five"] = query.value("pit_type_five").toString();
-        tomb["pit_format_six"] = query.value("pit_format_six").toString();
-        tomb["pit_type_six"] = query.value("pit_type_six").toString();
+        tomb["pit_one"] = query.value("pit_one").toString();
+        tomb["frame_one"] = query.value("frame_one").toString();
+        tomb["pit_two"] = query.value("pit_two").toString();
+        tomb["frame_two"] = query.value("frame_two").toString();
+        tomb["pit_three"] = query.value("pit_three").toString();
+        tomb["frame_three"] = query.value("frame_three").toString();
+        tomb["pit_four"] = query.value("pit_four").toString();
+        tomb["frame_four"] = query.value("frame_four").toString();
+        tomb["pit_five"] = query.value("pit_five").toString();
+        tomb["frame_five"] = query.value("frame_five").toString();
+        tomb["pit_six"] = query.value("pit_six").toString();
+        tomb["frame_six"] = query.value("frame_six").toString();
         tomb["notes"] = query.value("notes").toString();
         tomb["accessories_mounted"] = accessories_mounted;
         tomb["ordered_at"] = query.value("ordered_at").toString();
@@ -137,7 +137,7 @@ QMap<QString, QString> Tomb::getByProgressive(const int progressive)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return tomb;
     }
@@ -175,18 +175,18 @@ QMap<QString, QString> Tomb::getByProgressive(const int progressive)
         tomb["mounted"] = query.value("mounted").toString();
         tomb["ep_relief"] = query.value("ep_relief").toString();
         tomb["inscription"] = query.value("inscription").toString();
-        tomb["pit_format_one"] = query.value("pit_format_one").toString();
-        tomb["pit_type_one"] = query.value("pit_type_one").toString();
-        tomb["pit_format_two"] = query.value("pit_format_two").toString();
-        tomb["pit_type_two"] = query.value("pit_type_two").toString();
-        tomb["pit_format_three"] = query.value("pit_format_three").toString();
-        tomb["pit_type_three"] = query.value("pit_type_three").toString();
-        tomb["pit_format_four"] = query.value("pit_format_four").toString();
-        tomb["pit_type_four"] = query.value("pit_type_four").toString();
-        tomb["pit_format_five"] = query.value("pit_format_five").toString();
-        tomb["pit_type_five"] = query.value("pit_type_five").toString();
-        tomb["pit_format_six"] = query.value("pit_format_six").toString();
-        tomb["pit_type_six"] = query.value("pit_type_six").toString();
+        tomb["pit_one"] = query.value("pit_one").toString();
+        tomb["frame_one"] = query.value("frame_one").toString();
+        tomb["pit_two"] = query.value("pit_two").toString();
+        tomb["frame_two"] = query.value("frame_two").toString();
+        tomb["pit_three"] = query.value("pit_three").toString();
+        tomb["frame_three"] = query.value("frame_three").toString();
+        tomb["pit_four"] = query.value("pit_four").toString();
+        tomb["frame_four"] = query.value("frame_four").toString();
+        tomb["pit_five"] = query.value("pit_five").toString();
+        tomb["frame_five"] = query.value("frame_five").toString();
+        tomb["pit_six"] = query.value("pit_six").toString();
+        tomb["frame_six"] = query.value("frame_six").toString();
         tomb["notes"] = query.value("notes").toString();
         tomb["accessories_mounted"] = accessories_mounted;
         tomb["ordered_at"] = query.value("ordered_at").toString();
@@ -213,12 +213,12 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         "tomb.vase_code, vase.name AS vase_name, tomb.lamp_code, lamp.name AS lamp_name, tomb.flame_code, flame.name AS flame_name, "
         "tomb.cross_code, cross.name AS cross_name, tomb.sacred_code, sacred.name AS sacred_name, "
         "tomb.sculpture_code, sculpture.name AS sculpture_name, tomb.sculpture_h, tomb.mounted, tomb.ep_relief, tomb.inscription, "
-        "tomb.pit_format_one, tomb.pit_type_one, "
-        "tomb.pit_format_two, tomb.pit_type_two, "
-        "tomb.pit_format_three, tomb.pit_type_three, "
-        "tomb.pit_format_four, tomb.pit_type_four, "
-        "tomb.pit_format_five, tomb.pit_type_five, "
-        "tomb.pit_format_six, tomb.pit_type_six, "
+        "tomb.pit_one, tomb.frame_one, "
+        "tomb.pit_two, tomb.frame_two, "
+        "tomb.pit_three, tomb.frame_three, "
+        "tomb.pit_four, tomb.frame_four, "
+        "tomb.pit_five, tomb.frame_five, "
+        "tomb.pit_six, tomb.frame_six, "
         "tomb.notes, tomb.accessories_mounted, "
         "tomb.ordered_at, tomb.proofed_at, tomb.confirmed_at, tomb.engraved_at, "
         "tomb.delivered_at, tomb.created_at, tomb.edited_at "
@@ -241,7 +241,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -267,18 +267,18 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         tomb["mounted"] = query.value("mounted").toString();
         tomb["ep_relief"] = query.value("ep_relief").toString();
         tomb["inscription"] = query.value("inscription").toString();
-        tomb["pit_format_one"] = query.value("pit_format_one").toString();
-        tomb["pit_type_one"] = query.value("pit_type_one").toString();
-        tomb["pit_format_two"] = query.value("pit_format_two").toString();
-        tomb["pit_type_two"] = query.value("pit_type_two").toString();
-        tomb["pit_format_three"] = query.value("pit_format_three").toString();
-        tomb["pit_type_three"] = query.value("pit_type_three").toString();
-        tomb["pit_format_four"] = query.value("pit_format_four").toString();
-        tomb["pit_type_four"] = query.value("pit_type_four").toString();
-        tomb["pit_format_five"] = query.value("pit_format_five").toString();
-        tomb["pit_type_five"] = query.value("pit_type_five").toString();
-        tomb["pit_format_six"] = query.value("pit_format_six").toString();
-        tomb["pit_type_six"] = query.value("pit_type_six").toString();
+        tomb["pit_one"] = query.value("pit_one").toString();
+        tomb["frame_one"] = query.value("frame_one").toString();
+        tomb["pit_two"] = query.value("pit_two").toString();
+        tomb["frame_two"] = query.value("frame_two").toString();
+        tomb["pit_three"] = query.value("pit_three").toString();
+        tomb["frame_three"] = query.value("frame_three").toString();
+        tomb["pit_four"] = query.value("pit_four").toString();
+        tomb["frame_four"] = query.value("frame_four").toString();
+        tomb["pit_five"] = query.value("pit_five").toString();
+        tomb["frame_five"] = query.value("frame_five").toString();
+        tomb["pit_six"] = query.value("pit_six").toString();
+        tomb["frame_six"] = query.value("frame_six").toString();
         tomb["notes"] = query.value("notes").toString();
         tomb["accessories_mounted"] = query.value("accessories_mounted").toString();
         tomb["ordered_at"] = query.value("ordered_at").toString();
@@ -313,7 +313,7 @@ QList<QMap<QString, QString>> Tomb::tombsToEngrave()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
     }
     else {
@@ -352,7 +352,7 @@ QList<QMap<QString, QString>> Tomb::accessoriesToMount()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
     }
     else {
@@ -387,7 +387,7 @@ QList<QMap<QString, QString>> Tomb::tombsToPay()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
     }
     else {
@@ -427,18 +427,18 @@ bool Tomb::store(
     const bool mounted,
     const bool ep_relief,
     const bool inscription,
-    const QString& pit_format_one,
-    const QString& pit_type_one,
-    const QString& pit_format_two,
-    const QString& pit_type_two,
-    const QString& pit_format_three,
-    const QString& pit_type_three,
-    const QString& pit_format_four,
-    const QString& pit_type_four,
-    const QString& pit_format_five,
-    const QString& pit_type_five,
-    const QString& pit_format_six,
-    const QString& pit_type_six,
+    const QString& pit_one,
+    const QString& frame_one,
+    const QString& pit_two,
+    const QString& frame_two,
+    const QString& pit_three,
+    const QString& frame_three,
+    const QString& pit_four,
+    const QString& frame_four,
+    const QString& pit_five,
+    const QString& frame_five,
+    const QString& pit_six,
+    const QString& frame_six,
     const QString& notes,
     const bool accessories_mounted,
     const QString& ordered_at,
@@ -498,14 +498,14 @@ bool Tomb::store(
         "INSERT INTO " + this->table + " "
         "(progressive, client_id, name, engraved_names, ep_amount, engraved, price, paid, material_code, type_code, format_code, "
         "vase_code, lamp_code, flame_code, cross_code, sacred_code, sculpture_code, sculpture_h, mounted, ep_relief, inscription, "
-        "pit_format_one, pit_type_one, pit_format_two, pit_type_two, pit_format_three, pit_type_three, "
-        "pit_format_four, pit_type_four, pit_format_five, pit_type_five, pit_format_six, pit_type_six, "
+        "pit_one, frame_one, pit_two, frame_two, pit_three, frame_three, "
+        "pit_four, frame_four, pit_five, frame_five, pit_six, frame_six, "
         "notes, accessories_mounted, ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at, "
         "created_at, edited_at) "
         "VALUES (:progressive, :client_id, :name, :engraved_names, :ep_amount, :engraved, :price, :paid, :material_code, :type_code, :format_code, "
         ":vase_code, :lamp_code, :flame_code, :cross_code, :sacred_code, :sculpture_code, :sculpture_h, :mounted, :ep_relief, :inscription, "
-        ":pit_format_one, :pit_type_one, :pit_format_two, :pit_type_two, :pit_format_three, :pit_type_three, "
-        ":pit_format_four, :pit_type_four, :pit_format_five, :pit_type_five, :pit_format_six, :pit_type_six, "
+        ":pit_one, :frame_one, :pit_two, :frame_two, :pit_three, :frame_three, "
+        ":pit_four, :frame_four, :pit_five, :frame_five, :pit_six, :frame_six, "
         ":notes, :accessories_mounted, :ordered_at, :proofed_at, :confirmed_at, :engraved_at, :delivered_at, "
         ":created_at, :edited_at)"
     );
@@ -530,18 +530,18 @@ bool Tomb::store(
     query.bindValue(":mounted", mounted);
     query.bindValue(":ep_relief", ep_relief);
     query.bindValue(":inscription", inscription);
-    query.bindValue(":pit_format_one", pit_format_one);
-    query.bindValue(":pit_type_one", pit_type_one);
-    query.bindValue(":pit_format_two", pit_format_two);
-    query.bindValue(":pit_type_two", pit_type_two);
-    query.bindValue(":pit_format_three", pit_format_three);
-    query.bindValue(":pit_type_three", pit_type_three);
-    query.bindValue(":pit_format_four", pit_format_four);
-    query.bindValue(":pit_type_four", pit_type_four);
-    query.bindValue(":pit_format_five", pit_format_five);
-    query.bindValue(":pit_type_five", pit_type_five);
-    query.bindValue(":pit_format_six", pit_format_six);
-    query.bindValue(":pit_type_six", pit_type_six);
+    query.bindValue(":pit_one", pit_one);
+    query.bindValue(":frame_one", frame_one);
+    query.bindValue(":pit_two", pit_two);
+    query.bindValue(":frame_two", frame_two);
+    query.bindValue(":pit_three", pit_three);
+    query.bindValue(":frame_three", frame_three);
+    query.bindValue(":pit_four", pit_four);
+    query.bindValue(":frame_four", frame_four);
+    query.bindValue(":pit_five", pit_five);
+    query.bindValue(":frame_five", frame_five);
+    query.bindValue(":pit_six", pit_six);
+    query.bindValue(":frame_six", frame_six);
     query.bindValue(":notes", notes.trimmed());
     query.bindValue(":accessories_mounted", accessories_mounted);
     query.bindValue(":ordered_at", QDate::fromString(ordered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
@@ -569,7 +569,7 @@ bool Tomb::store(
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return false;
     }
@@ -606,18 +606,18 @@ bool Tomb::update(
     const bool mounted,
     const bool ep_relief,
     const bool inscription,
-    const QString& pit_format_one,
-    const QString& pit_type_one,
-    const QString& pit_format_two,
-    const QString& pit_type_two,
-    const QString& pit_format_three,
-    const QString& pit_type_three,
-    const QString& pit_format_four,
-    const QString& pit_type_four,
-    const QString& pit_format_five,
-    const QString& pit_type_five,
-    const QString& pit_format_six,
-    const QString& pit_type_six,
+    const QString& pit_one,
+    const QString& frame_one,
+    const QString& pit_two,
+    const QString& frame_two,
+    const QString& pit_three,
+    const QString& frame_three,
+    const QString& pit_four,
+    const QString& frame_four,
+    const QString& pit_five,
+    const QString& frame_five,
+    const QString& pit_six,
+    const QString& frame_six,
     const QString& notes,
     const bool accessories_mounted,
     const QString& ordered_at,
@@ -635,9 +635,9 @@ bool Tomb::update(
         "type_code = :type_code, format_code = :format_code, vase_code = :vase_code, lamp_code = :lamp_code,  flame_code = :flame_code, "
         "cross_code = :cross_code, sacred_code = :sacred_code,  sculpture_code = :sculpture_code, sculpture_h = :sculpture_h, "
         "mounted = :mounted, ep_relief = :ep_relief, inscription = :inscription, "
-        "pit_format_one = :pit_format_one, pit_type_one = :pit_type_one, pit_format_two = :pit_format_two, pit_type_two = :pit_type_two, "
-        "pit_format_three = :pit_format_three, pit_type_three = :pit_type_three, pit_format_four = :pit_format_four, pit_type_four = :pit_type_four, "
-        "pit_format_five = :pit_format_five, pit_type_five = :pit_type_five, pit_format_six = :pit_format_six, pit_type_six = :pit_type_six, "
+        "pit_one = :pit_one, frame_one = :frame_one, pit_two = :pit_two, frame_two = :frame_two, "
+        "pit_three = :pit_three, frame_three = :frame_three, pit_four = :pit_four, frame_four = :frame_four, "
+        "pit_five = :pit_five, frame_five = :frame_five, pit_six = :pit_six, frame_six = :frame_six, "
         "notes = :notes, accessories_mounted = :accessories_mounted, "
         "ordered_at = :ordered_at, proofed_at = :proofed_at, confirmed_at = :confirmed_at, engraved_at = :engraved_at, "
         "delivered_at = :delivered_at, edited_at = :edited_at "
@@ -664,18 +664,18 @@ bool Tomb::update(
     query.bindValue(":mounted", mounted);
     query.bindValue(":ep_relief", ep_relief);
     query.bindValue(":inscription", inscription);
-    query.bindValue(":pit_format_one", pit_format_one);
-    query.bindValue(":pit_type_one", pit_type_one);
-    query.bindValue(":pit_format_two", pit_format_two);
-    query.bindValue(":pit_type_two", pit_type_two);
-    query.bindValue(":pit_format_three", pit_format_three);
-    query.bindValue(":pit_type_three", pit_type_three);
-    query.bindValue(":pit_format_four", pit_format_four);
-    query.bindValue(":pit_type_four", pit_type_four);
-    query.bindValue(":pit_format_five", pit_format_five);
-    query.bindValue(":pit_type_five", pit_type_five);
-    query.bindValue(":pit_format_six", pit_format_six);
-    query.bindValue(":pit_type_six", pit_type_six);
+    query.bindValue(":pit_one", pit_one);
+    query.bindValue(":frame_one", frame_one);
+    query.bindValue(":pit_two", pit_two);
+    query.bindValue(":frame_two", frame_two);
+    query.bindValue(":pit_three", pit_three);
+    query.bindValue(":frame_three", frame_three);
+    query.bindValue(":pit_four", pit_four);
+    query.bindValue(":frame_four", frame_four);
+    query.bindValue(":pit_five", pit_five);
+    query.bindValue(":frame_five", frame_five);
+    query.bindValue(":pit_six", pit_six);
+    query.bindValue(":frame_six", frame_six);
     query.bindValue(":notes", notes.trimmed());
     query.bindValue(":accessories_mounted", accessories_mounted);
     query.bindValue(":ordered_at", QDate::fromString(ordered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
@@ -703,7 +703,7 @@ bool Tomb::update(
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return false;
     }
@@ -726,7 +726,7 @@ void Tomb::remove(const int progressive)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
     }
     else {
@@ -835,7 +835,7 @@ int Tomb::getLastProgresive() {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -858,7 +858,7 @@ QStringList Tomb::getNotInUseProgressives()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
     }
     else {
@@ -902,7 +902,7 @@ bool Tomb::isProgressiveInUse(const int progressive)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return true;
     }
@@ -923,7 +923,7 @@ bool Tomb::isConfirmed(const int progressive)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return true;
     }
@@ -944,7 +944,7 @@ bool Tomb::isEngraved(const int progressive)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return true;
     }
@@ -965,7 +965,7 @@ bool Tomb::isDelivered(const int progressive)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return true;
     }
@@ -986,7 +986,7 @@ bool Tomb::isPaied(const int progressive)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return true;
     }
@@ -1087,7 +1087,7 @@ QList<QMap<QString, QString>> Tomb::getReport(
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return report;
     }
@@ -1131,7 +1131,7 @@ QList<QMap<QString, QString>> Tomb::getGeneralTrend()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Tomb: " + query.lastError().text());
         message.exec();
         return trend;
     }

@@ -76,7 +76,7 @@ QList<QMap<QString, QString>> Frame::get()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Frame: " + query.lastError().text());
         message.exec();
 
         return types;
@@ -104,7 +104,7 @@ QList<QString> Frame::getNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Frame: " + query.lastError().text());
         message.exec();
 
         return names;
@@ -127,7 +127,7 @@ QString Frame::getName(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Frame: " + query.lastError().text());
         message.exec();
 
         return "";
@@ -150,7 +150,7 @@ QList<QString> Frame::getCodes()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Frame: " + query.lastError().text());
         message.exec();
 
         return codes;
@@ -173,7 +173,7 @@ QString Frame::getCode(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Frame: " + query.lastError().text());
         message.exec();
 
         return "";

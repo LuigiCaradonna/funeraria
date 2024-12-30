@@ -76,7 +76,7 @@ QList<QMap<QString, QString>> Sacred::get()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sacred: " + query.lastError().text());
         message.exec();
 
         return sacred_images;
@@ -104,7 +104,7 @@ QList<QString> Sacred::getNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sacred: " + query.lastError().text());
         message.exec();
 
         return names;
@@ -127,7 +127,7 @@ QString Sacred::getName(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sacred: " + query.lastError().text());
         message.exec();
 
         return "";
@@ -150,7 +150,7 @@ QList<QString> Sacred::getCodes()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sacred: " + query.lastError().text());
         message.exec();
 
         return codes;
@@ -173,7 +173,7 @@ QString Sacred::getCode(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sacred: " + query.lastError().text());
         message.exec();
 
         return "";

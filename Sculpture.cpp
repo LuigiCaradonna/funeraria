@@ -35,7 +35,7 @@ QList<QMap<QString, QString>> Sculpture::getListByCode(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sculpture: " + query.lastError().text());
         message.exec();
     }
 
@@ -77,7 +77,7 @@ QList<QMap<QString, QString>> Sculpture::getListByName(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sculpture: " + query.lastError().text());
         message.exec();
     }
 
@@ -114,7 +114,7 @@ QMap<QString, QString> Sculpture::getByCode(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sculpture: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -141,7 +141,7 @@ QList<QString> Sculpture::getNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sculpture: " + query.lastError().text());
         message.exec();
 
         return names;
@@ -164,7 +164,7 @@ QString Sculpture::getName(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sculpture: " + query.lastError().text());
         message.exec();
 
         return "";
@@ -187,7 +187,7 @@ QList<QString> Sculpture::getCodes()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sculpture: " + query.lastError().text());
         message.exec();
 
         return codes;
@@ -210,7 +210,7 @@ QString Sculpture::getCode(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText(query.lastError().text());
+        message.setText("Sculpture: " + query.lastError().text());
         message.exec();
 
         return "";
