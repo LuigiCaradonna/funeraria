@@ -68,27 +68,30 @@ Funeraria::Funeraria(QWidget* parent)
         // Clienti
         this->ui.actionCNew->setIcon(QIcon(this->icons_folder + "new-client-50.png"));
         this->ui.actionCList->setIcon(QIcon(this->icons_folder + "client-list-48.png"));
+        // Materiali
+        this->ui.actionMtNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionMtList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        // Sculture
+        this->ui.actionScNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionScList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        // Croci
+        this->ui.actionCrNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionCrList->setIcon(QIcon(this->icons_folder + "list-50.png"));
         // Accessori
-        this->ui.menuVasi->setIcon(QIcon(this->icons_folder + "vase-50.png"));
+        this->ui.menuVases->setIcon(QIcon(this->icons_folder + "vase-50.png"));
         this->ui.actionVNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionVList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuLampade->setIcon(QIcon(this->icons_folder + "lamp-50.png"));
+        this->ui.menuLamps->setIcon(QIcon(this->icons_folder + "lamp-50.png"));
         this->ui.actionLNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionLList->setIcon(QIcon(this->icons_folder + "list-50.png"));
         this->ui.menuFlames->setIcon(QIcon(this->icons_folder + "flame-50.png"));
         this->ui.actionFNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionFList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuMateriali->setIcon(QIcon(this->icons_folder + "material-64.png"));
-        this->ui.actionMNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionMList->setIcon(QIcon(this->icons_folder + "list-50.png"));
         // Lapidi
         this->ui.actionTNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionTEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
         this->ui.actionTPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
         this->ui.actionMAccessories->setIcon(QIcon(this->icons_folder + "mount-50.png"));
-        // Sculture
-        this->ui.actionScNew->setIcon(QIcon(this->icons_folder + "busto-48.png"));
-        this->ui.actionScList->setIcon(QIcon(this->icons_folder + "sculpture-list-50.png"));
 
         // Instantiate objects
         this->context_menu = new QMenu(this);
@@ -132,6 +135,9 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionScList, SIGNAL(triggered()), this, SLOT(slotShowSculptures()));
         this->connect(this->ui.actionScNew,  SIGNAL(triggered()), this, SLOT(slotNewSculpture()));
 
+        // Signal emitted from the menu "Croci"
+        this->connect(this->ui.actionCrList, SIGNAL(triggered()), this, SLOT(slotShowCrosses()));
+        this->connect(this->ui.actionCrNew, SIGNAL(triggered()), this, SLOT(slotNewCross()));
         /* 
          * Map the signal coming from the menu "Accessori" to call the same function (slotNewItem) 
          * with the proper parameter
@@ -1221,7 +1227,7 @@ void Funeraria::slotShowCrosses(int row)
 
     QString name = this->leCrName->text().trimmed();
 
-    QList<QMap<QString, QString>> crosses = this->sculpture->getListByName(name);
+    QList<QMap<QString, QString>> crosses = this->cross->getListByName(name);
 
     QStringList headers{ "Codice", "Img", "Nome", "Larghezza", "Altezza", "", "" };
 
@@ -2506,7 +2512,7 @@ void Funeraria::initCrossesTopBar()
     crossesTopBarLayout->addWidget(this->leCrName);
     crossesTopBarLayout->addSpacerItem(this->crossSpacer);
     // Connect the code line edit to the relative slot
-    this->connect(this->leScName, &QLineEdit::textChanged, this, &Funeraria::slotFilterCrosses);
+    this->connect(this->leCrName, &QLineEdit::textChanged, this, &Funeraria::slotFilterCrosses);
 
     // Set the widget as visible
     this->ui.crossesTopBarWidget->setVisible(false);
@@ -2556,6 +2562,7 @@ void Funeraria::showTopBar(const QString& bar)
     this->ui.tombsTopBarWidget->setVisible(false);
     this->ui.sculpturesTopBarWidget->setVisible(false);
     this->ui.clientsTopBarWidget->setVisible(false);
+    this->ui.crossesTopBarWidget->setVisible(false);
 
     // Show the one required
     if (bar == "tomb") {
@@ -2566,5 +2573,8 @@ void Funeraria::showTopBar(const QString& bar)
     }
     else if (bar == "client") {
         this->ui.clientsTopBarWidget->setVisible(true);
+    }
+    else if (bar == "cross") {
+        this->ui.crossesTopBarWidget->setVisible(true);
     }
 }

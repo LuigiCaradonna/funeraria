@@ -105,40 +105,32 @@
      <addaction name="actionFNew"/>
      <addaction name="actionFList"/>
     </widget>
-    <widget class="QMenu" name="menuLampade">
+    <widget class="QMenu" name="menuLamps">
      <property name="title">
       <string>Lampade</string>
      </property>
      <addaction name="actionLNew"/>
      <addaction name="actionLList"/>
     </widget>
-    <widget class="QMenu" name="menuVasi">
+    <widget class="QMenu" name="menuVases">
      <property name="title">
       <string>Vasi</string>
      </property>
      <addaction name="actionVNew"/>
      <addaction name="actionVList"/>
     </widget>
-    <widget class="QMenu" name="menuMateriali">
-     <property name="title">
-      <string>Materiali</string>
-     </property>
-     <addaction name="actionMNew"/>
-     <addaction name="actionMList"/>
-    </widget>
-    <addaction name="menuVasi"/>
-    <addaction name="menuLampade"/>
+    <addaction name="menuVases"/>
+    <addaction name="menuLamps"/>
     <addaction name="menuFlames"/>
-    <addaction name="menuMateriali"/>
    </widget>
-   <widget class="QMenu" name="menuClienti">
+   <widget class="QMenu" name="menuClients">
     <property name="title">
      <string>Clienti</string>
     </property>
     <addaction name="actionCNew"/>
     <addaction name="actionCList"/>
    </widget>
-   <widget class="QMenu" name="menuLapidi">
+   <widget class="QMenu" name="menuTombs">
     <property name="title">
      <string>Lapidi</string>
     </property>
@@ -154,18 +146,34 @@
     <addaction name="actionBackupCSV"/>
     <addaction name="actionSettings"/>
    </widget>
-   <widget class="QMenu" name="menuSculture">
+   <widget class="QMenu" name="menuSculptures">
     <property name="title">
      <string>Sculture</string>
     </property>
     <addaction name="actionScNew"/>
     <addaction name="actionScList"/>
    </widget>
+   <widget class="QMenu" name="menuMaterials">
+    <property name="title">
+     <string>Materiali</string>
+    </property>
+    <addaction name="actionMtNew"/>
+    <addaction name="actionMtList"/>
+   </widget>
+   <widget class="QMenu" name="menuCrosses">
+    <property name="title">
+     <string>Croci</string>
+    </property>
+    <addaction name="actionCrNew"/>
+    <addaction name="actionCrList"/>
+   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuClienti"/>
+   <addaction name="menuClients"/>
+   <addaction name="menuMaterials"/>
    <addaction name="menuAccessories"/>
-   <addaction name="menuLapidi"/>
-   <addaction name="menuSculture"/>
+   <addaction name="menuCrosses"/>
+   <addaction name="menuSculptures"/>
+   <addaction name="menuTombs"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionFNew">
@@ -289,6 +297,26 @@
    </property>
   </action>
   <action name="actionScList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+  </action>
+  <action name="actionMtNew">
+   <property name="text">
+    <string>Nuovo</string>
+   </property>
+  </action>
+  <action name="actionMtList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+  </action>
+  <action name="actionCrNew">
+   <property name="text">
+    <string>Nuova</string>
+   </property>
+  </action>
+  <action name="actionCrList">
    <property name="text">
     <string>Elenco</string>
    </property>
