@@ -63,6 +63,7 @@ void SacredUi::slotSelectImage()
 void SacredUi::slotSwitchEnableState()
 {
     this->ui.leCode->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leName->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leWidth->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
 }
@@ -82,14 +83,14 @@ void SacredUi::slotSave()
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Information);
-            message.setText("Scultura inserita.");
+            message.setText("Immagine inserita.");
             message.exec();
         }
         else {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText("Inserimento scultura non riuscito.");
+            message.setText("Inserimento immagine non riuscito.");
             message.exec();
         }
 
@@ -115,14 +116,14 @@ void SacredUi::slotUpdate()
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Information);
-            message.setText("Scultura modificata.");
+            message.setText("Immagine modificata.");
             message.exec();
         }
         else {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText("Aggiornamento scultura non riuscito.");
+            message.setText("Aggiornamento immagine non riuscito.");
             message.exec();
         }
 
@@ -146,7 +147,7 @@ void SacredUi::updateForm()
     QMap<QString, QString> sacred_details = sacred->getByCode(this->code);
 
     if (!sacred_details.isEmpty()) {
-        this->setWindowTitle("Modifica scultura");
+        this->setWindowTitle("Modifica immagine");
 
         Config* config = new Config();
 
@@ -201,7 +202,7 @@ void SacredUi::updateForm()
     }
     else {
         // Sacred not found means we are asking to insert a new one
-        this->setWindowTitle("Inserisci scultura");
+        this->setWindowTitle("Inserisci immagine");
 
         // The image field must not be manually edited
         this->ui.leImgPath->setEnabled(false);
@@ -233,7 +234,7 @@ bool SacredUi::checkForm()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Il codice della scultura è obbligatorio.");
+        message.setText("Il codice dell'a scultur'immagine è obbligatorio.");
         message.exec();
 
         return false;
@@ -243,7 +244,7 @@ bool SacredUi::checkForm()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Il nome della scultura è obbligatorio.");
+        message.setText("Il nome dell'a scultura'immagine è obbligatorio.");
         message.exec();
 
         return false;
@@ -253,7 +254,7 @@ bool SacredUi::checkForm()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("L'immagine della scultura è obbligatoria.");
+        message.setText("L'immagine è obbligatoria.");
         message.exec();
 
         return false;

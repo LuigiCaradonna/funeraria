@@ -66,6 +66,7 @@ void SculptureUi::slotSelectImage()
 void SculptureUi::slotSwitchEnableState()
 {
     this->ui.leCode->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leName->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leOWidth->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leOHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leODepth->setEnabled(this->ui.chbAllowEdit->isChecked());

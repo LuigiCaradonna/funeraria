@@ -266,10 +266,11 @@ bool Sculpture::update(
     QString edited_at = QDate::currentDate().toString("yyyy-MM-dd");
 
     QSqlQuery query = QSqlQuery(this->db);
+
     query.prepare("UPDATE " + this->table + ""
         " SET code = :code, name = :name, img = :img, width = :width,"
         " height = :height, depth = :depth, edited_at = :edited_at "
-        " WHERE id = :id;");
+        " WHERE code = :old_code;");
     query.bindValue(":code", code);
     query.bindValue(":name", name);
     query.bindValue(":img", img);
@@ -277,7 +278,7 @@ bool Sculpture::update(
     query.bindValue(":height", height);
     query.bindValue(":depth", depth);
     query.bindValue(":edited_at", edited_at);
-    query.bindValue(":code", old_code);
+    query.bindValue(":old_code", old_code);
 
     if (!query.exec()) {
         return false;

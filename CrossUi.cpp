@@ -63,6 +63,7 @@ void CrossUi::slotSelectImage()
 void CrossUi::slotSwitchEnableState()
 {
     this->ui.leCode->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leName->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leWidth->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
 }
@@ -82,14 +83,14 @@ void CrossUi::slotSave()
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Information);
-            message.setText("Scultura inserita.");
+            message.setText("Croce inserita.");
             message.exec();
         }
         else {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText("Inserimento scultura non riuscito.");
+            message.setText("Inserimento croce non riuscito.");
             message.exec();
         }
 
@@ -115,14 +116,14 @@ void CrossUi::slotUpdate()
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Information);
-            message.setText("Scultura modificata.");
+            message.setText("Croce modificata.");
             message.exec();
         }
         else {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText("Aggiornamento scultura non riuscito.");
+            message.setText("Aggiornamento croce non riuscito.");
             message.exec();
         }
 
@@ -156,6 +157,12 @@ void CrossUi::updateForm()
         this->ui.leImgPath->setText(cross_details["img"]);
         this->ui.leWidth->setText(cross_details["width"]);
         this->ui.leHeight->setText(cross_details["height"]);
+
+        this->ui.leCode->setEnabled(false);
+        this->ui.leName->setEnabled(false);
+        this->ui.leImgPath->setEnabled(false);
+        this->ui.leWidth->setEnabled(false);
+        this->ui.leHeight->setEnabled(false);
 
         QString pic_path = config->getCrossesPath() + "/" + cross_details["img"];
 

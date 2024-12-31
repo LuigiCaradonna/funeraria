@@ -263,14 +263,14 @@ bool Cross::update(
     query.prepare("UPDATE " + this->table + ""
         " SET code = :code, name = :name, img = :img, width = :width,"
         " height = :height, edited_at = :edited_at "
-        " WHERE id = :id;");
+        " WHERE code = :old_code;");
     query.bindValue(":code", code);
     query.bindValue(":name", name);
     query.bindValue(":img", img);
     query.bindValue(":width", width);
     query.bindValue(":height", height);
     query.bindValue(":edited_at", edited_at);
-    query.bindValue(":code", old_code);
+    query.bindValue(":old_code", old_code);
 
     if (!query.exec()) {
         return false;

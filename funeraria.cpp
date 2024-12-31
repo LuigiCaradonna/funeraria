@@ -1083,8 +1083,6 @@ void Funeraria::slotDeleteItem() {
             message.setIcon(QMessageBox::Information);
             message.setText("Eliminazione eseguita.");
             message.exec();
-
-            this->slotShowItems(this->current_table);
         }
         else {
             QMessageBox message;
@@ -1092,6 +1090,31 @@ void Funeraria::slotDeleteItem() {
             message.setIcon(QMessageBox::Critical);
             message.setText("Eliminazione non riuscita.");
             message.exec();
+
+            // Reload the table
+
+            if (this->current_table == "vase" || 
+                this->current_table == "lamp" || 
+                this->current_table == "flame" || 
+                this->current_table == "pit" || 
+                this->current_table == "frame" || 
+                this->current_table == "material") 
+            {
+                this->slotShowItems(this->current_table);
+            }
+            else if (this->current_table == "client") {
+                this->slotShowClients();
+            }
+            else if (this->current_table == "sculpture") {
+                this->slotShowSculptures();
+            }
+            else if (this->current_table == "cross") {
+                this->slotShowCrosses();
+            }
+            else if (this->current_table == "sacred") {
+                this->slotShowSacred();
+            }
+
         }
     }
 }
