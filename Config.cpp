@@ -125,6 +125,28 @@ QString Config::getCrossesPath()
     return db_path;
 }
 
+void Config::setSacredPath(const QString& sacred_path)
+{
+    QJsonObject config;
+
+    config = this->getConfigFileContent();
+    config.remove("sacred_path");
+    config.insert("sacred_path", sacred_path);
+
+    this->storeConfig(config);
+}
+
+QString Config::getSacredPath()
+{
+    //Then get the main JSON object and get the datas in it
+    QJsonObject config_content = this->getConfigFileContent();
+
+    //Access the wanted value
+    QString db_path = config_content.value("sacred_path").toString();
+
+    return db_path;
+}
+
 /********** PRIVATE FUNCTIONS **********/
 
 bool Config::initConfig()

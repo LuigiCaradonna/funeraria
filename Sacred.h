@@ -34,76 +34,117 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Stores a new sacred image
+     * Gets all the images' data
      *
-     * @param const QString& code   - Sacred image's code
-     * @param const QString& name   - Sacred image's name
+     * @param   const QString& code - Optional, code of the image to get
      *
-     * @return bool - True on success, false on failure
+     * @return  QList<QMap<QString, QString>> - A list containing the images' data
      */
-    bool store(const QString& code, const QString& name);
+    QList<QMap<QString, QString>> getListByCode(const QString& code = "");
 
     /*
-     *  Updates a new sacred image
+     * Gets all the images' data
      *
-     * @param const QString& old_code   - Sacred image's previous code
-     * @param const QString& code   - Sacred image's code
-     * @param const QString& name   - Sacred image's name
+     * @param   const QString& code - Optional, name of the image to get
      *
-     * @return bool - True on success, false on failure
+     * @return  QList<QMap<QString, QString>> - A list containing the images' data
      */
-    bool update(const QString& old_code, const QString& code, const QString& name);
+    QList<QMap<QString, QString>> getListByName(const QString& name = "");
 
     /*
-     * Updates a new sacred image
+     * Gets the given image's datails
      *
-     * @param const QString& code   - Sacred image's code
+     * @param   const QString& code - Code
      *
-     * @return bool - True on success, false on failure
+     * @return  QMap<QString, QString> - A map containing the image's data
      */
-    bool remove(const QString& code);
+    QMap<QString, QString> getByCode(const QString& code);
 
     /*
-     * Gets all sacred images
+     * Gets all images' names
      *
-     * @return QList<QMap<QString, QString>> - A list of all the sacred images
-     */
-    QList<QMap<QString, QString>> get();
-
-    /*
-     * Gets all sacred images' names
-     *
-     * @return QList<QString> - A list of all the sacred images' names
+     * @return QList<QString> - A list of all the images' names
      */
     QList<QString> getNames();
 
     /*
-     * Gets a sacred image's codes given its name
+     * Gets an image's codes given its name
      *
-     * @param const QString& code   - Sacred image's code
+     * @param const QString& code   - Pit type's code
      *
-     * @return QString - A sacred image's code given its name
+     * @return QString - A image's code given its name
      */
     QString getName(const QString& code);
 
     /*
-     * Gets all sacred images' codes
+     * Gets all images' codes
      *
-     * @return QList<QString> - A list of all the sacred images' codes
+     * @return QList<QString> - A list of all the images' codes
      */
     QList<QString> getCodes();
 
     /*
-     * Gets a sacred image's codes given its name
+     * Gets the image's code given its name
      *
-     * @param const QString& name   - Sacred image's name
+     * @param   const QString& name - Image's name
      *
-     * @return QString - A sacred image's code given its name
+     * @return  QString - Image's code
      */
     QString getCode(const QString& name);
+
+    /*
+     * Creates a new image entry
+     *
+     * @param const QString& code   -   Code
+     * @param const QString& name   -   Name
+     * @param const QString& img    -   Image file name
+     * @param const QString& width  -   Width in mm
+     * @param const QString& height -   Height in mm
+     *
+     * @return  boolean true if the creation succeeds, false otherwise
+     */
+    bool store(
+        const QString& code,
+        const QString& name,
+        const QString& img,
+        const QString& width,
+        const QString& height
+    );
+
+    /*
+     * Updates the image's data
+     *
+     * @param const QString& old_code   -   Old code
+     * @param const QString& code       -   Code
+     * @param const QString& name       -   Name
+     * @param const QString& img        -   Image file name
+     * @param const QString& width      -   Width in mm
+     * @param const QString& height     -   Height in mm
+     *
+     * @return  boolean true if the update succeeds, false otherwise
+     */
+    bool update(
+        const QString& old_code,
+        const QString& code,
+        const QString& name,
+        const QString& img,
+        const QString& width,
+        const QString& height
+    );
+
+    /*
+     * Deletes an image from the database
+     *
+     * @param   const QString& code - Code
+     *
+     * @return  boolean true on success, false on failure
+     */
+    bool remove(const QString& code);
 
 private:
     const QString table = "sacred";
     QSqlDatabase db;
-    Settings* settings;
+    QString name;
+    // Temporary id for an image to be inserted
+    int new_sacred_temp_id = 9000;
 };

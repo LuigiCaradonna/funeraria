@@ -67,6 +67,13 @@ protected slots:
     void slotChangeCrossesPath();
 
     /*
+     * Asks the user to provide a new path for the sacred images' file
+     *
+     * @return  void
+     */
+    void slotChangeSacredPath();
+
+    /*
      * Saves a settings
      *
      * @return  void

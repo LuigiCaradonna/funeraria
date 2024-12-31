@@ -94,6 +94,22 @@ public:
     QString getCrossesPath();
 
     /*
+     * Sets the images' folder path into the config file
+     *
+     * @param   const QString& sacred_path    - Images folder path
+     *
+     * @return void
+     */
+    void setSacredPath(const QString& sacred_path);
+
+    /*
+     * Gets the images' folder path from the config file
+     *
+     * @return QString the images' folder path
+     */
+    QString getSacredPath();
+
+    /*
      * Initializes a new configuration file
      * 
      * @return bool true on success, false on failure

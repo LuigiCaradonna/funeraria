@@ -23,6 +23,7 @@ SettingsUi::SettingsUi(const QSqlDatabase& db, const QString& css_folder, const 
     this->connect(this->ui.btnArchiveFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeArchivePath);
     this->connect(this->ui.btnCrossesFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeCrossesPath);
     this->connect(this->ui.btnSculpturesFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeSculpturesPath);
+    this->connect(this->ui.btnSacredFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeSacredPath);
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SettingsUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &SettingsUi::slotCloseDialog);
 }
@@ -115,6 +116,23 @@ void SettingsUi::slotChangeCrossesPath()
     this->ui.lblCrossesFolder->setText(new_crosses_path);
 }
 
+void SettingsUi::slotChangeSacredPath()
+{
+    // Prompt the user to select the archive folder
+    QString new_sacred_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
+
+    if (new_sacred_path.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("La cartella indicata risulta inesistente.");
+        message.exec();
+        return;
+    }
+
+    this->ui.lblSacredFolder->setText(new_sacred_path);
+}
+
 void SettingsUi::slotSave()
 {
     QMap<QString, QString> setting;
@@ -150,6 +168,11 @@ void SettingsUi::slotSave()
     QString crosses_path = this->ui.lblCrossesFolder->text();
     if (crosses_path != config->getSculpturesPath()) {
         config->setCrossesPath(crosses_path);
+    }
+
+    QString sacred_path = this->ui.lblSacredFolder->text();
+    if (sacred_path != config->getSacredPath()) {
+        config->setCrossesPath(sacred_path);
     }
 
     delete config;

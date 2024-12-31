@@ -13,7 +13,6 @@
 #include "Tomb.h"
 #include "TombType.h"
 #include "TombFormat.h"
-#include "Frame.h"
 #include "Pit.h"
 #include "Cross.h"
 #include "Sacred.h"
@@ -152,10 +151,10 @@ private:
     Accessory* vase;
     Accessory* lamp;
     Accessory* flame;
+    Accessory* frame;
     Tomb* tomb;
     TombType* tomb_type;
     TombFormat* tomb_format;
-    Frame* frame;
     Pit* pit;
     Cross* cross;
     Sacred* sacred;

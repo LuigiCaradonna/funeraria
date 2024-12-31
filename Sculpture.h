@@ -11,6 +11,7 @@ class Sculpture : public QObject
 	Q_OBJECT
 
 public:
+
     /********** CONSTRUCTOR **********/
 
     /*
@@ -32,7 +33,7 @@ public:
     /*
      * Gets all the sculptures' data
      *
-     * @param   const QString& code - Optional, code of the sculputre to get
+     * @param   const QString& code - Optional, code of the sculpture to get
      *
      * @return  QList<QMap<QString, QString>> - A list containing the sculptures' data
      */
@@ -41,7 +42,7 @@ public:
     /*
      * Gets all the sculptures' data
      *
-     * @param   const QString& code - Optional, name of the sculputre to get
+     * @param   const QString& code - Optional, name of the sculpture to get
      *
      * @return  QList<QMap<QString, QString>> - A list containing the sculptures' data
      */

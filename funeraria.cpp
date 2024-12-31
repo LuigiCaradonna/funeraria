@@ -982,6 +982,17 @@ void Funeraria::slotEditItem() {
 
         delete flame_ui;
     }
+    else if (this->current_table == "frame") {
+        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, this->css_folder, "frame", this->icons_folder, this);
+        frame_ui->updateForm(
+            this->ui.tableWidget->item(row, 0)->text(),
+            this->ui.tableWidget->item(row, 1)->text()
+        );
+        frame_ui->setModal(true);
+        frame_ui->exec();
+
+        delete frame_ui;
+    }
     else if (this->current_table == "material") {
         AccessoryUi* material_ui = new AccessoryUi(this->db->db, this->css_folder, "material", this->icons_folder, this);
         material_ui->updateForm(

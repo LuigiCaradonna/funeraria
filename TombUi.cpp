@@ -26,7 +26,7 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->flame = new Accessory(this->db, "flame");
     this->tomb_type = new TombType(this->db);
     this->tomb_format = new TombFormat(this->db);
-    this->frame = new Frame(this->db);
+    this->frame = new Accessory(this->db, "frame");
     this->pit = new Pit(this->db);
     this->cross = new Cross(this->db);
     this->sacred = new Sacred(this->db);
@@ -803,7 +803,7 @@ void TombUi::updateForm()
     QList<QMap<QString, QString>> lamps = this->lamp->get();
     QList<QMap<QString, QString>> flames = this->flame->get();
     QList<QMap<QString, QString>> crosses = this->cross->getListByCode();
-    QList<QMap<QString, QString>> sacreds = this->sacred->get();
+    QList<QMap<QString, QString>> sacreds = this->sacred->getListByCode();
     QList<QMap<QString, QString>> sculptures = this->sculpture->getListByCode();
     QList<QMap<QString, QString>> frames = this->frame->get();
     QList<QMap<QString, QString>> pits = this->pit->get();
