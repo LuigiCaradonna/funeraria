@@ -54,9 +54,9 @@ QString Config::getDbFile()
     QJsonObject config_content = this->getConfigFileContent();
 
     //Access the wanted value
-    QString db_path = config_content.value("db_file").toString();
+    QString db_file = config_content.value("db_file").toString();
 
-    return db_path;
+    return db_file;
 }
 
 void Config::setArchivePath(const QString& archive_path)
@@ -76,9 +76,9 @@ QString Config::getArchivePath()
     QJsonObject config_content = this->getConfigFileContent();
 
     //Access the wanted value
-    QString db_path = config_content.value("archive_path").toString();
+    QString archive_path = config_content.value("archive_path").toString();
 
-    return db_path;
+    return archive_path;
 }
 
 void Config::setSculpturesPath(const QString& sculptures_path)
@@ -98,9 +98,9 @@ QString Config::getSculpturesPath()
     QJsonObject config_content = this->getConfigFileContent();
 
     //Access the wanted value
-    QString db_path = config_content.value("sculptures_path").toString();
+    QString sculptures_path = config_content.value("sculptures_path").toString();
 
-    return db_path;
+    return sculptures_path;
 }
 
 void Config::setCrossesPath(const QString& crosses_path)
@@ -120,9 +120,9 @@ QString Config::getCrossesPath()
     QJsonObject config_content = this->getConfigFileContent();
 
     //Access the wanted value
-    QString db_path = config_content.value("crosses_path").toString();
+    QString crosses_path = config_content.value("crosses_path").toString();
 
-    return db_path;
+    return crosses_path;
 }
 
 void Config::setSacredPath(const QString& sacred_path)

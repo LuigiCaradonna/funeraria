@@ -172,7 +172,7 @@ void SettingsUi::slotSave()
 
     QString sacred_path = this->ui.lblSacredFolder->text();
     if (sacred_path != config->getSacredPath()) {
-        config->setCrossesPath(sacred_path);
+        config->setSacredPath(sacred_path);
     }
 
     delete config;
@@ -230,6 +230,7 @@ void SettingsUi::updateForm() {
     this->ui.lblArchiveFolder->setText(config->getArchivePath());
     this->ui.lblSculpturesFolder->setText(config->getSculpturesPath());
     this->ui.lblCrossesFolder->setText(config->getCrossesPath());
+    this->ui.lblSacredFolder->setText(config->getSacredPath());
 
     delete config;
     delete settings;
