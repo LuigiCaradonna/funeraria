@@ -2540,7 +2540,7 @@ void Funeraria::initTopBarQuickAccess()
     // Tombs to engrave button
     this->btnQuickSculptures = new QPushButton();
     this->btnQuickSculptures->setMinimumSize(QSize(48, 48));
-    this->btnQuickSculptures->setIcon(QIcon(this->icons_folder + "busto-48.png"));
+    this->btnQuickSculptures->setIcon(QIcon(this->icons_folder + "sculpture-48.png"));
     this->btnQuickSculptures->setIconSize(QSize(32, 32));
     this->btnQuickSculptures->setToolTip("Sculture");
     this->btnQuickSculptures->setToolTipDuration(tooltip_duration);
@@ -2569,7 +2569,7 @@ void Funeraria::initTopBarQuickAccess()
     this->btnQuickToPay->setToolTip("Lapidi da saldare");
     this->btnQuickToPay->setToolTipDuration(tooltip_duration);
 
-    // Tombs to pay button
+    // New tomb button
     this->btnQuickNewTomb = new QPushButton();
     this->btnQuickNewTomb->setMinimumSize(QSize(48, 48));
     this->btnQuickNewTomb->setIcon(QIcon(this->icons_folder + "add-50.png"));
