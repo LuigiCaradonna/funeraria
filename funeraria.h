@@ -457,6 +457,8 @@ private:
     QPushButton* btnQuickReports;
     QPushButton* btnQuickClients;
     QPushButton* btnQuickSculptures;
+    QPushButton* btnQuickCrosses;
+    QPushButton* btnQuickSacred;
     QPushButton* btnQuickToEngrave;
     QPushButton* btnQuickToPay;
     QPushButton* btnQuickToMount;

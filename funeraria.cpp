@@ -81,7 +81,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.menuFrames->setIcon(QIcon(this->icons_folder + "frame-50.png"));
         this->ui.actionFrNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionFrList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuCrosses->setIcon(QIcon(this->icons_folder + "cross-64.png"));
+        this->ui.menuCrosses->setIcon(QIcon(this->icons_folder + "cross-72.png"));
         this->ui.actionCrNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionCrList->setIcon(QIcon(this->icons_folder + "list-50.png"));
         this->ui.menuImages->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
@@ -2557,13 +2557,29 @@ void Funeraria::initTopBarQuickAccess()
     this->btnQuickClients->setToolTip("Clienti");
     this->btnQuickClients->setToolTipDuration(tooltip_duration);
 
-    // Tombs to engrave button
+    // Sculpture button
     this->btnQuickSculptures = new QPushButton();
     this->btnQuickSculptures->setMinimumSize(QSize(48, 48));
     this->btnQuickSculptures->setIcon(QIcon(this->icons_folder + "sculpture-48.png"));
     this->btnQuickSculptures->setIconSize(QSize(32, 32));
     this->btnQuickSculptures->setToolTip("Sculture");
     this->btnQuickSculptures->setToolTipDuration(tooltip_duration);
+
+    // Sculpture button
+    this->btnQuickCrosses = new QPushButton();
+    this->btnQuickCrosses->setMinimumSize(QSize(48, 48));
+    this->btnQuickCrosses->setIcon(QIcon(this->icons_folder + "cross-72.png"));
+    this->btnQuickCrosses->setIconSize(QSize(32, 32));
+    this->btnQuickCrosses->setToolTip("Croci");
+    this->btnQuickCrosses->setToolTipDuration(tooltip_duration);
+
+    // Sacred button
+    this->btnQuickSacred = new QPushButton();
+    this->btnQuickSacred->setMinimumSize(QSize(48, 48));
+    this->btnQuickSacred->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
+    this->btnQuickSacred->setIconSize(QSize(32, 32));
+    this->btnQuickSacred->setToolTip("Immagini sacre");
+    this->btnQuickSacred->setToolTipDuration(tooltip_duration);
 
     // Tombs to engrave button
     this->btnQuickToEngrave = new QPushButton();
@@ -2607,6 +2623,8 @@ void Funeraria::initTopBarQuickAccess()
     topBarQuickAccessLayout->addWidget(this->btnQuickReports);
     topBarQuickAccessLayout->addWidget(this->btnQuickClients);
     topBarQuickAccessLayout->addWidget(this->btnQuickSculptures);
+    topBarQuickAccessLayout->addWidget(this->btnQuickCrosses);
+    topBarQuickAccessLayout->addWidget(this->btnQuickSacred);
     topBarQuickAccessLayout->addWidget(this->btnQuickToEngrave);
     topBarQuickAccessLayout->addWidget(this->btnQuickToMount);
     topBarQuickAccessLayout->addWidget(this->btnQuickToPay);
@@ -2617,6 +2635,8 @@ void Funeraria::initTopBarQuickAccess()
     this->connect(this->btnQuickReports,    &QPushButton::clicked, this, &Funeraria::slotReport);
     this->connect(this->btnQuickClients,    &QPushButton::clicked, this, &Funeraria::slotShowClients);
     this->connect(this->btnQuickSculptures, &QPushButton::clicked, this, &Funeraria::slotShowSculptures);
+    this->connect(this->btnQuickCrosses,    &QPushButton::clicked, this, &Funeraria::slotShowCrosses);
+    this->connect(this->btnQuickSacred,     &QPushButton::clicked, this, &Funeraria::slotShowSacred);
     this->connect(this->btnQuickToEngrave,  &QPushButton::clicked, this, &Funeraria::slotTombsToEngrave);
     this->connect(this->btnQuickToMount,    &QPushButton::clicked, this, &Funeraria::slotAccessoriesToMount);
     this->connect(this->btnQuickToPay,      &QPushButton::clicked, this, &Funeraria::slotTombsNotPaid);
