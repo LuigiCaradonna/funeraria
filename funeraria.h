@@ -16,6 +16,8 @@
 #include "Client.h"
 #include "Sculpture.h"
 #include "SculptureUi.h"
+#include "Sacred.h"
+#include "SacredUi.h"
 #include "Cross.h"
 #include "CrossUi.h"
 #include "SettingsUi.h"
@@ -235,7 +237,7 @@ protected slots:
     void slotShowSculptures(int row = 1);
 
     /*
-     * Updates the sculptures's orders list shown applying the filter (sculpture code/name string)
+     * Updates the sculptures's orders list shown applying the filter (name string)
      *
      * @return void
      */
@@ -265,7 +267,7 @@ protected slots:
     void slotShowCrosses(int row = 1);
 
     /*
-     * Updates the crosses' orders list shown applying the filter (sculpture code/name string)
+     * Updates the crosses' orders list shown applying the filter (name string)
      *
      * @return void
      */
@@ -284,6 +286,36 @@ protected slots:
      * @return void
      */
     void slotCrossDetails();
+
+    /*
+     * Shows the images' list
+     *
+     * @param int row - Row where to center the scroll view
+     *
+     * @return void
+     */
+    void slotShowSacred(int row = 1);
+
+    /*
+     * Updates the images' orders list shown applying the filter (name string)
+     *
+     * @return void
+     */
+    void slotFilterSacred();
+
+    /*
+     * Shows the dialog to insert a new image
+     *
+     * @return void
+     */
+    void slotNewSacred();
+
+    /*
+     * Shows a dialog window containing the selected images's details
+     *
+     * @return void
+     */
+    void slotSacredDetails();
 
     /*
      * Shows the tombs needed which can be engraved
@@ -380,6 +412,8 @@ private:
     SculptureUi* sculpture_ui;
     Cross* cross;
     CrossUi* cross_ui;
+    Sacred* sacred;
+    SacredUi* sacred_ui;
     ReportUi* report_ui;
     Accessory* vase;
     Accessory* lamp;
@@ -452,6 +486,11 @@ private:
     QLabel* lblCrName;
     QLineEdit* leCrName;
     QSpacerItem* crossSpacer;
+
+    // Sacred top bar elements
+    QLabel* lblImName;
+    QLineEdit* leImName;
+    QSpacerItem* sacredSpacer;
 
     // Clients top bar elements
     QLabel* lblClName;
@@ -608,6 +647,13 @@ private:
      * @return void
      */
     void initCrossesTopBar();
+
+    /*
+     * Initialize the top bar for the sacred images view.
+     *
+     * @return void
+     */
+    void initSacredTopBar();
 
     /*
      * Initialize the top bar for the clients view.
