@@ -237,7 +237,7 @@ bool Sculpture::store(
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("INSERT INTO " + this->table + " "
         " (code, name, img, width, height, depth, created_at, edited_at)"
-        " VALUES (:code, :img, :width, :height, :depth, :created_at, :edited_at)");
+        " VALUES (:code, :name, :img, :width, :height, :depth, :created_at, :edited_at)");
     query.bindValue(":code", code);
     query.bindValue(":name", name);
     query.bindValue(":img", img);
