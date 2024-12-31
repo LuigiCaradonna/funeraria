@@ -345,6 +345,7 @@ QList<QMap<QString, QString>> Tomb::accessoriesToMount()
         "JOIN flame ON tomb.flame_code = flame.code "
         "JOIN client ON tomb.client_id = client.id "
         "WHERE tomb.accessories_mounted = 0 AND (tomb.confirmed_at != '' AND tomb.confirmed_at IS NOT NULL) "
+        "AND (tomb.engraved_at != '' AND tomb.engraved_at IS NOT NULL) "
         "AND (tomb.vase_code != 'NO' OR tomb.lamp_code != 'NO' OR tomb.flame_code != 'NO');"
     );
 
