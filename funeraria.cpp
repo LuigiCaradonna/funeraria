@@ -901,7 +901,7 @@ void Funeraria::slotNewItem(const QString& type)
     this->current_table = type;
 
     if (type == "vase") {
-        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, this->css_folder, "vase", this->icons_folder, this);
+        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vase", this->css_folder, this->icons_folder, this);
         vase_ui->updateForm();
         vase_ui->setModal(true);
         vase_ui->exec();
@@ -909,7 +909,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete vase_ui;
     }
     else if (type == "lamp") {
-        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, this->css_folder, "lamp", this->icons_folder, this);
+        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamp", this->css_folder, this->icons_folder, this);
         lamp_ui->updateForm();
         lamp_ui->setModal(true);
         lamp_ui->exec();
@@ -917,7 +917,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete lamp_ui;
     }
     else if (type == "flame") {
-        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, this->css_folder, "flame", this->icons_folder, this);
+        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flame", this->css_folder, this->icons_folder, this);
         flame_ui->updateForm();
         flame_ui->setModal(true);
         flame_ui->exec();
@@ -925,7 +925,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete flame_ui;
     }
     else if (type == "material") {
-        AccessoryUi* material_ui = new AccessoryUi(this->db->db, this->css_folder, "material", this->icons_folder, this);
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->css_folder, this->icons_folder, this);
         material_ui->updateForm();
         material_ui->setModal(true);
         material_ui->exec();
@@ -933,7 +933,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete material_ui;
     }
     else if (type == "frame") {
-        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, this->css_folder, "frame", this->icons_folder, this);
+        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, "frame", this->css_folder, this->icons_folder, this);
         frame_ui->updateForm();
         frame_ui->setModal(true);
         frame_ui->exec();
@@ -941,7 +941,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete frame_ui;
     }
     else if (type == "pit") {
-        AccessoryUi* pit_ui = new AccessoryUi(this->db->db, this->css_folder, "pit", this->icons_folder, this);
+        AccessoryUi* pit_ui = new AccessoryUi(this->db->db, "pit", this->css_folder, this->icons_folder, this);
         pit_ui->updateForm();
         pit_ui->setModal(true);
         pit_ui->exec();
@@ -1083,22 +1083,15 @@ void Funeraria::slotDeleteItem() {
             message.setIcon(QMessageBox::Information);
             message.setText("Eliminazione eseguita.");
             message.exec();
-        }
-        else {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Critical);
-            message.setText("Eliminazione non riuscita.");
-            message.exec();
 
             // Reload the table
 
-            if (this->current_table == "vase" || 
-                this->current_table == "lamp" || 
-                this->current_table == "flame" || 
-                this->current_table == "pit" || 
-                this->current_table == "frame" || 
-                this->current_table == "material") 
+            if (this->current_table == "vase" ||
+                this->current_table == "lamp" ||
+                this->current_table == "flame" ||
+                this->current_table == "pit" ||
+                this->current_table == "frame" ||
+                this->current_table == "material")
             {
                 this->slotShowItems(this->current_table);
             }
@@ -1114,7 +1107,13 @@ void Funeraria::slotDeleteItem() {
             else if (this->current_table == "sacred") {
                 this->slotShowSacred();
             }
-
+        }
+        else {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Eliminazione non riuscita.");
+            message.exec();
         }
     }
 }
