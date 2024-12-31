@@ -58,6 +58,12 @@ void AccessoryUi::updateForm(const QString& code, const QString& name)
     else if (this->table == "flame") {
         this->setWindowTitle(action + " fiamma");
     }
+    else if (this->table == "frame") {
+        this->setWindowTitle(action + " cornice");
+    }
+    else if (this->table == "pit") {
+        this->setWindowTitle(action + " scavo");
+    }
 }
 
 /********** PRIVATE SLOTS **********/

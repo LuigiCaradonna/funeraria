@@ -961,7 +961,7 @@ void Funeraria::slotEditItem() {
     int row = this->ui.tableWidget->currentRow();
     // Set the name property of the Client object to the name present in the clicked row
     if (this->current_table == "vase") {
-        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, this->css_folder, "vase", this->icons_folder, this);
+        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vase", this->css_folder, this->icons_folder, this);
         vase_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(), 
             this->ui.tableWidget->item(row, 1)->text()
@@ -972,7 +972,7 @@ void Funeraria::slotEditItem() {
         delete vase_ui;
     }
     else if (this->current_table == "lamp") {
-        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, this->css_folder, "lamp", this->icons_folder, this);
+        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamp", this->css_folder, this->icons_folder, this);
         lamp_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(), 
             this->ui.tableWidget->item(row, 1)->text()
@@ -983,7 +983,7 @@ void Funeraria::slotEditItem() {
         delete lamp_ui;
     }
     else if (this->current_table == "flame") {
-        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, this->css_folder, "flame", this->icons_folder, this);
+        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flame", this->css_folder, this->icons_folder, this);
         flame_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(), 
             this->ui.tableWidget->item(row, 1)->text()
@@ -994,7 +994,7 @@ void Funeraria::slotEditItem() {
         delete flame_ui;
     }
     else if (this->current_table == "frame") {
-        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, this->css_folder, "frame", this->icons_folder, this);
+        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, "frame", this->css_folder, this->icons_folder, this);
         frame_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -1005,7 +1005,7 @@ void Funeraria::slotEditItem() {
         delete frame_ui;
     }
     else if (this->current_table == "pit") {
-        AccessoryUi* pit_ui = new AccessoryUi(this->db->db, this->css_folder, "pit", this->icons_folder, this);
+        AccessoryUi* pit_ui = new AccessoryUi(this->db->db, "pit", this->css_folder, this->icons_folder, this);
         pit_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -1016,7 +1016,7 @@ void Funeraria::slotEditItem() {
         delete pit_ui;
     }
     else if (this->current_table == "material") {
-        AccessoryUi* material_ui = new AccessoryUi(this->db->db, this->css_folder, "material", this->icons_folder, this);
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->css_folder, this->icons_folder, this);
         material_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(), 
             this->ui.tableWidget->item(row, 1)->text()
