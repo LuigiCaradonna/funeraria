@@ -1326,7 +1326,6 @@ void Funeraria::slotShowCrosses(int row)
     this->ui.tableWidget->setColumnWidth(5, 90);  // Details button
     this->ui.tableWidget->setColumnWidth(6, 90);  // Delete button
 
-    QFont rid_font("Calibri", 16);
     int row_number = 1;
 
     for (int i = 0; i < crosses.size(); i++) {
@@ -1489,7 +1488,6 @@ void Funeraria::slotShowSacred(int row)
     this->ui.tableWidget->setColumnWidth(5, 90);  // Details button
     this->ui.tableWidget->setColumnWidth(6, 90);  // Delete button
 
-    QFont rid_font("Calibri", 16);
     int row_number = 1;
 
     for (int i = 0; i < sacreds.size(); i++) {
