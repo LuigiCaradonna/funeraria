@@ -160,19 +160,49 @@
     <addaction name="actionMtNew"/>
     <addaction name="actionMtList"/>
    </widget>
-   <widget class="QMenu" name="menuCrosses">
+   <widget class="QMenu" name="menuOrnaments">
     <property name="title">
-     <string>Croci</string>
+     <string>Decorazioni</string>
     </property>
-    <addaction name="actionCrNew"/>
-    <addaction name="actionCrList"/>
+    <widget class="QMenu" name="menuFrames">
+     <property name="title">
+      <string>Cornici</string>
+     </property>
+     <addaction name="actionFrNew"/>
+     <addaction name="actionFrList"/>
+    </widget>
+    <widget class="QMenu" name="menuPits">
+     <property name="title">
+      <string>Scavi</string>
+     </property>
+     <addaction name="actionPitNew"/>
+     <addaction name="actionPitList"/>
+    </widget>
+    <widget class="QMenu" name="menuCrosses">
+     <property name="title">
+      <string>Croci</string>
+     </property>
+     <addaction name="actionCrNew"/>
+     <addaction name="actionCrList"/>
+    </widget>
+    <widget class="QMenu" name="menuImages">
+     <property name="title">
+      <string>Immagini</string>
+     </property>
+     <addaction name="actionImNew"/>
+     <addaction name="actionImList"/>
+    </widget>
+    <addaction name="menuPits"/>
+    <addaction name="menuFrames"/>
+    <addaction name="menuCrosses"/>
+    <addaction name="menuImages"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuClients"/>
    <addaction name="menuMaterials"/>
    <addaction name="menuAccessories"/>
-   <addaction name="menuCrosses"/>
    <addaction name="menuSculptures"/>
+   <addaction name="menuOrnaments"/>
    <addaction name="menuTombs"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -311,9 +341,39 @@
     <string>Elenco</string>
    </property>
   </action>
+  <action name="actionFrNew">
+   <property name="text">
+    <string>Nuova</string>
+   </property>
+  </action>
+  <action name="actionFrList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+  </action>
+  <action name="actionPitNew">
+   <property name="text">
+    <string>Nuovo</string>
+   </property>
+  </action>
+  <action name="actionPitList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+  </action>
   <action name="actionCrNew">
    <property name="text">
     <string>Nuova</string>
+   </property>
+  </action>
+  <action name="actionImNew">
+   <property name="text">
+    <string>Nuova</string>
+   </property>
+  </action>
+  <action name="actionImList">
+   <property name="text">
+    <string>Elenco</string>
    </property>
   </action>
   <action name="actionCrList">

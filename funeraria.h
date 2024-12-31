@@ -384,6 +384,8 @@ private:
     Accessory* vase;
     Accessory* lamp;
     Accessory* flame;
+    Accessory* pit;
+    Accessory* frame;
     Accessory* material;
 
     QSignalMapper* show_items_mapper;

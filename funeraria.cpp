@@ -74,9 +74,19 @@ Funeraria::Funeraria(QWidget* parent)
         // Sculture
         this->ui.actionScNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionScList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        // Croci
+        // Decorazioni
+        this->ui.menuPits->setIcon(QIcon(this->icons_folder + "pit-50.png"));
+        this->ui.actionPitNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionPitList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.menuFrames->setIcon(QIcon(this->icons_folder + "frame-50.png"));
+        this->ui.actionFrNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionFrList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.menuCrosses->setIcon(QIcon(this->icons_folder + "cross-64.png"));
         this->ui.actionCrNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionCrList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.menuImages->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
+        this->ui.actionImNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionImList->setIcon(QIcon(this->icons_folder + "list-50.png"));
         // Accessori
         this->ui.menuVases->setIcon(QIcon(this->icons_folder + "vase-50.png"));
         this->ui.actionVNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
@@ -107,6 +117,8 @@ Funeraria::Funeraria(QWidget* parent)
         this->vase = new Accessory(this->db->db, "vase");
         this->lamp = new Accessory(this->db->db, "lamp");
         this->flame = new Accessory(this->db->db, "flame");
+        this->pit = new Accessory(this->db->db, "pit");
+        this->frame = new Accessory(this->db->db, "frame");
         this->material = new Accessory(this->db->db, "material");
 
         // Top bars' init, must be after the objects instantiation, some of them are required to build the bars
@@ -147,10 +159,14 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionVNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionLNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionFNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
+        this->connect(this->ui.actionFrNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
+        this->connect(this->ui.actionPitNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         new_item_mapper->setMapping(this->ui.actionMNew, "material");
         new_item_mapper->setMapping(this->ui.actionVNew, "vase");
         new_item_mapper->setMapping(this->ui.actionLNew, "lamp");
         new_item_mapper->setMapping(this->ui.actionFNew, "flame");
+        new_item_mapper->setMapping(this->ui.actionFrNew, "frame");
+        new_item_mapper->setMapping(this->ui.actionPitNew, "pit");
         this->connect(new_item_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotNewItem);
 
         /* 
@@ -162,10 +178,14 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionVList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionLList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionFList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
+        this->connect(this->ui.actionFrList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
+        this->connect(this->ui.actionPitList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         show_items_mapper->setMapping(this->ui.actionMList, "material");
         show_items_mapper->setMapping(this->ui.actionVList, "vase");
         show_items_mapper->setMapping(this->ui.actionLList, "lamp");
         show_items_mapper->setMapping(this->ui.actionFList, "flame");
+        show_items_mapper->setMapping(this->ui.actionFrList, "frame");
+        show_items_mapper->setMapping(this->ui.actionPitList, "pit");
         this->connect(show_items_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
 
         // Create a qPushButton for each client for the quick access bar
@@ -185,6 +205,7 @@ Funeraria::~Funeraria()
     delete this->client_ui;
     delete this->sculpture;
     delete this->sculpture_ui;
+    delete this->frame;
     delete this->cross;
     delete this->cross_ui;
     delete this->settings_ui;
@@ -193,6 +214,7 @@ Funeraria::~Funeraria()
     delete this->vase;
     delete this->lamp;
     delete this->flame;
+    delete this->pit;
     delete this->material;
     delete this->show_items_mapper;
     delete this->new_item_mapper;
@@ -899,6 +921,22 @@ void Funeraria::slotNewItem(const QString& type)
 
         delete material_ui;
     }
+    else if (type == "frame") {
+        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, this->css_folder, "frame", this->icons_folder, this);
+        frame_ui->updateForm();
+        frame_ui->setModal(true);
+        frame_ui->exec();
+
+        delete frame_ui;
+    }
+    else if (type == "pit") {
+        AccessoryUi* pit_ui = new AccessoryUi(this->db->db, this->css_folder, "pit", this->icons_folder, this);
+        pit_ui->updateForm();
+        pit_ui->setModal(true);
+        pit_ui->exec();
+
+        delete pit_ui;
+    }
     else {
         // The type requested is not valid
         return;
@@ -984,6 +1022,9 @@ void Funeraria::slotDeleteItem() {
         else if (this->current_table == "flame") {
             if (!this->flame->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
         }
+        else if (this->current_table == "pit") {
+            if (!this->pit->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
+        }
         else if (this->current_table == "material") {
             if (!this->material->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
         }
@@ -995,6 +1036,9 @@ void Funeraria::slotDeleteItem() {
         }
         else if (this->current_table == "cross") {
             if (!this->cross->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
+        }
+        else if (this->current_table == "frame") {
+            if (!this->frame->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
         }
 
         if (!errors) {
@@ -1869,6 +1913,12 @@ void Funeraria::showItems(const QString& type, int row)
     }
     else if (type == "material") {
         accessories = this->material->get();
+    }
+    else if (type == "frame") {
+        accessories = this->frame->get();
+    }
+    else if (type == "pit") {
+        accessories = this->pit->get();
     }
     else {
         // The type requested is not valid

@@ -49,3 +49,9 @@ IDB_PNG23               PNG                     "assets\\icons\\ok-64.png"
 IDB_PNG24               PNG                     "assets\\icons\\cross-64.png"
 
 IDB_PNG25               PNG                     "assets\\icons\\bible-50.png"
+
+IDB_PNG26               PNG                     "assets\\icons\\frame-50.png"
+
+IDB_PNG27               PNG                     "assets\\icons\\pit-50.png"
+
+IDB_PNG28               PNG                     "assets\\icons\\jesus-50.png"
