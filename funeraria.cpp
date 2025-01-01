@@ -1185,16 +1185,15 @@ void Funeraria::slotShowSculptures(int row)
         }
 
         QPixmap pic(pic_path);
-        QPixmap resized;
+        QPixmap resized, resized_h, resized_w;
+        resized_h = pic.scaledToHeight(img_cell_height);
+        resized_w = pic.scaledToWidth(img_cell_width);
 
-        // If the image is vertical or squared
-        if (pic.height() >= pic.width()) {
-            // Resize the image according to the cell height
-            resized = pic.scaledToHeight(img_cell_height);
+        if (resized_h.width() <= img_cell_width && resized_h.height() <= img_cell_height) {
+            resized = resized_h;
         }
         else {
-            // Resize the image according to the cell width
-            resized = pic.scaledToWidth(img_cell_width);
+            resized = resized_w;
         }
 
         QLabel* image_widget = new QLabel(this->ui.tableWidget);
@@ -1371,16 +1370,15 @@ void Funeraria::slotShowCrosses(int row)
         }
 
         QPixmap pic(pic_path);
-        QPixmap resized;
+        QPixmap resized, resized_h, resized_w;
+        resized_h = pic.scaledToHeight(img_cell_height);
+        resized_w = pic.scaledToWidth(img_cell_width);
 
-        // If the image is vertical or squared
-        if (pic.height() >= pic.width()) {
-            // Resize the image according to the cell height
-            resized = pic.scaledToHeight(img_cell_height);
+        if (resized_h.width() <= img_cell_width && resized_h.height() <= img_cell_height) {
+            resized = resized_h;
         }
         else {
-            // Resize the image according to the cell width
-            resized = pic.scaledToWidth(img_cell_width);
+            resized = resized_w;
         }
 
         QLabel* image_widget = new QLabel(this->ui.tableWidget);
@@ -1533,16 +1531,15 @@ void Funeraria::slotShowSacred(int row)
         }
 
         QPixmap pic(pic_path);
-        QPixmap resized;
+        QPixmap resized, resized_h, resized_w;
+        resized_h = pic.scaledToHeight(img_cell_height);
+        resized_w = pic.scaledToWidth(img_cell_width);
 
-        // If the image is vertical or squared
-        if (pic.height() >= pic.width()) {
-            // Resize the image according to the cell height
-            resized = pic.scaledToHeight(img_cell_height);
+        if (resized_h.width() <= img_cell_width && resized_h.height() <= img_cell_height) {
+            resized = resized_h;
         }
         else {
-            // Resize the image according to the cell width
-            resized = pic.scaledToWidth(img_cell_width);
+            resized = resized_w;
         }
 
         QLabel* image_widget = new QLabel(this->ui.tableWidget);
