@@ -784,18 +784,18 @@
              </property>
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>80</width>
                <height>30</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>100</width>
+               <width>80</width>
                <height>30</height>
               </size>
              </property>
              <property name="toolTip">
-              <string>Altezza scultura</string>
+              <string>Altezza scultura (cm)</string>
              </property>
              <property name="placeholderText">
               <string>Alt. (cm)</string>
@@ -814,13 +814,13 @@
         <widget class="QGroupBox" name="contEngravedYesNo">
          <property name="minimumSize">
           <size>
-           <width>400</width>
+           <width>330</width>
            <height>60</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>400</width>
+           <width>330</width>
            <height>60</height>
           </size>
          </property>
@@ -883,7 +883,7 @@
            <rect>
             <x>250</x>
             <y>20</y>
-            <width>131</width>
+            <width>71</width>
             <height>30</height>
            </rect>
           </property>
@@ -900,7 +900,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Bronzi applicati</string>
+           <string>Bronzi</string>
           </property>
          </widget>
         </widget>
@@ -976,6 +976,72 @@
           </property>
           <property name="text">
            <string>No</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="contMatProvided">
+         <property name="minimumSize">
+          <size>
+           <width>140</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>140</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Materiale Fornito</string>
+         </property>
+         <widget class="QRadioButton" name="rbMProvYes">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>20</y>
+            <width>41</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Sì</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="rbMProvNo">
+          <property name="geometry">
+           <rect>
+            <x>60</x>
+            <y>20</y>
+            <width>51</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>No</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </widget>
@@ -1169,7 +1235,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_4">
+        <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>

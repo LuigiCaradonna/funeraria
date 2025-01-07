@@ -48,6 +48,8 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->connect(this->ui.rbEngraveBronze, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.rbMountYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.rbMountNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbMProvYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.rbMProvNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.rbEpReliefYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.rbEpReliefNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.rbInscriptionYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
@@ -229,6 +231,7 @@ void TombUi::slotSave()
             this->sculpture->getCode(this->ui.cbSculpture->currentText()),
             this->ui.leScHeight->text().toInt(),
             this->ui.rbMountYes->isChecked(),
+            this->ui.rbMProvYes->isChecked(),
             this->ui.rbEpReliefYes->isChecked(),
             this->ui.rbInscriptionYes->isChecked(),
             this->pit->getCode(this->ui.cbPitFormatOne->currentText()),
@@ -281,6 +284,7 @@ void TombUi::slotSave()
             this->drawing->getCode(this->ui.cbDrawing->currentText()),
             this->sculpture->getCode(this->ui.cbSculpture->currentText()),
             this->ui.leScHeight->text().toInt(),
+            this->ui.rbMProvYes->isChecked(),
             this->ui.rbMountYes->isChecked(),
             this->ui.rbEpReliefYes->isChecked(),
             this->ui.rbInscriptionYes->isChecked(),
@@ -338,6 +342,8 @@ void TombUi::slotUpdateNotes()
     // Reset the text area content
     this->ui.ptNote->setPlainText("");
     QString notes = "";
+
+    if (this->ui.rbMProvYes->isChecked()) notes += "Materiale fornito, ";
 
     if (this->ui.rbMountYes->isChecked()) notes += "Montaggio, ";
     /*
@@ -795,7 +801,7 @@ void TombUi::updateForm()
     // Get the selected tomb's data
     QMap<QString, QString> tomb_details = this->tomb->getDetails(this->progressive);
 
-    QList<QMap<QString, QString>> clients = client->get();
+    QList<QMap<QString, QString>> clients = client->getActive();
     QList<QMap<QString, QString>> materials = this->material->get();
     QList<QMap<QString, QString>> tomb_types = this->tomb_type->get();
     QList<QMap<QString, QString>> tomb_formats = this->tomb_format->get();
@@ -874,6 +880,7 @@ void TombUi::updateForm()
 
         /*********** Get the index to select for the comboboxes *************/
         for (int i = 0; i < clients.size(); i++) {
+
             if (clients[i]["id"] == tomb_details["client_id"]) {
                 client_index = i;
                 break;

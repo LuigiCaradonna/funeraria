@@ -51,21 +51,28 @@ public:
     /*
      * Gets all the clients' names
      *
-     * @return  QList<QStringList> - A list containing all the clients' names
+     * @return  QStringList - A list containing all the clients' names
      */
     QStringList getNames();
 
     /*
+     * Gets all the active clients
+     *
+     * @return  QList<QMap<QString, QString>> - A list containing the active clients
+     */
+    QList<QMap<QString, QString>> getActive();
+
+    /*
      * Gets all the active clients' names
      *
-     * @return  QList<QStringList> - A list containing the clients' names
+     * @return  QQStringList - A list containing the Active clients' names
      */
     QStringList getActiveNames();
 
     /*
      * Gets all the clients' names to show as buttons into the quick access bar
      *
-     * @return  QList<QStringList> - A list containing the clients' names to show as buttons into the quick access bar
+     * @return  QStringList - A list containing the clients' names to show as buttons into the quick access bar
      */
     QStringList getQuickAccessNames();
 

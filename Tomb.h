@@ -110,6 +110,7 @@ public:
      * @param const QString& lamp_code          - Lamp's code
      * @param const QString& flame_code         - Flame's code
      * @param const bool mounted                - Whether the tomb have to be mounted or not
+     * @param const bool mat_provided           - Whether the material was provided or not
      * @param const bool ep_relief              - Whether the tomb have a relief engraved epigraph or not
      * @param const bool inscription            - Whether the tomb have an inscription or not
      * @param const QString& sculpture_code     - Sculpture's code
@@ -156,6 +157,7 @@ public:
         const QString& sculpture_code,
         const float& sculpture_height,
         const bool mounted,
+        const bool mat_provided,
         const bool ep_relief,
         const bool inscription,
         const QString& pit_format_one,
@@ -198,6 +200,7 @@ public:
      * @param const QString& lamp_code          - Lamp's code
      * @param const QString& flame_code         - Flame's code
      * @param const bool mounted                - Whether the tomb have to be mounted or not
+     * @param const bool mat_provided           - Whether the material was provided or not
      * @param const bool ep_relief              - Whether the tomb have a relief engraved epigraph or not
      * @param const bool inscription            - Whether the tomb have an inscription or not
      * @param const QString& sculpture_code     - Sculpture's code
@@ -245,6 +248,7 @@ public:
         const QString& sculpture_code,
         const float& sculpture_height,
         const bool mounted,
+        const bool mat_provided,
         const bool ep_relief,
         const bool inscription,
         const QString& pit_format_one,

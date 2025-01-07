@@ -426,6 +426,7 @@ bool Tomb::store(
     const QString& sculpture_code,
     const float& sculpture_height,
     const bool mounted,
+    const bool mat_provided,
     const bool ep_relief,
     const bool inscription,
     const QString& pit_one,
@@ -498,13 +499,15 @@ bool Tomb::store(
     query.prepare(
         "INSERT INTO " + this->table + " "
         "(progressive, client_id, name, engraved_names, ep_amount, engraved, price, paid, material_code, type_code, format_code, "
-        "vase_code, lamp_code, flame_code, cross_code, drawing_code, sculpture_code, sculpture_h, mounted, ep_relief, inscription, "
+        "vase_code, lamp_code, flame_code, cross_code, drawing_code, sculpture_code, sculpture_h, mounted, mat_provided, "
+        "ep_relief, inscription, "
         "pit_one, frame_one, pit_two, frame_two, pit_three, frame_three, "
         "pit_four, frame_four, pit_five, frame_five, pit_six, frame_six, "
         "notes, accessories_mounted, ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at, "
         "created_at, edited_at) "
         "VALUES (:progressive, :client_id, :name, :engraved_names, :ep_amount, :engraved, :price, :paid, :material_code, :type_code, :format_code, "
-        ":vase_code, :lamp_code, :flame_code, :cross_code, :drawing_code, :sculpture_code, :sculpture_h, :mounted, :ep_relief, :inscription, "
+        ":vase_code, :lamp_code, :flame_code, :cross_code, :drawing_code, :sculpture_code, :sculpture_h, :mounted, :mat_provided, "
+        ":ep_relief, : inscription, "
         ":pit_one, :frame_one, :pit_two, :frame_two, :pit_three, :frame_three, "
         ":pit_four, :frame_four, :pit_five, :frame_five, :pit_six, :frame_six, "
         ":notes, :accessories_mounted, :ordered_at, :proofed_at, :confirmed_at, :engraved_at, :delivered_at, "
@@ -529,6 +532,7 @@ bool Tomb::store(
     query.bindValue(":sculpture_code", sculpture_code);
     query.bindValue(":sculpture_h", sculpture_height);
     query.bindValue(":mounted", mounted);
+    query.bindValue(":mat_provided", mat_provided);
     query.bindValue(":ep_relief", ep_relief);
     query.bindValue(":inscription", inscription);
     query.bindValue(":pit_one", pit_one);
@@ -605,6 +609,7 @@ bool Tomb::update(
     const QString& sculpture_code,
     const float& sculpture_height,
     const bool mounted,
+    const bool mat_provided,
     const bool ep_relief,
     const bool inscription,
     const QString& pit_one,
@@ -635,7 +640,7 @@ bool Tomb::update(
         "ep_amount = :ep_amount, engraved = :engraved, price = :price, paid = :paid, material_code = :material_code, "
         "type_code = :type_code, format_code = :format_code, vase_code = :vase_code, lamp_code = :lamp_code,  flame_code = :flame_code, "
         "cross_code = :cross_code, drawing_code = :drawing_code,  sculpture_code = :sculpture_code, sculpture_h = :sculpture_h, "
-        "mounted = :mounted, ep_relief = :ep_relief, inscription = :inscription, "
+        "mounted = :mounted, mat_provided = :mat_provided, ep_relief = :ep_relief, inscription = :inscription, "
         "pit_one = :pit_one, frame_one = :frame_one, pit_two = :pit_two, frame_two = :frame_two, "
         "pit_three = :pit_three, frame_three = :frame_three, pit_four = :pit_four, frame_four = :frame_four, "
         "pit_five = :pit_five, frame_five = :frame_five, pit_six = :pit_six, frame_six = :frame_six, "
@@ -663,6 +668,7 @@ bool Tomb::update(
     query.bindValue(":sculpture_code", sculpture_code);
     query.bindValue(":sculpture_h", sculpture_height);
     query.bindValue(":mounted", mounted);
+    query.bindValue(":mat_provided", mat_provided);
     query.bindValue(":ep_relief", ep_relief);
     query.bindValue(":inscription", inscription);
     query.bindValue(":pit_one", pit_one);
