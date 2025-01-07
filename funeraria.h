@@ -60,28 +60,148 @@ protected slots:
     /********** SLOTS **********/
 
     /*
-     * Shows a context menu when right clicking on the QTableWidget, containis the proper actions according to the current table status
-     * 
-     * @param const QPoint& pos - Mouse pointer's position where the right button was clicked
+     * Sets the tomb's accessories as mounted
      *
      * @return void
      */
-    void slotShowContextMenu(const QPoint& pos);
+    void slotSetAccessoriesMounted();
 
     /*
-     * Iterates over the selected cells, sums their content and shows a dialog containig the result.
+     * Shows the accessories needed by the tombs not yet mounted
      *
      * @return void
      */
-    void slotSumSelectedPrices();
+    void slotAccessoriesToMount();
 
     /*
-     * Iterates over the selected rows and gets informations to save a list containing the data of the tombs 
-     * to be paid into a txt file.
-     * 
+     * Saves the database in CSV format
+     *
      * @return void
      */
-    void slotPrintToPayListTxt();
+    void slotBackupDbToCSV();
+
+    /*
+     * Shows a dialog window containing the selected client's details
+     *
+     * @return void
+     */
+    void slotClientDetails();
+
+    /*
+     * Shows the selected client's orders
+     *
+     * @param int row - Row where to center the scroll view
+     *
+     * @return void
+     */
+    void slotClientOrders(int row = 1);
+
+    /*
+     * Shows a dialog window containing the selected cross's details
+     *
+     * @return void
+     */
+    void slotCrossDetails();
+
+    /*
+     * Deletes the selected item from the database
+     *
+     * @return void
+     */
+    void slotDeleteItem();
+
+    /*
+     * Shows a dialog window containing the selected images's details
+     *
+     * @return void
+     */
+    void slotDrawingDetails();
+
+    /*
+     * Edits the selected item
+     *
+     * @return void
+     */
+    void slotEditItem();
+
+    /*
+     * Updates the selected client's orders list shown applying the filter (deceased name string)
+     *
+     * @return void
+     */
+    void slotFilterClientOrders();
+
+    /*
+     * Updates the clients' list applying the filter (client's name string)
+     *
+     * @return void
+     */
+    void slotFilterClients();
+
+    /*
+     * Updates the crosses' orders list shown applying the filter (name string)
+     *
+     * @return void
+     */
+    void slotFilterCrosses();
+
+    /*
+     * Updates the images' orders list shown applying the filter (name string)
+     *
+     * @return void
+     */
+    void slotFilterDrawing();
+
+    /*
+     * Updates the sculptures's orders list shown applying the filter (name string)
+     *
+     * @return void
+     */
+    void slotFilterSculptures();
+
+    /*
+     * Shows the dialog to insert a new client
+     *
+     * @return void
+     */
+    void slotNewClient();
+
+    /*
+     * Shows the dialog to insert a new cross
+     *
+     * @return void
+     */
+    void slotNewCross();
+
+    /*
+     * Shows the dialog to insert a new image
+     *
+     * @return void
+     */
+    void slotNewDrawing();
+
+    /*
+     * Shows the dialog to insert a new accessory
+     *
+     * @param   const QString& type - Name of the accessories type to add
+     *
+     * @return void
+     */
+    void slotNewItem(const QString& type);
+
+    /*
+     * Shows the dialog to insert a new sculpture
+     *
+     * @return void
+     */
+    void slotNewSculpture();
+
+    /*
+     * Shows the dialog to insert a new tomb
+     *
+     * @return void
+     */
+    void slotNewTomb();
 
     /*
      * Iterates over the selected rows and gets informations to save a list containing the data of the tombs
@@ -92,43 +212,33 @@ protected slots:
     void slotPrintToPayListPdf();
 
     /*
-     * Sorts the table's rows according to the clicked column name.
-     * 
-     * @param int logical_index - Clicked column index
-     * 
-     * @return void
-     */
-    void slotSortColumn(int logical_index);
-
-    /*
-     * Saves the database in CSV format
+     * Iterates over the selected rows and gets informations to save a list containing the data of the tombs
+     * to be paid into a txt file.
      *
      * @return void
      */
-    void slotBackupDbToCSV();
+    void slotPrintToPayListTxt();
 
     /*
-     * Shows a dialog window containing the settings
+     * Shows the selected client's orders when using the quick access buttons
      *
      * @return void
      */
-    void slotShowSettings();
+    void slotQuickClientOrders();
 
     /*
-     * Shows the selected client's orders
-     *
-     * @param int row - Row where to center the scroll view
-     * 
-     * @return void
-     */
-    void slotClientOrders(int row = 1);
-
-    /*
-     * Updates the selected client's orders list shown applying the filter (deceased name string)
+     * Shows the report dialog
      *
      * @return void
      */
-    void slotFilterClientOrders();
+    void slotReport();
+
+    /*
+     * Shows a dialog window containing the selected sculpture's details
+     *
+     * @return void
+     */
+    void slotSculptureDetails();
 
     /*
      * Shows an order given its progressive number
@@ -138,11 +248,109 @@ protected slots:
     void slotSearchByProgressive();
 
     /*
-     * Shows the selected client's orders when using the quick access buttons
+     * Sets a tomb as confirmed
      *
      * @return void
      */
-    void slotQuickClientOrders();
+    void slotSetConfirmedTomb();
+
+    /*
+     * Sets a tomb as delivered
+     *
+     * @return void
+     */
+    void slotSetDeliveredTomb();
+
+    /*
+     * Sets a tomb as Engraved
+     *
+     * @return void
+     */
+    void slotSetEngravedTomb();
+
+    /*
+     * Sets a tomb as paid
+     *
+     * @return void
+     */
+    void slotSetPaidTomb();
+
+    /*
+     * Sorts the table's rows according to the clicked column name.
+     *
+     * @param int logical_index - Clicked column index
+     *
+     * @return void
+     */
+    void slotSortColumn(int logical_index);
+
+    /*
+     * Shows the clients' list
+     *
+     * @param int row - Row where to center the scroll view
+     *
+     * @return void
+     */
+    void slotShowClients(int row = 1);
+
+    /*
+     * Shows a context menu when right clicking on the QTableWidget, containis the proper actions according to the current table status
+     * 
+     * @param const QPoint& pos - Mouse pointer's position where the right button was clicked
+     *
+     * @return void
+     */
+    void slotShowContextMenu(const QPoint& pos);
+
+    /*
+     * Shows the crosses' list
+     *
+     * @param int row - Row where to center the scroll view
+     *
+     * @return void
+     */
+    void slotShowCrosses(int row = 1);
+
+    /*
+     * Shows the images' list
+     *
+     * @param int row - Row where to center the scroll view
+     *
+     * @return void
+     */
+    void slotShowDrawing(int row = 1);
+
+    /*
+     * Calls the showItem method passing it the required parameters
+     *
+     * @param   const QString& type - Name of the accessories type to show
+     *
+     * @return void
+     */
+    void slotShowItems(const QString& type);
+
+    /*
+     * Shows the sculptures' list
+     *
+     * @param int row - Row where to center the scroll view
+     *
+     * @return void
+     */
+    void slotShowSculptures(int row = 1);
+
+    /*
+     * Shows a dialog window containing the settings
+     *
+     * @return void
+     */
+    void slotShowSettings();
+
+    /*
+     * Iterates over the selected cells, sums their content and shows a dialog containig the result.
+     *
+     * @return void
+     */
+    void slotSumSelectedPrices();
 
     /*
      * Shows a dialog window containing the selected tomb's details
@@ -159,177 +367,11 @@ protected slots:
     void slotTombFolder();
 
     /*
-     * Shows the dialog to insert a new tomb
-     *
-     * @return void
-     */
-    void slotNewTomb();
-
-    /*
-     * Shows the clients' list
-     *
-     * @param int row - Row where to center the scroll view
-     * 
-     * @return void
-     */
-    void slotShowClients(int row = 1);
-
-    /*
-     * Updates the clients' list applying the filter (client's name string)
-     *
-     * @return void
-     */
-    void slotFilterClients();
-
-    /*
-     * Shows a dialog window containing the selected client's details
-     *
-     * @return void
-     */
-    void slotClientDetails();
-
-    /*
-     * Shows the dialog to insert a new client
-     *
-     * @return void
-     */
-    void slotNewClient();
-
-    /*
-     * Calls the showItem method passing it the required parameters
-     *
-     * @param   const QString& type - Name of the accessories type to show
-     * 
-     * @return void
-     */
-    void slotShowItems(const QString& type);
-
-    /*
-     * Shows the dialog to insert a new accessory
-     *
-     * @param   const QString& type - Name of the accessories type to add
-     *
-     * @return void
-     */
-    void slotNewItem(const QString& type);
-
-    /*
-     * Edits the selected item
-     *
-     * @return void
-     */
-    void slotEditItem();
-
-    /*
-     * Deletes the selected item from the database
-     *
-     * @return void
-     */
-    void slotDeleteItem();
-
-    /*
-     * Shows the sculptures' list
-     *
-     * @param int row - Row where to center the scroll view
-     * 
-     * @return void
-     */
-    void slotShowSculptures(int row = 1);
-
-    /*
-     * Updates the sculptures's orders list shown applying the filter (name string)
-     *
-     * @return void
-     */
-    void slotFilterSculptures();
-
-    /*
-     * Shows the dialog to insert a new sculpture
-     *
-     * @return void
-     */
-    void slotNewSculpture();
-
-    /*
-     * Shows a dialog window containing the selected sculpture's details
-     *
-     * @return void
-     */
-    void slotSculptureDetails();
-
-    /*
-     * Shows the crosses' list
-     *
-     * @param int row - Row where to center the scroll view
-     *
-     * @return void
-     */
-    void slotShowCrosses(int row = 1);
-
-    /*
-     * Updates the crosses' orders list shown applying the filter (name string)
-     *
-     * @return void
-     */
-    void slotFilterCrosses();
-
-    /*
-     * Shows the dialog to insert a new cross
-     *
-     * @return void
-     */
-    void slotNewCross();
-
-    /*
-     * Shows a dialog window containing the selected cross's details
-     *
-     * @return void
-     */
-    void slotCrossDetails();
-
-    /*
-     * Shows the images' list
-     *
-     * @param int row - Row where to center the scroll view
-     *
-     * @return void
-     */
-    void slotShowDrawing(int row = 1);
-
-    /*
-     * Updates the images' orders list shown applying the filter (name string)
-     *
-     * @return void
-     */
-    void slotFilterDrawing();
-
-    /*
-     * Shows the dialog to insert a new image
-     *
-     * @return void
-     */
-    void slotNewDrawing();
-
-    /*
-     * Shows a dialog window containing the selected images's details
-     *
-     * @return void
-     */
-    void slotDrawingDetails();
-
-    /*
      * Shows the tombs needed which can be engraved
      *
      * @return void
      */
     void slotTombsToEngrave();
-
-    /*
-     * Shows the accessories needed by the tombs not yet mounted
-     *
-     * @return void
-     */
-    void slotAccessoriesToMount();
 
     /*
      * Shows the tombs not yet paid
@@ -344,48 +386,6 @@ protected slots:
      * @return void
      */
     void slotTombByProgressive();
-
-    /*
-     * Sets a tomb as paid
-     *
-     * @return void
-     */
-    void slotSetPaidTomb();
-
-    /*
-     * Sets a tomb as confirmed
-     *
-     * @return void
-     */
-    void slotSetConfirmedTomb();
-
-    /*
-     * Sets a tomb as Engraved
-     *
-     * @return void
-     */
-    void slotSetEngravedTomb();
-
-    /*
-     * Sets a tomb as delivered
-     *
-     * @return void
-     */
-    void slotSetDeliveredTomb();
-
-    /*
-     * Sets the tomb's accessories as mounted
-     *
-     * @return void
-     */
-    void slotSetAccessoriesMounted();
-    
-    /*
-     * Shows the report dialog
-     *
-     * @return void
-     */
-    void slotReport();
 
 private:
     Ui::FunerariaClass ui;
@@ -502,13 +502,6 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Clears the table content and all the created pointers.
-     *
-     * @return void
-     */
-    void clearTable();
-
-    /*
      * Removes all the content from a container.
      *
      * @param QBoxLayout* container   - Pointer to the container to clear
@@ -518,47 +511,11 @@ private:
     void clearContainer(QBoxLayout* container);
 
     /*
-     * Fills the table to show the client's orders.
-     *
-     * @param const QList<QMap<QString, QString>> &tombs   - List of the client's orders
-     * @param int row - Row where to center the scroll view
+     * Clears the table content and all the created pointers.
      *
      * @return void
      */
-    void showClientOrders(const QList<QMap<QString, QString>>& tombs, int row = 1);
-
-    /*
-     * Shows a single client's order.
-     *
-     * @param const QList<QMap<QString, QString>> &tombs   - List of the client's orders
-     *
-     * @return void
-     */
-    void showClientOrder(const QMap<QString, QString>& tomb);
-
-    /*
-     * Shows a list of items of the given type.
-     *
-     * @param const QString &type   - List of the client's orders
-     * @param int row               - Row where to center the scroll view
-     *
-     * @return void
-     */
-    void showItems(const QString& type, int row = 1);
-
-    /*
-     * Updates the combobox containing the clients.
-     *
-     * @return void
-     */
-    void updateClientsCombobox();
-
-    /*
-     * Updates the quick access bar using only the selected clients.
-     *
-     * @return void
-     */
-    void updateQuickAccessNames();
+    void clearTable();
 
     /*
      * Closes the main window.
@@ -566,24 +523,6 @@ private:
      * @return void
      */
     void closeWindow();
-
-    /*
-     * Sets the sorting direction for the selected column.
-     *
-     * @param const QString& column - column name
-     *
-     * @return void
-     */
-    void sortColumnDirection(const QString& column);
-
-    /*
-     * Sets up the table to show a client's orders.
-     *
-     * @param tombs_Count  - Number of tombs to show
-     *
-     * @return void
-     */
-    void setupClientOrdersTable(int tombs_count);
 
     /*
      * Adds a row to the table that shows the client's orders.
@@ -596,6 +535,48 @@ private:
     void addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row);
 
     /*
+     * Initialize the top bar for the clients view.
+     *
+     * @return void
+     */
+    void initClientsTopBar();
+
+    /*
+     * Initialize the top bar for the crosses view.
+     *
+     * @return void
+     */
+    void initCrossesTopBar();
+
+    /*
+     * Initialize the top bar for the drawing images view.
+     *
+     * @return void
+     */
+    void initDrawingsTopBar();
+
+    /*
+     * Initialize the top bar for the sculptures view.
+     *
+     * @return void
+     */
+    void initSculpturesTopBar();
+
+    /*
+     * Initialize the top bar for the tombs view.
+     *
+     * @return void
+     */
+    void initTombsTopBar();
+
+    /*
+     * Initialize the top quick access bar.
+     *
+     * @return void
+     */
+    void initTopBarQuickAccess();
+
+    /*
      * Sets up the table to show the accessories to be mounted.
      *
      * @param tombs_count  - Number of tombs to show
@@ -603,6 +584,15 @@ private:
      * @return void
      */
     void setupAccessoriesToMountTable(int tombs_count);
+
+    /*
+     * Sets up the table to show a client's orders.
+     *
+     * @param tombs_Count  - Number of tombs to show
+     *
+     * @return void
+     */
+    void setupClientOrdersTable(int tombs_count);
 
     /*
      * Sets up the table to show the tombs to be paid.
@@ -623,46 +613,23 @@ private:
     void setupTombsToEngraveTable(int tombs_count);
 
     /*
-     * Initialize the top quick access bar.
+     * Shows a single client's order.
+     *
+     * @param const QList<QMap<QString, QString>> &tombs   - List of the client's orders
      *
      * @return void
      */
-    void initTopBarQuickAccess();
+    void showClientOrder(const QMap<QString, QString>& tomb);
 
     /*
-     * Initialize the top bar for the tombs view.
+     * Fills the table to show the client's orders.
+     *
+     * @param const QList<QMap<QString, QString>> &tombs   - List of the client's orders
+     * @param int row - Row where to center the scroll view
      *
      * @return void
      */
-    void initTombTopBar();
-
-    /*
-     * Initialize the top bar for the sculptures view.
-     *
-     * @return void
-     */
-    void initSculpturesTopBar();
-
-    /*
-     * Initialize the top bar for the crosses view.
-     *
-     * @return void
-     */
-    void initCrossesTopBar();
-
-    /*
-     * Initialize the top bar for the drawing images view.
-     *
-     * @return void
-     */
-    void initDrawingTopBar();
-
-    /*
-     * Initialize the top bar for the clients view.
-     *
-     * @return void
-     */
-    void initClientsTopBar();
+    void showClientOrders(const QList<QMap<QString, QString>>& tombs, int row = 1);
 
     /*
      * Swithces off all the top bars and shows the one required.
@@ -670,4 +637,37 @@ private:
      * @return void
      */
     void showTopBar(const QString& bar);
+
+    /*
+     * Shows a list of items of the given type.
+     *
+     * @param const QString &type   - List of the client's orders
+     * @param int row               - Row where to center the scroll view
+     *
+     * @return void
+     */
+    void showItems(const QString& type, int row = 1);
+
+    /*
+     * Sets the sorting direction for the selected column.
+     *
+     * @param const QString& column - column name
+     *
+     * @return void
+     */
+    void sortColumnDirection(const QString& column);
+
+    /*
+     * Updates the combobox containing the clients.
+     *
+     * @return void
+     */
+    void updateClientsCombobox();
+
+    /*
+     * Updates the quick access bar using only the selected clients.
+     *
+     * @return void
+     */
+    void updateQuickAccessNames();
 };
