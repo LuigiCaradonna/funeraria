@@ -40,22 +40,6 @@ public:
     int getId(const QString& name);
 
     /*
-     * Gets the client's name
-     *
-     * @param   const int - Id
-     *
-     * @return  QString - The clients' id, 0 if not found, also meaning "all"
-     */
-    QString getName(const int id);
-
-    /*
-     * Gets all the clients' names
-     *
-     * @return  QStringList - A list containing all the clients' names
-     */
-    QStringList getNames();
-
-    /*
      * Gets all the clients' data
      *
      * @param   const QString& name - Optional, client's name to get
@@ -70,6 +54,22 @@ public:
      * @return  QList<QMap<QString, QString>> - A list containing the active clients
      */
     QList<QMap<QString, QString>> getActive();
+
+    /*
+     * Gets the client's name
+     *
+     * @param   const int - Id
+     *
+     * @return  QString - The clients' id, 0 if not found, also meaning "all"
+     */
+    QString getName(const int id);
+
+    /*
+     * Gets all the clients' names
+     *
+     * @return  QStringList - A list containing all the clients' names
+     */
+    QStringList getNames();
 
     /*
      * Gets all the active clients' names
