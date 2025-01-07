@@ -537,7 +537,7 @@ bool TombUi::validateForm(const QString& op)
     }
 
     if (this->ui.rbEngraveYes->isChecked() &&
-        (this->ui.leEpigraphAmount->text().trimmed() == "" || this->ui.leEpigraphAmount->text().toInt() <= 0)) {
+        (this->ui.leEpigraphAmount->text().trimmed() == "" || this->ui.leEpigraphAmount->text().toInt() < 0)) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
@@ -1120,6 +1120,7 @@ void TombUi::updateForm()
         this->ui.leName->setText("");
         this->ui.leEngravedNames->setText("");
         this->ui.leEpigraphAmount->setText("1");
+        this->ui.leEpigraphAmount->setEnabled(true);
         this->ui.rbEngraveYes->setChecked(true);
         this->ui.rbEngraveNo->setChecked(false);
         this->ui.lePrice->setText("0");
