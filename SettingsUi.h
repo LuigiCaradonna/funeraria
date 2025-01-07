@@ -67,11 +67,11 @@ protected slots:
     void slotChangeCrossesPath();
 
     /*
-     * Asks the user to provide a new path for the sacred images' file
+     * Asks the user to provide a new path for the drawing images' file
      *
      * @return  void
      */
-    void slotChangeSacredPath();
+    void slotChangeDrawingPath();
 
     /*
      * Saves a settings

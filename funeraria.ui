@@ -57,7 +57,7 @@
        <widget class="QWidget" name="sculpturesTopBarWidget" native="true"/>
       </item>
       <item>
-       <widget class="QWidget" name="sacredTopBarWidget" native="true"/>
+       <widget class="QWidget" name="drawingTopBarWidget" native="true"/>
       </item>
       <item>
        <widget class="QWidget" name="clientsTopBarWidget" native="true"/>

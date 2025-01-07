@@ -1,8 +1,8 @@
-#include "SacredUi.h"
+#include "DrawingUi.h"
 
 /********** CONSTRUCTOR **********/
 
-SacredUi::SacredUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, const QString& images_folder, QWidget* parent)
+DrawingUi::DrawingUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, const QString& images_folder, QWidget* parent)
     : db(db), css_folder(css_folder), icons_folder(icons_folder), images_folder(images_folder), parent(parent)
 {
     this->ui.setupUi(this);
@@ -24,21 +24,21 @@ SacredUi::SacredUi(const QSqlDatabase& db, const QString& css_folder, const QStr
     this->ui.chbAllowEdit->setChecked(false);
 
     // UI elements' binding
-    this->connect(this->ui.btnImgPath, &QPushButton::clicked, this, &SacredUi::slotSelectImage);
-    this->connect(this->ui.chbAllowEdit, &QCheckBox::stateChanged, this, &SacredUi::slotSwitchEnableState);
-    this->connect(this->ui.btnClose, &QPushButton::clicked, this, &SacredUi::slotCloseDialog);
+    this->connect(this->ui.btnImgPath, &QPushButton::clicked, this, &DrawingUi::slotSelectImage);
+    this->connect(this->ui.chbAllowEdit, &QCheckBox::stateChanged, this, &DrawingUi::slotSwitchEnableState);
+    this->connect(this->ui.btnClose, &QPushButton::clicked, this, &DrawingUi::slotCloseDialog);
     // Save button binding is set inside slotSave() and slotUpdate()
 }
 
 /********** DESTRUCTOR **********/
 
-SacredUi::~SacredUi()
+DrawingUi::~DrawingUi()
 {
 }
 
 /********** PUBLIC FUNCTIONS **********/
 
-void SacredUi::setCode(const QString& code)
+void DrawingUi::setCode(const QString& code)
 {
     this->code = code;
     this->updateForm();
@@ -46,11 +46,11 @@ void SacredUi::setCode(const QString& code)
 
 /********** PROTECTED SLOTS **********/
 
-void SacredUi::slotSelectImage()
+void DrawingUi::slotSelectImage()
 {
     Config* config = new Config();
     QString path;
-    path = QFileDialog::getOpenFileName(parent, "Apri file", config->getSacredPath(), "Images (*.png *.jpg *.jpeg *.bmp)");
+    path = QFileDialog::getOpenFileName(parent, "Apri file", config->getDrawingPath(), "Images (*.png *.jpg *.jpeg *.bmp)");
 
     if (!path.isNull()) {
         QString image_file = QFileInfo(path).fileName();
@@ -60,7 +60,7 @@ void SacredUi::slotSelectImage()
     delete config;
 }
 
-void SacredUi::slotSwitchEnableState()
+void DrawingUi::slotSwitchEnableState()
 {
     this->ui.leCode->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leName->setEnabled(this->ui.chbAllowEdit->isChecked());
@@ -68,12 +68,12 @@ void SacredUi::slotSwitchEnableState()
     this->ui.leHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
 }
 
-void SacredUi::slotSave()
+void DrawingUi::slotSave()
 {
     if (this->checkForm()) {
-        Sacred* sacred = new Sacred(this->db);
+        Drawing* drawing = new Drawing(this->db);
 
-        if (sacred->store(
+        if (drawing->store(
             this->ui.leCode->text().trimmed(),
             this->ui.leName->text().trimmed(),
             this->ui.leImgPath->text().trimmed(),
@@ -94,18 +94,18 @@ void SacredUi::slotSave()
             message.exec();
         }
 
-        delete sacred;
+        delete drawing;
         // Close the dialog
         this->close();
     }
 }
 
-void SacredUi::slotUpdate()
+void DrawingUi::slotUpdate()
 {
     if (this->checkForm()) {
-        Sacred* sacred = new Sacred(this->db);
+        Drawing* drawing = new Drawing(this->db);
 
-        if (sacred->update(
+        if (drawing->update(
             this->code,
             this->ui.leCode->text().trimmed(),
             this->ui.leName->text().trimmed(),
@@ -127,36 +127,36 @@ void SacredUi::slotUpdate()
             message.exec();
         }
 
-        delete sacred;
+        delete drawing;
         // Close the dialog
         this->close();
     }
 }
 
-void SacredUi::slotCloseDialog()
+void DrawingUi::slotCloseDialog()
 {
     this->close();
 }
 
 /********** PRIVATE FUNCTIONS **********/
 
-void SacredUi::updateForm()
+void DrawingUi::updateForm()
 {
-    Sacred* sacred = new Sacred(this->db);
-    // Get the selected sacred's data
-    QMap<QString, QString> sacred_details = sacred->getByCode(this->code);
+    Drawing* drawing = new Drawing(this->db);
+    // Get the selected drawing's data
+    QMap<QString, QString> drawing_details = drawing->getByCode(this->code);
 
-    if (!sacred_details.isEmpty()) {
+    if (!drawing_details.isEmpty()) {
         this->setWindowTitle("Modifica immagine");
 
         Config* config = new Config();
 
-        // Fill the form fields with the selected sacred's data
-        this->ui.leCode->setText(sacred_details["code"]);
-        this->ui.leName->setText(sacred_details["name"]);
-        this->ui.leImgPath->setText(sacred_details["img"]);
-        this->ui.leWidth->setText(sacred_details["width"]);
-        this->ui.leHeight->setText(sacred_details["height"]);
+        // Fill the form fields with the selected drawing's data
+        this->ui.leCode->setText(drawing_details["code"]);
+        this->ui.leName->setText(drawing_details["name"]);
+        this->ui.leImgPath->setText(drawing_details["img"]);
+        this->ui.leWidth->setText(drawing_details["width"]);
+        this->ui.leHeight->setText(drawing_details["height"]);
 
         this->ui.leCode->setEnabled(false);
         this->ui.leName->setEnabled(false);
@@ -164,7 +164,7 @@ void SacredUi::updateForm()
         this->ui.leWidth->setEnabled(false);
         this->ui.leHeight->setEnabled(false);
 
-        QString pic_path = config->getSacredPath() + "/" + sacred_details["img"];
+        QString pic_path = config->getDrawingPath() + "/" + drawing_details["img"];
 
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
@@ -196,12 +196,12 @@ void SacredUi::updateForm()
         this->ui.btnSave->setText("Aggiorna");
         // Disconnect previous bindings or multiple signals will be emitted
         this->ui.btnSave->disconnect();
-        this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SacredUi::slotUpdate);
+        this->connect(this->ui.btnSave, &QPushButton::clicked, this, &DrawingUi::slotUpdate);
 
         delete config;
     }
     else {
-        // Sacred not found means we are asking to insert a new one
+        // Drawing not found means we are asking to insert a new one
         this->setWindowTitle("Inserisci immagine");
 
         // The image field must not be manually edited
@@ -218,17 +218,17 @@ void SacredUi::updateForm()
         this->ui.btnSave->setText("Aggiungi");
         // Disconnect previous bindings or multiple signals will be emitted
         this->ui.btnSave->disconnect();
-        this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SacredUi::slotSave);
+        this->connect(this->ui.btnSave, &QPushButton::clicked, this, &DrawingUi::slotSave);
 
         this->ui.lblImgPreview->setText("");
         this->ui.lblImgPreview->setScaledContents(false);
         this->ui.lblImgPreview->clear();
     }
 
-    delete sacred;
+    delete drawing;
 }
 
-bool SacredUi::checkForm()
+bool DrawingUi::checkForm()
 {
     if (this->ui.leCode->text().trimmed() == "") {
         QMessageBox message;

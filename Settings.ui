@@ -322,7 +322,7 @@
      <item row="11" column="0">
       <layout class="QHBoxLayout" name="SacredPathContainer">
        <item>
-        <widget class="QLabel" name="lblSacred">
+        <widget class="QLabel" name="lblDrawing">
          <property name="minimumSize">
           <size>
            <width>95</width>
@@ -341,12 +341,12 @@
           </font>
          </property>
          <property name="text">
-          <string>Img. Sacre</string>
+          <string>Immagini</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="lblSacredFolder">
+        <widget class="QLabel" name="lblDrawingFolder">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -370,7 +370,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnSacredFolder">
+        <widget class="QPushButton" name="btnDrawingFolder">
          <property name="maximumSize">
           <size>
            <width>60</width>

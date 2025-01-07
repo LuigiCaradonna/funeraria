@@ -125,24 +125,24 @@ QString Config::getCrossesPath()
     return crosses_path;
 }
 
-void Config::setSacredPath(const QString& sacred_path)
+void Config::setDrawingPath(const QString& drawing_path)
 {
     QJsonObject config;
 
     config = this->getConfigFileContent();
-    config.remove("sacred_path");
-    config.insert("sacred_path", sacred_path);
+    config.remove("drawing_path");
+    config.insert("drawing_path", drawing_path);
 
     this->storeConfig(config);
 }
 
-QString Config::getSacredPath()
+QString Config::getDrawingPath()
 {
     //Then get the main JSON object and get the datas in it
     QJsonObject config_content = this->getConfigFileContent();
 
     //Access the wanted value
-    QString db_path = config_content.value("sacred_path").toString();
+    QString db_path = config_content.value("drawing_path").toString();
 
     return db_path;
 }

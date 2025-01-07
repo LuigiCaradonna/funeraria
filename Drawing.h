@@ -9,7 +9,7 @@
 #include "Helpers.h"
 #include "Config.h"
 
-class Sacred : public QObject
+class Drawing : public QObject
 {
     Q_OBJECT
 
@@ -18,18 +18,18 @@ public:
     /********** CONSTRUCTOR **********/
 
     /*
-     * Constructs the Sacred object.
+     * Constructs the Drawing object.
      *
      * @param	const QSqlDatabase*	db	- Reference to the database connection
      */
-    Sacred(const QSqlDatabase& db);
+    Drawing(const QSqlDatabase& db);
 
     /********** DESTRUCTOR **********/
 
     /*
-     * Destructs the Sacred object.
+     * Destructs the Drawing object.
      */
-    ~Sacred();
+    ~Drawing();
 
     /********** PUBLIC FUNCTIONS **********/
 
@@ -142,9 +142,9 @@ public:
     bool remove(const QString& code);
 
 private:
-    const QString table = "sacred";
+    const QString table = "drawing";
     QSqlDatabase db;
     QString name;
     // Temporary id for an image to be inserted
-    int new_sacred_temp_id = 9000;
+    int new_drawing_temp_id = 9000;
 };

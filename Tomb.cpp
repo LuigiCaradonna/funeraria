@@ -90,7 +90,7 @@ QList<QMap<QString, QString>> Tomb::getList(
         tomb["lamp_code"] = query.value("lamp_code").toString();
         tomb["flame_code"] = query.value("flame_code").toString();
         tomb["cross_code"] = query.value("cross_code").toString();
-        tomb["sacred_code"] = query.value("sacred_code").toString();
+        tomb["drawing_code"] = query.value("drawing_code").toString();
         tomb["sculpture_code"] = query.value("sculpture_code").toString();
         tomb["sculpture_h"] = query.value("sculpture_h").toString();
         tomb["mounted"] = query.value("mounted").toString();
@@ -169,7 +169,7 @@ QMap<QString, QString> Tomb::getByProgressive(const int progressive)
         tomb["lamp_code"] = query.value("lamp_code").toString();
         tomb["flame_code"] = query.value("flame_code").toString();
         tomb["cross_code"] = query.value("cross_code").toString();
-        tomb["sacred_code"] = query.value("sacred_code").toString();
+        tomb["drawing_code"] = query.value("drawing_code").toString();
         tomb["sculpture_code"] = query.value("sculpture_code").toString();
         tomb["sculpture_h"] = query.value("sculpture_h").toString();
         tomb["mounted"] = query.value("mounted").toString();
@@ -211,7 +211,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         "tomb.engraved, tomb.price, tomb.paid, tomb.material_code, material.name AS material_name, "
         "tomb.type_code, tomb_type.name AS type_name, tomb.format_code, tomb_format.name AS format_name, "
         "tomb.vase_code, vase.name AS vase_name, tomb.lamp_code, lamp.name AS lamp_name, tomb.flame_code, flame.name AS flame_name, "
-        "tomb.cross_code, cross.name AS cross_name, tomb.sacred_code, sacred.name AS sacred_name, "
+        "tomb.cross_code, cross.name AS cross_name, tomb.drawing_code, drawing.name AS drawing_name, "
         "tomb.sculpture_code, sculpture.name AS sculpture_name, tomb.sculpture_h, tomb.mounted, tomb.ep_relief, tomb.inscription, "
         "tomb.pit_one, tomb.frame_one, "
         "tomb.pit_two, tomb.frame_two, "
@@ -229,7 +229,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         "JOIN lamp ON tomb.lamp_code = lamp.code "
         "JOIN flame ON tomb.flame_code = flame.code "
         "JOIN cross ON tomb.cross_code = cross.code "
-        "JOIN sacred ON tomb.sacred_code = sacred.code "
+        "JOIN drawing ON tomb.drawing_code = drawing.code "
         "JOIN sculpture ON tomb.sculpture_code = sculpture.code "
         "JOIN tomb_type ON tomb.type_code = tomb_type.code "
         "JOIN tomb_format ON tomb.format_code = tomb_format.code "
@@ -261,7 +261,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         tomb["lamp_code"] = query.value("lamp_code").toString();
         tomb["flame_code"] = query.value("flame_code").toString();
         tomb["cross_code"] = query.value("cross_code").toString();
-        tomb["sacred_code"] = query.value("sacred_code").toString();
+        tomb["drawing_code"] = query.value("drawing_code").toString();
         tomb["sculpture_code"] = query.value("sculpture_code").toString();
         tomb["sculpture_h"] = query.value("sculpture_h").toString();
         tomb["mounted"] = query.value("mounted").toString();
@@ -422,7 +422,7 @@ bool Tomb::store(
     const QString& lamp_code,
     const QString& flame_code,
     const QString& cross_code,
-    const QString& sacred_code,
+    const QString& drawing_code,
     const QString& sculpture_code,
     const float& sculpture_height,
     const bool mounted,
@@ -498,13 +498,13 @@ bool Tomb::store(
     query.prepare(
         "INSERT INTO " + this->table + " "
         "(progressive, client_id, name, engraved_names, ep_amount, engraved, price, paid, material_code, type_code, format_code, "
-        "vase_code, lamp_code, flame_code, cross_code, sacred_code, sculpture_code, sculpture_h, mounted, ep_relief, inscription, "
+        "vase_code, lamp_code, flame_code, cross_code, drawing_code, sculpture_code, sculpture_h, mounted, ep_relief, inscription, "
         "pit_one, frame_one, pit_two, frame_two, pit_three, frame_three, "
         "pit_four, frame_four, pit_five, frame_five, pit_six, frame_six, "
         "notes, accessories_mounted, ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at, "
         "created_at, edited_at) "
         "VALUES (:progressive, :client_id, :name, :engraved_names, :ep_amount, :engraved, :price, :paid, :material_code, :type_code, :format_code, "
-        ":vase_code, :lamp_code, :flame_code, :cross_code, :sacred_code, :sculpture_code, :sculpture_h, :mounted, :ep_relief, :inscription, "
+        ":vase_code, :lamp_code, :flame_code, :cross_code, :drawing_code, :sculpture_code, :sculpture_h, :mounted, :ep_relief, :inscription, "
         ":pit_one, :frame_one, :pit_two, :frame_two, :pit_three, :frame_three, "
         ":pit_four, :frame_four, :pit_five, :frame_five, :pit_six, :frame_six, "
         ":notes, :accessories_mounted, :ordered_at, :proofed_at, :confirmed_at, :engraved_at, :delivered_at, "
@@ -525,7 +525,7 @@ bool Tomb::store(
     query.bindValue(":lamp_code", lamp_code);
     query.bindValue(":flame_code", flame_code);
     query.bindValue(":cross_code", cross_code);
-    query.bindValue(":sacred_code", sacred_code);
+    query.bindValue(":drawing_code", drawing_code);
     query.bindValue(":sculpture_code", sculpture_code);
     query.bindValue(":sculpture_h", sculpture_height);
     query.bindValue(":mounted", mounted);
@@ -601,7 +601,7 @@ bool Tomb::update(
     const QString& lamp_code,
     const QString& flame_code,
     const QString& cross_code,
-    const QString& sacred_code,
+    const QString& drawing_code,
     const QString& sculpture_code,
     const float& sculpture_height,
     const bool mounted,
@@ -634,7 +634,7 @@ bool Tomb::update(
         "SET progressive = :progressive, client_id = :client_id, name = :name, engraved_names = :engraved_names, "
         "ep_amount = :ep_amount, engraved = :engraved, price = :price, paid = :paid, material_code = :material_code, "
         "type_code = :type_code, format_code = :format_code, vase_code = :vase_code, lamp_code = :lamp_code,  flame_code = :flame_code, "
-        "cross_code = :cross_code, sacred_code = :sacred_code,  sculpture_code = :sculpture_code, sculpture_h = :sculpture_h, "
+        "cross_code = :cross_code, drawing_code = :drawing_code,  sculpture_code = :sculpture_code, sculpture_h = :sculpture_h, "
         "mounted = :mounted, ep_relief = :ep_relief, inscription = :inscription, "
         "pit_one = :pit_one, frame_one = :frame_one, pit_two = :pit_two, frame_two = :frame_two, "
         "pit_three = :pit_three, frame_three = :frame_three, pit_four = :pit_four, frame_four = :frame_four, "
@@ -659,7 +659,7 @@ bool Tomb::update(
     query.bindValue(":lamp_code", lamp_code);
     query.bindValue(":flame_code", flame_code);
     query.bindValue(":cross_code", cross_code);
-    query.bindValue(":sacred_code", sacred_code);
+    query.bindValue(":drawing_code", drawing_code);
     query.bindValue(":sculpture_code", sculpture_code);
     query.bindValue(":sculpture_h", sculpture_height);
     query.bindValue(":mounted", mounted);

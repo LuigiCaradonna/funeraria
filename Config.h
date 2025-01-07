@@ -94,20 +94,20 @@ public:
     QString getCrossesPath();
 
     /*
-     * Sets the images' folder path into the config file
+     * Sets the drawings' folder path into the config file
      *
-     * @param   const QString& sacred_path    - Images folder path
+     * @param   const QString& drawing_path    - Drawing folder path
      *
      * @return void
      */
-    void setSacredPath(const QString& sacred_path);
+    void setDrawingPath(const QString& drawing_path);
 
     /*
-     * Gets the images' folder path from the config file
+     * Gets the drawings' folder path from the config file
      *
-     * @return QString the images' folder path
+     * @return QString the drawings' folder path
      */
-    QString getSacredPath();
+    QString getDrawingPath();
 
     /*
      * Initializes a new configuration file

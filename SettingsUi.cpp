@@ -23,7 +23,7 @@ SettingsUi::SettingsUi(const QSqlDatabase& db, const QString& css_folder, const 
     this->connect(this->ui.btnArchiveFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeArchivePath);
     this->connect(this->ui.btnCrossesFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeCrossesPath);
     this->connect(this->ui.btnSculpturesFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeSculpturesPath);
-    this->connect(this->ui.btnSacredFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeSacredPath);
+    this->connect(this->ui.btnDrawingFolder, &QPushButton::clicked, this, &SettingsUi::slotChangeDrawingPath);
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &SettingsUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &SettingsUi::slotCloseDialog);
 }
@@ -116,12 +116,12 @@ void SettingsUi::slotChangeCrossesPath()
     this->ui.lblCrossesFolder->setText(new_crosses_path);
 }
 
-void SettingsUi::slotChangeSacredPath()
+void SettingsUi::slotChangeDrawingPath()
 {
     // Prompt the user to select the archive folder
-    QString new_sacred_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
+    QString new_drawing_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
 
-    if (new_sacred_path.isEmpty()) {
+    if (new_drawing_path.isEmpty()) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
@@ -130,7 +130,7 @@ void SettingsUi::slotChangeSacredPath()
         return;
     }
 
-    this->ui.lblSacredFolder->setText(new_sacred_path);
+    this->ui.lblDrawingFolder->setText(new_drawing_path);
 }
 
 void SettingsUi::slotSave()
@@ -170,9 +170,9 @@ void SettingsUi::slotSave()
         config->setCrossesPath(crosses_path);
     }
 
-    QString sacred_path = this->ui.lblSacredFolder->text();
-    if (sacred_path != config->getSacredPath()) {
-        config->setSacredPath(sacred_path);
+    QString drawing_path = this->ui.lblDrawingFolder->text();
+    if (drawing_path != config->getDrawingPath()) {
+        config->setDrawingPath(drawing_path);
     }
 
     delete config;
@@ -230,7 +230,7 @@ void SettingsUi::updateForm() {
     this->ui.lblArchiveFolder->setText(config->getArchivePath());
     this->ui.lblSculpturesFolder->setText(config->getSculpturesPath());
     this->ui.lblCrossesFolder->setText(config->getCrossesPath());
-    this->ui.lblSacredFolder->setText(config->getSacredPath());
+    this->ui.lblDrawingFolder->setText(config->getDrawingPath());
 
     delete config;
     delete settings;

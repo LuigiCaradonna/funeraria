@@ -111,8 +111,8 @@ Funeraria::Funeraria(QWidget* parent)
         this->sculpture_ui = new SculptureUi(this->db->db, this->css_folder, this->icons_folder, this->images_folder, this);
         this->cross = new Cross(this->db->db);
         this->cross_ui = new CrossUi(this->db->db, this->css_folder, this->icons_folder, this->images_folder, this);
-        this->sacred = new Sacred(this->db->db);
-        this->sacred_ui = new SacredUi(this->db->db, this->css_folder, this->icons_folder, this->images_folder, this);
+        this->drawing = new Drawing(this->db->db);
+        this->drawing_ui = new DrawingUi(this->db->db, this->css_folder, this->icons_folder, this->images_folder, this);
         this->settings_ui = new SettingsUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->report_ui = new ReportUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->tomb_ui = new TombUi(this->db->db, this->css_folder, this->icons_folder, this);
@@ -128,7 +128,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->initTombTopBar();
         this->initSculpturesTopBar();
         this->initCrossesTopBar();
-        this->initSacredTopBar();
+        this->initDrawingTopBar();
         this->initClientsTopBar();
 
         // Signal emitted from the menu "Files"
@@ -155,8 +155,8 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionCrNew, SIGNAL(triggered()), this, SLOT(slotNewCross()));
 
         // Signal emitted from the menu "Immagini"
-        this->connect(this->ui.actionImList, SIGNAL(triggered()), this, SLOT(slotShowSacred()));
-        this->connect(this->ui.actionImNew, SIGNAL(triggered()), this, SLOT(slotNewSacred()));
+        this->connect(this->ui.actionImList, SIGNAL(triggered()), this, SLOT(slotShowDrawing()));
+        this->connect(this->ui.actionImNew, SIGNAL(triggered()), this, SLOT(slotNewDrawing()));
         /* 
          * Map the signal coming from the menu "Accessori" to call the same function (slotNewItem) 
          * with the proper parameter
@@ -258,7 +258,7 @@ Funeraria::~Funeraria()
 
     delete this->lblImName;
     delete this->leImName;
-    delete this->sacredSpacer;
+    delete this->drawingSpacer;
 
     delete this->lblClName;
     delete this->leClName;
@@ -1073,8 +1073,8 @@ void Funeraria::slotDeleteItem() {
         else if (this->current_table == "frame") {
             if (!this->frame->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
         }
-        else if (this->current_table == "sacred") {
-            if (!this->sacred->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
+        else if (this->current_table == "drawing") {
+            if (!this->drawing->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
         }
 
         if (!errors) {
@@ -1104,8 +1104,8 @@ void Funeraria::slotDeleteItem() {
             else if (this->current_table == "cross") {
                 this->slotShowCrosses();
             }
-            else if (this->current_table == "sacred") {
-                this->slotShowSacred();
+            else if (this->current_table == "drawing") {
+                this->slotShowDrawing();
             }
         }
         else {
@@ -1468,19 +1468,19 @@ void Funeraria::slotCrossDetails()
     this->slotShowCrosses(row);
 }
 
-void Funeraria::slotShowSacred(int row)
+void Funeraria::slotShowDrawing(int row)
 {
     // Block the signals while building the table
     const QSignalBlocker blocker(this->ui.tableWidget);
 
-    this->showTopBar("sacred");
+    this->showTopBar("drawing");
 
     /*
         Set the current table after the top bar's selection,
         that checks the current table to decide whether to
         perform the switch or not
     */
-    this->current_table = "sacred";
+    this->current_table = "drawing";
 
     this->is_table_sortable = false;
 
@@ -1489,14 +1489,14 @@ void Funeraria::slotShowSacred(int row)
 
     QString name = this->leImName->text().trimmed();
 
-    QList<QMap<QString, QString>> sacreds = this->sacred->getListByName(name);
+    QList<QMap<QString, QString>> drawings = this->drawing->getListByName(name);
 
     QStringList headers{ "Codice", "Img", "Nome", "Larghezza", "Altezza", "", "" };
 
     int img_cell_width = 150;
     int img_cell_height = 100;
 
-    this->ui.tableWidget->setRowCount(sacreds.size());
+    this->ui.tableWidget->setRowCount(drawings.size());
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
@@ -1510,7 +1510,7 @@ void Funeraria::slotShowSacred(int row)
 
     int row_number = 1;
 
-    for (int i = 0; i < sacreds.size(); i++) {
+    for (int i = 0; i < drawings.size(); i++) {
         QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
         pb_details->setText("Dettagli");
         QPushButton* pb_delete = new QPushButton(this->ui.tableWidget);
@@ -1519,14 +1519,14 @@ void Funeraria::slotShowSacred(int row)
         // Specific row height to contain the image
         this->ui.tableWidget->setRowHeight(i, img_cell_height);
 
-        QTableWidgetItem* code_widget = new QTableWidgetItem(sacreds[i]["code"]);
+        QTableWidgetItem* code_widget = new QTableWidgetItem(drawings[i]["code"]);
         code_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-        QString pic_path = this->config->getSacredPath() + "/" + sacreds[i]["img"];
+        QString pic_path = this->config->getDrawingPath() + "/" + drawings[i]["img"];
 
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
-        if (!img_file.exists() || sacreds[i]["img"] == "") {
+        if (!img_file.exists() || drawings[i]["img"] == "") {
             pic_path = this->images_folder + "notfound.jpg";
         }
 
@@ -1547,15 +1547,15 @@ void Funeraria::slotShowSacred(int row)
         image_widget->setScaledContents(false);
         image_widget->setPixmap(resized);
 
-        QTableWidgetItem* name_widget = new QTableWidgetItem(sacreds[i]["name"]);
+        QTableWidgetItem* name_widget = new QTableWidgetItem(drawings[i]["name"]);
         // Set the field as not editable
         name_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-        QTableWidgetItem* width_widget = new QTableWidgetItem(sacreds[i]["width"]);
+        QTableWidgetItem* width_widget = new QTableWidgetItem(drawings[i]["width"]);
         width_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         width_widget->setTextAlignment(Qt::AlignCenter);
 
-        QTableWidgetItem* height_widget = new QTableWidgetItem(sacreds[i]["height"]);
+        QTableWidgetItem* height_widget = new QTableWidgetItem(drawings[i]["height"]);
         height_widget->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         height_widget->setTextAlignment(Qt::AlignCenter);
 
@@ -1579,7 +1579,7 @@ void Funeraria::slotShowSacred(int row)
         this->ui.tableWidget->setCellWidget(i, 5, pb_details);
         this->ui.tableWidget->setCellWidget(i, 6, pb_delete);
 
-        this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotSacredDetails);
+        this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotDrawingDetails);
         this->connect(pb_delete, &QPushButton::clicked, this, &Funeraria::slotDeleteItem);
 
         row_number++;
@@ -1594,39 +1594,39 @@ void Funeraria::slotShowSacred(int row)
     this->leImName->setFocus();
 }
 
-void Funeraria::slotFilterSacred()
+void Funeraria::slotFilterDrawing()
 {
     // If the image table is not shown
-    if (this->current_table != "sacred") {
+    if (this->current_table != "drawing") {
         return;
     }
 
-    this->slotShowSacred();
+    this->slotShowDrawing();
 }
 
-void Funeraria::slotNewSacred()
+void Funeraria::slotNewDrawing()
 {
-    this->current_table = "sacred";
+    this->current_table = "drawing";
 
-    // Set the id property of the Sacred object to 0
-    this->sacred_ui->setCode("0");
-    this->sacred_ui->setModal(true);
-    this->sacred_ui->exec();
+    // Set the id property of the Drawing object to 0
+    this->drawing_ui->setCode("0");
+    this->drawing_ui->setModal(true);
+    this->drawing_ui->exec();
 
     // Reload the table when the popup is closed, the user could have made some changes
-    this->slotShowSacred();
+    this->slotShowDrawing();
 }
 
-void Funeraria::slotSacredDetails()
+void Funeraria::slotDrawingDetails()
 {
     // Row index of the clicked button
     int row = this->ui.tableWidget->currentRow();
-    this->sacred_ui->setCode(this->ui.tableWidget->item(row, 0)->text());
-    this->sacred_ui->setModal(true);
-    this->sacred_ui->exec();
+    this->drawing_ui->setCode(this->ui.tableWidget->item(row, 0)->text());
+    this->drawing_ui->setModal(true);
+    this->drawing_ui->exec();
 
     // Reload the table when the popup is closed, the user could have made some changes
-    this->slotShowSacred(row);
+    this->slotShowDrawing(row);
 }
 
 void Funeraria::slotTombsToEngrave()
@@ -2570,13 +2570,13 @@ void Funeraria::initTopBarQuickAccess()
     this->btnQuickCrosses->setToolTip("Croci");
     this->btnQuickCrosses->setToolTipDuration(tooltip_duration);
 
-    // Sacred button
-    this->btnQuickSacred = new QPushButton();
-    this->btnQuickSacred->setMinimumSize(QSize(48, 48));
-    this->btnQuickSacred->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
-    this->btnQuickSacred->setIconSize(QSize(32, 32));
-    this->btnQuickSacred->setToolTip("Immagini sacre");
-    this->btnQuickSacred->setToolTipDuration(tooltip_duration);
+    // Drawing button
+    this->btnQuickDrawing = new QPushButton();
+    this->btnQuickDrawing->setMinimumSize(QSize(48, 48));
+    this->btnQuickDrawing->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
+    this->btnQuickDrawing->setIconSize(QSize(32, 32));
+    this->btnQuickDrawing->setToolTip("Immagini sacre");
+    this->btnQuickDrawing->setToolTipDuration(tooltip_duration);
 
     // Tombs to engrave button
     this->btnQuickToEngrave = new QPushButton();
@@ -2621,7 +2621,7 @@ void Funeraria::initTopBarQuickAccess()
     topBarQuickAccessLayout->addWidget(this->btnQuickClients);
     topBarQuickAccessLayout->addWidget(this->btnQuickSculptures);
     topBarQuickAccessLayout->addWidget(this->btnQuickCrosses);
-    topBarQuickAccessLayout->addWidget(this->btnQuickSacred);
+    topBarQuickAccessLayout->addWidget(this->btnQuickDrawing);
     topBarQuickAccessLayout->addWidget(this->btnQuickToEngrave);
     topBarQuickAccessLayout->addWidget(this->btnQuickToMount);
     topBarQuickAccessLayout->addWidget(this->btnQuickToPay);
@@ -2633,7 +2633,7 @@ void Funeraria::initTopBarQuickAccess()
     this->connect(this->btnQuickClients,    &QPushButton::clicked, this, &Funeraria::slotShowClients);
     this->connect(this->btnQuickSculptures, &QPushButton::clicked, this, &Funeraria::slotShowSculptures);
     this->connect(this->btnQuickCrosses,    &QPushButton::clicked, this, &Funeraria::slotShowCrosses);
-    this->connect(this->btnQuickSacred,     &QPushButton::clicked, this, &Funeraria::slotShowSacred);
+    this->connect(this->btnQuickDrawing,     &QPushButton::clicked, this, &Funeraria::slotShowDrawing);
     this->connect(this->btnQuickToEngrave,  &QPushButton::clicked, this, &Funeraria::slotTombsToEngrave);
     this->connect(this->btnQuickToMount,    &QPushButton::clicked, this, &Funeraria::slotAccessoriesToMount);
     this->connect(this->btnQuickToPay,      &QPushButton::clicked, this, &Funeraria::slotTombsNotPaid);
@@ -2804,7 +2804,7 @@ void Funeraria::initCrossesTopBar()
     this->ui.crossesTopBarWidget->setVisible(false);
 }
 
-void Funeraria::initSacredTopBar()
+void Funeraria::initDrawingTopBar()
 {
     QFont font;
     font.setPointSize(12);
@@ -2820,19 +2820,19 @@ void Funeraria::initSacredTopBar()
     this->leImName->setMaximumWidth(300);
 
     // Horizontal spacer
-    this->sacredSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    this->drawingSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     // Horizontal layout containing the tombs top bar's elements
-    QHBoxLayout* sacredTopBarLayout = new QHBoxLayout(this->ui.sacredTopBarWidget);
+    QHBoxLayout* drawingTopBarLayout = new QHBoxLayout(this->ui.drawingTopBarWidget);
 
-    sacredTopBarLayout->addWidget(this->lblImName);
-    sacredTopBarLayout->addWidget(this->leImName);
-    sacredTopBarLayout->addSpacerItem(this->sacredSpacer);
+    drawingTopBarLayout->addWidget(this->lblImName);
+    drawingTopBarLayout->addWidget(this->leImName);
+    drawingTopBarLayout->addSpacerItem(this->drawingSpacer);
     // Connect the code line edit to the relative slot
-    this->connect(this->leImName, &QLineEdit::textChanged, this, &Funeraria::slotFilterSacred);
+    this->connect(this->leImName, &QLineEdit::textChanged, this, &Funeraria::slotFilterDrawing);
 
     // Set the widget as visible
-    this->ui.sacredTopBarWidget->setVisible(false);
+    this->ui.drawingTopBarWidget->setVisible(false);
 }
 
 void Funeraria::initClientsTopBar()
@@ -2880,7 +2880,7 @@ void Funeraria::showTopBar(const QString& bar)
     this->ui.sculpturesTopBarWidget->setVisible(false);
     this->ui.clientsTopBarWidget->setVisible(false);
     this->ui.crossesTopBarWidget->setVisible(false);
-    this->ui.sacredTopBarWidget->setVisible(false);
+    this->ui.drawingTopBarWidget->setVisible(false);
 
     // Show the one required
     if (bar == "tomb") {
@@ -2895,7 +2895,7 @@ void Funeraria::showTopBar(const QString& bar)
     else if (bar == "cross") {
         this->ui.crossesTopBarWidget->setVisible(true);
     }
-    else if (bar == "sacred") {
-        this->ui.sacredTopBarWidget->setVisible(true);
+    else if (bar == "drawing") {
+        this->ui.drawingTopBarWidget->setVisible(true);
     }
 }

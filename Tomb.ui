@@ -605,7 +605,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_15">
            <item>
-            <widget class="QLabel" name="lblSacred">
+            <widget class="QLabel" name="lblDrawing">
              <property name="minimumSize">
               <size>
                <width>70</width>
@@ -619,12 +619,12 @@
               </size>
              </property>
              <property name="text">
-              <string>Img Sacra</string>
+              <string>Immagine</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="cbSacred">
+            <widget class="QComboBox" name="cbDrawing">
              <property name="minimumSize">
               <size>
                <width>308</width>

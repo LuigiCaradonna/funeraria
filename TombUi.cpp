@@ -29,7 +29,7 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->frame = new Accessory(this->db, "frame");
     this->pit = new Pit(this->db);
     this->cross = new Cross(this->db);
-    this->sacred = new Sacred(this->db);
+    this->drawing = new Drawing(this->db);
 
     // Connect the UI elements
     this->connect(this->ui.cbMaterial, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
@@ -39,7 +39,7 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->connect(this->ui.cbLamp, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbFlame, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbCross, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbSacred, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
+    this->connect(this->ui.cbDrawing, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.cbSculpture, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.leScHeight, &QLineEdit::textChanged, this, &TombUi::slotUpdateNotes);
@@ -117,7 +117,7 @@ TombUi::~TombUi()
     delete this->frame;
     delete this->pit;
     delete this->cross;
-    delete this->sacred;
+    delete this->drawing;
     delete this->currentDateMapper;
 }
 
@@ -225,7 +225,7 @@ void TombUi::slotSave()
             this->lamp->getCode(this->ui.cbLamp->currentText()),
             this->flame->getCode(this->ui.cbFlame->currentText()),
             this->cross->getCode(this->ui.cbCross->currentText()),
-            this->sacred->getCode(this->ui.cbSacred->currentText()),
+            this->drawing->getCode(this->ui.cbDrawing->currentText()),
             this->sculpture->getCode(this->ui.cbSculpture->currentText()),
             this->ui.leScHeight->text().toInt(),
             this->ui.rbMountYes->isChecked(),
@@ -278,7 +278,7 @@ void TombUi::slotSave()
             this->lamp->getCode(this->ui.cbLamp->currentText()),
             this->flame->getCode(this->ui.cbFlame->currentText()),
             this->cross->getCode(this->ui.cbCross->currentText()),
-            this->sacred->getCode(this->ui.cbSacred->currentText()),
+            this->drawing->getCode(this->ui.cbDrawing->currentText()),
             this->sculpture->getCode(this->ui.cbSculpture->currentText()),
             this->ui.leScHeight->text().toInt(),
             this->ui.rbMountYes->isChecked(),
@@ -364,7 +364,7 @@ void TombUi::slotUpdateNotes()
 
     if (this->ui.cbCross->currentIndex() != 0) notes += "croce, ";
 
-    if (this->ui.cbSacred->currentIndex() != 0) notes += "imm. serigrafata, ";
+    if (this->ui.cbDrawing->currentIndex() != 0) notes += "imm. serigrafata, ";
 
     if (this->ui.cbSculpture->currentIndex() != 0) {
         notes += "scultura ";
@@ -803,7 +803,7 @@ void TombUi::updateForm()
     QList<QMap<QString, QString>> lamps = this->lamp->get();
     QList<QMap<QString, QString>> flames = this->flame->get();
     QList<QMap<QString, QString>> crosses = this->cross->getListByCode();
-    QList<QMap<QString, QString>> sacreds = this->sacred->getListByCode();
+    QList<QMap<QString, QString>> drawings = this->drawing->getListByCode();
     QList<QMap<QString, QString>> sculptures = this->sculpture->getListByCode();
     QList<QMap<QString, QString>> frames = this->frame->get();
     QList<QMap<QString, QString>> pits = this->pit->get();
@@ -816,7 +816,7 @@ void TombUi::updateForm()
     int lamp_index = 0;
     int flame_index = 0;
     int cross_index = 0;
-    int sacred_index = 0;
+    int drawing_index = 0;
     int sculpture_index = 0;
     int pit1_index = 0;
     int frame1_index = 0;
@@ -839,7 +839,7 @@ void TombUi::updateForm()
     QList<QString> lamp_names = this->lamp->getNames();
     QList<QString> flame_names = this->flame->getNames();
     QList<QString> cross_names = this->cross->getNames();
-    QList<QString> sacred_names = this->sacred->getNames();
+    QList<QString> drawing_names = this->drawing->getNames();
     QList<QString> sculpture_names = this->sculpture->getNames();
     QList<QString> pit_names = this->pit->getNames();
     QList<QString> frame_names = this->frame->getNames();
@@ -853,7 +853,7 @@ void TombUi::updateForm()
     this->ui.cbLamp->clear();
     this->ui.cbFlame->clear();
     this->ui.cbCross->clear();
-    this->ui.cbSacred->clear();
+    this->ui.cbDrawing->clear();
     this->ui.cbSculpture->clear();
     this->ui.cbPitFormatOne->clear();
     this->ui.cbPitTypeOne->clear();
@@ -929,9 +929,9 @@ void TombUi::updateForm()
             }
         }
 
-        for (int i = 0; i < sacreds.size(); i++) {
-            if (sacreds[i]["code"] == tomb_details["sacred_code"]) {
-                sacred_index = i;
+        for (int i = 0; i < drawings.size(); i++) {
+            if (drawings[i]["code"] == tomb_details["drawing_code"]) {
+                drawing_index = i;
                 break;
             }
         }
@@ -1055,7 +1055,7 @@ void TombUi::updateForm()
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
         this->ui.cbCross->addItems(cross_names);
-        this->ui.cbSacred->addItems(sacred_names);
+        this->ui.cbDrawing->addItems(drawing_names);
         this->ui.cbSculpture->addItems(sculpture_names);
         this->ui.cbPitFormatOne->addItems(pit_names);
         this->ui.cbPitTypeOne->addItems(frame_names);
@@ -1092,7 +1092,7 @@ void TombUi::updateForm()
         this->ui.cbLamp->setCurrentIndex(lamp_index);
         this->ui.cbFlame->setCurrentIndex(flame_index);
         this->ui.cbCross->setCurrentIndex(cross_index);
-        this->ui.cbSacred->setCurrentIndex(sacred_index);
+        this->ui.cbDrawing->setCurrentIndex(drawing_index);
         this->ui.cbSculpture->setCurrentIndex(sculpture_index);
         this->ui.cbPitFormatOne->setCurrentIndex(pit1_index);
         this->ui.cbPitTypeOne->setCurrentIndex(frame1_index);
@@ -1132,7 +1132,7 @@ void TombUi::updateForm()
         this->ui.cbLamp->addItems(lamp_names);
         this->ui.cbFlame->addItems(flame_names);
         this->ui.cbCross->addItems(cross_names);
-        this->ui.cbSacred->addItems(sacred_names);
+        this->ui.cbDrawing->addItems(drawing_names);
         this->ui.cbSculpture->addItems(sculpture_names);
         this->ui.cbPitFormatOne->addItems(pit_names);
         this->ui.cbPitTypeOne->addItems(frame_names);

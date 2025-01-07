@@ -1,21 +1,21 @@
-#include "Sacred.h"
+#include "Drawing.h"
 
 /********** CONSTRUCTOR **********/
 
-Sacred::Sacred(const QSqlDatabase& db)
+Drawing::Drawing(const QSqlDatabase& db)
     : db(db)
 {
 }
 
 /********** DESTRUCTOR **********/
 
-Sacred::~Sacred()
+Drawing::~Drawing()
 {
 }
 
 /********** PUBLIC FUNCTIONS **********/
 
-QList<QMap<QString, QString>> Sacred::getListByCode(const QString& code)
+QList<QMap<QString, QString>> Drawing::getListByCode(const QString& code)
 {
     QList<QMap<QString, QString>> list{};
 
@@ -35,7 +35,7 @@ QList<QMap<QString, QString>> Sacred::getListByCode(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Sacred: " + query.lastError().text());
+        message.setText("Drawing: " + query.lastError().text());
         message.exec();
     }
 
@@ -57,7 +57,7 @@ QList<QMap<QString, QString>> Sacred::getListByCode(const QString& code)
     return list;
 }
 
-QList<QMap<QString, QString>> Sacred::getListByName(const QString& name)
+QList<QMap<QString, QString>> Drawing::getListByName(const QString& name)
 {
     QList<QMap<QString, QString>> list{};
 
@@ -77,7 +77,7 @@ QList<QMap<QString, QString>> Sacred::getListByName(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Sacred: " + query.lastError().text());
+        message.setText("Drawing: " + query.lastError().text());
         message.exec();
     }
 
@@ -99,7 +99,7 @@ QList<QMap<QString, QString>> Sacred::getListByName(const QString& name)
     return list;
 }
 
-QMap<QString, QString> Sacred::getByCode(const QString& code)
+QMap<QString, QString> Drawing::getByCode(const QString& code)
 {
     QMap<QString, QString> map;
 
@@ -114,7 +114,7 @@ QMap<QString, QString> Sacred::getByCode(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Sacred: " + query.lastError().text());
+        message.setText("Drawing: " + query.lastError().text());
         message.exec();
     }
     else if (query.next()) {
@@ -131,7 +131,7 @@ QMap<QString, QString> Sacred::getByCode(const QString& code)
     return map;
 }
 
-QList<QString> Sacred::getNames()
+QList<QString> Drawing::getNames()
 {
     QStringList names = {};
     QSqlQuery query = QSqlQuery(this->db);
@@ -141,7 +141,7 @@ QList<QString> Sacred::getNames()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Sacred: " + query.lastError().text());
+        message.setText("Drawing: " + query.lastError().text());
         message.exec();
 
         return names;
@@ -154,7 +154,7 @@ QList<QString> Sacred::getNames()
     return names;
 }
 
-QString Sacred::getName(const QString& code)
+QString Drawing::getName(const QString& code)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT name FROM " + this->table + " WHERE code = :code");
@@ -164,7 +164,7 @@ QString Sacred::getName(const QString& code)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Sacred: " + query.lastError().text());
+        message.setText("Drawing: " + query.lastError().text());
         message.exec();
 
         return "";
@@ -177,7 +177,7 @@ QString Sacred::getName(const QString& code)
     return "";
 }
 
-QList<QString> Sacred::getCodes()
+QList<QString> Drawing::getCodes()
 {
     QStringList codes = {};
     QSqlQuery query = QSqlQuery(this->db);
@@ -187,7 +187,7 @@ QList<QString> Sacred::getCodes()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Sacred: " + query.lastError().text());
+        message.setText("Drawing: " + query.lastError().text());
         message.exec();
 
         return codes;
@@ -200,7 +200,7 @@ QList<QString> Sacred::getCodes()
     return codes;
 }
 
-QString Sacred::getCode(const QString& name)
+QString Drawing::getCode(const QString& name)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT code FROM " + this->table + " WHERE name = :name");
@@ -210,7 +210,7 @@ QString Sacred::getCode(const QString& name)
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
-        message.setText("Sacred: " + query.lastError().text());
+        message.setText("Drawing: " + query.lastError().text());
         message.exec();
 
         return "";
@@ -223,7 +223,7 @@ QString Sacred::getCode(const QString& name)
     return "";
 }
 
-bool Sacred::store(
+bool Drawing::store(
     const QString& code,
     const QString& name,
     const QString& img,
@@ -235,8 +235,8 @@ bool Sacred::store(
 
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("INSERT INTO " + this->table + " "
-        " (code, name, img, width, height, depth, created_at, edited_at)"
-        " VALUES (:code, :img, :width, :height, :created_at, :edited_at)");
+        " (code, name, img, width, height, created_at, edited_at)"
+        " VALUES (:code, :name, :img, :width, :height, :created_at, :edited_at)");
     query.bindValue(":code", code);
     query.bindValue(":name", name);
     query.bindValue(":img", img);
@@ -251,7 +251,7 @@ bool Sacred::store(
     return true;
 }
 
-bool Sacred::update(
+bool Drawing::update(
     const QString& old_code,
     const QString& code,
     const QString& name,
@@ -282,7 +282,7 @@ bool Sacred::update(
     return true;
 }
 
-bool Sacred::remove(const QString& code)
+bool Drawing::remove(const QString& code)
 {
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("DELETE FROM " + this->table + " WHERE code = :code;");

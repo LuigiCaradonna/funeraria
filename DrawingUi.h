@@ -2,12 +2,12 @@
 
 #include <QDebug>
 #include <QFileDialog>
-#include "Sacred.h"
-#include "ui_Sacred.h"
+#include "Drawing.h"
+#include "ui_Drawing.h"
 #include "Config.h"
 #include "Helpers.h"
 
-class SacredUi : public QDialog
+class DrawingUi : public QDialog
 {
     Q_OBJECT
 
@@ -15,7 +15,7 @@ public:
     /********** CONSTRUCTOR **********/
 
     /*
-     * Constructs the SacredUi object.
+     * Constructs the DrawingUi object.
      *
      * @param	const QSqlDatabase*	db	            - Reference to the database connection
      * @param	const QString&	    css_folder	    - Path to the css folder
@@ -23,14 +23,14 @@ public:
      * @param	const QString&	    images_folder	- Path to the images folder
      * @param	QWidget*            parent	        - Parent widget
      */
-    SacredUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, const QString& images_folder, QWidget* parent = nullptr);
+    DrawingUi(const QSqlDatabase& db, const QString& css_folder, const QString& icons_folder, const QString& images_folder, QWidget* parent = nullptr);
 
     /********** DESTRUCTOR **********/
 
     /*
-     * Destructs the SacredUi object.
+     * Destructs the DrawingUi object.
      */
-    ~SacredUi();
+    ~DrawingUi();
 
     /********** PUBLIC FUNCTIONS **********/
 
@@ -83,8 +83,8 @@ protected slots:
     void slotCloseDialog();
 
 private:
-    Ui::SacredClass ui;
-    const QString table = "sacred";
+    Ui::DrawingClass ui;
+    const QString table = "drawing";
     QSqlDatabase db;
     QWidget* parent;
     QString code;

@@ -15,7 +15,7 @@
 #include "TombFormat.h"
 #include "Pit.h"
 #include "Cross.h"
-#include "Sacred.h"
+#include "Drawing.h"
 #include "Helpers.h"
 
 class TombUi : public QDialog
@@ -157,7 +157,7 @@ private:
     TombFormat* tomb_format;
     Pit* pit;
     Cross* cross;
-    Sacred* sacred;
+    Drawing* drawing;
 
     const QString css_folder;
 

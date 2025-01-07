@@ -16,8 +16,8 @@
 #include "Client.h"
 #include "Sculpture.h"
 #include "SculptureUi.h"
-#include "Sacred.h"
-#include "SacredUi.h"
+#include "Drawing.h"
+#include "DrawingUi.h"
 #include "Cross.h"
 #include "CrossUi.h"
 #include "SettingsUi.h"
@@ -294,28 +294,28 @@ protected slots:
      *
      * @return void
      */
-    void slotShowSacred(int row = 1);
+    void slotShowDrawing(int row = 1);
 
     /*
      * Updates the images' orders list shown applying the filter (name string)
      *
      * @return void
      */
-    void slotFilterSacred();
+    void slotFilterDrawing();
 
     /*
      * Shows the dialog to insert a new image
      *
      * @return void
      */
-    void slotNewSacred();
+    void slotNewDrawing();
 
     /*
      * Shows a dialog window containing the selected images's details
      *
      * @return void
      */
-    void slotSacredDetails();
+    void slotDrawingDetails();
 
     /*
      * Shows the tombs needed which can be engraved
@@ -412,8 +412,8 @@ private:
     SculptureUi* sculpture_ui;
     Cross* cross;
     CrossUi* cross_ui;
-    Sacred* sacred;
-    SacredUi* sacred_ui;
+    Drawing* drawing;
+    DrawingUi* drawing_ui;
     ReportUi* report_ui;
     Accessory* vase;
     Accessory* lamp;
@@ -458,7 +458,7 @@ private:
     QPushButton* btnQuickClients;
     QPushButton* btnQuickSculptures;
     QPushButton* btnQuickCrosses;
-    QPushButton* btnQuickSacred;
+    QPushButton* btnQuickDrawing;
     QPushButton* btnQuickToEngrave;
     QPushButton* btnQuickToPay;
     QPushButton* btnQuickToMount;
@@ -489,10 +489,10 @@ private:
     QLineEdit* leCrName;
     QSpacerItem* crossSpacer;
 
-    // Sacred top bar elements
+    // Drawing top bar elements
     QLabel* lblImName;
     QLineEdit* leImName;
-    QSpacerItem* sacredSpacer;
+    QSpacerItem* drawingSpacer;
 
     // Clients top bar elements
     QLabel* lblClName;
@@ -651,11 +651,11 @@ private:
     void initCrossesTopBar();
 
     /*
-     * Initialize the top bar for the sacred images view.
+     * Initialize the top bar for the drawing images view.
      *
      * @return void
      */
-    void initSacredTopBar();
+    void initDrawingTopBar();
 
     /*
      * Initialize the top bar for the clients view.
