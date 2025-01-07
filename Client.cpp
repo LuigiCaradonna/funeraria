@@ -33,127 +33,6 @@ int Client::getId(const QString& name)
     return 0;
 }
 
-QString Client::getName(const int id)
-{
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table + " WHERE id = :id;");
-    query.bindValue(":id", id);
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-    else if (query.next()) {
-        return query.value("name").toString();
-    }
-
-    return "";
-}
-
-QStringList Client::getNames()
-{
-    QStringList names{};
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table + " ORDER BY position ASC;");
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-
-    while (query.next()) {
-        names.append(query.value("name").toString());
-    }
-
-    return names;
-}
-
-QList<QMap<QString, QString>> Client::getActive()
-{
-    QList<QMap<QString, QString>> list{};
-
-    QSqlQuery query = QSqlQuery(this->db);
-
-    QString query_string = "SELECT * FROM " + this->table + " WHERE active = 1 ORDER BY position ASC";
-
-    query.prepare(query_string);
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-
-    while (query.next()) {
-        QMap<QString, QString> row;
-
-        row["id"] = query.value("id").toString();
-        row["position"] = query.value("position").toString();
-        row["name"] = query.value("name").toString();
-        row["email"] = query.value("email").toString();
-        row["address"] = query.value("address").toString();
-        row["phone"] = query.value("phone").toString();
-        row["active"] = query.value("active").toString();
-        row["quick"] = query.value("quick").toString();
-        row["created_at"] = query.value("created_at").toString();
-        row["edited_at"] = query.value("edited_at").toString();
-
-        list.append(row);
-    }
-
-    return list;
-}
-
-QStringList Client::getActiveNames()
-{
-    QStringList names{};
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table + " WHERE active = 1 ORDER BY position ASC;");
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-
-    while (query.next()) {
-        names.append(query.value("name").toString());
-    }
-
-    return names;
-}
-
-QStringList Client::getQuickAccessNames()
-{
-    QStringList names{};
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table + " WHERE quick = 1 ORDER BY position ASC;");
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-
-    while (query.next()) {
-        names.append(query.value("name").toString());
-    }
-
-    return names;
-}
-
 QList<QMap<QString, QString>> Client::get(const QString& name)
 {
     QList<QMap<QString, QString>> list{};
@@ -196,6 +75,127 @@ QList<QMap<QString, QString>> Client::get(const QString& name)
     }
 
     return list;
+}
+
+QList<QMap<QString, QString>> Client::getActive()
+{
+    QList<QMap<QString, QString>> list{};
+
+    QSqlQuery query = QSqlQuery(this->db);
+
+    QString query_string = "SELECT * FROM " + this->table + " WHERE active = 1 ORDER BY position ASC";
+
+    query.prepare(query_string);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        QMap<QString, QString> row;
+
+        row["id"] = query.value("id").toString();
+        row["position"] = query.value("position").toString();
+        row["name"] = query.value("name").toString();
+        row["email"] = query.value("email").toString();
+        row["address"] = query.value("address").toString();
+        row["phone"] = query.value("phone").toString();
+        row["active"] = query.value("active").toString();
+        row["quick"] = query.value("quick").toString();
+        row["created_at"] = query.value("created_at").toString();
+        row["edited_at"] = query.value("edited_at").toString();
+
+        list.append(row);
+    }
+
+    return list;
+}
+
+QString Client::getName(const int id)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " WHERE id = :id;");
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+    else if (query.next()) {
+        return query.value("name").toString();
+    }
+
+    return "";
+}
+
+QStringList Client::getNames()
+{
+    QStringList names{};
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " ORDER BY position ASC;");
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        names.append(query.value("name").toString());
+    }
+
+    return names;
+}
+
+QStringList Client::getActiveNames()
+{
+    QStringList names{};
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " WHERE active = 1 ORDER BY position ASC;");
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        names.append(query.value("name").toString());
+    }
+
+    return names;
+}
+
+QStringList Client::getQuickAccessNames()
+{
+    QStringList names{};
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " WHERE quick = 1 ORDER BY position ASC;");
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        names.append(query.value("name").toString());
+    }
+
+    return names;
 }
 
 QMap<QString, QString> Client::getDetailsById(int id)

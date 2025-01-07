@@ -56,6 +56,15 @@ public:
     QStringList getNames();
 
     /*
+     * Gets all the clients' data
+     *
+     * @param   const QString& name - Optional, client's name to get
+     *
+     * @return  QList<QMap<QString, QString>> - A list containing the clients' data
+     */
+    QList<QMap<QString, QString>> get(const QString& name = "");
+
+    /*
      * Gets all the active clients
      *
      * @return  QList<QMap<QString, QString>> - A list containing the active clients
@@ -75,15 +84,6 @@ public:
      * @return  QStringList - A list containing the clients' names to show as buttons into the quick access bar
      */
     QStringList getQuickAccessNames();
-
-    /*
-     * Gets all the clients' data
-     *
-     * @param   const QString& name - Optional, client's name to get
-     *
-     * @return  QList<QMap<QString, QString>> - A list containing the clients' data
-     */
-    QList<QMap<QString, QString>> get(const QString& name = "");
 
     /*
      * Gets the given client's datails
