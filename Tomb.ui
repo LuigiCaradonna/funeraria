@@ -619,7 +619,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Immagine</string>
+              <string>Disegno</string>
              </property>
             </widget>
            </item>
@@ -830,7 +830,7 @@
          <widget class="QRadioButton" name="rbEngraveYes">
           <property name="geometry">
            <rect>
-            <x>150</x>
+            <x>10</x>
             <y>20</y>
             <width>84</width>
             <height>30</height>
@@ -857,7 +857,7 @@
          <widget class="QRadioButton" name="rbEngraveNo">
           <property name="geometry">
            <rect>
-            <x>10</x>
+            <x>110</x>
             <y>20</y>
             <width>131</width>
             <height>30</height>
