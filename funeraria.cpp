@@ -2513,7 +2513,7 @@ void Funeraria::initTopBarQuickAccess()
     this->btnQuickDrawing->setMinimumSize(QSize(48, 48));
     this->btnQuickDrawing->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
     this->btnQuickDrawing->setIconSize(QSize(32, 32));
-    this->btnQuickDrawing->setToolTip("Immagini sacre");
+    this->btnQuickDrawing->setToolTip("Disegni");
     this->btnQuickDrawing->setToolTipDuration(tooltip_duration);
 
     // Tombs to engrave button
