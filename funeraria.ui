@@ -188,9 +188,9 @@
      <addaction name="actionCrNew"/>
      <addaction name="actionCrList"/>
     </widget>
-    <widget class="QMenu" name="menuImages">
+    <widget class="QMenu" name="menuDrawings">
      <property name="title">
-      <string>Immagini</string>
+      <string>Disegni</string>
      </property>
      <addaction name="actionImNew"/>
      <addaction name="actionImList"/>
@@ -198,7 +198,7 @@
     <addaction name="menuPits"/>
     <addaction name="menuFrames"/>
     <addaction name="menuCrosses"/>
-    <addaction name="menuImages"/>
+    <addaction name="menuDrawings"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuClients"/>

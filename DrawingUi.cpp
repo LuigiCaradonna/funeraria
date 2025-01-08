@@ -83,14 +83,14 @@ void DrawingUi::slotSave()
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Information);
-            message.setText("Immagine inserita.");
+            message.setText("Disegno inserita.");
             message.exec();
         }
         else {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText("Inserimento immagine non riuscito.");
+            message.setText("Inserimento disegno non riuscito.");
             message.exec();
         }
 
@@ -116,14 +116,14 @@ void DrawingUi::slotUpdate()
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Information);
-            message.setText("Immagine modificata.");
+            message.setText("Disegno modificato.");
             message.exec();
         }
         else {
             QMessageBox message;
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Critical);
-            message.setText("Aggiornamento immagine non riuscito.");
+            message.setText("Aggiornamento disegno non riuscito.");
             message.exec();
         }
 
@@ -147,7 +147,7 @@ void DrawingUi::updateForm()
     QMap<QString, QString> drawing_details = drawing->getByCode(this->code);
 
     if (!drawing_details.isEmpty()) {
-        this->setWindowTitle("Modifica immagine");
+        this->setWindowTitle("Modifica disegno");
 
         Config* config = new Config();
 
@@ -202,7 +202,7 @@ void DrawingUi::updateForm()
     }
     else {
         // Drawing not found means we are asking to insert a new one
-        this->setWindowTitle("Inserisci immagine");
+        this->setWindowTitle("Inserisci disegno");
 
         // The image field must not be manually edited
         this->ui.leImgPath->setEnabled(false);
@@ -234,7 +234,7 @@ bool DrawingUi::checkForm()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Il codice dell'a scultur'immagine è obbligatorio.");
+        message.setText("Il codice del disegno è obbligatorio.");
         message.exec();
 
         return false;
@@ -244,7 +244,7 @@ bool DrawingUi::checkForm()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("Il nome dell'a scultura'immagine è obbligatorio.");
+        message.setText("Il nome del disegno è obbligatorio.");
         message.exec();
 
         return false;
@@ -254,7 +254,7 @@ bool DrawingUi::checkForm()
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
-        message.setText("L'immagine è obbligatoria.");
+        message.setText("Il disegno è obbligatoria.");
         message.exec();
 
         return false;

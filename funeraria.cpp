@@ -84,7 +84,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.menuCrosses->setIcon(QIcon(this->icons_folder + "cross-72.png"));
         this->ui.actionCrNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionCrList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuImages->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
+        this->ui.menuDrawings->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
         this->ui.actionImNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
         this->ui.actionImList->setIcon(QIcon(this->icons_folder + "list-50.png"));
         // Accessori
@@ -154,7 +154,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionCrList, SIGNAL(triggered()), this, SLOT(slotShowCrosses()));
         this->connect(this->ui.actionCrNew, SIGNAL(triggered()), this, SLOT(slotNewCross()));
 
-        // Signal emitted from the menu "Immagini"
+        // Signal emitted from the menu "Disegni"
         this->connect(this->ui.actionImList, SIGNAL(triggered()), this, SLOT(slotShowDrawing()));
         this->connect(this->ui.actionImNew, SIGNAL(triggered()), this, SLOT(slotNewDrawing()));
         /* 
