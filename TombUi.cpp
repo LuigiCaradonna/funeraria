@@ -1054,6 +1054,12 @@ void TombUi::updateForm()
         this->ui.leName->setText(tomb_details["name"]);
         this->ui.leEngravedNames->setText(tomb_details["engraved_names"]);
         this->ui.leEpigraphAmount->setText(tomb_details["ep_amount"]);
+        if (tomb_details["engraved"] == "1") {
+            this->ui.leEpigraphAmount->setEnabled(true);
+        }
+        else {
+            this->ui.leEpigraphAmount->setEnabled(false);
+        }
         this->ui.rbEngraveYes->setChecked(tomb_details["engraved"] == "1");
         this->ui.rbEngraveNo->setChecked(tomb_details["engraved"] == "0");
         this->ui.lePrice->setText(tomb_details["price"]);
