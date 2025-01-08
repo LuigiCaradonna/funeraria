@@ -495,7 +495,7 @@ bool Tomb::store(
     // Store the tomb into the database
 
     QSqlQuery query = QSqlQuery(this->db);
-   
+    
     query.prepare(
         "INSERT INTO " + this->table + " "
         "(progressive, client_id, name, engraved_names, ep_amount, engraved, price, paid, material_code, type_code, format_code, "
@@ -507,7 +507,7 @@ bool Tomb::store(
         "created_at, edited_at) "
         "VALUES (:progressive, :client_id, :name, :engraved_names, :ep_amount, :engraved, :price, :paid, :material_code, :type_code, :format_code, "
         ":vase_code, :lamp_code, :flame_code, :cross_code, :drawing_code, :sculpture_code, :sculpture_h, :mounted, :mat_provided, "
-        ":ep_relief, : inscription, "
+        ":ep_relief, :inscription, "
         ":pit_one, :frame_one, :pit_two, :frame_two, :pit_three, :frame_three, "
         ":pit_four, :frame_four, :pit_five, :frame_five, :pit_six, :frame_six, "
         ":notes, :accessories_mounted, :ordered_at, :proofed_at, :confirmed_at, :engraved_at, :delivered_at, "
