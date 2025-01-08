@@ -343,6 +343,10 @@ void TombUi::slotUpdateNotes()
     this->ui.ptNote->setPlainText("");
     QString notes = "";
 
+    if (this->ui.rbEngraveNo->isChecked()) notes += "Solo materiale, ";
+
+    if (this->ui.rbEngraveBronze->isChecked()) notes += "Bronzi applicati, ";
+
     if (this->ui.rbMProvYes->isChecked()) notes += "Materiale fornito, ";
 
     if (this->ui.rbMountYes->isChecked()) notes += "Montaggio, ";
