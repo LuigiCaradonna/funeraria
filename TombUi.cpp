@@ -343,13 +343,9 @@ void TombUi::slotUpdateNotes()
     this->ui.ptNote->setPlainText("");
     QString notes = "";
 
-    if (this->ui.rbEngraveNo->isChecked()) notes += "Solo materiale, ";
+    if (this->ui.rbMProvYes->isChecked()) notes += "Materiale fornito - ";
 
-    if (this->ui.rbEngraveBronze->isChecked()) notes += "Bronzi applicati, ";
-
-    if (this->ui.rbMProvYes->isChecked()) notes += "Materiale fornito, ";
-
-    if (this->ui.rbMountYes->isChecked()) notes += "Montaggio, ";
+    if (this->ui.rbMountYes->isChecked()) notes += "Montaggio - ";
     /*
     if (this->ui.cbType->currentIndex() != 0) notes += this->ui.cbType->currentText() + ", ";
     if (this->ui.cbFormat->currentIndex() != 0) notes += this->ui.cbFormat->currentText() + ", ";
@@ -358,34 +354,34 @@ void TombUi::slotUpdateNotes()
         QString epigrafi = "epigrafe";
         if (this->ui.leEpigraphAmount->text().toInt() > 1) epigrafi = "epigrafi";
         if (this->ui.rbEpReliefYes->isChecked()) epigrafi += " a rilievo";
-        notes += this->ui.leEpigraphAmount->text() + " " + epigrafi + ", ";
+        notes += this->ui.leEpigraphAmount->text() + " " + epigrafi + " - ";
     }
-    else if (this->ui.rbEngraveNo->isChecked()) notes += "Solo materiale, ";
-    else if (this->ui.rbEngraveBronze->isChecked()) notes += "Bronzi applicati, ";
+    else if (this->ui.rbEngraveNo->isChecked()) notes += "Solo materiale - ";
+    else if (this->ui.rbEngraveBronze->isChecked()) notes += "Bronzi applicati - ";
 
-    if (this->ui.rbInscriptionYes->isChecked()) notes += " dedica, ";
+    if (this->ui.rbInscriptionYes->isChecked()) notes += " Dedica - ";
 
-    if (this->ui.cbPitFormatSix->currentIndex() != 0) notes += "6 scavi, ";
-    else if (this->ui.cbPitFormatFive->currentIndex() != 0) notes += "5 scavi, ";
-    else if (this->ui.cbPitFormatFour->currentIndex() != 0) notes += "4 scavi, ";
-    else if (this->ui.cbPitFormatThree->currentIndex() != 0) notes += "3 scavi, ";
-    else if (this->ui.cbPitFormatTwo->currentIndex() != 0) notes += "2 scavi, ";
-    else if (this->ui.cbPitFormatOne->currentIndex() != 0) notes += "1 scavo, ";
+    if (this->ui.cbPitFormatSix->currentIndex() != 0) notes += "6 scavi - ";
+    else if (this->ui.cbPitFormatFive->currentIndex() != 0) notes += "5 scavi - ";
+    else if (this->ui.cbPitFormatFour->currentIndex() != 0) notes += "4 scavi - ";
+    else if (this->ui.cbPitFormatThree->currentIndex() != 0) notes += "3 scavi - ";
+    else if (this->ui.cbPitFormatTwo->currentIndex() != 0) notes += "2 scavi - ";
+    else if (this->ui.cbPitFormatOne->currentIndex() != 0) notes += "1 scavo - ";
 
-    if (this->ui.cbCross->currentIndex() != 0) notes += "croce, ";
+    if (this->ui.cbCross->currentIndex() != 0) notes += "Croce - ";
 
-    if (this->ui.cbDrawing->currentIndex() != 0) notes += "imm. serigrafata, ";
+    if (this->ui.cbDrawing->currentIndex() != 0) notes += "Imm. serigrafata - ";
 
     if (this->ui.cbSculpture->currentIndex() != 0) {
-        notes += "scultura ";
+        notes += "Scultura";
         if (this->ui.leScHeight->text().toInt() > 20) {
-            notes += this->ui.leScHeight->text() + "cm, ";
+            notes += " " + this->ui.leScHeight->text() + "cm - ";
         }
-        else notes += ", ";
+        else notes += " - ";
     }
 
-    // Remove the last 2 characters ", "
-    notes.chop(2);
+    // Remove the last 3 characters " - "
+    notes.chop(3);
 
     this->ui.ptNote->setPlainText(notes);
 }
