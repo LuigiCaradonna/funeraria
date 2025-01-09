@@ -1278,7 +1278,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitFormatOne">
+          <widget class="QComboBox" name="cbPitOne">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1299,7 +1299,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitTypeOne">
+          <widget class="QComboBox" name="cbFrameOne">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1348,7 +1348,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitFormatTwo">
+          <widget class="QComboBox" name="cbPitTwo">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1372,7 +1372,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitTypeTwo">
+          <widget class="QComboBox" name="cbFrameTwo">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1424,7 +1424,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitFormatThree">
+          <widget class="QComboBox" name="cbPitThree">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1448,7 +1448,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitTypeThree">
+          <widget class="QComboBox" name="cbFrameThree">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1500,7 +1500,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitFormatFour">
+          <widget class="QComboBox" name="cbPitFour">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1524,7 +1524,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitTypeFour">
+          <widget class="QComboBox" name="cbFrameFour">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1576,7 +1576,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitFormatFive">
+          <widget class="QComboBox" name="cbPitFive">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1600,7 +1600,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitTypeFive">
+          <widget class="QComboBox" name="cbFrameFive">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1652,7 +1652,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitFormatSix">
+          <widget class="QComboBox" name="cbPitSix">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1676,7 +1676,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbPitTypeSix">
+          <widget class="QComboBox" name="cbFrameSix">
            <property name="enabled">
             <bool>false</bool>
            </property>
