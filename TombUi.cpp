@@ -362,15 +362,66 @@ void TombUi::slotUpdateNotes()
     if (this->ui.rbInscriptionYes->isChecked()) notes += "Dedica - ";
 
     if (this->ui.cbPitSix->currentIndex() != 0) {
-        notes += "6 scavi - ";
-
-        // if (this->ui.cbFrameOne->currentIndex())
+        if (this->ui.cbFrameOne->currentIndex() != 0 &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameThree->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFour->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFive->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameSix->currentIndex()) {
+            notes += "6 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+        }
+        else {
+            notes += "6 scavi cornici varie - ";
+        }
     }
-    else if (this->ui.cbPitFive->currentIndex() != 0) notes += "5 scavi - ";
-    else if (this->ui.cbPitFour->currentIndex() != 0) notes += "4 scavi - ";
-    else if (this->ui.cbPitThree->currentIndex() != 0) notes += "3 scavi - ";
-    else if (this->ui.cbPitTwo->currentIndex() != 0) notes += "2 scavi - ";
-    else if (this->ui.cbPitOne->currentIndex() != 0) notes += "1 scavo - ";
+    else if (this->ui.cbPitFive->currentIndex() != 0) {
+        if (this->ui.cbFrameOne->currentIndex() != 0 &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameThree->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFour->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFive->currentIndex()) {
+            notes += "5 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+        }
+        else {
+            notes += "5 scavi cornici varie - ";
+        }
+    }
+    else if (this->ui.cbPitFour->currentIndex() != 0) {
+        if (this->ui.cbFrameOne->currentIndex() != 0 &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameThree->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFour->currentIndex()) {
+            notes += "4 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+        }
+        else {
+            notes += "4 scavi cornici varie - ";
+        }
+    }
+    else if (this->ui.cbPitThree->currentIndex() != 0) {
+        if (this->ui.cbFrameOne->currentIndex() != 0 &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameThree->currentIndex()) {
+            notes += "3 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+        }
+        else {
+            notes += "3 scavi cornici varie - ";
+        }
+    }
+    else if (this->ui.cbPitTwo->currentIndex() != 0) {
+        if (this->ui.cbFrameOne->currentIndex() != 0 &&
+            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex()) {
+            notes += "2 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+        }
+        else {
+            notes += "2 scavi cornici varie - ";
+        }
+    }
+    else if (this->ui.cbFrameOne->currentIndex() != 0 && this->ui.cbPitOne->currentIndex() != 0) {
+
+        if (this->ui.cbFrameOne->currentIndex() != 0) {
+            notes += "1 scavo cornice " + this->ui.cbFrameOne->currentText() + " - ";
+        }
+    }
 
     if (this->ui.cbCross->currentIndex() != 0) notes += "Croce - ";
 
