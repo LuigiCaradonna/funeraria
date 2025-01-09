@@ -362,55 +362,80 @@ void TombUi::slotUpdateNotes()
     if (this->ui.rbInscriptionYes->isChecked()) notes += "Dedica - ";
 
     if (this->ui.cbPitSix->currentIndex() != 0) {
-        if (this->ui.cbFrameOne->currentIndex() != 0 &&
-            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
+        if (this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameThree->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFour->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFive->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameSix->currentIndex()) {
-            notes += "6 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+
+            if (this->frame->getCode(this->ui.cbFrameOne->currentText()) == "NO") {
+                notes += "6 scavi senza cornice - ";
+            }
+            else {
+                notes += "6 scavi cornice " + this->ui.cbFrameOne->currentText().toLower() + " - ";
+            }
         }
         else {
             notes += "6 scavi cornici varie - ";
         }
     }
     else if (this->ui.cbPitFive->currentIndex() != 0) {
-        if (this->ui.cbFrameOne->currentIndex() != 0 &&
-            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
+        if (this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameThree->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFour->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFive->currentIndex()) {
-            notes += "5 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+
+            if (this->frame->getCode(this->ui.cbFrameOne->currentText()) == "NO") {
+                notes += "5 scavi senza cornice - ";
+            }
+            else {
+                notes += "5 scavi cornice " + this->ui.cbFrameOne->currentText().toLower() + " - ";
+            }
         }
         else {
             notes += "5 scavi cornici varie - ";
         }
     }
     else if (this->ui.cbPitFour->currentIndex() != 0) {
-        if (this->ui.cbFrameOne->currentIndex() != 0 &&
-            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
+        if (this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameThree->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameFour->currentIndex()) {
-            notes += "4 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+
+            if (this->frame->getCode(this->ui.cbFrameOne->currentText()) == "NO") {
+                notes += "4 scavi senza cornice - ";
+            }
+            else {
+                notes += "4 scavi cornice " + this->ui.cbFrameOne->currentText().toLower() + " - ";
+            }
         }
         else {
             notes += "4 scavi cornici varie - ";
         }
     }
     else if (this->ui.cbPitThree->currentIndex() != 0) {
-        if (this->ui.cbFrameOne->currentIndex() != 0 &&
-            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
+        if (this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex() &&
             this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameThree->currentIndex()) {
-            notes += "3 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+
+            if (this->frame->getCode(this->ui.cbFrameOne->currentText()) == "NO") {
+                notes += "3 scavi senza cornice - ";
+            }
+            else {
+                notes += "3 scavi cornice " + this->ui.cbFrameOne->currentText().toLower() + " - ";
+            }
         }
         else {
             notes += "3 scavi cornici varie - ";
         }
     }
     else if (this->ui.cbPitTwo->currentIndex() != 0) {
-        if (this->ui.cbFrameOne->currentIndex() != 0 &&
-            this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex()) {
-            notes += "2 scavi cornici " + this->ui.cbFrameOne->currentText() + " - ";
+        if (this->ui.cbFrameOne->currentIndex() == this->ui.cbFrameTwo->currentIndex()) {
+
+            if (this->frame->getCode(this->ui.cbFrameOne->currentText()) == "NO") {
+                notes += "2 scavi senza cornice - ";
+            }
+            else {
+                notes += "2 scavi cornice " + this->ui.cbFrameOne->currentText().toLower() + " - ";
+            }
         }
         else {
             notes += "2 scavi cornici varie - ";
@@ -418,8 +443,11 @@ void TombUi::slotUpdateNotes()
     }
     else if (this->ui.cbFrameOne->currentIndex() != 0 && this->ui.cbPitOne->currentIndex() != 0) {
 
-        if (this->ui.cbFrameOne->currentIndex() != 0) {
-            notes += "1 scavo cornice " + this->ui.cbFrameOne->currentText() + " - ";
+        if (this->frame->getCode(this->ui.cbFrameOne->currentText()) == "NO") {
+            notes += "1 scavo senza cornice - ";
+        }
+        else {
+            notes += "1 scavo cornice " + this->ui.cbFrameOne->currentText().toLower() + " - ";
         }
     }
 
@@ -608,42 +636,38 @@ bool TombUi::validateForm(const QString& op)
     }
 
     if (
-        (
-            this->pit->getCode(this->ui.cbPitTwo->currentText()) != "NO" && 
-			this->pit->getCode(this->ui.cbPitOne->currentText()) == "NO"
-        )
+        (this->ui.cbPitTwo->currentIndex() != 0 && this->ui.cbPitOne->currentIndex() != 0 )
         ||
-        (this->pit->getCode(this->ui.cbPitThree->currentText()) != "NO" &&
+        (this->ui.cbPitThree->currentIndex() != 0 &&
             (
-                this->pit->getCode(this->ui.cbPitTwo->currentText()) == "NO" || 
-                this->pit->getCode(this->ui.cbPitOne->currentText()) == "NO"
+                this->ui.cbPitTwo->currentIndex() != 0 || this->ui.cbPitOne->currentIndex() != 0
             )
         ) 
         ||
-        (this->pit->getCode(this->ui.cbPitFour->currentText()) != "NO" &&
+        (this->ui.cbPitFour->currentIndex() != 0 &&
             (
-                this->pit->getCode(this->ui.cbPitThree->currentText()) == "NO" ||
-                this->pit->getCode(this->ui.cbPitTwo->currentText()) == "NO" ||
-                this->pit->getCode(this->ui.cbPitOne->currentText()) == "NO"
+                this->ui.cbPitThree->currentIndex() != 0 ||
+                this->ui.cbPitTwo->currentIndex() != 0 ||
+                this->ui.cbPitOne->currentIndex() != 0
             )
         ) 
         ||
-        (this->pit->getCode(this->ui.cbPitFive->currentText()) != "NO" &&
+        (this->ui.cbPitFive->currentIndex() != 0 &&
             (
-                this->pit->getCode(this->ui.cbPitFour->currentText()) == "NO" ||
-                this->pit->getCode(this->ui.cbPitThree->currentText()) == "NO" ||
-                this->pit->getCode(this->ui.cbPitTwo->currentText()) == "NO" ||
-                this->pit->getCode(this->ui.cbPitOne->currentText()) == "NO"
+                this->ui.cbPitFour->currentIndex() != 0 ||
+                this->ui.cbPitThree->currentIndex() != 0 ||
+                this->ui.cbPitTwo->currentIndex() != 0 ||
+                this->ui.cbPitOne->currentIndex() != 0
             )
         ) 
         ||
-        (this->pit->getCode(this->ui.cbPitSix->currentText()) != "NO" &&
+        (this->ui.cbPitSix->currentIndex() != 0 &&
             (
-                this->pit->getCode(this->ui.cbPitFive->currentText()) == "NO" ||
-                this->pit->getCode(this->ui.cbPitFour->currentText()) == "NO" ||
-                this->pit->getCode(this->ui.cbPitThree->currentText()) == "NO" ||
-                this->pit->getCode(this->ui.cbPitTwo->currentText()) == "NO" ||
-                this->pit->getCode(this->ui.cbPitOne->currentText()) == "NO"
+                this->ui.cbPitFive->currentIndex() != 0 ||
+                this->ui.cbPitFour->currentIndex() != 0 ||
+                this->ui.cbPitThree->currentIndex() != 0 ||
+                this->ui.cbPitTwo->currentIndex() != 0 ||
+                this->ui.cbPitOne->currentIndex() != 0
             )
         )
     ) {
@@ -654,8 +678,6 @@ bool TombUi::validateForm(const QString& op)
         message.exec();
         return false;
     }
-
-    // TODO: Check if a frame is selected for each pit
 
     if (!this->checkDates(
         this->ui.leOrderedAt->text(), 
