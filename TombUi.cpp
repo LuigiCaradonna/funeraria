@@ -874,6 +874,51 @@ bool TombUi::checkDates(const QString& order, const QString& proof, const QStrin
     return true;
 }
 
+void TombUi::resetForm()
+{
+    this->ui.cbClient->setCurrentIndex(0);
+    this->ui.leName->setText("");
+    this->ui.leEngravedNames->setText("");
+    this->ui.chbPaid->setChecked(false);
+    this->ui.chbAccessoriesMounted->setChecked(false);
+    this->ui.cbMaterial->setCurrentIndex(0);
+    this->ui.cbType->setCurrentIndex(0);
+    this->ui.cbFormat->setCurrentIndex(0);
+    this->ui.cbVase->setCurrentIndex(0);
+    this->ui.cbLamp->setCurrentIndex(0);
+    this->ui.cbFlame->setCurrentIndex(0);
+    this->ui.cbCross->setCurrentIndex(0);
+    this->ui.cbDrawing->setCurrentIndex(0);
+    this->ui.cbSculpture->setCurrentIndex(0);
+    this->ui.leScHeight->setText("");
+    this->ui.leScHeight->setEnabled(false);
+    this->ui.rbEngraveYes->setChecked(true);
+    this->ui.rbMountYes->setChecked(true);
+    this->ui.rbMProvNo->setChecked(true);
+    this->ui.rbEpReliefNo->setChecked(true);
+    this->ui.rbInscriptionNo->setChecked(true);
+    this->ui.leEpigraphAmount->setText("1");
+    this->ui.leEpigraphAmount->setEnabled(true);
+    this->ui.cbPitOne->setCurrentIndex(0);
+    this->ui.cbFrameOne->setCurrentIndex(0);
+    this->ui.cbPitTwo->setCurrentIndex(0);
+    this->ui.cbFrameTwo->setCurrentIndex(0);
+    this->ui.cbPitThree->setCurrentIndex(0);
+    this->ui.cbFrameThree->setCurrentIndex(0);
+    this->ui.cbPitFour->setCurrentIndex(0);
+    this->ui.cbFrameFour->setCurrentIndex(0);
+    this->ui.cbPitFive->setCurrentIndex(0);
+    this->ui.cbFrameFive->setCurrentIndex(0);
+    this->ui.cbPitSix->setCurrentIndex(0);
+    this->ui.cbFrameSix->setCurrentIndex(0);
+    this->ui.ptNote->setPlainText("");
+    this->ui.leOrderedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
+    this->ui.leProofedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
+    this->ui.leConfirmedAt->setText("");
+    this->ui.leEngravedAt->setText("");
+    this->ui.leDeliveredAt->setText("");
+}
+
 void TombUi::updateForm()
 {
     Client* client = new Client(this->db);
@@ -1209,15 +1254,6 @@ void TombUi::updateForm()
         // Reset the form fields
         this->ui.leProgressive->setText(QString::number(this->tomb->getLastProgresive() + 1));
         this->ui.cbClient->addItems(client_names);
-        this->ui.leName->setText("");
-        this->ui.leEngravedNames->setText("");
-        this->ui.leEpigraphAmount->setText("1");
-        this->ui.leEpigraphAmount->setEnabled(true);
-        this->ui.rbEngraveYes->setChecked(true);
-        this->ui.rbEngraveNo->setChecked(false);
-        this->ui.lePrice->setText("0");
-        this->ui.chbPaid->setChecked(false);
-        this->ui.chbAccessoriesMounted->setChecked(false);
         this->ui.cbMaterial->addItems(material_names);
         this->ui.cbType->addItems(tomb_type_names);
         this->ui.cbFormat->addItems(tomb_format_names);
@@ -1239,15 +1275,12 @@ void TombUi::updateForm()
         this->ui.cbFrameFive->addItems(frame_names);
         this->ui.cbPitSix->addItems(pit_names);
         this->ui.cbFrameSix->addItems(frame_names);
-        this->ui.ptNote->setPlainText("");
-        this->ui.leOrderedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
-        this->ui.leProofedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
-        this->ui.leConfirmedAt->setText("");
-        this->ui.leEngravedAt->setText("");
-        this->ui.leDeliveredAt->setText("");
 
         // Set the save button text
         this->ui.btnSave->setText(this->btn_create_text);
+
+        // After all the fields have been populated, set the default selections
+        this->resetForm();
     }
 
     delete client;

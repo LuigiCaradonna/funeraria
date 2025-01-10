@@ -188,6 +188,13 @@ private:
     bool checkDates(const QString& order, const QString& proof, const QString& confirmation, const QString& engraving, const QString& delivery);
 
     /*
+     * Resets the dialog interface with the default selections.
+     *
+     * @return void
+     */
+    void resetForm();
+
+    /*
      * Updates the dialog interface with the proper data.
      * 
      * @return void
