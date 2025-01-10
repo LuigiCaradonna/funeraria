@@ -636,38 +636,38 @@ bool TombUi::validateForm(const QString& op)
     }
 
     if (
-        (this->ui.cbPitTwo->currentIndex() != 0 && this->ui.cbPitOne->currentIndex() != 0 )
+        (this->ui.cbPitTwo->currentIndex() != 0 && this->ui.cbPitOne->currentIndex() == 0 )
         ||
         (this->ui.cbPitThree->currentIndex() != 0 &&
             (
-                this->ui.cbPitTwo->currentIndex() != 0 || this->ui.cbPitOne->currentIndex() != 0
+                this->ui.cbPitTwo->currentIndex() == 0 || this->ui.cbPitOne->currentIndex() == 0
             )
         ) 
         ||
         (this->ui.cbPitFour->currentIndex() != 0 &&
             (
-                this->ui.cbPitThree->currentIndex() != 0 ||
-                this->ui.cbPitTwo->currentIndex() != 0 ||
-                this->ui.cbPitOne->currentIndex() != 0
+                this->ui.cbPitThree->currentIndex() == 0 ||
+                this->ui.cbPitTwo->currentIndex() == 0 ||
+                this->ui.cbPitOne->currentIndex() == 0
             )
         ) 
         ||
         (this->ui.cbPitFive->currentIndex() != 0 &&
             (
-                this->ui.cbPitFour->currentIndex() != 0 ||
-                this->ui.cbPitThree->currentIndex() != 0 ||
-                this->ui.cbPitTwo->currentIndex() != 0 ||
-                this->ui.cbPitOne->currentIndex() != 0
+                this->ui.cbPitFour->currentIndex() == 0 ||
+                this->ui.cbPitThree->currentIndex() == 0 ||
+                this->ui.cbPitTwo->currentIndex() == 0 ||
+                this->ui.cbPitOne->currentIndex() == 0
             )
         ) 
         ||
         (this->ui.cbPitSix->currentIndex() != 0 &&
             (
-                this->ui.cbPitFive->currentIndex() != 0 ||
-                this->ui.cbPitFour->currentIndex() != 0 ||
-                this->ui.cbPitThree->currentIndex() != 0 ||
-                this->ui.cbPitTwo->currentIndex() != 0 ||
-                this->ui.cbPitOne->currentIndex() != 0
+                this->ui.cbPitFive->currentIndex() == 0 ||
+                this->ui.cbPitFour->currentIndex() == 0 ||
+                this->ui.cbPitThree->currentIndex() == 0 ||
+                this->ui.cbPitTwo->currentIndex() == 0 ||
+                this->ui.cbPitOne->currentIndex() == 0
             )
         )
     ) {
