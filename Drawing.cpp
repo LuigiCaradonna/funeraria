@@ -15,21 +15,16 @@ Drawing::~Drawing()
 
 /********** PUBLIC FUNCTIONS **********/
 
-QList<QMap<QString, QString>> Drawing::getListByCode(const QString& code)
+QMap<QString, QString> Drawing::getByCode(const QString& code)
 {
-    QList<QMap<QString, QString>> list{};
+    QMap<QString, QString> map;
+
+    // If no name is provided, just return the empty map
+    if (code == "") return map;
 
     QSqlQuery query = QSqlQuery(this->db);
-
-    QString query_string = "SELECT * FROM " + this->table + " WHERE 1=1 ";
-
-    if (code.trimmed() != "") {
-        query_string += " AND code LIKE \"%" + code + "%\"";
-    }
-
-    query_string += " ORDER BY name ASC";
-
-    query.prepare(query_string);
+    query.prepare("SELECT * FROM " + this->table + " WHERE code = :code;");
+    query.bindValue(":code", code);
 
     if (!query.exec()) {
         QMessageBox message;
@@ -38,23 +33,64 @@ QList<QMap<QString, QString>> Drawing::getListByCode(const QString& code)
         message.setText("Drawing: " + query.lastError().text());
         message.exec();
     }
-
-    while (query.next()) {
-        QMap<QString, QString> row;
-
-        row["code"] = query.value("code").toString();
-        row["img"] = query.value("img").toString();
-        row["name"] = query.value("name").toString();
-        row["width"] = query.value("width").toString();
-        row["height"] = query.value("height").toString();
-        row["depth"] = query.value("depth").toString();
-        row["created_at"] = query.value("created_at").toString();
-        row["edited_at"] = query.value("edited_at").toString();
-
-        list.append(row);
+    else if (query.next()) {
+        map["code"] = query.value("code").toString();
+        map["img"] = query.value("img").toString();
+        map["name"] = query.value("name").toString();
+        map["width"] = query.value("width").toString();
+        map["height"] = query.value("height").toString();
+        map["depth"] = query.value("depth").toString();
+        map["created_at"] = query.value("created_at").toString();
+        map["edited_at"] = query.value("edited_at").toString();
     }
 
-    return list;
+    return map;
+}
+
+QString Drawing::getCode(const QString& name)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT code FROM " + this->table + " WHERE name = :name");
+    query.bindValue(":name", name);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Drawing: " + query.lastError().text());
+        message.exec();
+
+        return "";
+    }
+
+    if (query.next()) {
+        return query.value("code").toString();
+    }
+
+    return "";
+}
+
+QList<QString> Drawing::getCodes()
+{
+    QStringList codes = {};
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT code FROM " + this->table);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Drawing: " + query.lastError().text());
+        message.exec();
+
+        return codes;
+    }
+
+    while (query.next()) {
+        codes.append(query.value("code").toString());
+    }
+
+    return codes;
 }
 
 QList<QMap<QString, QString>> Drawing::getListByName(const QString& name)
@@ -99,16 +135,21 @@ QList<QMap<QString, QString>> Drawing::getListByName(const QString& name)
     return list;
 }
 
-QMap<QString, QString> Drawing::getByCode(const QString& code)
+QList<QMap<QString, QString>> Drawing::getListByCode(const QString& code)
 {
-    QMap<QString, QString> map;
-
-    // If no name is provided, just return the empty map
-    if (code == "") return map;
+    QList<QMap<QString, QString>> list{};
 
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT * FROM " + this->table + " WHERE code = :code;");
-    query.bindValue(":code", code);
+
+    QString query_string = "SELECT * FROM " + this->table + " WHERE 1=1 ";
+
+    if (code.trimmed() != "") {
+        query_string += " AND code LIKE \"%" + code + "%\"";
+    }
+
+    query_string += " ORDER BY name ASC";
+
+    query.prepare(query_string);
 
     if (!query.exec()) {
         QMessageBox message;
@@ -116,42 +157,24 @@ QMap<QString, QString> Drawing::getByCode(const QString& code)
         message.setIcon(QMessageBox::Critical);
         message.setText("Drawing: " + query.lastError().text());
         message.exec();
-    }
-    else if (query.next()) {
-        map["code"] = query.value("code").toString();
-        map["img"] = query.value("img").toString();
-        map["name"] = query.value("name").toString();
-        map["width"] = query.value("width").toString();
-        map["height"] = query.value("height").toString();
-        map["depth"] = query.value("depth").toString();
-        map["created_at"] = query.value("created_at").toString();
-        map["edited_at"] = query.value("edited_at").toString();
-    }
-
-    return map;
-}
-
-QList<QString> Drawing::getNames()
-{
-    QStringList names = {};
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table + " ORDER BY name ASC");
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Drawing: " + query.lastError().text());
-        message.exec();
-
-        return names;
     }
 
     while (query.next()) {
-        names.append(query.value("name").toString());
+        QMap<QString, QString> row;
+
+        row["code"] = query.value("code").toString();
+        row["img"] = query.value("img").toString();
+        row["name"] = query.value("name").toString();
+        row["width"] = query.value("width").toString();
+        row["height"] = query.value("height").toString();
+        row["depth"] = query.value("depth").toString();
+        row["created_at"] = query.value("created_at").toString();
+        row["edited_at"] = query.value("edited_at").toString();
+
+        list.append(row);
     }
 
-    return names;
+    return list;
 }
 
 QString Drawing::getName(const QString& code)
@@ -177,11 +200,11 @@ QString Drawing::getName(const QString& code)
     return "";
 }
 
-QList<QString> Drawing::getCodes()
+QList<QString> Drawing::getNames()
 {
-    QStringList codes = {};
+    QStringList names = {};
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT code FROM " + this->table);
+    query.prepare("SELECT name FROM " + this->table + " ORDER BY name ASC");
 
     if (!query.exec()) {
         QMessageBox message;
@@ -190,37 +213,27 @@ QList<QString> Drawing::getCodes()
         message.setText("Drawing: " + query.lastError().text());
         message.exec();
 
-        return codes;
+        return names;
     }
 
     while (query.next()) {
-        codes.append(query.value("code").toString());
+        names.append(query.value("name").toString());
     }
 
-    return codes;
+    return names;
 }
 
-QString Drawing::getCode(const QString& name)
+bool Drawing::remove(const QString& code)
 {
     QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT code FROM " + this->table + " WHERE name = :name");
-    query.bindValue(":name", name);
+    query.prepare("DELETE FROM " + this->table + " WHERE code = :code;");
+    query.bindValue(":code", code);
 
     if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Drawing: " + query.lastError().text());
-        message.exec();
-
-        return "";
+        return false;
     }
 
-    if (query.next()) {
-        return query.value("code").toString();
-    }
-
-    return "";
+    return true;
 }
 
 bool Drawing::store(
@@ -274,19 +287,6 @@ bool Drawing::update(
     query.bindValue(":height", height);
     query.bindValue(":edited_at", edited_at);
     query.bindValue(":old_code", old_code);
-
-    if (!query.exec()) {
-        return false;
-    }
-
-    return true;
-}
-
-bool Drawing::remove(const QString& code)
-{
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("DELETE FROM " + this->table + " WHERE code = :code;");
-    query.bindValue(":code", code);
 
     if (!query.exec()) {
         return false;

@@ -47,11 +47,11 @@ protected slots:
     /********** PRIVATE SLOTS **********/
 
     /*
-     * Gets the data from the dialog window and stores a new accessory into the database
+     * Closes the dialog window
      *
      * @return  void
      */
-    void slotSave();
+    void slotCloseDialog();
 
     /*
      * Gets the data from the dialog window and edits the accessory information into the database
@@ -61,11 +61,11 @@ protected slots:
     void slotEdit();
 
     /*
-     * Closes the dialog window
+     * Gets the data from the dialog window and stores a new accessory into the database
      *
      * @return  void
      */
-    void slotCloseDialog();
+    void slotSave();
 
 private:
     Ui::Dialog ui;
@@ -77,6 +77,20 @@ private:
     const QString css_folder;
 
     /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Checks the data inserted into the form to add/edit an accessory
+     *
+     * @return  bool - True if the validation passes, false on failure
+     */
+    bool checkForm();
+
+    /*
+     * Resets the form's fields
+     *
+     * @return  void
+     */
+    void resetFields();
 
     /*
      * Sets the code field
@@ -95,19 +109,5 @@ private:
      * @return  void
      */
     void setName(QString name);
-
-    /*
-     * Checks the data inserted into the form to add/edit an accessory
-     *
-     * @return  bool - True if the validation passes, false on failure
-     */
-    bool checkForm();
-
-    /*
-     * Resets the form's fields
-     *
-     * @return  void
-     */
-    void resetFields();
 };
 

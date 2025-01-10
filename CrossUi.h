@@ -48,6 +48,20 @@ protected slots:
     /********** PROTECTED SLOTS **********/
 
     /*
+     * Closes the dialog window
+     *
+     * @return  void
+     */
+    void slotCloseDialog();
+
+    /*
+     * Saves the cross's data, responds to the dialog window's save button
+     *
+     * @return  void
+     */
+    void slotSave();
+
+    /*
      * Sets the selected cross's image path into the corresponding form field
      *
      * @return  void
@@ -62,25 +76,11 @@ protected slots:
     void slotSwitchEnableState();
 
     /*
-     * Saves the cross's data, responds to the dialog window's save button
-     *
-     * @return  void
-     */
-    void slotSave();
-
-    /*
      * Updates the cross's data, responds to the dialog window's update button
      *
      * @return  void
      */
     void slotUpdate();
-
-    /*
-     * Closes the dialog window
-     *
-     * @return  void
-     */
-    void slotCloseDialog();
 
 private:
     Ui::CrossClass ui;
@@ -95,17 +95,17 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Updateds the UI filling the fields with the proper values for the selected cross
-     *
-     * @return  void
-     */
-    void updateForm();
-
-    /*
      * Checks the data inserted into the form to add/edit a cross
      *
      * @return  bool - True if the validation passes, false on failure
      */
     bool checkForm();
+
+    /*
+     * Updateds the UI filling the fields with the proper values for the selected cross
+     *
+     * @return  void
+     */
+    void updateForm();
 };
 

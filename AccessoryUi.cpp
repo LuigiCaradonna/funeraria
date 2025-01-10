@@ -68,38 +68,8 @@ void AccessoryUi::updateForm(const QString& code, const QString& name)
 
 /********** PRIVATE SLOTS **********/
 
-void AccessoryUi::slotSave()
+void AccessoryUi::slotCloseDialog()
 {
-    if (this->checkForm()) {
-        Accessory* accessory = new Accessory(this->db, this->table);
-
-        bool result = accessory->store(this->ui.leCode->text().trimmed(), this->ui.leName->text().trimmed());
-
-        delete accessory;
-
-        if (!result) {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Critical);
-            message.setText("L'inserimento non è riuscito.");
-            message.exec();
-
-            return;
-        }
-
-        // Insert successful
-
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Information);
-        message.setText("Inserimento eseguito.");
-        message.exec();
-
-        // Reset the input fields
-        this->resetFields();
-    }
-
-    // Close the dialog
     this->close();
 }
 
@@ -138,22 +108,42 @@ void AccessoryUi::slotEdit()
     this->close();
 }
 
-void AccessoryUi::slotCloseDialog()
+void AccessoryUi::slotSave()
 {
+    if (this->checkForm()) {
+        Accessory* accessory = new Accessory(this->db, this->table);
+
+        bool result = accessory->store(this->ui.leCode->text().trimmed(), this->ui.leName->text().trimmed());
+
+        delete accessory;
+
+        if (!result) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("L'inserimento non è riuscito.");
+            message.exec();
+
+            return;
+        }
+
+        // Insert successful
+
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Inserimento eseguito.");
+        message.exec();
+
+        // Reset the input fields
+        this->resetFields();
+    }
+
+    // Close the dialog
     this->close();
 }
 
 /********** PRIVATE FUNCTIONS **********/
-
-void AccessoryUi::setCode(QString code)
-{
-    this->ui.leCode->setText(code);
-}
-
-void AccessoryUi::setName(QString name)
-{
-    this->ui.leName->setText(name);
-}
 
 bool AccessoryUi::checkForm()
 {
@@ -183,4 +173,14 @@ bool AccessoryUi::checkForm()
 void AccessoryUi::resetFields() {
     this->ui.leCode->setText("");
     this->ui.leName->setText("");
+}
+
+void AccessoryUi::setCode(QString code)
+{
+    this->ui.leCode->setText(code);
+}
+
+void AccessoryUi::setName(QString name)
+{
+    this->ui.leName->setText(name);
 }

@@ -37,39 +37,6 @@ Config::~Config()
 
 /********** PUBLIC FUNCTIONS **********/
 
-void Config::setDbFile(const QString& db_file)
-{
-    QJsonObject config;
-
-    config = this->getConfigFileContent();
-    config.remove("db_file");
-    config.insert("db_file", db_file);
-
-    this->storeConfig(config);
-}
-
-QString Config::getDbFile()
-{
-    //Then get the main JSON object and get the datas in it
-    QJsonObject config_content = this->getConfigFileContent();
-
-    //Access the wanted value
-    QString db_file = config_content.value("db_file").toString();
-
-    return db_file;
-}
-
-void Config::setArchivePath(const QString& archive_path)
-{
-    QJsonObject config;
-
-    config = this->getConfigFileContent();
-    config.remove("archive_path");
-    config.insert("archive_path", archive_path);
-
-    this->storeConfig(config);
-}
-
 QString Config::getArchivePath()
 {
     //Then get the main JSON object and get the datas in it
@@ -79,39 +46,6 @@ QString Config::getArchivePath()
     QString archive_path = config_content.value("archive_path").toString();
 
     return archive_path;
-}
-
-void Config::setSculpturesPath(const QString& sculptures_path)
-{
-    QJsonObject config;
-
-    config = this->getConfigFileContent();
-    config.remove("sculptures_path");
-    config.insert("sculptures_path", sculptures_path);
-
-    this->storeConfig(config);
-}
-
-QString Config::getSculpturesPath()
-{
-    //Then get the main JSON object and get the datas in it
-    QJsonObject config_content = this->getConfigFileContent();
-
-    //Access the wanted value
-    QString sculptures_path = config_content.value("sculptures_path").toString();
-
-    return sculptures_path;
-}
-
-void Config::setCrossesPath(const QString& crosses_path)
-{
-    QJsonObject config;
-
-    config = this->getConfigFileContent();
-    config.remove("crosses_path");
-    config.insert("crosses_path", crosses_path);
-
-    this->storeConfig(config);
 }
 
 QString Config::getCrossesPath()
@@ -125,17 +59,6 @@ QString Config::getCrossesPath()
     return crosses_path;
 }
 
-void Config::setDrawingPath(const QString& drawing_path)
-{
-    QJsonObject config;
-
-    config = this->getConfigFileContent();
-    config.remove("drawing_path");
-    config.insert("drawing_path", drawing_path);
-
-    this->storeConfig(config);
-}
-
 QString Config::getDrawingPath()
 {
     //Then get the main JSON object and get the datas in it
@@ -147,20 +70,84 @@ QString Config::getDrawingPath()
     return db_path;
 }
 
-/********** PRIVATE FUNCTIONS **********/
+QString Config::getDbFile()
+{
+    //Then get the main JSON object and get the datas in it
+    QJsonObject config_content = this->getConfigFileContent();
 
-bool Config::initConfig()
+    //Access the wanted value
+    QString db_file = config_content.value("db_file").toString();
+
+    return db_file;
+}
+
+QString Config::getSculpturesPath()
+{
+    //Then get the main JSON object and get the datas in it
+    QJsonObject config_content = this->getConfigFileContent();
+
+    //Access the wanted value
+    QString sculptures_path = config_content.value("sculptures_path").toString();
+
+    return sculptures_path;
+}
+
+void Config::setArchivePath(const QString& archive_path)
 {
     QJsonObject config;
 
-    config.insert("db_file", this->default_db_file);
-    config.insert("archive_path", this->default_archive_path);
-    config.insert("sculptures_path", this->default_sculptures_path);
+    config = this->getConfigFileContent();
+    config.remove("archive_path");
+    config.insert("archive_path", archive_path);
 
     this->storeConfig(config);
-
-    return true;
 }
+
+void Config::setCrossesPath(const QString& crosses_path)
+{
+    QJsonObject config;
+
+    config = this->getConfigFileContent();
+    config.remove("crosses_path");
+    config.insert("crosses_path", crosses_path);
+
+    this->storeConfig(config);
+}
+
+void Config::setDbFile(const QString& db_file)
+{
+    QJsonObject config;
+
+    config = this->getConfigFileContent();
+    config.remove("db_file");
+    config.insert("db_file", db_file);
+
+    this->storeConfig(config);
+}
+
+void Config::setDrawingPath(const QString& drawing_path)
+{
+    QJsonObject config;
+
+    config = this->getConfigFileContent();
+    config.remove("drawing_path");
+    config.insert("drawing_path", drawing_path);
+
+    this->storeConfig(config);
+}
+
+void Config::setSculpturesPath(const QString& sculptures_path)
+{
+    QJsonObject config;
+
+    config = this->getConfigFileContent();
+    config.remove("sculptures_path");
+    config.insert("sculptures_path", sculptures_path);
+
+    this->storeConfig(config);
+}
+
+/********** PRIVATE FUNCTIONS **********/
 
 QJsonObject Config::getConfigFileContent()
 {
@@ -183,6 +170,19 @@ QJsonObject Config::getConfigFileContent()
     }
 
     return jsonDocument.object();
+}
+
+bool Config::initConfig()
+{
+    QJsonObject config;
+
+    config.insert("db_file", this->default_db_file);
+    config.insert("archive_path", this->default_archive_path);
+    config.insert("sculptures_path", this->default_sculptures_path);
+
+    this->storeConfig(config);
+
+    return true;
 }
 
 bool Config::storeConfig(const QJsonObject& config)

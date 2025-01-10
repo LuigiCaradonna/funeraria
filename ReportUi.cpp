@@ -297,6 +297,124 @@ void ReportUi::slotUpdateRadioState()
 
 /********** PRIVATE FUNCTIONS **********/
 
+void ReportUi::clearLayout()
+{
+    QLayoutItem* child;
+    while ((child = this->ui.ReportContainer->takeAt(0)) != 0) {
+        this->ui.ReportContainer->removeItem(child);
+        delete child;
+    }
+
+    delete this->tableWidget;
+    delete this->chart;
+    delete this->chartView;
+    this->series = nullptr;
+
+    this->tableWidget = new QTableWidget();
+    this->chart = new QChart;
+    this->chartView = new QChartView(this->chart);
+    this->series = new QBarSeries();
+}
+
+void ReportUi::clearTable()
+{
+    int row_number = 1;
+    for (int i = 0; i < this->tableWidget->rowCount(); i++) {
+        this->tableWidget->setRowHeight(i, 30);
+        for (int j = 0; j < this->tableWidget->columnCount(); j++) {
+            // Usually the last column holds a button
+            if (j == this->tableWidget->columnCount() - 1) {
+                QPushButton* pbutton = qobject_cast<QPushButton*>(this->tableWidget->cellWidget(i, j));
+                if (pbutton) {
+                    pbutton->disconnect(); // Disconnect any connections
+                    pbutton->setParent(nullptr); // Reparent the button
+                    delete pbutton;
+                    pbutton = nullptr;
+                }
+                else {
+                    QTableWidgetItem* item = this->tableWidget->item(i, j);
+                    delete item;
+                    item = nullptr;
+                }
+            }
+            else {
+                QTableWidgetItem* item = this->tableWidget->item(i, j);
+                delete item;
+                item = nullptr;
+            }
+        }
+    }
+
+    this->tableWidget->clear();
+}
+
+void ReportUi::showReportGraph(
+    QList<QMap<QString, QString>> report,
+    const QString& title,
+    const QString& category,
+    const QString& group
+)
+{
+    QBarSet* set = new QBarSet("Lapidi");
+    QCategoryAxis* axisX = new QCategoryAxis();
+    QStringList categories;
+    QString cat = group;
+
+    this->clearLayout();
+
+    int max = 0;
+    for (int i = 0; i < report.size(); i++) {
+        if (category == "client_id" || group == "by_client") {
+            cat = this->client->getName(report[i]["client_id"].toInt());
+        }
+
+        if (group == "year") {
+            // Years prior to 2013 have missing data
+            if (report[i]["year"].toInt() < 2013) continue;
+        }
+
+        // The inserted set is the last of the list, assign a value to it
+        *set << report[i]["amount"].toInt();
+
+        // Holds the category titles (year, month or nothing)
+        if (cat == "year") {
+            categories << report[i]["year"];
+        }
+        else if (cat == "month") {
+            categories << report[i]["month"];
+        }
+        else {
+            categories << cat;
+        }
+    }
+
+    // Add the set to the series
+    this->series->append(set);
+
+    // Create chart, add data, hide legend, and add axis
+    this->chart->addSeries(this->series);
+
+    // Customize the title font
+    QFont font;
+    font.setPixelSize(18);
+    this->chart->setTitleFont(font);
+    this->chart->setTitleBrush(QBrush(Qt::black));
+    this->chart->setTitle(title);
+
+    // Adds categories to the axes
+    QBarCategoryAxis* axis = new QBarCategoryAxis();
+    axis->append(categories);
+    this->chart->createDefaultAxes();
+
+    this->chart->setAxisX(axis, this->series);
+    // Used to display the chart
+    this->chartView->setRenderHint(QPainter::Antialiasing);
+    this->ui.ReportContainer->addWidget(this->chartView);
+
+    // Add value labels on top of bars, using a delay to wait the graph to be ready before to add the lables
+    QTimer::singleShot(100, this, SLOT(slotAddValueLabels()));
+}
+
 void ReportUi::showReportTable(QList<QMap<QString, QString>> report, const QString& group)
 {
     this->clearLayout();
@@ -387,122 +505,4 @@ void ReportUi::showReportTable(QList<QMap<QString, QString>> report, const QStri
     this->tableWidget->setItem(rows, 1, amount);
 
     this->ui.ReportContainer->addWidget(this->tableWidget);
-}
-
-void ReportUi::showReportGraph(
-    QList<QMap<QString, QString>> report, 
-    const QString& title, 
-    const QString& category,
-    const QString& group
-)
-{
-    QBarSet* set = new QBarSet("Lapidi");
-    QCategoryAxis* axisX = new QCategoryAxis();
-    QStringList categories;
-    QString cat = group;
-
-    this->clearLayout();
-
-    int max = 0;
-    for (int i = 0; i < report.size(); i++) {
-        if (category == "client_id" || group == "by_client") {
-            cat = this->client->getName(report[i]["client_id"].toInt());
-        }
-
-        if (group == "year") {
-            // Years prior to 2013 have missing data
-            if (report[i]["year"].toInt() < 2013) continue;
-        }
-
-        // The inserted set is the last of the list, assign a value to it
-        *set << report[i]["amount"].toInt();
-
-        // Holds the category titles (year, month or nothing)
-        if (cat == "year") {
-            categories << report[i]["year"];
-        }
-        else if (cat == "month") {
-            categories << report[i]["month"];
-        }
-        else {
-            categories << cat;
-        }
-    }
-
-    // Add the set to the series
-    this->series->append(set);
-
-    // Create chart, add data, hide legend, and add axis
-    this->chart->addSeries(this->series);
-
-    // Customize the title font
-    QFont font;
-    font.setPixelSize(18);
-    this->chart->setTitleFont(font);
-    this->chart->setTitleBrush(QBrush(Qt::black));
-    this->chart->setTitle(title);
-
-    // Adds categories to the axes
-    QBarCategoryAxis* axis = new QBarCategoryAxis();
-    axis->append(categories);
-    this->chart->createDefaultAxes();
-
-    this->chart->setAxisX(axis, this->series);
-    // Used to display the chart
-    this->chartView->setRenderHint(QPainter::Antialiasing);
-    this->ui.ReportContainer->addWidget(this->chartView);
-
-    // Add value labels on top of bars, using a delay to wait the graph to be ready before to add the lables
-    QTimer::singleShot(100, this, SLOT(slotAddValueLabels()));
-}
-
-void ReportUi::clearLayout()
-{
-    QLayoutItem* child;
-    while ((child = this->ui.ReportContainer->takeAt(0)) != 0) {
-        this->ui.ReportContainer->removeItem(child);
-        delete child;
-    }
-
-    delete this->tableWidget;
-    delete this->chart;
-    delete this->chartView;
-    this->series = nullptr;
-
-    this->tableWidget = new QTableWidget();
-    this->chart = new QChart;
-    this->chartView = new QChartView(this->chart);
-    this->series = new QBarSeries();
-}
-
-void ReportUi::clearTable()
-{
-    int row_number = 1;
-    for (int i = 0; i < this->tableWidget->rowCount(); i++) {
-        this->tableWidget->setRowHeight(i, 30);
-        for (int j = 0; j < this->tableWidget->columnCount(); j++) {
-            // Usually the last column holds a button
-            if (j == this->tableWidget->columnCount() - 1) {
-                QPushButton* pbutton = qobject_cast<QPushButton*>(this->tableWidget->cellWidget(i, j));
-                if (pbutton) {
-                    pbutton->disconnect(); // Disconnect any connections
-                    pbutton->setParent(nullptr); // Reparent the button
-                    delete pbutton;
-                    pbutton = nullptr;
-                }
-                else {
-                    QTableWidgetItem* item = this->tableWidget->item(i, j);
-                    delete item;
-                    item = nullptr;
-                }
-            }
-            else {
-                QTableWidgetItem* item = this->tableWidget->item(i, j);
-                delete item;
-                item = nullptr;
-            }
-        }
-    }
-
-    this->tableWidget->clear();
 }

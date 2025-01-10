@@ -39,25 +39,11 @@ protected slots:
     /********** PROTECTED SLOTS **********/
 
     /*
-     * Asks the user to provide a new path for the DB's file
-     *
-     * @return  void
-     */
-    void slotChangeDbPath();
-
-    /*
      * Asks the user to provide a new path for the archive's file
      *
      * @return  void
      */
     void slotChangeArchivePath();
-
-    /*
-     * Asks the user to provide a new path for the sculptures' file
-     *
-     * @return  void
-     */
-    void slotChangeSculpturesPath();
 
     /*
      * Asks the user to provide a new path for the crosses' file
@@ -67,6 +53,13 @@ protected slots:
     void slotChangeCrossesPath();
 
     /*
+     * Asks the user to provide a new path for the DB's file
+     *
+     * @return  void
+     */
+    void slotChangeDbPath();
+
+    /*
      * Asks the user to provide a new path for the drawing images' file
      *
      * @return  void
@@ -74,11 +67,11 @@ protected slots:
     void slotChangeDrawingPath();
 
     /*
-     * Saves a settings
+     * Asks the user to provide a new path for the sculptures' file
      *
      * @return  void
      */
-    void slotSave();
+    void slotChangeSculpturesPath();
 
     /*
      * Closes the dialog window
@@ -87,6 +80,12 @@ protected slots:
      */
     void slotCloseDialog();
 
+    /*
+     * Saves a settings
+     *
+     * @return  void
+     */
+    void slotSave();
 
 private:
     Ui::SettingsClass ui;
@@ -98,13 +97,6 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Updates the dialog interface with the proper data.
-     *
-     * @return void
-     */
-    void updateForm();
-
-    /*
      * Updates the settings according to the data provided into the dialog box.
      * 
      * @param const QMap<QString, QString>& setting - Setting name/value to store
@@ -112,5 +104,12 @@ private:
      * @return bool true on success, false on failure
      */
     const bool store(const QMap<QString, QString>& setting);
+
+    /*
+     * Updates the dialog interface with the proper data.
+     *
+     * @return void
+     */
+    void updateForm();
 };
 

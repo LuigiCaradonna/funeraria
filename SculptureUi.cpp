@@ -49,27 +49,55 @@ void SculptureUi::setCode(const QString& code)
 
 /********** PROTECTED SLOTS **********/
 
-void SculptureUi::slotSelectImage()
+void SculptureUi::slotCloseDialog()
 {
-    Config* config = new Config();
-    QString path;
-    path = QFileDialog::getOpenFileName(parent, "Apri file", config->getSculpturesPath(), "Images (*.png *.jpg *.jpeg *.bmp)");
-
-    if (!path.isNull()) {
-        QString image_file = QFileInfo(path).fileName();
-        this->ui.leImgPath->setText(image_file);
-    }
-
-    delete config;
+    this->close();
 }
 
-void SculptureUi::slotSwitchEnableState()
+void SculptureUi::slotReductionHXY()
 {
-    this->ui.leCode->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.leName->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.leOWidth->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.leOHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.leODepth->setEnabled(this->ui.chbAllowEdit->isChecked());
+    // Prevent leTWidth signals because its content will be changed by this function
+    const QSignalBlocker blocker(this->ui.leTWidth);
+
+    if (!Helpers::isDecimal(this->ui.leTHeight->text()) || this->ui.leTHeight->text().toFloat() < 0) {
+        this->ui.lblRedXYVal->setText("---");
+        return;
+    }
+    // XY reduction
+    float redXY = Helpers::scaleFactor(this->ui.leOHeight->text().toFloat(), this->ui.leTHeight->text().toFloat());
+    // New width according to the target height
+    float width = round(this->ui.leOWidth->text().toFloat() * redXY);
+    this->ui.leTWidth->setText(QString::number(width));
+    this->ui.lblRedXYVal->setText(QString::number(redXY));
+}
+
+void SculptureUi::slotReductionWXY()
+{
+    // Prevent leTHight signals because its content will be changed by this function
+    const QSignalBlocker blocker(this->ui.leTHeight);
+
+    if (!Helpers::isDecimal(this->ui.leTWidth->text()) || this->ui.leTWidth->text().toFloat() < 0) {
+        this->ui.lblRedXYVal->setText("---");
+        return;
+    }
+    // XY reduction
+    float redXY = Helpers::scaleFactor(this->ui.leOWidth->text().toFloat(), this->ui.leTWidth->text().toFloat());
+    // New height according to the target width
+    float height = round(this->ui.leOHeight->text().toFloat() * redXY);
+    this->ui.leTHeight->setText(QString::number(height));
+    this->ui.lblRedXYVal->setText(QString::number(redXY));
+}
+
+void SculptureUi::slotReductionZ()
+{
+    if (!Helpers::isDecimal(this->ui.leTDepth->text()) || this->ui.leTDepth->text().toFloat() < 0) {
+        this->ui.lblRedZVal->setText("---");
+        return;
+    }
+    // Z reduction
+    float redZ = Helpers::scaleFactor(this->ui.leODepth->text().toFloat(), this->ui.leTDepth->text().toFloat());
+
+    this->ui.lblRedZVal->setText(QString::number(redZ));
 }
 
 void SculptureUi::slotSave()
@@ -103,6 +131,29 @@ void SculptureUi::slotSave()
         // Close the dialog
         this->close();
     }
+}
+
+void SculptureUi::slotSelectImage()
+{
+    Config* config = new Config();
+    QString path;
+    path = QFileDialog::getOpenFileName(parent, "Apri file", config->getSculpturesPath(), "Images (*.png *.jpg *.jpeg *.bmp)");
+
+    if (!path.isNull()) {
+        QString image_file = QFileInfo(path).fileName();
+        this->ui.leImgPath->setText(image_file);
+    }
+
+    delete config;
+}
+
+void SculptureUi::slotSwitchEnableState()
+{
+    this->ui.leCode->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leName->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leOWidth->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leOHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leODepth->setEnabled(this->ui.chbAllowEdit->isChecked());
 }
 
 void SculptureUi::slotUpdate()
@@ -139,58 +190,72 @@ void SculptureUi::slotUpdate()
     }
 }
 
-void SculptureUi::slotCloseDialog()
-{
-    this->close();
-}
-
-void SculptureUi::slotReductionWXY()
-{
-    // Prevent leTHight signals because its content will be changed by this function
-    const QSignalBlocker blocker(this->ui.leTHeight);
-
-    if (!Helpers::isDecimal(this->ui.leTWidth->text()) || this->ui.leTWidth->text().toFloat() < 0) {
-        this->ui.lblRedXYVal->setText("---");
-        return;
-    }
-    // XY reduction
-    float redXY = Helpers::scaleFactor(this->ui.leOWidth->text().toFloat(), this->ui.leTWidth->text().toFloat());
-    // New height according to the target width
-    float height = round(this->ui.leOHeight->text().toFloat() * redXY);
-    this->ui.leTHeight->setText(QString::number(height));
-    this->ui.lblRedXYVal->setText(QString::number(redXY));
-}
-
-void SculptureUi::slotReductionHXY()
-{
-    // Prevent leTWidth signals because its content will be changed by this function
-    const QSignalBlocker blocker(this->ui.leTWidth);
-
-    if (!Helpers::isDecimal(this->ui.leTHeight->text()) || this->ui.leTHeight->text().toFloat() < 0) {
-        this->ui.lblRedXYVal->setText("---");
-        return;
-    }
-    // XY reduction
-    float redXY = Helpers::scaleFactor(this->ui.leOHeight->text().toFloat(), this->ui.leTHeight->text().toFloat());
-    // New width according to the target height
-    float width = round(this->ui.leOWidth->text().toFloat() * redXY);
-    this->ui.leTWidth->setText(QString::number(width));
-    this->ui.lblRedXYVal->setText(QString::number(redXY));
-}
-
-void SculptureUi::slotReductionZ()
-{
-    if (!Helpers::isDecimal(this->ui.leTDepth->text()) || this->ui.leTDepth->text().toFloat() < 0) {
-        this->ui.lblRedZVal->setText("---");
-        return;
-    }
-    // Z reduction
-    float redZ = Helpers::scaleFactor(this->ui.leODepth->text().toFloat(), this->ui.leTDepth->text().toFloat());
-
-    this->ui.lblRedZVal->setText(QString::number(redZ));
-}
-
 /********** PRIVATE FUNCTIONS **********/
+
+bool SculptureUi::checkForm()
+{
+    if (this->ui.leCode->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il codice della scultura è obbligatorio.");
+        message.exec();
+
+        return false;
+    }
+
+    if (this->ui.leName->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il nome della scultura è obbligatorio.");
+        message.exec();
+
+        return false;
+    }
+
+    if (this->ui.leImgPath->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("L'immagine della scultura è obbligatoria.");
+        message.exec();
+
+        return false;
+    }
+
+    if (!Helpers::isInt(this->ui.leOWidth->text().trimmed()) || this->ui.leOWidth->text().trimmed().toInt() < 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La larghezza deve essere un numero intero maggiore di zero.");
+        message.exec();
+
+        return false;
+    }
+
+    if (!Helpers::isInt(this->ui.leOHeight->text().trimmed()) || this->ui.leOHeight->text().trimmed().toInt() < 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("L'altezza deve essere un numero intero maggiore di zero.");
+        message.exec();
+
+        return false;
+    }
+
+    if (!Helpers::isDecimal(this->ui.leODepth->text().trimmed()) || this->ui.leODepth->text().trimmed().toFloat() < 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La profondità deve essere un numero intero maggiore di zero.");
+        message.exec();
+
+        return false;
+    }
+
+    return true;
+}
 
 void SculptureUi::updateForm()
 {
@@ -297,69 +362,4 @@ void SculptureUi::updateForm()
     }
 
     delete sculpture;
-}
-
-bool SculptureUi::checkForm()
-{
-    if (this->ui.leCode->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il codice della scultura è obbligatorio.");
-        message.exec();
-
-        return false;
-    }
-
-    if (this->ui.leName->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il nome della scultura è obbligatorio.");
-        message.exec();
-
-        return false;
-    }
-
-    if (this->ui.leImgPath->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("L'immagine della scultura è obbligatoria.");
-        message.exec();
-
-        return false;
-    }
-
-    if (!Helpers::isInt(this->ui.leOWidth->text().trimmed()) || this->ui.leOWidth->text().trimmed().toInt() < 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La larghezza deve essere un numero intero maggiore di zero.");
-        message.exec();
-
-        return false;
-    }
-    
-    if (!Helpers::isInt(this->ui.leOHeight->text().trimmed()) || this->ui.leOHeight->text().trimmed().toInt() < 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("L'altezza deve essere un numero intero maggiore di zero.");
-        message.exec();
-
-        return false;
-    }
-    
-    if (!Helpers::isDecimal(this->ui.leODepth->text().trimmed()) || this->ui.leODepth->text().trimmed().toFloat() < 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La profondità deve essere un numero intero maggiore di zero.");
-        message.exec();
-
-        return false;
-    }
-
-    return true;
 }

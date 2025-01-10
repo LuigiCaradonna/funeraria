@@ -30,13 +30,25 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Sets the database file into the config file
-     * 
-     * @param   const QString& db_file    - DB file path
+     * Gets the archive path from the config file
      *
-     * @return void
+     * @return QString the archive path
      */
-    void setDbFile(const QString& db_file);
+    QString getArchivePath();
+
+    /*
+     * Gets the crosses' folder path from the config file
+     *
+     * @return QString the crosses' folder path
+     */
+    QString getCrossesPath();
+
+    /*
+     * Gets the drawings' folder path from the config file
+     *
+     * @return QString the drawings' folder path
+     */
+    QString getDrawingPath();
 
     /*
      * Gets the database file path from the config file
@@ -44,6 +56,13 @@ public:
      * @return QString the database file path
      */
     QString getDbFile();
+
+    /*
+     * Gets the sculptures' folder path from the config file
+     *
+     * @return QString the sculptures' folder path
+     */
+    QString getSculpturesPath();
 
     /*
      * Sets the archive's folder path into the config file
@@ -55,29 +74,6 @@ public:
     void setArchivePath(const QString& archive_path);
 
     /*
-     * Gets the archive path from the config file
-     *
-     * @return QString the archive path
-     */
-    QString getArchivePath();
-
-    /*
-     * Sets the sculptures' folder path into the config file
-     *
-     * @param   const QString& sculptures_path    - Sculptures folder path
-     *
-     * @return void
-     */
-    void setSculpturesPath(const QString& sculptures_path);
-
-    /*
-     * Gets the sculptures' folder path from the config file
-     *
-     * @return QString the sculptures' folder path
-     */
-    QString getSculpturesPath();
-
-    /*
      * Sets the crosses' folder path into the config file
      *
      * @param   const QString& crosses_path    - Crosses folder path
@@ -87,11 +83,13 @@ public:
     void setCrossesPath(const QString& crosses_path);
 
     /*
-     * Gets the crosses' folder path from the config file
+     * Sets the database file into the config file
      *
-     * @return QString the crosses' folder path
+     * @param   const QString& db_file    - DB file path
+     *
+     * @return void
      */
-    QString getCrossesPath();
+    void setDbFile(const QString& db_file);
 
     /*
      * Sets the drawings' folder path into the config file
@@ -103,18 +101,13 @@ public:
     void setDrawingPath(const QString& drawing_path);
 
     /*
-     * Gets the drawings' folder path from the config file
+     * Sets the sculptures' folder path into the config file
      *
-     * @return QString the drawings' folder path
+     * @param   const QString& sculptures_path    - Sculptures folder path
+     *
+     * @return void
      */
-    QString getDrawingPath();
-
-    /*
-     * Initializes a new configuration file
-     * 
-     * @return bool true on success, false on failure
-     */
-    bool initConfig();
+    void setSculpturesPath(const QString& sculptures_path);
 
 private:
     QString config_file = "config.cfg";
@@ -130,6 +123,13 @@ private:
      * @return QJsonObject consisting of the content of the config file
      */
     QJsonObject getConfigFileContent();
+
+    /*
+     * Initializes a new configuration file
+     *
+     * @return bool true on success, false on failure
+     */
+    bool initConfig();
 
     /*
      * Stores/updates the settings into the config file

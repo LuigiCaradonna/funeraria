@@ -38,15 +38,6 @@ public:
     QList<QMap<QString, QString>> get();
 
     /*
-     * Updates a settings into the database
-     *
-     * @param const QMap<QString, QString>& setting - Setting name/value to store
-     *
-     * @return  boolean true on success, false on faliure
-     */
-    bool store(const QMap<QString, QString>& setting);
-
-    /*
      * Gets the backup interval
      *
      * @return  int - The backup interval on success, -1 on failure
@@ -59,6 +50,15 @@ public:
      * @return  int - The backups to keep on success, -1 on failure
      */
     const int getBackupsToKeep();
+
+    /*
+     * Updates a settings into the database
+     *
+     * @param const QMap<QString, QString>& setting - Setting name/value to store
+     *
+     * @return  boolean true on success, false on faliure
+     */
+    bool store(const QMap<QString, QString>& setting);
 
 private:
     const QString table = "settings";

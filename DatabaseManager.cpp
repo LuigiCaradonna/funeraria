@@ -51,35 +51,6 @@ DatabaseManager::~DatabaseManager()
 
 /********** PUBLIC FUNCTIONS **********/
 
-QString DatabaseManager::getSortableColumnName(const QString& column) {
-    if (column == "Numero") {
-        return "progressive";
-    }
-    else if (column == "Defunto") {
-        return "name";
-    }
-    else if (column == "Prezzo") {
-        return "price";
-    }
-    else if (column == "Ordine") {
-        return "ordered_At";
-    }
-    else if (column == "Provino") {
-        return "proofed_at";
-    }
-    else if (column == "Conferma") {
-        return "confirmed_at";
-    }
-    else if (column == "Incisione") {
-        return "engraved_at";
-    }
-    else if (column == "Consegna") {
-        return "delivered_at";
-    }
-    else {
-        return "";
-    }
-}
 bool DatabaseManager::backupToCSV()
 {
     Client* client = new Client(this->db);
@@ -148,6 +119,37 @@ bool DatabaseManager::backupToCSV()
     delete tomb;
     return true;
 }
+
+QString DatabaseManager::getSortableColumnName(const QString& column) {
+    if (column == "Numero") {
+        return "progressive";
+    }
+    else if (column == "Defunto") {
+        return "name";
+    }
+    else if (column == "Prezzo") {
+        return "price";
+    }
+    else if (column == "Ordine") {
+        return "ordered_At";
+    }
+    else if (column == "Provino") {
+        return "proofed_at";
+    }
+    else if (column == "Conferma") {
+        return "confirmed_at";
+    }
+    else if (column == "Incisione") {
+        return "engraved_at";
+    }
+    else if (column == "Consegna") {
+        return "delivered_at";
+    }
+    else {
+        return "";
+    }
+}
+
 bool DatabaseManager::reloadDatabase()
 {
     // Close the currently open DB
@@ -155,7 +157,305 @@ bool DatabaseManager::reloadDatabase()
 
     return this->openDatabase();
 }
+
 /********** PRIVATE FUNCTIONS **********/
+
+void DatabaseManager::backupDatabase()
+{
+    QString today = QDate::currentDate().toString("yyyyMMdd");
+
+    // Copy of the .db file, no need to check if it exists, 
+    // the program arrives here only after having solved any issues with the database
+    if (!QFile::copy(this->db_file, "./" + this->backup_folder + "/" + today + "-database.db")) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria Backup");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Impossibile eseguire la copia di backup del database.");
+        message.exec();
+        return;
+    }
+
+    // Create a file for the SQL statements
+    QFile sql_file("./" + this->backup_folder + "/" + today + "-database.sql");
+    if (!sql_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria Backup");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Impossibile aprire il nuovo file .sql per il backup del database.");
+        message.exec();
+        return;
+    }
+
+    QTextStream out(&sql_file);
+
+    // Fetch and write SQL statements to the file
+    QSqlQuery query(this->db);
+    if (query.exec("PRAGMA foreign_keys=OFF") && query.exec("BEGIN")) {
+        // Iterate through tables and write SQL to recreate them
+        QSqlQuery tables_query("SELECT name FROM sqlite_master WHERE type='table'", this->db);
+        while (tables_query.next()) {
+            QString table_name = tables_query.value(0).toString();
+
+            // Exclude reserved tables generatead automatically by sqlite
+            if (table_name == "sqlite_sequence") continue;
+
+            QSqlQuery tables_dump("SELECT sql FROM sqlite_master WHERE name='" + table_name + "'", this->db);
+            if (tables_dump.next()) {
+                QString create_table_sql = tables_dump.value(0).toString();
+                out << create_table_sql << ";\n";
+
+                QSqlQuery data_dump("SELECT * FROM " + table_name, this->db);
+                while (data_dump.next()) {
+                    out << "INSERT INTO " << table_name << " VALUES (";
+
+                    for (int i = 0; i < data_dump.record().count(); i++) {
+                        if (i > 0) {
+                            out << ", ";
+                        }
+
+                        QVariant value = data_dump.value(i);
+                        if (value.type() == QVariant::String) {
+                            out << "\"" << value.toString() << "\"";
+                        }
+                        else {
+                            out << value.toString();
+                        }
+                    }
+
+                    out << ");\n";
+                }
+            }
+        }
+
+        if (!query.exec("COMMIT")) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria Backup");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Impossibile generare correttamente il file di backup .sql. \nTransazione fallita.");
+            message.exec();
+            // Rollback not required, the database was only read
+            sql_file.close();
+            return;
+        }
+    }
+    else {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria Backup");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Impossibile iniziare la transazione per generare il file di backupp .sql");
+        message.exec();
+        return;
+    }
+
+    sql_file.close();
+}
+
+void DatabaseManager::closeDb()
+{
+    {
+        if (this->db.isOpen()) {
+            this->db.close();
+        }
+    }
+
+    this->db = QSqlDatabase::database();
+    QSqlDatabase::removeDatabase(this->connection_name);
+}
+
+bool DatabaseManager::createDatabase()
+{
+    // Can't use the code inside openDatabase() method, because at this point no DB yet exists
+    // thus a new one must be created here before to execute the queries from the sql file
+    this->db = QSqlDatabase::addDatabase("QSQLITE", this->connection_name);
+    this->db.setDatabaseName(this->db_file);
+
+    if (!this->db.open()) {
+        return this->solveDatabaseConnectionFailure();
+    }
+    else {
+        // Ask for the sql file to open to generate the new database
+        QString sqlFile = QFileDialog::getOpenFileName(
+            this->parent,
+            "Selezione file sql per generare il database",
+            "./",
+            "Database (*.sql)"
+        );
+
+        // If no file is selected or if the sql execution fails
+        if (!QFile::exists(sqlFile) || sqlFile.isEmpty() || !this->executeQueryFile(sqlFile)) {
+            this->closeDb();
+
+            return this->solveDatabaseConnectionFailure();
+        }
+
+        return true;
+    }
+}
+
+void DatabaseManager::deleteOldBackups()
+{
+    QString backup_path = "./" + this->backup_folder;
+    QDir directory(backup_path);
+    QStringList files = directory.entryList(QStringList() << "*.db" << "*.sql", QDir::Files);
+
+    // * 2 is there because there are 2 files (1 .db and 1 .sql) for each backup
+    int backups_to_delete = files.length() - (this->backups_to_keep * 2);
+
+    if (backups_to_delete > 0) {
+        // Sort the the list of files found, having the format yyyyMMdd-backup they can be alphabetically sorted
+        files.sort();
+
+        for (int i = 0; i < backups_to_delete; i++) {
+            QFile::remove(backup_path + "/" + files[i]);
+        }
+    }
+}
+
+bool DatabaseManager::executeQueryFile(const QString& file_name) {
+
+    if (!QFile::exists(file_name)) {
+        return false;
+    }
+
+    QFile file(file_name);
+
+    // Read the file content
+    if (!file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+
+    QString query_string(file.readAll());
+    file.close();
+
+    QSqlQuery query = QSqlQuery(this->db);
+
+    // Check if SQL Driver supports Transactions
+    if (this->db.driver()->hasFeature(QSqlDriver::Transactions)) {
+        // Replace comments and tabs and new lines with space
+        query_string = query_string.replace(QRegularExpression("(\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption), " ");
+        // Remove not necessary spaces
+        query_string = query_string.trimmed();
+
+        // Extracting queries
+        QStringList qList = query_string.split(';', Qt::SkipEmptyParts);
+
+        // Detecting special queries (`begin transaction` and `commit`).
+        QRegularExpression re_transaction("\\bbegin.transaction.*", QRegularExpression::CaseInsensitiveOption);
+        QRegularExpression re_commit("\\bcommit.*", QRegularExpression::CaseInsensitiveOption);
+
+        // Check if the SQL file has a transaction set
+        bool is_started_with_transaction = re_transaction.match(qList.at(0)).hasMatch();
+
+        // If the SQL file did not had a transaction set
+        if (!is_started_with_transaction) {
+            this->db.transaction();
+        }
+
+        // Execute the queries
+        for (const QString& s : qList) {
+            if (re_transaction.match(s).hasMatch())    // Special query detected
+                this->db.transaction();
+            else if (re_commit.match(s).hasMatch())    // Special query detected
+                this->db.commit();
+            else {
+                query.exec(s);                        // Execute normal query
+                if (query.lastError().type() != QSqlError::NoError) {
+                    this->db.rollback();
+
+                    QMessageBox message;
+                    message.setWindowTitle("Funeraria");
+                    message.setIcon(QMessageBox::Critical);
+                    message.setText(query.lastError().text());
+                    message.exec();
+
+                    return false;
+                }
+            }
+        }
+
+        // If the SQL file did not had a transaction set
+        if (!is_started_with_transaction) {
+            this->db.commit();
+        }
+
+        return true;
+    }
+    else {
+        // Sql Driver doesn't supports transaction
+        // Remove special queries (`begin transaction` and `commit`)
+        query_string = query_string.replace(QRegularExpression("(\\bbegin.transaction.*;|\\bcommit.*;|\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption), " ");
+        query_string = query_string.trimmed();
+
+        // Execute each individual queries
+        QStringList qList = query_string.split(';', Qt::SkipEmptyParts);
+
+        for (const QString& s : qList) {
+            query.exec(s);
+            if (query.lastError().type() != QSqlError::NoError) {
+                return false;
+            };
+        }
+
+        return true;
+    }
+}
+
+void DatabaseManager::initSettings() {
+    bool errors = false;
+    int interval = this->settings->getBackupInterval();
+    int keep = this->settings->getBackupsToKeep();
+
+    if (interval != -1) {
+        this->backup_interval = interval;
+    }
+    else {
+        errors = true;
+    }
+
+    if (interval != -1) {
+        this->backups_to_keep = keep;
+    }
+    else {
+        errors = true;
+    }
+
+    if (errors) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Non è stato possibile recuperare uno o più settaggi.\n"
+            "Sono stati caricati i valori di default.");
+        message.exec();
+    }
+}
+
+bool DatabaseManager::isBackupRequired() {
+    QDir directory("./" + this->backup_folder);
+    QStringList files = directory.entryList(QStringList() << "*.db" << "*.sql", QDir::Files);
+
+    // If the folder is empty, it means that no backup has been created
+    if (files.isEmpty()) {
+        return true;
+    }
+
+    QString max_date = "00000000";
+    for (QString filename : files) {
+        QStringList date = filename.split("-");
+
+        if (date[0].compare(max_date) > 0) {
+            max_date = date[0];
+        }
+    }
+
+    QDate today = QDate::currentDate();
+    QDate date = QDate::fromString(max_date, "yyyyMMdd");
+
+    if (date.daysTo(today) >= this->backup_interval) {
+        return true;
+    }
+
+    return false;
+}
 
 bool DatabaseManager::openDatabase()
 {
@@ -286,301 +586,4 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
         // The user has decided not to solve the problem
         return false;
     }
-}
-
-bool DatabaseManager::createDatabase()
-{
-    // Can't use the code inside openDatabase() method, because at this point no DB yet exists
-    // thus a new one must be created here before to execute the queries from the sql file
-    this->db = QSqlDatabase::addDatabase("QSQLITE", this->connection_name);
-    this->db.setDatabaseName(this->db_file);
-
-    if (!this->db.open()) {
-        return this->solveDatabaseConnectionFailure();
-    }
-    else {
-        // Ask for the sql file to open to generate the new database
-        QString sqlFile = QFileDialog::getOpenFileName(
-            this->parent, 
-            "Selezione file sql per generare il database", 
-            "./", 
-            "Database (*.sql)"
-        );
-
-        // If no file is selected or if the sql execution fails
-        if (!QFile::exists(sqlFile) || sqlFile.isEmpty() || !this->executeQueryFile(sqlFile)) {
-            this->closeDb();
-
-            return this->solveDatabaseConnectionFailure();
-        }
-
-        return true;
-    }
-}
-
-void DatabaseManager::initSettings() {    
-    bool errors = false;
-    int interval = this->settings->getBackupInterval();
-    int keep = this->settings->getBackupsToKeep();
-
-    if (interval != -1) {
-        this->backup_interval = interval;
-    }
-    else {
-        errors = true;
-    }
-
-    if (interval != -1) {
-        this->backups_to_keep = keep;
-    }
-    else {
-        errors = true;
-    }
-
-    if (errors) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Non è stato possibile recuperare uno o più settaggi.\n"
-                        "Sono stati caricati i valori di default.");
-        message.exec();
-    }
-}
-
-bool DatabaseManager::executeQueryFile(const QString& file_name) {
-
-    if (!QFile::exists(file_name)) {
-        return false;
-    }
-
-    QFile file(file_name);
-
-    // Read the file content
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-
-    QString query_string(file.readAll());
-    file.close();
-
-    QSqlQuery query = QSqlQuery(this->db);
-
-    // Check if SQL Driver supports Transactions
-    if (this->db.driver()->hasFeature(QSqlDriver::Transactions)) {
-        // Replace comments and tabs and new lines with space
-        query_string = query_string.replace(QRegularExpression("(\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption), " ");
-        // Remove not necessary spaces
-        query_string = query_string.trimmed();
-
-        // Extracting queries
-        QStringList qList = query_string.split(';', Qt::SkipEmptyParts);
-
-        // Detecting special queries (`begin transaction` and `commit`).
-        QRegularExpression re_transaction("\\bbegin.transaction.*", QRegularExpression::CaseInsensitiveOption);
-        QRegularExpression re_commit("\\bcommit.*", QRegularExpression::CaseInsensitiveOption);
-
-        // Check if the SQL file has a transaction set
-        bool is_started_with_transaction = re_transaction.match(qList.at(0)).hasMatch();
-
-        // If the SQL file did not had a transaction set
-        if (!is_started_with_transaction) {
-            this->db.transaction();
-        }
-
-        // Execute the queries
-        for(const QString & s : qList) {
-            if (re_transaction.match(s).hasMatch())    // Special query detected
-                this->db.transaction();
-            else if (re_commit.match(s).hasMatch())    // Special query detected
-                this->db.commit();
-            else {
-                query.exec(s);                        // Execute normal query
-                if (query.lastError().type() != QSqlError::NoError) {
-                    this->db.rollback();
-
-                    QMessageBox message;
-                    message.setWindowTitle("Funeraria");
-                    message.setIcon(QMessageBox::Critical);
-                    message.setText(query.lastError().text());
-                    message.exec();
-
-                    return false;
-                }
-            }
-        }
-
-        // If the SQL file did not had a transaction set
-        if (!is_started_with_transaction) {
-            this->db.commit();
-        }
-
-        return true;
-    }
-    else {
-        // Sql Driver doesn't supports transaction
-        // Remove special queries (`begin transaction` and `commit`)
-        query_string = query_string.replace(QRegularExpression("(\\bbegin.transaction.*;|\\bcommit.*;|\\/\\*(.|\\n)*?\\*\\/|^--.*\\n|\\t|\\n)", QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption), " ");
-        query_string = query_string.trimmed();
-
-        // Execute each individual queries
-        QStringList qList = query_string.split(';', Qt::SkipEmptyParts);
-
-        for(const QString & s : qList) {
-            query.exec(s);
-            if (query.lastError().type() != QSqlError::NoError) {
-                return false;
-            };
-        }
-
-        return true;
-    }
-}
-
-void DatabaseManager::backupDatabase()
-{
-    QString today = QDate::currentDate().toString("yyyyMMdd");
-
-    // Copy of the .db file, no need to check if it exists, 
-    // the program arrives here only after having solved any issues with the database
-    if (!QFile::copy(this->db_file, "./" + this->backup_folder + "/" + today + "-database.db")) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria Backup");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Impossibile eseguire la copia di backup del database.");
-        message.exec();
-        return;
-    }
-
-    // Create a file for the SQL statements
-    QFile sql_file("./" + this->backup_folder + "/" + today + "-database.sql");
-    if (!sql_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria Backup");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Impossibile aprire il nuovo file .sql per il backup del database.");
-        message.exec();
-        return;
-    }
-
-    QTextStream out(&sql_file);
-
-    // Fetch and write SQL statements to the file
-    QSqlQuery query(this->db);
-    if (query.exec("PRAGMA foreign_keys=OFF") && query.exec("BEGIN")) {
-        // Iterate through tables and write SQL to recreate them
-        QSqlQuery tables_query("SELECT name FROM sqlite_master WHERE type='table'", this->db);
-        while (tables_query.next()) {
-            QString table_name = tables_query.value(0).toString();
-
-            // Exclude reserved tables generatead automatically by sqlite
-            if (table_name == "sqlite_sequence") continue;
-
-            QSqlQuery tables_dump("SELECT sql FROM sqlite_master WHERE name='" + table_name + "'", this->db);
-            if (tables_dump.next()) {
-                QString create_table_sql = tables_dump.value(0).toString();
-                out << create_table_sql << ";\n";
-
-                QSqlQuery data_dump("SELECT * FROM " + table_name, this->db);
-                while (data_dump.next()) {
-                    out << "INSERT INTO " << table_name << " VALUES (";
-
-                    for (int i = 0; i < data_dump.record().count(); i++) {
-                        if (i > 0) {
-                            out << ", ";
-                        }
-
-                        QVariant value = data_dump.value(i);
-                        if (value.type() == QVariant::String) {
-                            out << "\"" << value.toString() << "\"";
-                        }
-                        else {
-                            out << value.toString();
-                        }
-                    }
-
-                    out << ");\n";
-                }
-            }
-        }
-
-        if (!query.exec("COMMIT")) {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria Backup");
-            message.setIcon(QMessageBox::Critical);
-            message.setText("Impossibile generare correttamente il file di backup .sql. \nTransazione fallita.");
-            message.exec();
-            // Rollback not required, the database was only read
-            sql_file.close();
-            return;
-        }
-    }
-    else {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria Backup");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Impossibile iniziare la transazione per generare il file di backupp .sql");
-        message.exec();
-        return;
-    }
-
-    sql_file.close();
-}
-
-bool DatabaseManager::isBackupRequired() {
-    QDir directory("./" + this->backup_folder);
-    QStringList files = directory.entryList(QStringList() << "*.db" << "*.sql", QDir::Files);
-
-    // If the folder is empty, it means that no backup has been created
-    if (files.isEmpty()) {
-        return true;
-    }
-
-    QString max_date = "00000000";
-    for (QString filename : files) {
-        QStringList date = filename.split("-");
-        
-        if (date[0].compare(max_date) > 0) {
-            max_date = date[0];
-        }
-    }
-
-    QDate today = QDate::currentDate();
-    QDate date = QDate::fromString(max_date, "yyyyMMdd");
-
-    if (date.daysTo(today) >= this->backup_interval) {
-        return true;
-    }
-
-    return false;
-}
-
-void DatabaseManager::deleteOldBackups()
-{
-    QString backup_path = "./" + this->backup_folder;
-    QDir directory(backup_path);
-    QStringList files = directory.entryList(QStringList() << "*.db" << "*.sql", QDir::Files);
-
-    // * 2 is there because there are 2 files (1 .db and 1 .sql) for each backup
-    int backups_to_delete = files.length() - (this->backups_to_keep * 2);
-
-    if (backups_to_delete > 0) {
-        // Sort the the list of files found, having the format yyyyMMdd-backup they can be alphabetically sorted
-        files.sort();
-
-        for (int i = 0; i < backups_to_delete; i++) {
-            QFile::remove(backup_path + "/" + files[i]);
-        }
-    }
-}
-
-void DatabaseManager::closeDb()
-{
-    {
-        if (this->db.isOpen()) {
-            this->db.close();
-        }
-    }
-
-    this->db = QSqlDatabase::database();
-    QSqlDatabase::removeDatabase(this->connection_name);
 }

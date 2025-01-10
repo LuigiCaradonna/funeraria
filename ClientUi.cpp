@@ -30,19 +30,24 @@ ClientUi::~ClientUi()
 
 /********** PUBLIC FUNCTIONS **********/
 
-void ClientUi::setId(int id)
-{
-    this->id = id;
-    this->updateForm();
-}
-
 void ClientUi::setName(const QString& name)
 {
     this->name = name;
     this->updateForm();
 }
 
+void ClientUi::setId(int id)
+{
+    this->id = id;
+    this->updateForm();
+}
+
 /********** PROTECTED SLOTS **********/
+
+void ClientUi::slotCloseDialog()
+{
+    this->close();
+}
 
 void ClientUi::slotSave()
 {
@@ -125,11 +130,6 @@ void ClientUi::slotUpdate()
         // Close the dialog
         this->close();
     }
-}
-
-void ClientUi::slotCloseDialog()
-{
-    this->close();
 }
 
 /********** PRIVATE FUNCTIONS **********/

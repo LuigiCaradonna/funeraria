@@ -13,26 +13,6 @@ Client::~Client()
 
 /********** PUBLIC FUNCTIONS **********/
 
-int Client::getId(const QString& name)
-{
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT id FROM " + this->table + " WHERE name = :name;");
-    query.bindValue(":name", name);
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-    else if (query.next()) {
-        return query.value("id").toInt();
-    }
-
-    return 0;
-}
-
 QList<QMap<QString, QString>> Client::get(const QString& name)
 {
     QList<QMap<QString, QString>> list{};
@@ -115,73 +95,11 @@ QList<QMap<QString, QString>> Client::getActive()
     return list;
 }
 
-QString Client::getName(const int id)
-{
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table + " WHERE id = :id;");
-    query.bindValue(":id", id);
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-    else if (query.next()) {
-        return query.value("name").toString();
-    }
-
-    return "";
-}
-
-QStringList Client::getNames()
-{
-    QStringList names{};
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table + " ORDER BY position ASC;");
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-
-    while (query.next()) {
-        names.append(query.value("name").toString());
-    }
-
-    return names;
-}
-
 QStringList Client::getActiveNames()
 {
     QStringList names{};
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare("SELECT name FROM " + this->table + " WHERE active = 1 ORDER BY position ASC;");
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-
-    while (query.next()) {
-        names.append(query.value("name").toString());
-    }
-
-    return names;
-}
-
-QStringList Client::getQuickAccessNames()
-{
-    QStringList names{};
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT name FROM " + this->table + " WHERE quick = 1 ORDER BY position ASC;");
 
     if (!query.exec()) {
         QMessageBox message;
@@ -263,6 +181,180 @@ QMap<QString, QString> Client::getDetailsByName(const QString& name)
     return map;
 }
 
+int Client::getId(const QString& name)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT id FROM " + this->table + " WHERE name = :name;");
+    query.bindValue(":name", name);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+    else if (query.next()) {
+        return query.value("id").toInt();
+    }
+
+    return 0;
+}
+
+int Client::getLastPosition()
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT MAX(position) as position FROM " + this->table);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+    else if (query.next()) {
+        return query.value("position").toInt();
+    }
+
+    return 0;
+}
+
+QString Client::getName(const int id)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " WHERE id = :id;");
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+    else if (query.next()) {
+        return query.value("name").toString();
+    }
+
+    return "";
+}
+
+QStringList Client::getNames()
+{
+    QStringList names{};
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " ORDER BY position ASC;");
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        names.append(query.value("name").toString());
+    }
+
+    return names;
+}
+
+QStringList Client::getQuickAccessNames()
+{
+    QStringList names{};
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("SELECT name FROM " + this->table + " WHERE quick = 1 ORDER BY position ASC;");
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+    }
+
+    while (query.next()) {
+        names.append(query.value("name").toString());
+    }
+
+    return names;
+}
+
+bool Client::rearrangePositions(const int id, const QString& name, const int new_position)
+{
+    // Last position currently in use
+    int last_position = this->getLastPosition();
+
+    // A client is being removed
+    if (new_position == -1) {
+        QMap<QString, QString> old_client_data = this->getDetailsByName(name);
+
+        // Set the client's position to a not valid number
+        if (!this->setInvalidPosition(id)) {
+            return false;
+        }
+
+        if (!this->shiftPositionsUp(old_client_data["position"].toInt(), last_position)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // If the new position was greater than last_position+1 it would leave a hole between two positions
+    if (new_position > last_position + 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La posizione per questo cliente non può essere superiore a " + QString::number(last_position + 1));
+        message.exec();
+
+        return false;
+    }
+
+    // If the new position is not after the curent last
+    if (new_position <= last_position) {
+        // If the client's id is not new_client_temp_id, this is an existing client, we also need to check for position change
+        if (id != this->new_client_temp_id) {
+            QMap<QString, QString> old_client_data = this->getDetailsById(id);
+
+            // If the client's position has changed
+            if (new_position != old_client_data["position"].toInt()) {
+
+                // Set the client's position to a temporary not valid number
+                if (!this->setInvalidPosition(id)) {
+                    return false;
+                }
+
+                // Shift up the positions following the removed one 
+                if (!this->shiftPositionsUp(old_client_data["position"].toInt(), last_position)) {
+                    return false;
+                }
+
+                // The last position has decreased by one
+                last_position -= 1;
+
+                // Shift down the clients' positions to make room at the correct place
+                if (!this->shiftPositionsDown(new_position, last_position)) {
+                    return false;
+                }
+
+                // The las_position is changed again, but we will not use it anymore, no need to update it.
+            }
+        }
+        else {
+            // The creation of a new client always requires position shifting if it doesn't go after the last
+            if (!this->shiftPositionsDown(new_position, last_position)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 bool Client::remove(const int id)
 {
     // Begin a transaction
@@ -285,6 +377,69 @@ bool Client::remove(const int id)
     }
 
     this->db.commit();
+
+    return true;
+}
+
+bool Client::setInvalidPosition(const int client_id)
+{
+    QSqlQuery query = QSqlQuery(this->db);
+    query.prepare("UPDATE " + this->table + " SET position = -1 WHERE id = :id");
+    query.bindValue(":id", client_id);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Client: " + query.lastError().text());
+        message.exec();
+
+        return false;
+    }
+
+    return true;
+}
+
+bool Client::shiftPositionsDown(const int from, const int last_position)
+{
+    // Update one by one all the clients with a position higher than "from" starting from the last
+    for (int i = last_position; i >= from; i--) {
+        QSqlQuery query = QSqlQuery(this->db);
+        query.prepare("UPDATE " + this->table + " SET position = position+1 WHERE position = :position");
+        query.bindValue(":position", i);
+
+        if (!query.exec()) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Client: " + query.lastError().text());
+            message.exec();
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Client::shiftPositionsUp(const int from, const int last_position)
+{
+    // Update one by one all the clients with a position higher than "from"
+    for (int i = from + 1; i <= last_position; i++) {
+        QSqlQuery query = QSqlQuery(this->db);
+        query.prepare("UPDATE " + this->table + " SET position = position-1 WHERE position = :position");
+        query.bindValue(":position", i);
+
+        if (!query.exec()) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Client: " + query.lastError().text());
+            message.exec();
+
+            return false;
+        }
+    }
 
     return true;
 }
@@ -424,161 +579,6 @@ bool Client::update(
     }
 
     this->db.commit();
-
-    return true;
-}
-
-int Client::getLastPosition()
-{
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("SELECT MAX(position) as position FROM " + this->table);
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-    }
-    else if (query.next()) {
-        return query.value("position").toInt();
-    }
-
-    return 0;
-}
-
-bool Client::rearrangePositions(const int id, const QString& name, const int new_position)
-{
-    // Last position currently in use
-    int last_position = this->getLastPosition();
-    
-    // A client is being removed
-    if (new_position == -1) {
-        QMap<QString, QString> old_client_data = this->getDetailsByName(name);
-
-        // Set the client's position to a not valid number
-        if (!this->setInvalidPosition(id)) {
-            return false;
-        }
-
-        if (!this->shiftPositionsUp(old_client_data["position"].toInt(), last_position)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    // If the new position was greater than last_position+1 it would leave a hole between two positions
-    if (new_position > last_position + 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La posizione per questo cliente non può essere superiore a " + QString::number(last_position + 1));
-        message.exec();
-
-        return false;
-    }
-
-    // If the new position is not after the curent last
-    if (new_position <= last_position) {
-        // If the client's id is not new_client_temp_id, this is an existing client, we also need to check for position change
-        if (id != this->new_client_temp_id) {
-            QMap<QString, QString> old_client_data = this->getDetailsById(id);
-
-            // If the client's position has changed
-            if (new_position != old_client_data["position"].toInt()) {
-
-                // Set the client's position to a temporary not valid number
-                if (!this->setInvalidPosition(id)) {
-                    return false;
-                }
-
-                // Shift up the positions following the removed one 
-                if (!this->shiftPositionsUp(old_client_data["position"].toInt(), last_position)) {
-                    return false;
-                }
-
-                // The last position has decreased by one
-                last_position -= 1;
-
-                // Shift down the clients' positions to make room at the correct place
-                if (!this->shiftPositionsDown(new_position, last_position)) {
-                    return false;
-                }
-
-                // The las_position is changed again, but we will not use it anymore, no need to update it.
-            }
-        }
-        else {
-            // The creation of a new client always requires position shifting if it doesn't go after the last
-            if (!this->shiftPositionsDown(new_position, last_position)) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-bool Client::shiftPositionsUp(const int from, const int last_position)
-{
-    // Update one by one all the clients with a position higher than "from"
-    for (int i = from + 1; i <= last_position; i++) {
-        QSqlQuery query = QSqlQuery(this->db);
-        query.prepare("UPDATE " + this->table + " SET position = position-1 WHERE position = :position");
-        query.bindValue(":position", i);
-
-        if (!query.exec()) {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Critical);
-            message.setText("Client: " + query.lastError().text());
-            message.exec();
-
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool Client::shiftPositionsDown(const int from, const int last_position)
-{
-    // Update one by one all the clients with a position higher than "from" starting from the last
-    for (int i = last_position; i >= from; i--) {
-        QSqlQuery query = QSqlQuery(this->db);
-        query.prepare("UPDATE " + this->table + " SET position = position+1 WHERE position = :position");
-        query.bindValue(":position", i);
-
-        if (!query.exec()) {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Critical);
-            message.setText("Client: " + query.lastError().text());
-            message.exec();
-
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool Client::setInvalidPosition(const int client_id)
-{
-    QSqlQuery query = QSqlQuery(this->db);
-    query.prepare("UPDATE " + this->table + " SET position = -1 WHERE id = :id");
-    query.bindValue(":id", client_id);
-
-    if (!query.exec()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("Client: " + query.lastError().text());
-        message.exec();
-
-        return false;
-    }
 
     return true;
 }

@@ -32,15 +32,6 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Sets the client's id property and updates the content of the QDialog according
-     *
-     * @param   int id - Id
-     *
-     * @return  void
-     */
-    void setId(int id);
-
-    /*
      * Sets the client's name property and updates the content of the QDialog according
      *
      * @param   const QString& name - Name
@@ -49,9 +40,25 @@ public:
      */
     void setName(const QString& name);
 
+    /*
+     * Sets the client's id property and updates the content of the QDialog according
+     *
+     * @param   int id - Id
+     *
+     * @return  void
+     */
+    void setId(int id);
+
 protected slots:
 
     /********** PROTECTED SLOTS **********/
+
+    /*
+     * Closes the dialog window
+     *
+     * @return  void
+     */
+    void slotCloseDialog();
 
     /*
      * Saves the client's data, responds to the dialog window's save button
@@ -66,13 +73,6 @@ protected slots:
      * @return  void
      */
     void slotUpdate();
-
-    /*
-     * Closes the dialog window
-     *
-     * @return  void
-     */
-    void slotCloseDialog();
 
 private:
     Ui::ClientClass ui;

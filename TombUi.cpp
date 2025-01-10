@@ -133,35 +133,26 @@ void TombUi::setProgressive(const int& progressive)
 
 /********** PROTECTED SLOTS **********/
 
-void TombUi::slotSetCurrentDate(const QString& field)
+void TombUi::slotCloseDialog()
 {
-    QString today = QDate::currentDate().toString("dd/MM/yyyy");
-
-    if (field == "order") {
-        this->ui.leOrderedAt->setText(today);
-    }
-    else if (field == "proof") {
-        this->ui.leProofedAt->setText(today);
-    }
-    else if (field == "confirm") {
-        this->ui.leConfirmedAt->setText(today);
-    }
-    else if (field == "engrave") {
-        this->ui.leEngravedAt->setText(today);
-    }
-    else if (field == "deliver") {
-        this->ui.leDeliveredAt->setText(today);
-    }
+    this->close();
 }
 
-void TombUi::slotSetDelivered()
+void TombUi::slotDelete()
 {
-    this->ui.leDeliveredAt->setText("Consegnata");
-}
+    QMessageBox message;
+    QPushButton* proceed_btn = message.addButton("Elimina", QMessageBox::ActionRole);
+    QPushButton* abort_btn = message.addButton("Annulla", QMessageBox::ActionRole);
+    message.setWindowTitle("Funeraria");
+    message.setIcon(QMessageBox::Warning);
+    message.setText("Vuoi eliminare questa lapide?");
+    message.exec();
 
-void TombUi::slotSetNoEngraving()
-{
-    this->ui.leEngravedAt->setText(this->not_engraved);
+    if (message.clickedButton() == proceed_btn) {
+        this->tomb->remove(this->ui.leProgressive->text().toInt());
+    }
+
+    this->close();
 }
 
 void TombUi::slotNotInUseProgressives()
@@ -315,26 +306,47 @@ void TombUi::slotSave()
     }
 }
 
-void TombUi::slotDelete()
+void TombUi::slotSetCurrentDate(const QString& field)
 {
-    QMessageBox message;
-    QPushButton* proceed_btn = message.addButton("Elimina", QMessageBox::ActionRole);
-    QPushButton* abort_btn = message.addButton("Annulla", QMessageBox::ActionRole);
-    message.setWindowTitle("Funeraria");
-    message.setIcon(QMessageBox::Warning);
-    message.setText("Vuoi eliminare questa lapide?");
-    message.exec();
+    QString today = QDate::currentDate().toString("dd/MM/yyyy");
 
-    if (message.clickedButton() == proceed_btn) {
-        this->tomb->remove(this->ui.leProgressive->text().toInt());
+    if (field == "order") {
+        this->ui.leOrderedAt->setText(today);
     }
-
-    this->close();
+    else if (field == "proof") {
+        this->ui.leProofedAt->setText(today);
+    }
+    else if (field == "confirm") {
+        this->ui.leConfirmedAt->setText(today);
+    }
+    else if (field == "engrave") {
+        this->ui.leEngravedAt->setText(today);
+    }
+    else if (field == "deliver") {
+        this->ui.leDeliveredAt->setText(today);
+    }
 }
 
-void TombUi::slotCloseDialog()
+void TombUi::slotSetDelivered()
 {
-    this->close();
+    this->ui.leDeliveredAt->setText("Consegnata");
+}
+
+void TombUi::slotSetNoEngraving()
+{
+    this->ui.leEngravedAt->setText(this->not_engraved);
+}
+
+void TombUi::slotUpdateEpNumState()
+{
+    if (this->ui.rbEngraveYes->isChecked()) {
+        this->ui.leEpigraphAmount->setEnabled(true);
+        this->ui.leEpigraphAmount->setText("1");
+    }
+    else {
+        this->ui.leEpigraphAmount->setEnabled(false);
+        this->ui.leEpigraphAmount->setText("0");
+    }
 }
 
 void TombUi::slotUpdateNotes()
@@ -469,18 +481,6 @@ void TombUi::slotUpdateNotes()
     this->ui.ptNote->setPlainText(notes);
 }
 
-void TombUi::slotUpdateEpNumState()
-{
-    if (this->ui.rbEngraveYes->isChecked()) {
-        this->ui.leEpigraphAmount->setEnabled(true);
-        this->ui.leEpigraphAmount->setText("1");
-    }
-    else {
-        this->ui.leEpigraphAmount->setEnabled(false);
-        this->ui.leEpigraphAmount->setText("0");
-    }
-}
-
 void TombUi::slotUpdatePitState()
 {
     if (this->ui.cbPitOne->currentIndex() != 0) {
@@ -556,141 +556,6 @@ void TombUi::slotUpdateScHightState()
 }
 
 /********** PRIVATE FUNCTIONS **********/
-
-bool TombUi::validateForm(const QString& op)
-{
-    int current_last = this->tomb->getLastProgresive();
-
-    if (op == "store") {
-        if (this->tomb->isProgressiveInUse(this->ui.leProgressive->text().toInt())) {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Warning);
-            message.setText("Il numero assegnato alla lapide è già in uso");
-            message.exec();
-            return false;
-        }
-
-    }
-    else {
-        // If the progressive has changed and the new number is already in use
-        if (this->progressive != this->ui.leProgressive->text().toInt() && 
-            this->tomb->isProgressiveInUse(this->ui.leProgressive->text().toInt())) {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Warning);
-            message.setText("Il numero assegnato alla lapide è già in uso");
-            message.exec();
-            return false;
-        }
-    }
-
-    if (this->ui.leProgressive->text().toInt() > current_last + 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il numero assegnato alla lapide non può essere maggiore di " + QString::number(current_last + 1));
-        message.exec();
-        return false;
-    }
-
-    Client* client = new Client(this->db);
-    int client_id = client->getId(this->ui.cbClient->currentText());
-    delete client;
-    if (client_id == 0) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il cliente selezionato non è valido");
-        message.exec();
-        return false;
-    }
-
-    if (this->ui.leName->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il nome del defunto è obbligatorio");
-        message.exec();
-        return false;
-    }
-
-    if (this->sculpture->getCode(this->ui.cbSculpture->currentText()) != "NO" &&
-        (this->ui.leScHeight->text().trimmed() == "" || this->ui.leScHeight->text().toInt() <= 0)) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("L'altezza della scultura non è corretta");
-        message.exec();
-        return false;
-    }
-
-    if (this->ui.rbEngraveYes->isChecked() &&
-        (this->ui.leEpigraphAmount->text().trimmed() == "" || this->ui.leEpigraphAmount->text().toInt() < 0)) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il numero di epigrafi non è corretto");
-        message.exec();
-        return false;
-    }
-
-    if (
-        (this->ui.cbPitTwo->currentIndex() != 0 && this->ui.cbPitOne->currentIndex() == 0 )
-        ||
-        (this->ui.cbPitThree->currentIndex() != 0 &&
-            (
-                this->ui.cbPitTwo->currentIndex() == 0 || this->ui.cbPitOne->currentIndex() == 0
-            )
-        ) 
-        ||
-        (this->ui.cbPitFour->currentIndex() != 0 &&
-            (
-                this->ui.cbPitThree->currentIndex() == 0 ||
-                this->ui.cbPitTwo->currentIndex() == 0 ||
-                this->ui.cbPitOne->currentIndex() == 0
-            )
-        ) 
-        ||
-        (this->ui.cbPitFive->currentIndex() != 0 &&
-            (
-                this->ui.cbPitFour->currentIndex() == 0 ||
-                this->ui.cbPitThree->currentIndex() == 0 ||
-                this->ui.cbPitTwo->currentIndex() == 0 ||
-                this->ui.cbPitOne->currentIndex() == 0
-            )
-        ) 
-        ||
-        (this->ui.cbPitSix->currentIndex() != 0 &&
-            (
-                this->ui.cbPitFive->currentIndex() == 0 ||
-                this->ui.cbPitFour->currentIndex() == 0 ||
-                this->ui.cbPitThree->currentIndex() == 0 ||
-                this->ui.cbPitTwo->currentIndex() == 0 ||
-                this->ui.cbPitOne->currentIndex() == 0
-            )
-        )
-    ) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Gli scavi devono essere selezionati in sequenza senza saltare posizioni");
-        message.exec();
-        return false;
-    }
-
-    if (!this->checkDates(
-        this->ui.leOrderedAt->text(), 
-        this->ui.leProofedAt->text(), 
-        this->ui.leConfirmedAt->text(),
-        this->ui.leEngravedAt->text(),
-        this->ui.leDeliveredAt->text())
-    ) {
-        return false;
-    }
-
-    return true;
-}
 
 bool TombUi::checkDates(const QString& order, const QString& proof, const QString& confirmation, const QString& engraving, const QString& delivery)
 {
@@ -1284,4 +1149,139 @@ void TombUi::updateForm()
     }
 
     delete client;
+}
+
+bool TombUi::validateForm(const QString& op)
+{
+    int current_last = this->tomb->getLastProgresive();
+
+    if (op == "store") {
+        if (this->tomb->isProgressiveInUse(this->ui.leProgressive->text().toInt())) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("Il numero assegnato alla lapide è già in uso");
+            message.exec();
+            return false;
+        }
+
+    }
+    else {
+        // If the progressive has changed and the new number is already in use
+        if (this->progressive != this->ui.leProgressive->text().toInt() &&
+            this->tomb->isProgressiveInUse(this->ui.leProgressive->text().toInt())) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("Il numero assegnato alla lapide è già in uso");
+            message.exec();
+            return false;
+        }
+    }
+
+    if (this->ui.leProgressive->text().toInt() > current_last + 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il numero assegnato alla lapide non può essere maggiore di " + QString::number(current_last + 1));
+        message.exec();
+        return false;
+    }
+
+    Client* client = new Client(this->db);
+    int client_id = client->getId(this->ui.cbClient->currentText());
+    delete client;
+    if (client_id == 0) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il cliente selezionato non è valido");
+        message.exec();
+        return false;
+    }
+
+    if (this->ui.leName->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il nome del defunto è obbligatorio");
+        message.exec();
+        return false;
+    }
+
+    if (this->sculpture->getCode(this->ui.cbSculpture->currentText()) != "NO" &&
+        (this->ui.leScHeight->text().trimmed() == "" || this->ui.leScHeight->text().toInt() <= 0)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("L'altezza della scultura non è corretta");
+        message.exec();
+        return false;
+    }
+
+    if (this->ui.rbEngraveYes->isChecked() &&
+        (this->ui.leEpigraphAmount->text().trimmed() == "" || this->ui.leEpigraphAmount->text().toInt() < 0)) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il numero di epigrafi non è corretto");
+        message.exec();
+        return false;
+    }
+
+    if (
+        (this->ui.cbPitTwo->currentIndex() != 0 && this->ui.cbPitOne->currentIndex() == 0)
+        ||
+        (this->ui.cbPitThree->currentIndex() != 0 &&
+            (
+                this->ui.cbPitTwo->currentIndex() == 0 || this->ui.cbPitOne->currentIndex() == 0
+                )
+            )
+        ||
+        (this->ui.cbPitFour->currentIndex() != 0 &&
+            (
+                this->ui.cbPitThree->currentIndex() == 0 ||
+                this->ui.cbPitTwo->currentIndex() == 0 ||
+                this->ui.cbPitOne->currentIndex() == 0
+                )
+            )
+        ||
+        (this->ui.cbPitFive->currentIndex() != 0 &&
+            (
+                this->ui.cbPitFour->currentIndex() == 0 ||
+                this->ui.cbPitThree->currentIndex() == 0 ||
+                this->ui.cbPitTwo->currentIndex() == 0 ||
+                this->ui.cbPitOne->currentIndex() == 0
+                )
+            )
+        ||
+        (this->ui.cbPitSix->currentIndex() != 0 &&
+            (
+                this->ui.cbPitFive->currentIndex() == 0 ||
+                this->ui.cbPitFour->currentIndex() == 0 ||
+                this->ui.cbPitThree->currentIndex() == 0 ||
+                this->ui.cbPitTwo->currentIndex() == 0 ||
+                this->ui.cbPitOne->currentIndex() == 0
+                )
+            )
+        ) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Gli scavi devono essere selezionati in sequenza senza saltare posizioni");
+        message.exec();
+        return false;
+    }
+
+    if (!this->checkDates(
+        this->ui.leOrderedAt->text(),
+        this->ui.leProofedAt->text(),
+        this->ui.leConfirmedAt->text(),
+        this->ui.leEngravedAt->text(),
+        this->ui.leDeliveredAt->text())
+        ) {
+        return false;
+    }
+
+    return true;
 }

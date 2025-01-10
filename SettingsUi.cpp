@@ -36,6 +36,40 @@ SettingsUi::~SettingsUi()
 
 /********** PROTECTED SLOTS **********/
 
+void SettingsUi::slotChangeArchivePath()
+{
+    // Prompt the user to select the archive folder
+    QString new_archive_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
+
+    if (new_archive_path.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("La cartella indicata risulta inesistente.");
+        message.exec();
+        return;
+    }
+
+    this->ui.lblArchiveFolder->setText(new_archive_path);
+}
+
+void SettingsUi::slotChangeCrossesPath()
+{
+    // Prompt the user to select the archive folder
+    QString new_crosses_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
+
+    if (new_crosses_path.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("La cartella indicata risulta inesistente.");
+        message.exec();
+        return;
+    }
+
+    this->ui.lblCrossesFolder->setText(new_crosses_path);
+}
+
 void SettingsUi::slotChangeDbPath()
 {
     // Prompt the user to select the db file
@@ -65,12 +99,12 @@ void SettingsUi::slotChangeDbPath()
     this->ui.lblDbFile->setText(new_db_file);
 }
 
-void SettingsUi::slotChangeArchivePath()
+void SettingsUi::slotChangeDrawingPath()
 {
     // Prompt the user to select the archive folder
-    QString new_archive_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
+    QString new_drawing_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
 
-    if (new_archive_path.isEmpty()) {
+    if (new_drawing_path.isEmpty()) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Critical);
@@ -79,7 +113,7 @@ void SettingsUi::slotChangeArchivePath()
         return;
     }
 
-    this->ui.lblArchiveFolder->setText(new_archive_path);
+    this->ui.lblDrawingFolder->setText(new_drawing_path);
 }
 
 void SettingsUi::slotChangeSculpturesPath()
@@ -99,38 +133,9 @@ void SettingsUi::slotChangeSculpturesPath()
     this->ui.lblSculpturesFolder->setText(new_sculptures_path);
 }
 
-void SettingsUi::slotChangeCrossesPath()
+void SettingsUi::slotCloseDialog()
 {
-    // Prompt the user to select the archive folder
-    QString new_crosses_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
-
-    if (new_crosses_path.isEmpty()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("La cartella indicata risulta inesistente.");
-        message.exec();
-        return;
-    }
-
-    this->ui.lblCrossesFolder->setText(new_crosses_path);
-}
-
-void SettingsUi::slotChangeDrawingPath()
-{
-    // Prompt the user to select the archive folder
-    QString new_drawing_path = QFileDialog::getExistingDirectory(this, "Seleziona cartella");
-
-    if (new_drawing_path.isEmpty()) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Critical);
-        message.setText("La cartella indicata risulta inesistente.");
-        message.exec();
-        return;
-    }
-
-    this->ui.lblDrawingFolder->setText(new_drawing_path);
+    this->close();
 }
 
 void SettingsUi::slotSave()
@@ -205,12 +210,18 @@ void SettingsUi::slotSave()
     }
 }
 
-void SettingsUi::slotCloseDialog()
-{
-    this->close();
-}
-
 /********** PRIVATE FUNCTIONS **********/
+
+const bool SettingsUi::store(const QMap<QString, QString>& setting) {
+
+    Settings* settings = new Settings(this->db);
+    bool result;
+    result = settings->store(setting);
+
+    delete settings;
+
+    return result;
+}
 
 void SettingsUi::updateForm() {
     Settings* settings = new Settings(this->db);
@@ -234,15 +245,4 @@ void SettingsUi::updateForm() {
 
     delete config;
     delete settings;
-}
-
-const bool SettingsUi::store(const QMap<QString, QString>& setting) {
-
-    Settings* settings = new Settings(this->db);
-    bool result;
-    result = settings->store(setting);
-    
-    delete settings;
-
-    return result;
 }

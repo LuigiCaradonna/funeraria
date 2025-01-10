@@ -31,6 +31,31 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
+     * Gets the given sculpture's datails
+     *
+     * @param   const QString& code - Code
+     *
+     * @return  QMap<QString, QString> - A map containing the sculpture's data
+     */
+    QMap<QString, QString> getByCode(const QString& code);
+
+    /*
+     * Gets the sculpture's code given its name
+     *
+     * @param   const QString& name - Sculpture's name
+     *
+     * @return  QString - Sculpture's code
+     */
+    QString getCode(const QString& name);
+
+    /*
+     * Gets all sculptures' codes
+     *
+     * @return QList<QString> - A list of all the sculptures' codes
+     */
+    QList<QString> getCodes();
+
+    /*
      * Gets all the sculptures' data
      *
      * @param   const QString& code - Optional, code of the sculpture to get
@@ -49,22 +74,6 @@ public:
     QList<QMap<QString, QString>> getListByName(const QString& name = "");
 
     /*
-     * Gets the given sculpture's datails
-     *
-     * @param   const QString& code - Code
-     *
-     * @return  QMap<QString, QString> - A map containing the sculpture's data
-     */
-    QMap<QString, QString> getByCode(const QString& code);
-
-    /*
-     * Gets all sculptures' names
-     *
-     * @return QList<QString> - A list of all the sculptures' names
-     */
-    QList<QString> getNames();
-
-    /*
      * Gets a sculpture's codes given its name
      *
      * @param const QString& code   - Pit type's code
@@ -74,20 +83,20 @@ public:
     QString getName(const QString& code);
 
     /*
-     * Gets all sculptures' codes
+     * Gets all sculptures' names
      *
-     * @return QList<QString> - A list of all the sculptures' codes
+     * @return QList<QString> - A list of all the sculptures' names
      */
-    QList<QString> getCodes();
+    QList<QString> getNames();
 
     /*
-     * Gets the sculpture's code given its name
+     * Deletes a sculpture from the database
      *
-     * @param   const QString& name - Sculpture's name
+     * @param   const QString& code - Code
      *
-     * @return  QString - Sculpture's code
+     * @return  boolean true on success, false on failure
      */
-    QString getCode(const QString& name);
+    bool remove(const QString& code);
 
     /*
      * Creates a new sculpture entry
@@ -132,15 +141,6 @@ public:
         const QString& height,
         const QString& depth
     );
-
-    /*
-     * Deletes a sculpture from the database
-     *
-     * @param   const QString& code - Code
-     *
-     * @return  boolean true on success, false on failure
-     */
-    bool remove(const QString& code);
 
 private:
     const QString table = "sculpture";

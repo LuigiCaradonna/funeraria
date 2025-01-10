@@ -46,6 +46,43 @@ void CrossUi::setCode(const QString& code)
 
 /********** PROTECTED SLOTS **********/
 
+void CrossUi::slotCloseDialog()
+{
+    this->close();
+}
+
+void CrossUi::slotSave()
+{
+    if (this->checkForm()) {
+        Cross* cross = new Cross(this->db);
+
+        if (cross->store(
+            this->ui.leCode->text().trimmed(),
+            this->ui.leName->text().trimmed(),
+            this->ui.leImgPath->text().trimmed(),
+            this->ui.leWidth->text().trimmed(),
+            this->ui.leHeight->text().trimmed())
+            ) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Information);
+            message.setText("Croce inserita.");
+            message.exec();
+        }
+        else {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Critical);
+            message.setText("Inserimento croce non riuscito.");
+            message.exec();
+        }
+
+        delete cross;
+        // Close the dialog
+        this->close();
+    }
+}
+
 void CrossUi::slotSelectImage()
 {
     Config* config = new Config();
@@ -66,38 +103,6 @@ void CrossUi::slotSwitchEnableState()
     this->ui.leName->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leWidth->setEnabled(this->ui.chbAllowEdit->isChecked());
     this->ui.leHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
-}
-
-void CrossUi::slotSave()
-{
-    if (this->checkForm()) {
-        Cross* cross = new Cross(this->db);
-
-        if (cross->store(
-            this->ui.leCode->text().trimmed(),
-            this->ui.leName->text().trimmed(),
-            this->ui.leImgPath->text().trimmed(),
-            this->ui.leWidth->text().trimmed(),
-            this->ui.leHeight->text().trimmed())
-        ) {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Information);
-            message.setText("Croce inserita.");
-            message.exec();
-        }
-        else {
-            QMessageBox message;
-            message.setWindowTitle("Funeraria");
-            message.setIcon(QMessageBox::Critical);
-            message.setText("Inserimento croce non riuscito.");
-            message.exec();
-        }
-
-        delete cross;
-        // Close the dialog
-        this->close();
-    }
 }
 
 void CrossUi::slotUpdate()
@@ -133,12 +138,62 @@ void CrossUi::slotUpdate()
     }
 }
 
-void CrossUi::slotCloseDialog()
-{
-    this->close();
-}
-
 /********** PRIVATE FUNCTIONS **********/
+
+bool CrossUi::checkForm()
+{
+    if (this->ui.leCode->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il codice della croce è obbligatorio.");
+        message.exec();
+
+        return false;
+    }
+
+    if (this->ui.leName->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il nome della croce è obbligatorio.");
+        message.exec();
+
+        return false;
+    }
+
+    if (this->ui.leImgPath->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("L'immagine della croce è obbligatoria.");
+        message.exec();
+
+        return false;
+    }
+
+    if (!Helpers::isInt(this->ui.leWidth->text().trimmed()) || this->ui.leWidth->text().trimmed().toInt() < 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La larghezza deve essere un numero intero maggiore di zero.");
+        message.exec();
+
+        return false;
+    }
+
+    if (!Helpers::isInt(this->ui.leHeight->text().trimmed()) || this->ui.leHeight->text().trimmed().toInt() < 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("L'altezza deve essere un numero intero maggiore di zero.");
+        message.exec();
+
+        return false;
+    }
+
+    return true;
+}
 
 void CrossUi::updateForm()
 {
@@ -226,59 +281,4 @@ void CrossUi::updateForm()
     }
 
     delete cross;
-}
-
-bool CrossUi::checkForm()
-{
-    if (this->ui.leCode->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il codice della croce è obbligatorio.");
-        message.exec();
-
-        return false;
-    }
-
-    if (this->ui.leName->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il nome della croce è obbligatorio.");
-        message.exec();
-
-        return false;
-    }
-
-    if (this->ui.leImgPath->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("L'immagine della croce è obbligatoria.");
-        message.exec();
-
-        return false;
-    }
-
-    if (!Helpers::isInt(this->ui.leWidth->text().trimmed()) || this->ui.leWidth->text().trimmed().toInt() < 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La larghezza deve essere un numero intero maggiore di zero.");
-        message.exec();
-
-        return false;
-    }
-
-    if (!Helpers::isInt(this->ui.leHeight->text().trimmed()) || this->ui.leHeight->text().trimmed().toInt() < 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("L'altezza deve essere un numero intero maggiore di zero.");
-        message.exec();
-
-        return false;
-    }
-
-    return true;
 }

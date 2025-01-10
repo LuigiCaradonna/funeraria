@@ -34,6 +34,31 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
+     * Gets the given cross' datails
+     *
+     * @param   const QString& code - Code
+     *
+     * @return  QMap<QString, QString> - A map containing the cross's data
+     */
+    QMap<QString, QString> getByCode(const QString& code);
+
+    /*
+     * Gets the cross's code given its name
+     *
+     * @param   const QString& name - Cross's name
+     *
+     * @return  QString - Cross's code
+     */
+    QString getCode(const QString& name);
+
+    /*
+     * Gets all crosses' codes
+     *
+     * @return QList<QString> - A list of all the crosses' codes
+     */
+    QList<QString> getCodes();
+
+    /*
      * Gets all the crosses' data
      *
      * @param   const QString& code - Optional, code of the sculputre to get
@@ -52,22 +77,6 @@ public:
     QList<QMap<QString, QString>> getListByName(const QString& name = "");
 
     /*
-     * Gets the given cross' datails
-     *
-     * @param   const QString& code - Code
-     *
-     * @return  QMap<QString, QString> - A map containing the cross's data
-     */
-    QMap<QString, QString> getByCode(const QString& code);
-
-    /*
-     * Gets all crosses' names
-     *
-     * @return QList<QString> - A list of all the crosses' names
-     */
-    QList<QString> getNames();
-
-    /*
      * Gets a cross' codes given its name
      *
      * @param const QString& code   - Cross' code
@@ -77,20 +86,20 @@ public:
     QString getName(const QString& code);
 
     /*
-     * Gets all crosses' codes
+     * Gets all crosses' names
      *
-     * @return QList<QString> - A list of all the crosses' codes
+     * @return QList<QString> - A list of all the crosses' names
      */
-    QList<QString> getCodes();
+    QList<QString> getNames();
 
     /*
-     * Gets the cross's code given its name
+     * Deletes a cross from the database
      *
-     * @param   const QString& name - Cross's name
+     * @param   const QString& code - Code
      *
-     * @return  QString - Cross's code
+     * @return  boolean true on success, false on failure
      */
-    QString getCode(const QString& name);
+    bool remove(const QString& code);
 
     /*
      * Creates a new cross entry
@@ -131,15 +140,6 @@ public:
         const QString& width,
         const QString& height
     );
-
-    /*
-     * Deletes a cross from the database
-     *
-     * @param   const QString& code - Code
-     *
-     * @return  boolean true on success, false on failure
-     */
-    bool remove(const QString& code);
 
 private:
     const QString table = "cross";

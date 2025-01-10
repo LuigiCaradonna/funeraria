@@ -63,6 +63,15 @@ public:
     QStringList getNames();
 
     /*
+     * Removes a accessory from the database
+     *
+     * @param const QString& code - Code
+     *
+     * @return  Boolean true on success, false on failure
+     */
+    bool remove(const QString& code);
+
+    /*
      * Adds an accessory into the database
      *
      * @param const QString& code   - Code
@@ -82,15 +91,6 @@ public:
      * @return  Boolean true on success, false on failure
      */
     bool update(const QString& old_code, const QString& code, const QString& name);
-
-    /*
-     * Removes a accessory from the database
-     *
-     * @param const QString& code - Code
-     *
-     * @return  Boolean true on success, false on failure
-     */
-    bool remove(const QString& code);
 
 private:
     const QString table;

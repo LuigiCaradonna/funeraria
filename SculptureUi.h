@@ -48,6 +48,41 @@ protected slots:
     /********** PROTECTED SLOTS **********/
 
     /*
+     * Closes the dialog window
+     *
+     * @return  void
+     */
+    void slotCloseDialog();
+
+    /*
+     * Computes the reduction coefficient to obtain the target height
+     *
+     * @return  void
+     */
+    void slotReductionHXY();
+
+    /*
+     * Computes the reduction coefficient to obtain the target width
+     *
+     * @return  void
+     */
+    void slotReductionWXY();
+
+    /*
+     * Computes the reduction coefficient to obtain the target depth
+     *
+     * @return  void
+     */
+    void slotReductionZ();
+
+    /*
+     * Saves the sculpture's data, responds to the dialog window's save button
+     *
+     * @return  void
+     */
+    void slotSave();
+
+    /*
      * Sets the selected sculpture's image path into the corresponding form field
      *
      * @return  void
@@ -62,46 +97,11 @@ protected slots:
     void slotSwitchEnableState();
 
     /*
-     * Saves the sculpture's data, responds to the dialog window's save button
-     *
-     * @return  void
-     */
-    void slotSave();
-
-    /*
      * Updates the sculpture's data, responds to the dialog window's update button
      *
      * @return  void
      */
     void slotUpdate();
-
-    /*
-     * Closes the dialog window
-     *
-     * @return  void
-     */
-    void slotCloseDialog();
-
-    /*
-     * Computes the reduction coefficient to obtain the target width
-     *
-     * @return  void
-     */
-    void slotReductionWXY();
-
-    /*
-     * Computes the reduction coefficient to obtain the target height
-     *
-     * @return  void
-     */
-    void slotReductionHXY();
-
-    /*
-     * Computes the reduction coefficient to obtain the target depth
-     *
-     * @return  void
-     */
-    void slotReductionZ();
 
 private:
     Ui::SculptureClass ui;
@@ -118,17 +118,17 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Updateds the UI filling the fields with the proper values for the selected sculpture
-     *
-     * @return  void
-     */
-    void updateForm();
-
-    /*
      * Checks the data inserted into the form to add/edit a sculpture
      *
      * @return  bool - True if the validation passes, false on failure
      */
     bool checkForm();
+
+    /*
+     * Updateds the UI filling the fields with the proper values for the selected sculpture
+     *
+     * @return  void
+     */
+    void updateForm();
 };
 

@@ -58,6 +58,34 @@ protected slots:
     /********** PROTECTED SLOTS **********/
 
     /*
+     * Closes the dialog window
+     *
+     * @return  void
+     */
+    void slotCloseDialog();
+
+    /*
+     * Deletes a tomb
+     *
+     * @return  void
+     */
+    void slotDelete();
+
+    /*
+     * Replaces the tomb's progressive number with the one selected among those not in use
+     *
+     * @return  void
+     */
+    void slotNotInUseProgressives();
+
+    /*
+     * Saves a tomb's data
+     *
+     * @return  void
+     */
+    void slotSave();
+
+    /*
      * Sets the current date to the proper input field
      *
      * @param const QString& - Name of the field where to set the current date
@@ -81,32 +109,11 @@ protected slots:
     void slotSetNoEngraving();
 
     /*
-     * Replaces the tomb's progressive number with the one selected among those not in use
+     * Updates the epigraph quantity line edit state
      *
      * @return  void
      */
-    void slotNotInUseProgressives();
-
-    /*
-     * Saves a tomb's data
-     *
-     * @return  void
-     */
-    void slotSave();
-
-    /*
-     * Deletes a tomb
-     *
-     * @return  void
-     */
-    void slotDelete();
-
-    /*
-     * Closes the dialog window
-     *
-     * @return  void
-     */
-    void slotCloseDialog();
+    void slotUpdateEpNumState();
 
     /*
      * Updates the notes field according to the other UI form fields
@@ -114,13 +121,6 @@ protected slots:
      * @return  void
      */
     void slotUpdateNotes();
-
-    /*
-     * Updates the epigraph quantity line edit state
-     *
-     * @return  void
-     */
-    void slotUpdateEpNumState();
 
     /*
      * Updates the pit combobox enabled state
@@ -166,15 +166,6 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Validates the form's data.
-     * 
-     * @param const QString& op - store / update
-     * 
-     * @return bool - True if the validation passes, false if it fails
-     */
-    bool validateForm(const QString& op );
-
-    /*
      * Checks if the dates inserted into the form are congruent
      *
      * @param const QString& order         - Order date
@@ -200,4 +191,13 @@ private:
      * @return void
      */
     void updateForm();
+
+    /*
+     * Validates the form's data.
+     *
+     * @param const QString& op - store / update
+     *
+     * @return bool - True if the validation passes, false if it fails
+     */
+    bool validateForm(const QString& op);
 };

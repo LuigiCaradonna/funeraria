@@ -48,6 +48,13 @@ protected slots:
     /********** PROTECTED SLOTS **********/
 
     /*
+     * Saves the sculpture's data, responds to the dialog window's save button
+     *
+     * @return  void
+     */
+    void slotSave();
+
+    /*
      * Sets the selected sculpture's image path into the corresponding form field
      *
      * @return  void
@@ -60,13 +67,6 @@ protected slots:
      * @return  void
      */
     void slotSwitchEnableState();
-
-    /*
-     * Saves the sculpture's data, responds to the dialog window's save button
-     *
-     * @return  void
-     */
-    void slotSave();
 
     /*
      * Updates the sculpture's data, responds to the dialog window's update button
@@ -95,17 +95,17 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Updateds the UI filling the fields with the proper values for the selected sculpture
-     *
-     * @return  void
-     */
-    void updateForm();
-
-    /*
      * Checks the data inserted into the form to add/edit a sculpture
      *
      * @return  bool - True if the validation passes, false on failure
      */
     bool checkForm();
+
+    /*
+     * Updateds the UI filling the fields with the proper values for the selected sculpture
+     *
+     * @return  void
+     */
+    void updateForm();
 };
 

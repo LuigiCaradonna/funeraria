@@ -34,13 +34,29 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
-     * Gets all the images' data
+     * Gets the given image's datails
      *
-     * @param   const QString& code - Optional, code of the image to get
+     * @param   const QString& code - Code
      *
-     * @return  QList<QMap<QString, QString>> - A list containing the images' data
+     * @return  QMap<QString, QString> - A map containing the image's data
      */
-    QList<QMap<QString, QString>> getListByCode(const QString& code = "");
+    QMap<QString, QString> getByCode(const QString& code);
+
+    /*
+     * Gets the image's code given its name
+     *
+     * @param   const QString& name - Image's name
+     *
+     * @return  QString - Image's code
+     */
+    QString getCode(const QString& name);
+
+    /*
+     * Gets all images' codes
+     *
+     * @return QList<QString> - A list of all the images' codes
+     */
+    QList<QString> getCodes();
 
     /*
      * Gets all the images' data
@@ -52,20 +68,13 @@ public:
     QList<QMap<QString, QString>> getListByName(const QString& name = "");
 
     /*
-     * Gets the given image's datails
+     * Gets all the images' data
      *
-     * @param   const QString& code - Code
+     * @param   const QString& code - Optional, code of the image to get
      *
-     * @return  QMap<QString, QString> - A map containing the image's data
+     * @return  QList<QMap<QString, QString>> - A list containing the images' data
      */
-    QMap<QString, QString> getByCode(const QString& code);
-
-    /*
-     * Gets all images' names
-     *
-     * @return QList<QString> - A list of all the images' names
-     */
-    QList<QString> getNames();
+    QList<QMap<QString, QString>> getListByCode(const QString& code = "");
 
     /*
      * Gets an image's codes given its name
@@ -77,20 +86,20 @@ public:
     QString getName(const QString& code);
 
     /*
-     * Gets all images' codes
+     * Gets all images' names
      *
-     * @return QList<QString> - A list of all the images' codes
+     * @return QList<QString> - A list of all the images' names
      */
-    QList<QString> getCodes();
+    QList<QString> getNames();
 
     /*
-     * Gets the image's code given its name
+     * Deletes an image from the database
      *
-     * @param   const QString& name - Image's name
+     * @param   const QString& code - Code
      *
-     * @return  QString - Image's code
+     * @return  boolean true on success, false on failure
      */
-    QString getCode(const QString& name);
+    bool remove(const QString& code);
 
     /*
      * Creates a new image entry
@@ -131,15 +140,6 @@ public:
         const QString& width,
         const QString& height
     );
-
-    /*
-     * Deletes an image from the database
-     *
-     * @param   const QString& code - Code
-     *
-     * @return  boolean true on success, false on failure
-     */
-    bool remove(const QString& code);
 
 private:
     const QString table = "drawing";

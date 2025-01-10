@@ -46,28 +46,6 @@ void DrawingUi::setCode(const QString& code)
 
 /********** PROTECTED SLOTS **********/
 
-void DrawingUi::slotSelectImage()
-{
-    Config* config = new Config();
-    QString path;
-    path = QFileDialog::getOpenFileName(parent, "Apri file", config->getDrawingPath(), "Images (*.png *.jpg *.jpeg *.bmp)");
-
-    if (!path.isNull()) {
-        QString image_file = QFileInfo(path).fileName();
-        this->ui.leImgPath->setText(image_file);
-    }
-
-    delete config;
-}
-
-void DrawingUi::slotSwitchEnableState()
-{
-    this->ui.leCode->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.leName->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.leWidth->setEnabled(this->ui.chbAllowEdit->isChecked());
-    this->ui.leHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
-}
-
 void DrawingUi::slotSave()
 {
     if (this->checkForm()) {
@@ -98,6 +76,28 @@ void DrawingUi::slotSave()
         // Close the dialog
         this->close();
     }
+}
+
+void DrawingUi::slotSelectImage()
+{
+    Config* config = new Config();
+    QString path;
+    path = QFileDialog::getOpenFileName(parent, "Apri file", config->getDrawingPath(), "Images (*.png *.jpg *.jpeg *.bmp)");
+
+    if (!path.isNull()) {
+        QString image_file = QFileInfo(path).fileName();
+        this->ui.leImgPath->setText(image_file);
+    }
+
+    delete config;
+}
+
+void DrawingUi::slotSwitchEnableState()
+{
+    this->ui.leCode->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leName->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leWidth->setEnabled(this->ui.chbAllowEdit->isChecked());
+    this->ui.leHeight->setEnabled(this->ui.chbAllowEdit->isChecked());
 }
 
 void DrawingUi::slotUpdate()
@@ -139,6 +139,61 @@ void DrawingUi::slotCloseDialog()
 }
 
 /********** PRIVATE FUNCTIONS **********/
+
+bool DrawingUi::checkForm()
+{
+    if (this->ui.leCode->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il codice del disegno è obbligatorio.");
+        message.exec();
+
+        return false;
+    }
+
+    if (this->ui.leName->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il nome del disegno è obbligatorio.");
+        message.exec();
+
+        return false;
+    }
+
+    if (this->ui.leImgPath->text().trimmed() == "") {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Il disegno è obbligatoria.");
+        message.exec();
+
+        return false;
+    }
+
+    if (!Helpers::isInt(this->ui.leWidth->text().trimmed()) || this->ui.leWidth->text().trimmed().toInt() < 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("La larghezza deve essere un numero intero maggiore di zero.");
+        message.exec();
+
+        return false;
+    }
+
+    if (!Helpers::isInt(this->ui.leHeight->text().trimmed()) || this->ui.leHeight->text().trimmed().toInt() < 1) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("L'altezza deve essere un numero intero maggiore di zero.");
+        message.exec();
+
+        return false;
+    }
+
+    return true;
+}
 
 void DrawingUi::updateForm()
 {
@@ -226,59 +281,4 @@ void DrawingUi::updateForm()
     }
 
     delete drawing;
-}
-
-bool DrawingUi::checkForm()
-{
-    if (this->ui.leCode->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il codice del disegno è obbligatorio.");
-        message.exec();
-
-        return false;
-    }
-
-    if (this->ui.leName->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il nome del disegno è obbligatorio.");
-        message.exec();
-
-        return false;
-    }
-
-    if (this->ui.leImgPath->text().trimmed() == "") {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("Il disegno è obbligatoria.");
-        message.exec();
-
-        return false;
-    }
-
-    if (!Helpers::isInt(this->ui.leWidth->text().trimmed()) || this->ui.leWidth->text().trimmed().toInt() < 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("La larghezza deve essere un numero intero maggiore di zero.");
-        message.exec();
-
-        return false;
-    }
-
-    if (!Helpers::isInt(this->ui.leHeight->text().trimmed()) || this->ui.leHeight->text().trimmed().toInt() < 1) {
-        QMessageBox message;
-        message.setWindowTitle("Funeraria");
-        message.setIcon(QMessageBox::Warning);
-        message.setText("L'altezza deve essere un numero intero maggiore di zero.");
-        message.exec();
-
-        return false;
-    }
-
-    return true;
 }

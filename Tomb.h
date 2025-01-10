@@ -33,6 +33,65 @@ public:
     /********** PUBLIC FUNCTIONS **********/
 
     /*
+     * Gets the accessories needed by the tombs not yet mounted
+     *
+     * @return  QList<QMap<QString, QString>>   a list of the accessories' name, type and quantity
+     */
+    QList<QMap<QString, QString>> accessoriesToMount();
+
+    /*
+     * Gets the tombs matching the given progressive number
+     *
+     * @param const int progressive     - Progressive number
+     *
+     * @return  QMap<QString, QString>  - The Tomb's details
+     */
+    QMap<QString, QString> getByProgressive(const int progressive);
+
+    /*
+     * Gets the given tomb's datails joined to the related tables
+     *
+     * @param   int - Progressive number
+     *
+     * @return  QMap<QString, QString> - A map containing the tomb's  datails joined to the related tables
+     */
+    QMap<QString, QString> getDetails(const int progressive);
+
+    /*
+     * Gets all the tombs in the archive giving the sum of them sort by year
+     *
+     * @return  QList<QMap<QString, QString>> - A list containing the general trend info
+     */
+    QList<QMap<QString, QString>> getGeneralTrend();
+
+    /*
+     * Provides the full path to the folder of a given tomb
+     *
+     * @param   const int       - Progressive number of the tomb
+     * @param   const QString&  - Deceased's name
+     *
+     * @return  QString - The full path to the tomb's folder.
+     */
+    QString getFolderPath(const int progressive, const QString& name);
+
+    /*
+     * Given the progressive number of the tomb, calculates its range and then the folder where it belongs.
+     * E.G.: progressive 2140, it belongs to 2100-2199
+     *
+     * @param   const int - Progressive number of the tomb
+     *
+     * @return  QString - The folder where the tomb belongs.
+     */
+    QString getGroupingFolder(const int progressive);
+
+    /*
+     * Gets the last progressive number in use
+     *
+     * @return  int - The last progressive number in use
+     */
+    int getLastProgresive();
+
+    /*
      * Gets all the tombs matching the given parameters
      * 
      * @param const int client_id       - Client's id
@@ -54,22 +113,75 @@ public:
     );
 
     /*
-     * Gets the tombs matching the given progressive number
+     * Gets the last progressive number in use
      *
-     * @param const int progressive     - Progressive number
-     *
-     * @return  QMap<QString, QString>  - The Tomb's details
+     * @return  QList<int> - The list of progressive numbers not in use
      */
-    QMap<QString, QString> getByProgressive(const int progressive);
+    QStringList getNotInUseProgressives();
 
     /*
-     * Gets the given tomb's datails joined to the related tables
+     * Gets all the tombs matching the given parameters and formats the report
      *
-     * @param   int - Progressive number
+     * @param const int client_id       - Client's id
+     * @param const int year            - Year of the tombs to get, 0 for all the years
+     * @param bool engraved             - True to get only the tombs that required to be engraved, false for all the tombs
+     * @param QString group             - How to group the result: by year, month or none
+     * @param bool by_client            - True to get the tombs count separately by client
      *
-     * @return  QMap<QString, QString> - A map containing the tomb's  datails joined to the related tables
+     * @return  QList<QMap<QString, QString>> - A list containing the Tombs' report
      */
-    QMap<QString, QString> getDetails(const int progressive);
+    QList<QMap<QString, QString>> getReport(
+        const int client_id,
+        const int year,
+        bool engraved = false,
+        QString group = "",
+        bool by_client = false
+    );
+
+    /*
+     * Checks if the tomb with the given progressive number has been confirmed
+     *
+     * @param   const int progressive - Tomb's progressive number
+     *
+     * @return  boolean true if the tomb has been confirmed, false otherwise
+     */
+    bool isConfirmed(const int progressive);
+
+    /*
+     * Checks if the tomb with the given progressive number has been delivered
+     *
+     * @param   const int progressive - Tomb's progressive number
+     *
+     * @return  boolean true if the tomb has been delivered, false otherwise
+     */
+    bool isDelivered(const int progressive);
+
+    /*
+     * Checks if the tomb with the given progressive number has been engraved
+     *
+     * @param   const int progressive - Tomb's progressive number
+     *
+     * @return  boolean true if the tomb has been engraved, false otherwise
+     */
+    bool isEngraved(const int progressive);
+
+    /*
+     * Checks if the tomb with the given progressive number has been paied
+     *
+     * @param   const int progressive - Tomb's progressive number
+     *
+     * @return  boolean true if the tomb has been paid, false otherwise
+     */
+    bool isPaid(const int progressive);
+
+    /*
+     * Checks if the given progressive number is in use
+     *
+     * @param   const int progressive - Tomb's progressive number
+     *
+     * @return  boolean true if the progressive number in use or if the query fails, false otherwise
+     */
+    bool isProgressiveInUse(const int progressive);
 
     /*
      * Gets the list of the tombs which can be engraved
@@ -79,18 +191,65 @@ public:
     QList<QMap<QString, QString>> tombsToEngrave();
 
     /*
-     * Gets the accessories needed by the tombs not yet mounted
-     *
-     * @return  QList<QMap<QString, QString>>   a list of the accessories' name, type and quantity
-     */
-    QList<QMap<QString, QString>> accessoriesToMount();
-
-    /*
      * Gets the list of the tombs not yet paid
      *
      * @return  QList<QMap<QString, QString>>   the list of the tombs not yet paid
      */
     QList<QMap<QString, QString>> tombsToPay();
+
+    /*
+     * Deletes a tomb from the database
+     *
+     * @param   const int progressive - Progressive number
+     *
+     * @return  void
+     */
+    void remove(const int progressive);
+
+    /*
+     * Sets a tomb's accessories as mounted
+     *
+     * @param   const int progressive - Progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
+    bool setAccessoriesMounted(const int progressive);
+
+    /*
+     * Sets a tomb as confirmed
+     *
+     * @param   const int progressive - Progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
+    bool setConfirmed(const int progressive);
+
+    /*
+     * Sets a tomb as delivered
+     *
+     * @param   const int progressive - Progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
+    bool setDelivered(const int progressive);
+
+    /*
+     * Sets a tomb as engraved
+     *
+     * @param   const int progressive - Progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
+    bool setEngraved(const int progressive);
+
+    /*
+     * Sets a tomb as paid
+     *
+     * @param   const int progressive - Progressive number
+     *
+     * @return  bool - True on success, false on failure
+     */
+    bool setPaid(const int progressive);
 
     /*
      * Updates a tomb into the database
@@ -271,165 +430,6 @@ public:
         const QString& engraved_at,
         const QString& delivered_at
     );
-
-    /*
-     * Deletes a tomb from the database
-     *
-     * @param   const int progressive - Progressive number
-     *
-     * @return  void
-     */
-    void remove(const int progressive);
-
-    /*
-     * Sets a tomb as confirmed
-     *
-     * @param   const int progressive - Progressive number
-     *
-     * @return  bool - True on success, false on failure
-     */
-    bool setConfirmed(const int progressive);
-
-    /*
-     * Sets a tomb as engraved
-     *
-     * @param   const int progressive - Progressive number
-     *
-     * @return  bool - True on success, false on failure
-     */
-    bool setEngraved(const int progressive);
-
-    /*
-     * Sets a tomb as delivered
-     *
-     * @param   const int progressive - Progressive number
-     *
-     * @return  bool - True on success, false on failure
-     */
-    bool setDelivered(const int progressive);
-
-    /*
-     * Sets a tomb as paid
-     *
-     * @param   const int progressive - Progressive number
-     *
-     * @return  bool - True on success, false on failure
-     */
-    bool setPaid(const int progressive);
-
-    /*
-     * Sets a tomb's accessories as mounted
-     *
-     * @param   const int progressive - Progressive number
-     *
-     * @return  bool - True on success, false on failure
-     */
-    bool setAccessoriesMounted(const int progressive);
-
-    /*
-     * Gets the last progressive number in use
-     *
-     * @return  int - The last progressive number in use
-     */
-    int getLastProgresive();
-
-    /*
-     * Gets the last progressive number in use
-     *
-     * @return  QList<int> - The list of progressive numbers not in use
-     */
-    QStringList getNotInUseProgressives();
-
-    /*
-     * Checks if the given progressive number is in use
-     *
-     * @param   const int progressive - Tomb's progressive number
-     *
-     * @return  boolean true if the progressive number in use or if the query fails, false otherwise
-     */
-    bool isProgressiveInUse(const int progressive);
-
-    /*
-     * Checks if the tomb with the given progressive number has been confirmed
-     *
-     * @param   const int progressive - Tomb's progressive number
-     *
-     * @return  boolean true if the tomb has been confirmed, false otherwise
-     */
-    bool isConfirmed(const int progressive);
-
-    /*
-     * Checks if the tomb with the given progressive number has been engraved
-     *
-     * @param   const int progressive - Tomb's progressive number
-     *
-     * @return  boolean true if the tomb has been engraved, false otherwise
-     */
-    bool isEngraved(const int progressive);
-
-    /*
-     * Checks if the tomb with the given progressive number has been delivered
-     *
-     * @param   const int progressive - Tomb's progressive number
-     *
-     * @return  boolean true if the tomb has been delivered, false otherwise
-     */
-    bool isDelivered(const int progressive);
-
-    /*
-     * Checks if the tomb with the given progressive number has been paied
-     *
-     * @param   const int progressive - Tomb's progressive number
-     *
-     * @return  boolean true if the tomb has been paied, false otherwise
-     */
-    bool isPaied(const int progressive);
-
-    /*
-     * Given the progressive number of the tomb, calculates its range and then the folder where it belongs.
-     * E.G.: progressive 2140, it belongs to 2100-2199
-     *
-     * @param   const int - Progressive number of the tomb
-     *
-     * @return  QString - The folder where the tomb belongs.
-     */
-    QString getGroupingFolder(const int progressive);
-
-    /*
-     * Provides the full path to the folder of a given tomb
-     *
-     * @param   const int       - Progressive number of the tomb
-     * @param   const QString&  - Deceased's name
-     *
-     * @return  QString - The full path to the tomb's folder.
-     */
-    QString getFolderPath(const int progressive, const QString& name);
-
-    /*
-     * Gets all the tombs matching the given parameters and formats the report
-     *
-     * @param const int client_id       - Client's id
-     * @param const int year            - Year of the tombs to get, 0 for all the years
-     * @param bool engraved             - True to get only the tombs that required to be engraved, false for all the tombs
-     * @param QString group             - How to group the result: by year, month or none
-     * @param bool by_client            - True to get the tombs count separately by client
-     *
-     * @return  QList<QMap<QString, QString>> - A list containing the Tombs' report
-     */
-    QList<QMap<QString, QString>> getReport(
-        const int client_id,
-        const int year,
-        bool engraved = false,
-        QString group = "",
-        bool by_client = false
-    );
-
-    /*
-     * Gets all the tombs in the archive giving the sum of them sort by year
-     *
-     * @return  QList<QMap<QString, QString>> - A list containing the general trend info
-     */
-    QList<QMap<QString, QString>> getGeneralTrend();
 
 private:
     const QString table = "tomb";

@@ -90,33 +90,6 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
-     * Generates the report as a table
-     *
-     * @param	QList<QMap<QString, QString>> report	- Report's data to show
-     * @param	const QString& group                    - Group policy, default none
-     * 
-     * @return  void
-     */
-    void showReportTable(QList<QMap<QString, QString>> report, const QString& group = "");
-
-    /*
-     * Generates the report as a bar chart
-     *
-     * @param	QList<QMap<QString, QString>> report	- Report's data to show
-     * @param	const QString& title	                - Graph title
-     * @param	const QString& category                 - Graph category
-     * @param	const QString& group	                - Group policy, default none
-     * 
-     * @return  void
-     */
-    void showReportGraph(
-        QList<QMap<QString, QString>> report, 
-        const QString& title, 
-        const QString& category,
-        const QString& group = ""
-    );
-
-    /*
      * Resets the layout containing the report
      *
      * @return  void
@@ -129,5 +102,32 @@ private:
      * @return void
      */
     void clearTable();
+
+    /*
+     * Generates the report as a bar chart
+     *
+     * @param	QList<QMap<QString, QString>> report	- Report's data to show
+     * @param	const QString& title	                - Graph title
+     * @param	const QString& category                 - Graph category
+     * @param	const QString& group	                - Group policy, default none
+     *
+     * @return  void
+     */
+    void showReportGraph(
+        QList<QMap<QString, QString>> report,
+        const QString& title,
+        const QString& category,
+        const QString& group = ""
+    );
+
+    /*
+     * Generates the report as a table
+     *
+     * @param	QList<QMap<QString, QString>> report	- Report's data to show
+     * @param	const QString& group                    - Group policy, default none
+     * 
+     * @return  void
+     */
+    void showReportTable(QList<QMap<QString, QString>> report, const QString& group = "");
 };
 

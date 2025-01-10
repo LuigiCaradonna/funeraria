@@ -40,6 +40,32 @@ QList<QMap<QString, QString>> Settings::get() {
     return list;
 }
 
+const int Settings::getBackupInterval()
+{
+    QSqlQuery query = QSqlQuery(this->db);
+
+    query.prepare("SELECT value FROM settings WHERE name = 'backup_interval'");
+
+    if (!query.exec() || !query.next()) {
+        return -1;
+    }
+
+    return query.value("value").toInt();
+}
+
+const int Settings::getBackupsToKeep()
+{
+    QSqlQuery query = QSqlQuery(this->db);
+
+    query.prepare("SELECT value FROM settings WHERE name = 'backups_to_keep'");
+
+    if (!query.exec() || !query.next()) {
+        return -1;
+    }
+
+    return query.value("value").toInt();
+}
+
 bool Settings::store(const QMap<QString, QString>& setting)
 {
     QSqlQuery query_check = QSqlQuery(this->db);
@@ -80,32 +106,3 @@ bool Settings::store(const QMap<QString, QString>& setting)
 
     return true;
 }
-
-const int Settings::getBackupInterval()
-{
-    QSqlQuery query = QSqlQuery(this->db);
-
-    query.prepare("SELECT value FROM settings WHERE name = 'backup_interval'");
-
-    if (!query.exec() || !query.next()) {
-        return -1;
-    }
-
-    return query.value("value").toInt();
-}
-
-const int Settings::getBackupsToKeep()
-{
-    QSqlQuery query = QSqlQuery(this->db);
-
-    query.prepare("SELECT value FROM settings WHERE name = 'backups_to_keep'");
-
-    if (!query.exec() || !query.next()) {
-        return -1;
-    }
-
-    return query.value("value").toInt();
-}
-
-
-/********** PRIVATE FUNCTIONS **********/
