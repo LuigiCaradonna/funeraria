@@ -23,6 +23,7 @@
 #include "SettingsUi.h"
 #include "Settings.h"
 #include "ReportUi.h"
+#include "TombsAlikeUi.h"
 #include "TombUi.h"
 #include "Tomb.h"
 #include "AccessoryUi.h"
@@ -367,7 +368,14 @@ protected slots:
     void slotTombFolder();
 
     /*
-     * Shows the tombs needed which can be engraved
+     * Shows an input window where to provide a tomb's properties and to look for similar tombs
+     *
+     * @return void
+     */
+    void slotTombsAlike();
+
+    /*
+     * Shows the tombs which can be engraved
      *
      * @return void
      */
@@ -408,6 +416,7 @@ private:
     ClientUi* client_ui;
     SettingsUi* settings_ui;
     TombUi* tomb_ui;
+    TombsAlikeUi* tombsAlike_ui;
     Sculpture* sculpture;
     SculptureUi* sculpture_ui;
     Cross* cross;
@@ -462,6 +471,7 @@ private:
     QPushButton* btnQuickToEngrave;
     QPushButton* btnQuickToPay;
     QPushButton* btnQuickToMount;
+    QPushButton* btnQuickTombsAlike;
     QPushButton* btnQuickNewTomb;
     QSpacerItem* topQuickAccessSpacer;
 
@@ -502,6 +512,16 @@ private:
     /********** PRIVATE FUNCTIONS **********/
 
     /*
+     * Adds a row to the table that shows the client's orders.
+     *
+     * @param QMap<QString, QString> &tomb  - Tomb's data
+     * @param int row  - Row's number
+     *
+     * @return void
+     */
+    void addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row);
+
+    /*
      * Removes all the content from a container.
      *
      * @param QBoxLayout* container   - Pointer to the container to clear
@@ -523,16 +543,6 @@ private:
      * @return void
      */
     void closeWindow();
-
-    /*
-     * Adds a row to the table that shows the client's orders.
-     *
-     * @param QMap<QString, QString> &tomb  - Tomb's data
-     * @param int row  - Row's number
-     *
-     * @return void
-     */
-    void addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row);
 
     /*
      * Initialize the top bar for the clients view.

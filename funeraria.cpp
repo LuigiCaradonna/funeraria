@@ -116,6 +116,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->settings_ui = new SettingsUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->report_ui = new ReportUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->tomb_ui = new TombUi(this->db->db, this->css_folder, this->icons_folder, this);
+        this->tombsAlike_ui = new TombsAlikeUi(this->db->db, this->css_folder, this->icons_folder, this);
         this->vase = new Accessory(this->db->db, "vase");
         this->lamp = new Accessory(this->db->db, "lamp");
         this->flame = new Accessory(this->db->db, "flame");
@@ -218,6 +219,7 @@ Funeraria::~Funeraria()
     delete this->settings_ui;
     delete this->report_ui;
     delete this->tomb_ui;
+    delete this->tombsAlike_ui;
     delete this->vase;
     delete this->lamp;
     delete this->flame;
@@ -1853,6 +1855,25 @@ void Funeraria::slotTombFolder()
     QDesktopServices::openUrl(QUrl(path, QUrl::TolerantMode));
 }
 
+void Funeraria::slotTombsAlike()
+{
+    this->tombsAlike_ui->reset();
+    this->tombsAlike_ui->setModal(true);
+    if (this->tombsAlike_ui->exec() == 1) {
+        QString client = this->tombsAlike_ui->getClient();
+        QString material = this->tombsAlike_ui->getMaterial();
+        int ep_amount = this->tombsAlike_ui->getEpAmount();
+        int pit_amount = this->tombsAlike_ui->getPitsAmount();
+        bool relief = this->tombsAlike_ui->getRelief();
+        bool inscription = this->tombsAlike_ui->getInscription();
+        bool mount = this->tombsAlike_ui->getMount();
+        bool provided = this->tombsAlike_ui->getProvided();
+        bool cross = this->tombsAlike_ui->getCross();
+        bool drawing = this->tombsAlike_ui->getDrawing();
+        bool sculpture = this->tombsAlike_ui->getSculpture();
+    }
+}
+
 void Funeraria::slotTombsToEngrave()
 {
     Tomb* tomb = new Tomb(this->db->db);
@@ -2019,66 +2040,6 @@ void Funeraria::slotTombByProgressive()
 
 /********** PRIVATE FUNCTIONS **********/
 
-void Funeraria::clearContainer(QBoxLayout* container)
-{
-    // Clear the bottom bar
-    QLayoutItem* item;
-    while ((item = container->takeAt(0)) != 0) {
-        // If the item is a pushbutton
-        QPushButton* pbutton = qobject_cast<QPushButton*>(item->widget());
-        if (pbutton) {
-            // Disconnect any connections
-            pbutton->disconnect();
-            // Reparent the button
-            pbutton->setParent(nullptr); // Reparent the button
-
-            delete pbutton;
-            pbutton = nullptr;
-        }
-        else {
-            delete item->widget();
-        }
-
-        delete item;
-    }
-}
-
-void Funeraria::clearTable()
-{
-    int rows = this->ui.tableWidget->rowCount();
-    int columns = this->ui.tableWidget->columnCount();
-
-    for (int i = 0; i < rows; i++) {
-        this->ui.tableWidget->setRowHeight(i, this->row_height);
-        for (int j = 0; j < columns; j++) {
-            // Check if the cell's content is a pushbutton
-            QPushButton* pbutton = qobject_cast<QPushButton*>(this->ui.tableWidget->cellWidget(i, j));
-            if (pbutton) {
-                // Disconnect any connections
-                pbutton->disconnect();
-                // Reparent the button
-                pbutton->setParent(nullptr);
-
-                delete pbutton;
-                pbutton = nullptr;
-            }
-            else {
-                QTableWidgetItem* item = this->ui.tableWidget->item(i, j);
-                delete item;
-                item = nullptr;
-            }
-        }
-    }
-
-    this->ui.tableWidget->clear();
-}
-
-void Funeraria::closeWindow()
-{
-    this->up = false;
-    this->close();
-}
-
 void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row)
 {
     QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
@@ -2094,7 +2055,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     Tomb* tomb_to_check = new Tomb(this->db->db);
 
     QPushButton* pb_set_paid = new QPushButton(this->ui.tableWidget);
-    if (tomb_to_check->isPaied(tomb["progressive"].toInt())) {
+    if (tomb_to_check->isPaid(tomb["progressive"].toInt())) {
         pb_set_paid->setIcon(QIcon(this->icons_folder + "ok-64.png"));
         pb_set_paid->setToolTip("Pagata");
         pb_set_paid->setEnabled(false);
@@ -2245,6 +2206,66 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     this->ui.tableWidget->setCellWidget(row, 13, pb_open_folder); // Open folder button
     this->ui.tableWidget->setCellWidget(row, 14, pb_set_paid); // Paid tomb button
     this->ui.tableWidget->setCellWidget(row, 15, pb_dynamic); // Dynamic tomb button
+}
+
+void Funeraria::clearContainer(QBoxLayout* container)
+{
+    // Clear the bottom bar
+    QLayoutItem* item;
+    while ((item = container->takeAt(0)) != 0) {
+        // If the item is a pushbutton
+        QPushButton* pbutton = qobject_cast<QPushButton*>(item->widget());
+        if (pbutton) {
+            // Disconnect any connections
+            pbutton->disconnect();
+            // Reparent the button
+            pbutton->setParent(nullptr); // Reparent the button
+
+            delete pbutton;
+            pbutton = nullptr;
+        }
+        else {
+            delete item->widget();
+        }
+
+        delete item;
+    }
+}
+
+void Funeraria::clearTable()
+{
+    int rows = this->ui.tableWidget->rowCount();
+    int columns = this->ui.tableWidget->columnCount();
+
+    for (int i = 0; i < rows; i++) {
+        this->ui.tableWidget->setRowHeight(i, this->row_height);
+        for (int j = 0; j < columns; j++) {
+            // Check if the cell's content is a pushbutton
+            QPushButton* pbutton = qobject_cast<QPushButton*>(this->ui.tableWidget->cellWidget(i, j));
+            if (pbutton) {
+                // Disconnect any connections
+                pbutton->disconnect();
+                // Reparent the button
+                pbutton->setParent(nullptr);
+
+                delete pbutton;
+                pbutton = nullptr;
+            }
+            else {
+                QTableWidgetItem* item = this->ui.tableWidget->item(i, j);
+                delete item;
+                item = nullptr;
+            }
+        }
+    }
+
+    this->ui.tableWidget->clear();
+}
+
+void Funeraria::closeWindow()
+{
+    this->up = false;
+    this->close();
 }
 
 void Funeraria::initClientsTopBar()
@@ -2476,6 +2497,7 @@ void Funeraria::initTombsTopBar()
 void Funeraria::initTopBarQuickAccess()
 {
     int tooltip_duration = 2500;
+
     // Reports button
     this->btnQuickReports = new QPushButton();
     this->btnQuickReports->setMinimumSize(QSize(48, 48));
@@ -2540,6 +2562,14 @@ void Funeraria::initTopBarQuickAccess()
     this->btnQuickToPay->setToolTip("Lapidi da saldare");
     this->btnQuickToPay->setToolTipDuration(tooltip_duration);
 
+    // Search similar tomb button
+    this->btnQuickTombsAlike = new QPushButton();
+    this->btnQuickTombsAlike->setMinimumSize(QSize(48, 48));
+    this->btnQuickTombsAlike->setIcon(QIcon(this->icons_folder + "detail-50.png"));
+    this->btnQuickTombsAlike->setIconSize(QSize(32, 32));
+    this->btnQuickTombsAlike->setToolTip("Cerca lapidi simili");
+    this->btnQuickTombsAlike->setToolTipDuration(tooltip_duration);
+
     // New tomb button
     this->btnQuickNewTomb = new QPushButton();
     this->btnQuickNewTomb->setMinimumSize(QSize(48, 48));
@@ -2563,6 +2593,7 @@ void Funeraria::initTopBarQuickAccess()
     topBarQuickAccessLayout->addWidget(this->btnQuickToEngrave);
     topBarQuickAccessLayout->addWidget(this->btnQuickToMount);
     topBarQuickAccessLayout->addWidget(this->btnQuickToPay);
+    topBarQuickAccessLayout->addWidget(this->btnQuickTombsAlike);
     topBarQuickAccessLayout->addWidget(this->btnQuickNewTomb);
     topBarQuickAccessLayout->addSpacerItem(this->topQuickAccessSpacer);
 
@@ -2575,6 +2606,7 @@ void Funeraria::initTopBarQuickAccess()
     this->connect(this->btnQuickToEngrave, &QPushButton::clicked, this, &Funeraria::slotTombsToEngrave);
     this->connect(this->btnQuickToMount, &QPushButton::clicked, this, &Funeraria::slotAccessoriesToMount);
     this->connect(this->btnQuickToPay, &QPushButton::clicked, this, &Funeraria::slotTombsNotPaid);
+    this->connect(this->btnQuickTombsAlike, &QPushButton::clicked, this, &Funeraria::slotTombsAlike);
     this->connect(this->btnQuickNewTomb, &QPushButton::clicked, this, &Funeraria::slotNewTomb);
 }
 
