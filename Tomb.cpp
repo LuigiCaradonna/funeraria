@@ -84,14 +84,20 @@ QList<QMap<QString, QString>> Tomb::getAlike(
     QString cr = "";
     if (cross)
         cr = " AND cross_code != 'NO' ";
+    else
+        cr = " AND cross_code == 'NO' ";
 
     QString dr = "";
     if (drawing)
         dr = " AND drawing_code != 'NO' ";
+    else
+        dr = " AND drawing_code == 'NO' ";
 
     QString sc = "";
     if (sculpture)
         sc = " AND sculpture_code != 'NO' ";
+    else
+        sc = " AND drawing_code == 'NO' ";
 
     QString query_string = "SELECT * FROM " + this->table + " "
         " WHERE client_id = :client_id "
@@ -102,25 +108,13 @@ QList<QMap<QString, QString>> Tomb::getAlike(
         " AND mounted = :mount "
         " AND mat_provided = :provided " + cr + dr + sc + " "
         " ORDER BY progressive ASC";
-    
-    QString q = "SELECT * FROM " + this->table + " "
-        " WHERE client_id = " + QString::number(client_id) +
-        " AND material_code = '" + material + "'"
-        " AND ep_amount = " + QString::number(ep_amount) + pit + " "
-        " AND ep_relief = " + QString::number(relief) +
-        " AND inscription = " + QString::number(inscription) +
-        " AND mounted = " + QString::number(mount) +
-        " AND mat_provided = " + QString::number(provided) + cr + dr + sc + " "
-        " ORDER BY progressive ASC";
 
-    qDebug() << q; return list;
-    
     query.prepare(query_string);
 
     query.bindValue(":client_id", client_id);
     query.bindValue(":material_code", material);
     query.bindValue(":ep_amount", ep_amount);
-    query.bindValue(":ep_relief", relief);
+    query.bindValue(":relief", relief);
     query.bindValue(":inscription", inscription);
     query.bindValue(":mount", mount);
     query.bindValue(":provided", provided);
