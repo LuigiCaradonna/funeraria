@@ -1860,17 +1860,19 @@ void Funeraria::slotTombsAlike()
     this->tombsAlike_ui->reset();
     this->tombsAlike_ui->setModal(true);
     if (this->tombsAlike_ui->exec() == 1) {
-        QString client = this->tombsAlike_ui->getClient();
-        QString material = this->tombsAlike_ui->getMaterial();
-        int ep_amount = this->tombsAlike_ui->getEpAmount();
-        int pit_amount = this->tombsAlike_ui->getPitsAmount();
-        bool relief = this->tombsAlike_ui->getRelief();
-        bool inscription = this->tombsAlike_ui->getInscription();
-        bool mount = this->tombsAlike_ui->getMount();
-        bool provided = this->tombsAlike_ui->getProvided();
-        bool cross = this->tombsAlike_ui->getCross();
-        bool drawing = this->tombsAlike_ui->getDrawing();
-        bool sculpture = this->tombsAlike_ui->getSculpture();
+        this->tombsAlike(
+            this->client->getId(this->tombsAlike_ui->getClient()),
+            this->material->getCode(this->tombsAlike_ui->getMaterial()),
+            this->tombsAlike_ui->getEpAmount(),
+            this->tombsAlike_ui->getPitsAmount(),
+            this->tombsAlike_ui->getRelief(),
+            this->tombsAlike_ui->getInscription(),
+            this->tombsAlike_ui->getMount(),
+            this->tombsAlike_ui->getProvided(),
+            this->tombsAlike_ui->getCross(),
+            this->tombsAlike_ui->getDrawing(),
+            this->tombsAlike_ui->getSculpture()
+        );
     }
 }
 
@@ -2894,6 +2896,31 @@ void Funeraria::sortColumnDirection(const QString& column)
             this->sort_column_direction = "ASC";
         }
     }
+}
+
+void Funeraria::tombsAlike(
+    int client_id, const QString& material, int ep_amount, int pits_amount, 
+    bool relief, bool inscription, bool mount, bool provided, bool cross, bool drawing, bool sculpture
+)
+{
+    Tomb* tomb = new Tomb(this->db->db);
+
+    this->showTopBar("tomb");
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
+    this->current_table = "tomb";
+
+    QList<QMap<QString, QString>> tombs = tomb->getAlike(
+        client_id, material, ep_amount, pits_amount, relief, inscription, mount, provided, cross, drawing, sculpture
+    );
+
+    this->showClientOrders(tombs);
+
+    delete tomb;
 }
 
 void Funeraria::updateClientsCombobox()

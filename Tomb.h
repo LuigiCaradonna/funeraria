@@ -40,6 +40,37 @@ public:
     QList<QMap<QString, QString>> accessoriesToMount();
 
     /*
+     * Gets all the tombs matching the given parameters
+     *
+     * @param const int client_id       - Client's id
+     * @param const QString& material   - Material's code
+     * @param int ep_amount             - Amount of epigraphs
+     * @param int pits_amount           - Amount of pits
+     * @param bool relief               - Relief epigraph's presence
+     * @param bool inscription          - Inscription's presence
+     * @param bool mount                - Whether the tomb was assembled
+     * @param bool provided             - Whether the material was provided by the client
+     * @param bool cross                - Cross' presence
+     * @param bool drawing              - Drawing's presence
+     * @param bool sculpture            - Sculpture's presence
+     *
+     * @return  QList<QMap<QString, QString>> - A list containing the Tombs' details
+     */
+    QList<QMap<QString, QString>> getAlike(
+        const int client_id,
+        const QString& material,
+        const int ep_amount,
+        const int pits_amount,
+        bool relief,
+        bool inscription,
+        bool mount,
+        bool provided,
+        bool cross,
+        bool drawing,
+        bool sculpture
+    );
+
+    /*
      * Gets the tombs matching the given progressive number
      *
      * @param const int progressive     - Progressive number
@@ -252,7 +283,7 @@ public:
     bool setPaid(const int progressive);
 
     /*
-     * Updates a tomb into the database
+     * Stores a tomb into the database
      *
      * @param const int progressive             - Tomb's progressive number
      * @param const int client_id               - Client's id
