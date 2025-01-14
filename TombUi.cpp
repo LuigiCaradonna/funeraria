@@ -363,10 +363,10 @@ void TombUi::slotUpdateNotes()
     if (this->ui.cbFormat->currentIndex() != 0) notes += this->ui.cbFormat->currentText() + ", ";
     */
     if (this->ui.rbEngraveYes->isChecked()) {
-        QString epigrafi = "epigrafe";
-        if (this->ui.leEpigraphAmount->text().toInt() > 1) epigrafi = "epigrafi";
+        QString epigrafi = "Epigrafe";
+        if (this->ui.leEpigraphAmount->text().toInt() > 1) epigrafi = this->ui.leEpigraphAmount->text() + " " + "epigrafi";
         if (this->ui.rbEpReliefYes->isChecked()) epigrafi += " a rilievo";
-        notes += this->ui.leEpigraphAmount->text() + " " + epigrafi + " - ";
+        notes += epigrafi + " - ";
     }
     else if (this->ui.rbEngraveNo->isChecked()) notes += "Solo materiale - ";
     else if (this->ui.rbEngraveBronze->isChecked()) notes += "Bronzi applicati - ";
@@ -456,10 +456,10 @@ void TombUi::slotUpdateNotes()
     else if (this->ui.cbFrameOne->currentIndex() != 0 && this->ui.cbPitOne->currentIndex() != 0) {
 
         if (this->frame->getCode(this->ui.cbFrameOne->currentText()) == "NO") {
-            notes += "1 scavo senza cornice - ";
+            notes += "Scavo senza cornice - ";
         }
         else {
-            notes += "1 scavo cornice " + this->ui.cbFrameOne->currentText().toLower() + " - ";
+            notes += "Scavo cornice " + this->ui.cbFrameOne->currentText().toLower() + " - ";
         }
     }
 
