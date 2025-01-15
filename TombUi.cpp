@@ -32,42 +32,6 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->drawing = new Drawing(this->db);
 
     // Connect the UI elements
-    this->connect(this->ui.cbMaterial, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbType, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbFormat, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbVase, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbLamp, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbFlame, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbCross, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbDrawing, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbSculpture, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.leScHeight, &QLineEdit::textChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbEngraveNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbEngraveBronze, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbMountYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbMountNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbMProvYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbMProvNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbEpReliefYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbEpReliefNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbInscriptionYes, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.rbInscriptionNo, &QRadioButton::clicked, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.leEpigraphAmount, &QLineEdit::textChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbPitOne, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbFrameOne, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbPitTwo, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbFrameTwo, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbPitThree, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbFrameThree, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbPitFour, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbFrameFour, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbPitFive, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbFrameFive, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbPitSix, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-    this->connect(this->ui.cbFrameSix, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdateNotes);
-
     this->connect(this->ui.rbEngraveYes, &QRadioButton::clicked, this, &TombUi::slotUpdateEpNumState);
     this->connect(this->ui.rbEngraveNo, &QRadioButton::clicked, this, &TombUi::slotUpdateEpNumState);
     this->connect(this->ui.rbEngraveBronze, &QRadioButton::clicked, this, &TombUi::slotUpdateEpNumState);
@@ -81,6 +45,7 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->connect(this->ui.cbPitFive, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
     this->connect(this->ui.cbPitSix, &QComboBox::currentIndexChanged, this, &TombUi::slotUpdatePitState);
 
+    this->connect(this->ui.btnCompNotes, &QPushButton::clicked, this, &TombUi::slotUpdateNotes);
     this->connect(this->ui.btnSave, &QPushButton::clicked, this, &TombUi::slotSave);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &TombUi::slotCloseDialog);
 
