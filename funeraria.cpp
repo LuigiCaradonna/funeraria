@@ -102,6 +102,12 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.actionTEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
         this->ui.actionTPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
         this->ui.actionMAccessories->setIcon(QIcon(this->icons_folder + "mount-50.png"));
+        this->ui.menuTypes->setIcon(QIcon(this->icons_folder + "tomb-64.png"));
+        this->ui.actionTTNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionTTList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.menuFormats->setIcon(QIcon(this->icons_folder + "tomb-64.png"));
+        this->ui.actionTFNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
+        this->ui.actionTFList->setIcon(QIcon(this->icons_folder + "list-50.png"));
 
         // Instantiate objects
         this->context_menu = new QMenu(this);
@@ -521,6 +527,12 @@ void Funeraria::slotDeleteItem() {
         else if (this->current_table == "drawing") {
             if (!this->drawing->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
         }
+        else if (this->current_table == "tomb_type") {
+            if (!this->tomb_type->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
+        }
+        else if (this->current_table == "tomb_format") {
+            if (!this->tomb_format->remove(this->ui.tableWidget->item(row, 0)->text()))  errors = true;
+        }
 
         if (!errors) {
             QMessageBox message;
@@ -536,7 +548,9 @@ void Funeraria::slotDeleteItem() {
                 this->current_table == "flame" ||
                 this->current_table == "pit" ||
                 this->current_table == "frame" ||
-                this->current_table == "material")
+                this->current_table == "material" ||
+                this->current_table == "tomb_type" ||
+                this->current_table == "tomb_format")
             {
                 this->slotShowItems(this->current_table);
             }
@@ -644,6 +658,28 @@ void Funeraria::slotEditItem() {
         material_ui->exec();
 
         delete material_ui;
+    }
+    else if (this->current_table == "tomb_type") {
+        AccessoryUi* tomb_type_ui = new AccessoryUi(this->db->db, "tomb_type", this->css_folder, this->icons_folder, this);
+        tomb_type_ui->updateForm(
+            this->ui.tableWidget->item(row, 0)->text(),
+            this->ui.tableWidget->item(row, 1)->text()
+        );
+        tomb_type_ui->setModal(true);
+        tomb_type_ui->exec();
+
+        delete tomb_type_ui;
+    }
+    else if (this->current_table == "tomb_format") {
+        AccessoryUi* tomb_format_ui = new AccessoryUi(this->db->db, "tomb_format", this->css_folder, this->icons_folder, this);
+        tomb_format_ui->updateForm(
+            this->ui.tableWidget->item(row, 0)->text(),
+            this->ui.tableWidget->item(row, 1)->text()
+        );
+        tomb_format_ui->setModal(true);
+        tomb_format_ui->exec();
+
+        delete tomb_format_ui;
     }
 
     this->showItems(this->current_table, row);
@@ -2873,6 +2909,7 @@ void Funeraria::showItems(const QString& type, int row)
     this->ui.tableWidget->setColumnWidth(0, 70);
     this->ui.tableWidget->setColumnWidth(1, 300);
     this->ui.tableWidget->setColumnWidth(2, 90);
+    this->ui.tableWidget->setColumnWidth(3, 90);
 
     int row_number = 1;
     for (int i = 0; i < accessories.size(); i++) {
