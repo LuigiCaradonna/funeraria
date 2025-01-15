@@ -137,10 +137,26 @@
     <property name="title">
      <string>Lapidi</string>
     </property>
+    <widget class="QMenu" name="menuTipologie">
+     <property name="title">
+      <string>Tipologie</string>
+     </property>
+     <addaction name="actionTTNew"/>
+     <addaction name="actionTTList"/>
+    </widget>
+    <widget class="QMenu" name="menuFormati">
+     <property name="title">
+      <string>Formati</string>
+     </property>
+     <addaction name="actionTFNew"/>
+     <addaction name="actionTFList"/>
+    </widget>
     <addaction name="actionTNew"/>
     <addaction name="actionTEngrave"/>
     <addaction name="actionTPay"/>
     <addaction name="actionMAccessories"/>
+    <addaction name="menuTipologie"/>
+    <addaction name="menuFormati"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -380,6 +396,26 @@
    </property>
   </action>
   <action name="actionCrList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+  </action>
+  <action name="actionTTNew">
+   <property name="text">
+    <string>Nuova</string>
+   </property>
+  </action>
+  <action name="actionTTList">
+   <property name="text">
+    <string>Elenco</string>
+   </property>
+  </action>
+  <action name="actionTFNew">
+   <property name="text">
+    <string>Nuovo</string>
+   </property>
+  </action>
+  <action name="actionTFList">
    <property name="text">
     <string>Elenco</string>
    </property>

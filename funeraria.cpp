@@ -123,6 +123,8 @@ Funeraria::Funeraria(QWidget* parent)
         this->pit = new Accessory(this->db->db, "pit");
         this->frame = new Accessory(this->db->db, "frame");
         this->material = new Accessory(this->db->db, "material");
+        this->tomb_type = new Accessory(this->db->db, "tomb_type");
+        this->tomb_format = new Accessory(this->db->db, "tomb_format");
 
         // Top bars' init, must be after the objects instantiation, some of them are required to build the bars
         this->initTopBarQuickAccess();
@@ -134,10 +136,10 @@ Funeraria::Funeraria(QWidget* parent)
 
         // Signal emitted from the menu "Files"
         this->connect(this->ui.actionBackupCSV, SIGNAL(triggered()), this, SLOT(slotBackupDbToCSV()));
-        this->connect(this->ui.actionSettings,  SIGNAL(triggered()), this, SLOT(slotShowSettings()));
+        this->connect(this->ui.actionSettings, SIGNAL(triggered()), this, SLOT(slotShowSettings()));
 
         // Signal emitted from the menu "Clienti"
-        this->connect(this->ui.actionCNew,  SIGNAL(triggered()), this, SLOT(slotNewClient()));
+        this->connect(this->ui.actionCNew, SIGNAL(triggered()), this, SLOT(slotNewClient()));
         this->connect(this->ui.actionCList, SIGNAL(triggered()), this, SLOT(slotShowClients()));
 
         // Signal emitted from the menu "Lapidi"
@@ -148,18 +150,19 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionSearchByProgressive, SIGNAL(triggered()), this, SLOT(slotTombByProgressive()));
 
         // Signal emitted from the menu "Sculture"
+        this->connect(this->ui.actionScNew, SIGNAL(triggered()), this, SLOT(slotNewSculpture()));
         this->connect(this->ui.actionScList, SIGNAL(triggered()), this, SLOT(slotShowSculptures()));
-        this->connect(this->ui.actionScNew,  SIGNAL(triggered()), this, SLOT(slotNewSculpture()));
 
         // Signal emitted from the menu "Croci"
-        this->connect(this->ui.actionCrList, SIGNAL(triggered()), this, SLOT(slotShowCrosses()));
         this->connect(this->ui.actionCrNew, SIGNAL(triggered()), this, SLOT(slotNewCross()));
+        this->connect(this->ui.actionCrList, SIGNAL(triggered()), this, SLOT(slotShowCrosses()));
 
         // Signal emitted from the menu "Disegni"
-        this->connect(this->ui.actionImList, SIGNAL(triggered()), this, SLOT(slotShowDrawing()));
         this->connect(this->ui.actionImNew, SIGNAL(triggered()), this, SLOT(slotNewDrawing()));
+        this->connect(this->ui.actionImList, SIGNAL(triggered()), this, SLOT(slotShowDrawing()));
+
         /* 
-         * Map the signal coming from the menu "Accessori" to call the same function (slotNewItem) 
+         * Map the signal coming from the menues "Accessori, Materiali, Lapidi" to call the same function (slotNewItem) 
          * with the proper parameter
          */
         this->new_item_mapper = new QSignalMapper(this);
@@ -169,16 +172,20 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionFNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionFrNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionPitNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
+        this->connect(this->ui.actionTTNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
+        this->connect(this->ui.actionTFNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         new_item_mapper->setMapping(this->ui.actionMNew, "material");
         new_item_mapper->setMapping(this->ui.actionVNew, "vase");
         new_item_mapper->setMapping(this->ui.actionLNew, "lamp");
         new_item_mapper->setMapping(this->ui.actionFNew, "flame");
         new_item_mapper->setMapping(this->ui.actionFrNew, "frame");
         new_item_mapper->setMapping(this->ui.actionPitNew, "pit");
+        new_item_mapper->setMapping(this->ui.actionTTNew, "tomb_type");
+        new_item_mapper->setMapping(this->ui.actionTFNew, "tomb_format");
         this->connect(new_item_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotNewItem);
 
         /* 
-         * Map the signal coming from the menu "Accessori" to call the same function (slotShowItems) 
+         * Map the signal coming from the menu "Accessori, Materiali, Lapidi" to call the same function (slotShowItems) 
          * with the proper parameter
          */
         this->show_items_mapper = new QSignalMapper(this);
@@ -188,12 +195,16 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionFList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionFrList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionPitList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
+        this->connect(this->ui.actionTTList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
+        this->connect(this->ui.actionTFList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         show_items_mapper->setMapping(this->ui.actionMList, "material");
         show_items_mapper->setMapping(this->ui.actionVList, "vase");
         show_items_mapper->setMapping(this->ui.actionLList, "lamp");
         show_items_mapper->setMapping(this->ui.actionFList, "flame");
         show_items_mapper->setMapping(this->ui.actionFrList, "frame");
         show_items_mapper->setMapping(this->ui.actionPitList, "pit");
+        show_items_mapper->setMapping(this->ui.actionTTList, "tomb_type");
+        show_items_mapper->setMapping(this->ui.actionTFList, "tomb_format");
         this->connect(show_items_mapper, &QSignalMapper::mappedString, this, &Funeraria::slotShowItems);
 
         // Create a qPushButton for each client for the quick access bar
@@ -225,6 +236,8 @@ Funeraria::~Funeraria()
     delete this->flame;
     delete this->pit;
     delete this->material;
+    delete this->tomb_type;
+    delete this->tomb_format;
     delete this->show_items_mapper;
     delete this->new_item_mapper;
 
@@ -776,6 +789,22 @@ void Funeraria::slotNewItem(const QString& type)
         pit_ui->exec();
 
         delete pit_ui;
+    }
+    else if (type == "tomb_type") {
+        AccessoryUi* tomb_type_ui = new AccessoryUi(this->db->db, "tomb_type", this->css_folder, this->icons_folder, this);
+        tomb_type_ui->updateForm();
+        tomb_type_ui->setModal(true);
+        tomb_type_ui->exec();
+
+        delete tomb_type_ui;
+    }
+    else if (type == "tomb_format") {
+        AccessoryUi* tomb_format_ui = new AccessoryUi(this->db->db, "tomb_format", this->css_folder, this->icons_folder, this);
+        tomb_format_ui->updateForm();
+        tomb_format_ui->setModal(true);
+        tomb_format_ui->exec();
+
+        delete tomb_format_ui;
     }
     else {
         // The type requested is not valid
@@ -2820,6 +2849,12 @@ void Funeraria::showItems(const QString& type, int row)
     }
     else if (type == "pit") {
         accessories = this->pit->get();
+    }
+    else if (type == "tomb_type") {
+        accessories = this->tomb_type->get();
+    }
+    else if (type == "tomb_format") {
+        accessories = this->tomb_format->get();
     }
     else {
         // The type requested is not valid

@@ -430,6 +430,8 @@ private:
     Accessory* pit;
     Accessory* frame;
     Accessory* material;
+    Accessory* tomb_type;
+    Accessory* tomb_format;
 
     QSignalMapper* show_items_mapper;
     QSignalMapper* new_item_mapper;

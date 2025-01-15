@@ -64,6 +64,8 @@ void AccessoryUi::updateForm(const QString& code, const QString& name)
     else if (this->table == "pit") {
         this->setWindowTitle(action + " scavo");
     }
+
+    this->ui.leCode->setFocus();
 }
 
 /********** PRIVATE SLOTS **********/
