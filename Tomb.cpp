@@ -280,7 +280,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         "tomb.type_code, tomb_type.name AS type_name, tomb.format_code, tomb_format.name AS format_name, "
         "tomb.vase_code, vase.name AS vase_name, tomb.lamp_code, lamp.name AS lamp_name, tomb.flame_code, flame.name AS flame_name, "
         "tomb.cross_code, cross.name AS cross_name, tomb.drawing_code, drawing.name AS drawing_name, "
-        "tomb.sculpture_code, sculpture.name AS sculpture_name, tomb.sculpture_h, tomb.mounted, tomb.ep_relief, tomb.inscription, "
+        "tomb.sculpture_code, sculpture.name AS sculpture_name, tomb.sculpture_h, tomb.mounted, tomb.mat_provided, tomb.ep_relief, tomb.inscription, "
         "tomb.pit_one, tomb.frame_one, "
         "tomb.pit_two, tomb.frame_two, "
         "tomb.pit_three, tomb.frame_three, "
@@ -333,6 +333,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         tomb["sculpture_code"] = query.value("sculpture_code").toString();
         tomb["sculpture_h"] = query.value("sculpture_h").toString();
         tomb["mounted"] = query.value("mounted").toString();
+        tomb["mat_provided"] = query.value("mat_provided").toString();
         tomb["ep_relief"] = query.value("ep_relief").toString();
         tomb["inscription"] = query.value("inscription").toString();
         tomb["pit_one"] = query.value("pit_one").toString();

@@ -998,23 +998,8 @@ void TombUi::updateForm()
             engraved_at = this->not_engraved;
         }
 
-        // Fill the form fields with the selected tomb's data
-        this->ui.leProgressive->setText(tomb_details["progressive"]);
+        // Fill the comboboxes
         this->ui.cbClient->addItems(client_names);
-        this->ui.leName->setText(tomb_details["name"]);
-        this->ui.leEngravedNames->setText(tomb_details["engraved_names"]);
-        this->ui.leEpigraphAmount->setText(tomb_details["ep_amount"]);
-        if (tomb_details["engraved"] == "1") {
-            this->ui.leEpigraphAmount->setEnabled(true);
-        }
-        else {
-            this->ui.leEpigraphAmount->setEnabled(false);
-        }
-        this->ui.rbEngraveYes->setChecked(tomb_details["engraved"] == "1");
-        this->ui.rbEngraveNo->setChecked(tomb_details["engraved"] == "0");
-        this->ui.lePrice->setText(tomb_details["price"]);
-        this->ui.chbPaid->setChecked(tomb_details["paid"] == "1");
-        this->ui.chbAccessoriesMounted->setChecked(tomb_details["accessories_mounted"] == "1");
         this->ui.cbMaterial->addItems(material_names);
         this->ui.cbType->addItems(tomb_type_names);
         this->ui.cbFormat->addItems(tomb_format_names);
@@ -1036,12 +1021,20 @@ void TombUi::updateForm()
         this->ui.cbFrameFive->addItems(frame_names);
         this->ui.cbPitSix->addItems(pit_names);
         this->ui.cbFrameSix->addItems(frame_names);
+
+        // Fill the form fields with the selected tomb's data
+        this->ui.leProgressive->setText(tomb_details["progressive"]);
+        this->ui.leName->setText(tomb_details["name"]);
+        this->ui.leEngravedNames->setText(tomb_details["engraved_names"]);
+        this->ui.leEpigraphAmount->setText(tomb_details["ep_amount"]);
+        this->ui.leScHeight->setText(tomb_details["sculpture_h"]);
+        this->ui.lePrice->setText(tomb_details["price"]);
         this->ui.ptNote->setPlainText(tomb_details["notes"]);
         this->ui.leOrderedAt->setText(Helpers::dateSqlToIta(tomb_details["ordered_at"]));
         this->ui.leProofedAt->setText(Helpers::dateSqlToIta(tomb_details["proofed_at"]));
         this->ui.leConfirmedAt->setText(Helpers::dateSqlToIta(tomb_details["confirmed_at"]));
         this->ui.leEngravedAt->setText(engraved_at);
-        
+
         QString delivery_date;
         if (tomb_details["delivered_at"] == "Consegnata") {
             this->ui.leDeliveredAt->setText("Consegnata");
@@ -1050,7 +1043,39 @@ void TombUi::updateForm()
             this->ui.leDeliveredAt->setText(Helpers::dateSqlToIta(tomb_details["delivered_at"]));
         }
 
-        // Set the item to show inside the combo boxes
+        // Set fields' enabled state
+        if (tomb_details["sculpture_h"].toFloat() != 0 && tomb_details["sculpture_h"].toFloat() > 20) {
+            this->ui.leScHeight->setEnabled(true);
+        }
+        else {
+            this->ui.leScHeight->setEnabled(false);
+        }
+
+        if (tomb_details["engraved"] == "1") {
+            this->ui.leEpigraphAmount->setEnabled(true);
+        }
+        else {
+            this->ui.leEpigraphAmount->setEnabled(false);
+        }
+
+        // Set radio buttons selection
+        this->ui.rbEngraveYes->setChecked(tomb_details["engraved"] == "1");
+        this->ui.rbEngraveNo->setChecked(tomb_details["engraved"] == "0");
+        this->ui.rbEngraveBronze->setChecked(tomb_details["engraved"] == "2");
+        this->ui.rbMountYes->setChecked(tomb_details["mounted"] == "1");
+        this->ui.rbMountNo->setChecked(tomb_details["mounted"] == "0");
+        this->ui.rbMProvYes->setChecked(tomb_details["mat_provided"] == "1");
+        this->ui.rbMProvNo->setChecked(tomb_details["mat_provided"] == "0");
+        this->ui.rbEpReliefYes->setChecked(tomb_details["ep_relief"] == "1");
+        this->ui.rbEpReliefNo->setChecked(tomb_details["ep_relief"] == "0");
+        this->ui.rbInscriptionYes->setChecked(tomb_details["inscription"] == "1");
+        this->ui.rbInscriptionNo->setChecked(tomb_details["inscription"] == "0");
+
+        // Set checkboxes selection
+        this->ui.chbPaid->setChecked(tomb_details["paid"] == "1");
+        this->ui.chbAccessoriesMounted->setChecked(tomb_details["accessories_mounted"] == "1");
+        
+        // Set the item to show inside the comboboxes
         this->ui.cbClient->setCurrentIndex(client_index);
         this->ui.cbMaterial->setCurrentIndex(material_index);
         this->ui.cbType->setCurrentIndex(type_index);
