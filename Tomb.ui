@@ -2333,11 +2333,62 @@
   <tabstop>leProgressive</tabstop>
   <tabstop>cbClient</tabstop>
   <tabstop>leName</tabstop>
+  <tabstop>leEngravedNames</tabstop>
   <tabstop>lePrice</tabstop>
   <tabstop>chbPaid</tabstop>
+  <tabstop>chbAccessoriesMounted</tabstop>
+  <tabstop>cbMaterial</tabstop>
+  <tabstop>cbType</tabstop>
+  <tabstop>cbFormat</tabstop>
+  <tabstop>cbVase</tabstop>
+  <tabstop>cbLamp</tabstop>
+  <tabstop>cbFlame</tabstop>
+  <tabstop>cbCross</tabstop>
+  <tabstop>cbDrawing</tabstop>
+  <tabstop>cbSculpture</tabstop>
+  <tabstop>leScHeight</tabstop>
+  <tabstop>rbEngraveYes</tabstop>
+  <tabstop>rbEngraveNo</tabstop>
+  <tabstop>rbEngraveBronze</tabstop>
+  <tabstop>rbMountYes</tabstop>
+  <tabstop>rbMountNo</tabstop>
+  <tabstop>rbMProvYes</tabstop>
+  <tabstop>rbMProvNo</tabstop>
+  <tabstop>rbEpReliefYes</tabstop>
+  <tabstop>rbEpReliefNo</tabstop>
+  <tabstop>rbInscriptionYes</tabstop>
+  <tabstop>rbInscriptionNo</tabstop>
+  <tabstop>leEpigraphAmount</tabstop>
+  <tabstop>cbPitOne</tabstop>
+  <tabstop>cbFrameOne</tabstop>
+  <tabstop>cbPitTwo</tabstop>
+  <tabstop>cbFrameTwo</tabstop>
+  <tabstop>cbPitThree</tabstop>
+  <tabstop>cbFrameThree</tabstop>
+  <tabstop>cbPitFour</tabstop>
+  <tabstop>cbFrameFour</tabstop>
+  <tabstop>cbPitFive</tabstop>
+  <tabstop>cbFrameFive</tabstop>
+  <tabstop>cbPitSix</tabstop>
+  <tabstop>cbFrameSix</tabstop>
   <tabstop>ptNote</tabstop>
+  <tabstop>leOrderedAt</tabstop>
+  <tabstop>btnOrderedAt</tabstop>
+  <tabstop>leProofedAt</tabstop>
+  <tabstop>btnProofedAt</tabstop>
+  <tabstop>leConfirmedAt</tabstop>
+  <tabstop>btnConfirmedAt</tabstop>
+  <tabstop>leEngravedAt</tabstop>
+  <tabstop>btnEngravedAt</tabstop>
+  <tabstop>btnNoEngraving</tabstop>
+  <tabstop>leDeliveredAt</tabstop>
+  <tabstop>btnDeliveredAt</tabstop>
+  <tabstop>btnDelivered</tabstop>
+  <tabstop>btnCompNotes</tabstop>
   <tabstop>btnSave</tabstop>
   <tabstop>btnClose</tabstop>
+  <tabstop>btnDelete</tabstop>
+  <tabstop>btnMissing</tabstop>
  </tabstops>
  <resources/>
  <connections/>
