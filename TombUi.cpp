@@ -185,7 +185,7 @@ void TombUi::slotSave()
             this->cross->getCode(this->ui.cbCross->currentText()),
             this->drawing->getCode(this->ui.cbDrawing->currentText()),
             this->sculpture->getCode(this->ui.cbSculpture->currentText()),
-            this->ui.leScHeight->text().toInt(),
+            this->ui.leScHeight->text().toFloat(),
             this->ui.rbMountYes->isChecked(),
             this->ui.rbMProvYes->isChecked(),
             this->ui.rbEpReliefYes->isChecked(),
@@ -239,7 +239,7 @@ void TombUi::slotSave()
             this->cross->getCode(this->ui.cbCross->currentText()),
             this->drawing->getCode(this->ui.cbDrawing->currentText()),
             this->sculpture->getCode(this->ui.cbSculpture->currentText()),
-            this->ui.leScHeight->text().toInt(),
+            this->ui.leScHeight->text().toFloat(),
             this->ui.rbMountYes->isChecked(),
             this->ui.rbMProvYes->isChecked(),
             this->ui.rbEpReliefYes->isChecked(),
@@ -434,7 +434,7 @@ void TombUi::slotUpdateNotes()
 
     if (this->ui.cbSculpture->currentIndex() != 0) {
         notes += "Scultura";
-        if (this->ui.leScHeight->text().toInt() > 20) {
+        if (this->ui.leScHeight->text().toFloat() > 20) {
             notes += " " + this->ui.leScHeight->text() + "cm - ";
         }
         else notes += " - ";
@@ -512,7 +512,6 @@ void TombUi::slotUpdateScHightState()
 {
     if (this->ui.cbSculpture->currentIndex() != 0) {
         this->ui.leScHeight->setEnabled(true);
-        this->ui.leScHeight->setText("20");
     }
     else {
         this->ui.leScHeight->setEnabled(false);
@@ -1044,7 +1043,7 @@ void TombUi::updateForm()
         }
 
         // Set fields' enabled state
-        if (tomb_details["sculpture_h"].toFloat() != 0 && tomb_details["sculpture_h"].toFloat() > 20) {
+        if (tomb_details["sculpture_h"].toFloat() != 0) {
             this->ui.leScHeight->setEnabled(true);
         }
         else {
@@ -1200,7 +1199,7 @@ bool TombUi::validateForm(const QString& op)
     }
 
     if (this->sculpture->getCode(this->ui.cbSculpture->currentText()) != "NO" &&
-        (this->ui.leScHeight->text().trimmed() == "" || this->ui.leScHeight->text().toInt() <= 0)) {
+        (this->ui.leScHeight->text().trimmed() == "" || this->ui.leScHeight->text().toFloat() <= 0)) {
         QMessageBox message;
         message.setWindowTitle("Funeraria");
         message.setIcon(QMessageBox::Warning);
