@@ -2020,6 +2020,8 @@ void Funeraria::slotTombsToEngrave()
 
 void Funeraria::slotTombsNotPaid()
 {
+    this->showTopBar("tomb");
+
     Tomb* tomb = new Tomb(this->db->db);
 
     QList<QMap<QString, QString>> tombs = tomb->tombsToPay();
