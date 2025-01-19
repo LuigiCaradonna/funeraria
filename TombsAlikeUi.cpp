@@ -97,7 +97,7 @@ void TombsAlikeUi::reset()
     this->ui.chbMatProvided->setChecked(false);
     this->ui.chbEpRelief->setChecked(false);
     this->ui.chbInscription->setChecked(false);
-    this->ui.chbMount->setChecked(false);
+    this->ui.chbMount->setChecked(true);
     this->ui.chbSculpture->setChecked(false);
 }
 
