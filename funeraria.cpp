@@ -1242,49 +1242,6 @@ void Funeraria::slotSetPaidTomb()
     }
 }
 
-void Funeraria::slotSortColumn(int logical_index) {
-    // Get the clicked label text
-    QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logical_index, Qt::Horizontal).toString();
-    QString sort_by = this->db->getSortableColumnName(label);
-
-    // The selected column can't be sorted
-    if (!this->is_table_sortable || sort_by == "") {
-        return;
-    }
-
-    // Decide the sorting direction
-    this->sortColumnDirection(label);
-
-    Tomb* tomb = new Tomb(this->db->db);
-
-    this->showTopBar("tomb");
-
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "tomb";
-
-    int client_id = this->client->getId(this->cbClient->currentText());
-    int year;
-    QString name = this->leDeceased->text().trimmed();
-
-    if (this->cbYear->currentText() == "Tutti") {
-        year = 0;
-    }
-    else {
-        year = this->cbYear->currentText().toInt();
-    }
-
-    QList<QMap<QString, QString>> tombs =
-        tomb->getList(client_id, year, this->chbEngraved->isChecked(), name, sort_by, this->sort_column_direction);
-
-    this->showClientOrders(tombs);
-
-    delete tomb;
-}
-
 void Funeraria::slotShowClients(int row)
 {
     // Block the signals while building the table
@@ -1853,6 +1810,49 @@ void Funeraria::slotShowSculptures(int row)
 void Funeraria::slotShowSettings() {
     this->settings_ui->setModal(true);
     this->settings_ui->exec();
+}
+
+void Funeraria::slotSortColumn(int logical_index) {
+    // Get the clicked label text
+    QString label = this->ui.tableWidget->horizontalHeader()->model()->headerData(logical_index, Qt::Horizontal).toString();
+    QString sort_by = this->db->getSortableColumnName(label);
+
+    // The selected column can't be sorted
+    if (!this->is_table_sortable || sort_by == "") {
+        return;
+    }
+
+    // Decide the sorting direction
+    this->sortColumnDirection(label);
+
+    Tomb* tomb = new Tomb(this->db->db);
+
+    this->showTopBar("tomb");
+
+    /*
+        Set the current table after the top bar's selection,
+        that checks the current table to decide whether to
+        perform the switch or not
+    */
+    this->current_table = "tomb";
+
+    int client_id = this->client->getId(this->cbClient->currentText());
+    int year;
+    QString name = this->leDeceased->text().trimmed();
+
+    if (this->cbYear->currentText() == "Tutti") {
+        year = 0;
+    }
+    else {
+        year = this->cbYear->currentText().toInt();
+    }
+
+    QList<QMap<QString, QString>> tombs =
+        tomb->getList(client_id, year, this->chbEngraved->isChecked(), name, sort_by, this->sort_column_direction);
+
+    this->showClientOrders(tombs);
+
+    delete tomb;
 }
 
 void Funeraria::slotSumSelectedPrices() {

@@ -277,15 +277,6 @@ protected slots:
     void slotSetPaidTomb();
 
     /*
-     * Sorts the table's rows according to the clicked column name.
-     *
-     * @param int logical_index - Clicked column index
-     *
-     * @return void
-     */
-    void slotSortColumn(int logical_index);
-
-    /*
      * Shows the clients' list
      *
      * @param int row - Row where to center the scroll view
@@ -345,6 +336,15 @@ protected slots:
      * @return void
      */
     void slotShowSettings();
+
+    /*
+     * Sorts the table's rows according to the clicked column name.
+     *
+     * @param int logical_index - Clicked column index
+     *
+     * @return void
+     */
+    void slotSortColumn(int logical_index);
 
     /*
      * Iterates over the selected cells, sums their content and shows a dialog containig the result.
