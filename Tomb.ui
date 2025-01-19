@@ -995,7 +995,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Materiale Fornito</string>
+          <string>Mat. Fornito</string>
          </property>
          <widget class="QRadioButton" name="rbMProvYes">
           <property name="geometry">
