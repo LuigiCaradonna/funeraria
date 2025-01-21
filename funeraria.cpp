@@ -2170,6 +2170,9 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     QTableWidgetItem* material = new QTableWidgetItem(this->material->getNameFromCode(tomb["material_code"]));
     material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
+    QTableWidgetItem* format = new QTableWidgetItem(this->tomb_format->getNameFromCode(tomb["format_code"]));
+    format->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
     QTableWidgetItem* price = new QTableWidgetItem(tomb["price"]);
     price->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
@@ -2181,11 +2184,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
 
     QTableWidgetItem* accessories_mounted = new QTableWidgetItem("");
     accessories_mounted->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-    QString order_date = Helpers::dateSqlToIta(tomb["ordered_at"]);
-    QTableWidgetItem* ordered_at = new QTableWidgetItem(order_date);
-    ordered_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
+    
     QString proof_date = Helpers::dateSqlToIta(tomb["proofed_at"]);
     QTableWidgetItem* proofed_at = new QTableWidgetItem(proof_date);
     proofed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -2253,7 +2252,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     paid->setBackground(QBrush(this->paid_cell));
     notes->setBackground(QBrush(this->row_bg));
     accessories_mounted->setBackground(QBrush(this->mounted_cell));
-    ordered_at->setBackground(QBrush(this->row_bg));
+    format->setBackground(QBrush(this->row_bg));
     proofed_at->setBackground(QBrush(this->row_bg));
     confirmed_at->setBackground(QBrush(this->row_bg));
     engraved_at->setBackground(QBrush(this->row_bg));
@@ -2262,11 +2261,11 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     this->ui.tableWidget->setItem(row, 0, progressive);
     this->ui.tableWidget->setItem(row, 1, name);
     this->ui.tableWidget->setItem(row, 2, material);
-    this->ui.tableWidget->setItem(row, 3, price);
-    this->ui.tableWidget->setItem(row, 4, paid);
-    this->ui.tableWidget->setItem(row, 5, notes);
-    this->ui.tableWidget->setItem(row, 6, accessories_mounted);
-    this->ui.tableWidget->setItem(row, 7, ordered_at);
+    this->ui.tableWidget->setItem(row, 3, format);
+    this->ui.tableWidget->setItem(row, 4, price);
+    this->ui.tableWidget->setItem(row, 5, paid);
+    this->ui.tableWidget->setItem(row, 6, notes);
+    this->ui.tableWidget->setItem(row, 7, accessories_mounted);
     this->ui.tableWidget->setItem(row, 8, proofed_at);
     this->ui.tableWidget->setItem(row, 9, confirmed_at);
     this->ui.tableWidget->setItem(row, 10, engraved_at);
@@ -2715,8 +2714,8 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
     // Reset the table's content
     this->clearTable();
 
-    QStringList headers{ "Numero", "Nome", "Materiale", "€", "Pagata", "Note", "Accessori",
-        "Ordine", "Provino", "Conferma", "Incisione", "Consegna", "", "", "", "" };
+    QStringList headers{ "Numero", "Nome", "Materiale", "Formato", "€", "Pagata", "Note", "Accessori",
+        "Provino", "Conferma", "Incisione", "Consegna", "", "", "", "" };
 
     this->ui.tableWidget->setRowCount(tombs_count);
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -2725,11 +2724,11 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
     this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
     this->ui.tableWidget->setColumnWidth(1, 210);   // Name
     this->ui.tableWidget->setColumnWidth(2, 150);   // Material
-    this->ui.tableWidget->setColumnWidth(3, 45);    // Price
-    this->ui.tableWidget->setColumnWidth(4, 60);    // Paid
-    this->ui.tableWidget->setColumnWidth(5, 645);   // Notes
-    this->ui.tableWidget->setColumnWidth(6, 80);    // Accessories mounted
-    this->ui.tableWidget->setColumnWidth(7, 90);    // Ordered at
+    this->ui.tableWidget->setColumnWidth(3, 90);    // Format
+    this->ui.tableWidget->setColumnWidth(4, 45);    // Price
+    this->ui.tableWidget->setColumnWidth(5, 60);    // Paid
+    this->ui.tableWidget->setColumnWidth(6, 645);   // Notes
+    this->ui.tableWidget->setColumnWidth(7, 80);    // Accessories mounted
     this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
     this->ui.tableWidget->setColumnWidth(9, 90);    // Confirmed at
     this->ui.tableWidget->setColumnWidth(10, 90);   // Engraved at
