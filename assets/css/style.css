@@ -4,6 +4,7 @@ QGroupBox {
 	margin-top: 8px;
 }
 
+/* QGroupbox title position */
 QGroupBox::title {
 	margin-top: -22px;
 	left: 10px;
@@ -53,4 +54,9 @@ QCheckBox::indicator::checked {
 	background-color: white; 
     width: 4px;
 	height: 4px; 
+}
+
+/* QComboBox dropdown background color and transparency */
+QComboBox QFrame{
+	background: rgba(255, 255, 255, 1.0);
 }
