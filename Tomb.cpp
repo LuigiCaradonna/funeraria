@@ -885,7 +885,7 @@ bool Tomb::setAccessoriesMounted(const int progressive)
     QSqlQuery query = QSqlQuery(this->db);
     query.prepare(
         "UPDATE " + this->table + " "
-        "SET accessories_accessories_mounted = 1 "
+        "SET accessories_mounted = 1 "
         "WHERE progressive = :progressive;"
     );
     query.bindValue(":progressive", progressive);
