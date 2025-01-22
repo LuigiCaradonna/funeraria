@@ -21,7 +21,7 @@ Config::Config()
             message.setWindowTitle("Funeraria");
             message.setIcon(QMessageBox::Warning);
             message.setText("E' stato creato un file di configurazione con i valori di default.\n"
-                "Modificare i percorsi del DB e dell'Archivio come necessario.");
+                "Modificare nelle impostazioni i percorsi alle varie cartelle come necessario.");
             message.exec();
         }
     }
