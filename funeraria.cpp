@@ -2799,8 +2799,6 @@ void Funeraria::showClientOrders(const QList<QMap<QString, QString>>& tombs, int
 {
     this->showTopBar("tomb");
 
-    qDebug() << "Tombs found: " + QString::number(tombs.size());
-
     this->setupClientOrdersTable(tombs.size());
 
     for (int i = 0; i < tombs.size(); i++) {
@@ -2988,18 +2986,6 @@ void Funeraria::tombsAlike(
         perform the switch or not
     */
     this->current_table = "tomb";
-
-    qDebug() << "Client_id: " + QString::number(client_id);
-    qDebug() << "Material: " + material;
-    qDebug() << "Ep_amount: " + QString::number(ep_amount);
-    qDebug() << "Pits_amount: " + QString::number(pits_amount);
-    qDebug() << "Relief: " + QString::number(relief);
-    qDebug() << "Inscription: " + QString::number(inscription);
-    qDebug() << "Mount: " + QString::number(mount);
-    qDebug() << "Provided: " + QString::number(provided);
-    qDebug() << "Cross: " + QString::number(cross);
-    qDebug() << "Drawing: " + QString::number(drawing);
-    qDebug() << "Sculpture: " + QString::number(sculpture);
 
     QList<QMap<QString, QString>> tombs = tomb->getAlike(
         client_id, material, ep_amount, pits_amount, relief, inscription, mount, provided, cross, drawing, sculpture
