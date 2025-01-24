@@ -307,7 +307,6 @@ void Funeraria::slotSetAccessoriesMounted()
         message.setText("Non è stato possibile impostare gli accessori come montati.");
         message.exec();
         delete tomb;
-
     }
     else {
         delete tomb;
@@ -319,6 +318,8 @@ void Funeraria::slotSetAccessoriesMounted()
 
 void Funeraria::slotAccessoriesToMount()
 {
+    this->showTopBar("tomb");
+
     Tomb* tomb = new Tomb(this->db->db);
 
     QList<QMap<QString, QString>> accessories = tomb->accessoriesToMount();
@@ -493,10 +494,9 @@ void Funeraria::slotDeleteItem() {
     message.exec();
 
     if (message.clickedButton() == proceed_btn) {
-        // Delete the item
-
         bool errors = false;
 
+        // Delete the item
         if (this->current_table == "vase") {
             if (!this->vase->remove(this->ui.tableWidget->item(row, 0)->text())) errors = true;
         }
