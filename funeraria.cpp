@@ -1243,13 +1243,13 @@ void Funeraria::slotShowClients(int row)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 60);
-    this->ui.tableWidget->setColumnWidth(1, 80);
-    this->ui.tableWidget->setColumnWidth(2, 300);
-    this->ui.tableWidget->setColumnWidth(3, 300);
-    this->ui.tableWidget->setColumnWidth(4, 300);
-    this->ui.tableWidget->setColumnWidth(5, 90);
-    this->ui.tableWidget->setColumnWidth(6, 90);
+    this->ui.tableWidget->setColumnWidth(0, this->col_width_id);
+    this->ui.tableWidget->setColumnWidth(1, this->col_width_position);
+    this->ui.tableWidget->setColumnWidth(2, this->col_width_client_name);
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_email);
+    this->ui.tableWidget->setColumnWidth(4, this->col_width_phone);
+    this->ui.tableWidget->setColumnWidth(5, this->col_width_action);
+    this->ui.tableWidget->setColumnWidth(6, this->col_width_action);
 
     int row_number = 1;
     for (int i = 0; i < clients.size(); i++) {
@@ -1393,13 +1393,13 @@ void Funeraria::slotShowCrosses(int row)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 120); // Code
+    this->ui.tableWidget->setColumnWidth(0, this->col_width_code); // Code
     this->ui.tableWidget->setColumnWidth(1, img_cell_width);  // Img
-    this->ui.tableWidget->setColumnWidth(2, 300); // Name
-    this->ui.tableWidget->setColumnWidth(3, 80);  // Width
-    this->ui.tableWidget->setColumnWidth(4, 80);  // Height
-    this->ui.tableWidget->setColumnWidth(5, 90);  // Details button
-    this->ui.tableWidget->setColumnWidth(6, 90);  // Delete button
+    this->ui.tableWidget->setColumnWidth(2, this->col_width_acc_name); // Name
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_size);  // Width
+    this->ui.tableWidget->setColumnWidth(4, this->col_width_size);  // Height
+    this->ui.tableWidget->setColumnWidth(5, this->col_width_action);  // Details button
+    this->ui.tableWidget->setColumnWidth(6, this->col_width_action);  // Delete button
 
     int row_number = 1;
 
@@ -1512,13 +1512,13 @@ void Funeraria::slotShowDrawing(int row)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 120); // Code
+    this->ui.tableWidget->setColumnWidth(0, this->col_width_code); // Code
     this->ui.tableWidget->setColumnWidth(1, img_cell_width);  // Img
-    this->ui.tableWidget->setColumnWidth(2, 300); // Name
-    this->ui.tableWidget->setColumnWidth(3, 80);  // Width
-    this->ui.tableWidget->setColumnWidth(4, 80);  // Height
-    this->ui.tableWidget->setColumnWidth(5, 90);  // Details button
-    this->ui.tableWidget->setColumnWidth(6, 90);  // Delete button
+    this->ui.tableWidget->setColumnWidth(2, this->col_width_drawing_name); // Name
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_size);  // Width
+    this->ui.tableWidget->setColumnWidth(4, this->col_width_size);  // Height
+    this->ui.tableWidget->setColumnWidth(5, this->col_width_action);  // Details button
+    this->ui.tableWidget->setColumnWidth(6, this->col_width_action);  // Delete button
 
     int row_number = 1;
 
@@ -1636,16 +1636,16 @@ void Funeraria::slotShowSculptures(int row)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 120); // Code
+    this->ui.tableWidget->setColumnWidth(0, this->col_width_code); // Code
     this->ui.tableWidget->setColumnWidth(1, img_cell_width);  // Img
-    this->ui.tableWidget->setColumnWidth(2, 300); // Name
-    this->ui.tableWidget->setColumnWidth(3, 80);  // Width
-    this->ui.tableWidget->setColumnWidth(4, 80);  // Height
-    this->ui.tableWidget->setColumnWidth(5, 80);  // Depth
-    this->ui.tableWidget->setColumnWidth(6, 80);  // Riduzione Z default (per profondità 11mm)
-    this->ui.tableWidget->setColumnWidth(7, 80);  // Riduzione XY default (per altezza 200mm)
-    this->ui.tableWidget->setColumnWidth(8, 90);  // Details button
-    this->ui.tableWidget->setColumnWidth(9, 90);  // Delete button
+    this->ui.tableWidget->setColumnWidth(2, this->col_width_acc_name); // Name
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_size);  // Width
+    this->ui.tableWidget->setColumnWidth(4, this->col_width_size);  // Height
+    this->ui.tableWidget->setColumnWidth(5, this->col_width_size);  // Depth
+    this->ui.tableWidget->setColumnWidth(6, this->col_width_size);  // Riduzione Z default (per profondità 11mm)
+    this->ui.tableWidget->setColumnWidth(7, this->col_width_size);  // Riduzione XY default (per altezza 200mm)
+    this->ui.tableWidget->setColumnWidth(8, this->col_width_action);  // Details button
+    this->ui.tableWidget->setColumnWidth(9, this->col_width_action);  // Delete button
 
     QFont rid_font("Calibri", 16);
     int row_number = 1;
@@ -2638,14 +2638,14 @@ void Funeraria::setupAccessoriesToMountTable(int tombs_count)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
-    this->ui.tableWidget->setColumnWidth(1, 250);   // Name
-    this->ui.tableWidget->setColumnWidth(2, 300);   // Material
-    this->ui.tableWidget->setColumnWidth(3, 200);   // Vase
-    this->ui.tableWidget->setColumnWidth(4, 200);   // Lamp
-    this->ui.tableWidget->setColumnWidth(5, 200);   // Flame
-    this->ui.tableWidget->setColumnWidth(6, 300);   // Client
-    this->ui.tableWidget->setColumnWidth(7, 80);    // Actions
+    this->ui.tableWidget->setColumnWidth(0, this->col_width_progressive);   // Progressive
+    this->ui.tableWidget->setColumnWidth(1, this->col_width_ord_name);      // Name
+    this->ui.tableWidget->setColumnWidth(2, this->col_width_ord_material);  // Material
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_acc_name);      // Vase
+    this->ui.tableWidget->setColumnWidth(4, this->col_width_acc_name);      // Lamp
+    this->ui.tableWidget->setColumnWidth(5, this->col_width_acc_name);      // Flame
+    this->ui.tableWidget->setColumnWidth(6, this->col_width_client_name);   // Client
+    this->ui.tableWidget->setColumnWidth(7, this->col_width_action);        // Actions
 }
 
 void Funeraria::setupClientOrdersTable(int tombs_count)
@@ -2665,22 +2665,22 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 60);    // Progressive
-    this->ui.tableWidget->setColumnWidth(1, 210);   // Name
-    this->ui.tableWidget->setColumnWidth(2, 150);   // Material
-    this->ui.tableWidget->setColumnWidth(3, 90);    // Format
-    this->ui.tableWidget->setColumnWidth(4, 45);    // Price
-    this->ui.tableWidget->setColumnWidth(5, 60);    // Paid
-    this->ui.tableWidget->setColumnWidth(6, 645);   // Notes
-    this->ui.tableWidget->setColumnWidth(7, 80);    // Accessories mounted
-    this->ui.tableWidget->setColumnWidth(8, 90);    // Proofed at
-    this->ui.tableWidget->setColumnWidth(9, 90);    // Confirmed at
-    this->ui.tableWidget->setColumnWidth(10, 90);   // Engraved at
-    this->ui.tableWidget->setColumnWidth(11, 90);   // Delivered at
-    this->ui.tableWidget->setColumnWidth(12, 40);   // Details Button
-    this->ui.tableWidget->setColumnWidth(13, 40);   // Open folder Button
-    this->ui.tableWidget->setColumnWidth(14, 40);   // Set paid tomb button
-    this->ui.tableWidget->setColumnWidth(15, 40);   // Dynamc Button, changes according to the tomb's status
+    this->ui.tableWidget->setColumnWidth(0, this->col_width_progressive);       // Progressive
+    this->ui.tableWidget->setColumnWidth(1, this->col_width_ord_name);          // Name
+    this->ui.tableWidget->setColumnWidth(2, this->col_width_ord_material);      // Material
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_ord_format);        // Format
+    this->ui.tableWidget->setColumnWidth(4, this->col_width_ord_price);         // Price
+    this->ui.tableWidget->setColumnWidth(5, this->col_width_ord_paid);          // Paid
+    this->ui.tableWidget->setColumnWidth(6, this->col_width_ord_notes);         // Notes
+    this->ui.tableWidget->setColumnWidth(7, this->col_width_ord_accessories);   // Accessories mounted
+    this->ui.tableWidget->setColumnWidth(8, this->col_width_ord_date);          // Proofed at
+    this->ui.tableWidget->setColumnWidth(9, this->col_width_ord_date);          // Confirmed at
+    this->ui.tableWidget->setColumnWidth(10, this->col_width_ord_date);         // Engraved at
+    this->ui.tableWidget->setColumnWidth(11, this->col_width_ord_date);         // Delivered at
+    this->ui.tableWidget->setColumnWidth(12, this->col_width_ord_btn);          // Details Button
+    this->ui.tableWidget->setColumnWidth(13, this->col_width_ord_btn);          // Open folder Button
+    this->ui.tableWidget->setColumnWidth(14, this->col_width_ord_btn);          // Set paid tomb button
+    this->ui.tableWidget->setColumnWidth(15, this->col_width_ord_btn);          // Dynamc Button, changes according to the tomb's status
 }
 
 void Funeraria::setupTombsNotPaidTable(int tombs_count)
@@ -2699,11 +2699,11 @@ void Funeraria::setupTombsNotPaidTable(int tombs_count)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 60);
-    this->ui.tableWidget->setColumnWidth(1, 250);
-    this->ui.tableWidget->setColumnWidth(2, 90);
-    this->ui.tableWidget->setColumnWidth(3, 250);
-    this->ui.tableWidget->setColumnWidth(4, 70);
+    this->ui.tableWidget->setColumnWidth(0, this->col_width_progressive);
+    this->ui.tableWidget->setColumnWidth(1, this->col_width_ord_name);
+    this->ui.tableWidget->setColumnWidth(2, this->col_width_ord_price);
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_client_name);
+    this->ui.tableWidget->setColumnWidth(4, this->col_width_action);
 
 }
 
@@ -2723,13 +2723,13 @@ void Funeraria::setupTombsToEngraveTable(int tombs_count)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 90);
-    this->ui.tableWidget->setColumnWidth(1, 250);
-    this->ui.tableWidget->setColumnWidth(2, 250);
-    this->ui.tableWidget->setColumnWidth(3, 200);
-    this->ui.tableWidget->setColumnWidth(4, 100);
-    this->ui.tableWidget->setColumnWidth(5, 100);
-    this->ui.tableWidget->setColumnWidth(6, 100);
+    this->ui.tableWidget->setColumnWidth(0, this->col_width_progressive);
+    this->ui.tableWidget->setColumnWidth(1, this->col_width_ord_name);
+    this->ui.tableWidget->setColumnWidth(2, this->col_width_ord_material);
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_client_name);
+    this->ui.tableWidget->setColumnWidth(4, this->col_width_ord_date);
+    this->ui.tableWidget->setColumnWidth(5, this->col_width_action);
+    this->ui.tableWidget->setColumnWidth(6, this->col_width_action);
 }
 
 void Funeraria::showClientOrder(const QMap<QString, QString>& tomb)
@@ -2845,10 +2845,10 @@ void Funeraria::showItems(const QString& type, int row)
     this->ui.tableWidget->setColumnCount(headers.size());
     this->ui.tableWidget->setHorizontalHeaderLabels(headers);
 
-    this->ui.tableWidget->setColumnWidth(0, 70);
-    this->ui.tableWidget->setColumnWidth(1, 300);
-    this->ui.tableWidget->setColumnWidth(2, 90);
-    this->ui.tableWidget->setColumnWidth(3, 90);
+    this->ui.tableWidget->setColumnWidth(0, this->col_width_code);
+    this->ui.tableWidget->setColumnWidth(1, this->col_width_acc_name);
+    this->ui.tableWidget->setColumnWidth(2, this->col_width_action);
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_action);
 
     int row_number = 1;
     for (int i = 0; i < accessories.size(); i++) {
