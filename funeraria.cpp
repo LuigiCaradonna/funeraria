@@ -445,13 +445,6 @@ void Funeraria::slotClientOrders(int row)
 
     this->showTopBar("tomb");
 
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "tomb";
-
     int client_id = this->client->getId(this->cbClient->currentText());
     int year;
     QString name = this->leDeceased->text().trimmed();
@@ -1061,13 +1054,6 @@ void Funeraria::slotQuickClientOrders()
 
     this->showTopBar("tomb");
 
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "tomb";
-
     int client_id = this->client->getId(button_text);
     int year = QDate::currentDate().toString("yyyy").toInt();
 
@@ -1109,13 +1095,6 @@ void Funeraria::slotSearchByProgressive()
     QList<QMap<QString, QString>> tombs;
 
     this->showTopBar("tomb");
-
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "tomb";
 
     int progressive = this->leSearchByProgressive->text().trimmed().toInt();
 
@@ -1248,13 +1227,6 @@ void Funeraria::slotShowClients(int row)
     const QSignalBlocker blocker(this->ui.tableWidget);
 
     this->showTopBar("client");
-
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "client";
 
     this->is_table_sortable = false;
 
@@ -1403,13 +1375,6 @@ void Funeraria::slotShowCrosses(int row)
 
     this->showTopBar("cross");
 
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "cross";
-
     this->is_table_sortable = false;
 
     // Reset the table's content
@@ -1528,13 +1493,6 @@ void Funeraria::slotShowDrawing(int row)
     const QSignalBlocker blocker(this->ui.tableWidget);
 
     this->showTopBar("drawing");
-
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "drawing";
 
     this->is_table_sortable = false;
 
@@ -1659,13 +1617,6 @@ void Funeraria::slotShowSculptures(int row)
     const QSignalBlocker blocker(this->ui.tableWidget);
 
     this->showTopBar("sculpture");
-
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "sculpture";
 
     this->is_table_sortable = false;
 
@@ -1828,13 +1779,6 @@ void Funeraria::slotSortColumn(int logical_index) {
     Tomb* tomb = new Tomb(this->db->db);
 
     this->showTopBar("tomb");
-
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "tomb";
 
     int client_id = this->client->getId(this->cbClient->currentText());
     int year;
@@ -2823,6 +2767,9 @@ void Funeraria::showTopBar(const QString& bar)
      */
     if (bar == this->current_table) return;
 
+    // Set the current table
+    this->current_table = bar;
+
     // Hide all the top bars
     this->ui.tombsTopBarWidget->setVisible(false);
     this->ui.sculpturesTopBarWidget->setVisible(false);
@@ -2830,7 +2777,7 @@ void Funeraria::showTopBar(const QString& bar)
     this->ui.crossesTopBarWidget->setVisible(false);
     this->ui.drawingTopBarWidget->setVisible(false);
 
-    // Show the one required
+    // Show the required bar
     if (bar == "tomb") {
         this->ui.tombsTopBarWidget->setVisible(true);
     }
@@ -2854,13 +2801,6 @@ void Funeraria::showItems(const QString& type, int row)
     const QSignalBlocker blocker(this->ui.tableWidget);
 
     this->showTopBar(type);
-
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = type;
 
     this->is_table_sortable = false;
 
@@ -2979,13 +2919,6 @@ void Funeraria::tombsAlike(
     Tomb* tomb = new Tomb(this->db->db);
 
     this->showTopBar("tomb");
-
-    /*
-        Set the current table after the top bar's selection,
-        that checks the current table to decide whether to
-        perform the switch or not
-    */
-    this->current_table = "tomb";
 
     QList<QMap<QString, QString>> tombs = tomb->getAlike(
         client_id, material, ep_amount, pits_amount, relief, inscription, mount, provided, cross, drawing, sculpture
