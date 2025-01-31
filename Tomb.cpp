@@ -63,58 +63,71 @@ QList<QMap<QString, QString>> Tomb::getAlike(
     const int client_id, const QString& material, const int ep_amount, const int pits_amount, 
     bool relief, bool inscription, bool mount, bool provided, bool cross, bool drawing, bool sculpture)
 {
-    // TODO: Query to get the similar tombs
     QList<QMap<QString, QString>> list{};
     QSqlQuery query = QSqlQuery(this->db);
 
+    bool check_cli = false;
+    QString cli = "";
+    if (client_id != 999) {
+        cli = " AND client_id = :client_id";
+        check_cli = true;
+    }
+
+    bool check_mat = false;
+    QString mat = "";
+    if (material != "ND") {
+        mat = " AND material_code = :material_code";
+        check_mat = true;
+    }
+
     QString pit = "";
     if (pits_amount == 1)
-        pit = " AND pit_one != 'NO'";
+        pit = " AND pit_one != 'NO' AND pit_two = 'NO'";
     else if (pits_amount == 2)
-        pit = " AND pit_two != 'NO'";
+        pit = " AND pit_two != 'NO' AND pit_three = 'NO'";
     else if (pits_amount == 3)
-        pit = " AND pit_three != 'NO'";
+        pit = " AND pit_three != 'NO' AND pit_four = 'NO'";
     else if (pits_amount == 4)
-        pit = " AND pit_four != 'NO'";
+        pit = " AND pit_four != 'NO' AND pit_five = 'NO'";
     else if (pits_amount == 5)
-        pit = " AND pit_five != 'NO'";
+        pit = " AND pit_five != 'NO' AND pit_six = 'NO'";
     else if (pits_amount == 6)
         pit = " AND pit_six != 'NO'";
 
     QString cr = "";
     if (cross)
-        cr = " AND cross_code != 'NO' ";
+        cr = " AND cross_code != 'NO'";
     else
-        cr = " AND cross_code == 'NO' ";
+        cr = " AND cross_code = 'NO'";
 
     QString dr = "";
     if (drawing)
-        dr = " AND drawing_code != 'NO' ";
+        dr = " AND drawing_code != 'NO'";
     else
-        dr = " AND drawing_code == 'NO' ";
+        dr = " AND drawing_code = 'NO'";
 
     QString sc = "";
     if (sculpture)
-        sc = " AND sculpture_code != 'NO' ";
+        sc = " AND sculpture_code != 'NO'";
     else
-        sc = " AND drawing_code == 'NO' ";
+        sc = " AND sculpture_code = 'NO'";
 
-    QString query_string = "SELECT * FROM " + this->table + " "
-        " WHERE client_id = :client_id "
-        " AND material_code = :material_code "
-        " AND ep_amount = :ep_amount " + pit + " "
-        " AND ep_relief = :relief "
-        " AND inscription = :inscription "
-        " AND mounted = :mount "
-        " AND mat_provided = :provided " + cr + dr + sc + " "
+    QString query_string = "SELECT * FROM " + this->table +
+        " WHERE 1=1"+ cli + mat +
+        " AND ep_amount = :ep_amount" + pit +
+        " AND ep_relief = :ep_relief"
+        " AND inscription = :inscription"
+        " AND mounted = :mount"
+        " AND mat_provided = :provided" + cr + dr + sc +
         " ORDER BY progressive ASC";
 
     query.prepare(query_string);
-
-    query.bindValue(":client_id", client_id);
-    query.bindValue(":material_code", material);
+    if (check_cli)
+        query.bindValue(":client_id", client_id);
+    if (check_mat)
+        query.bindValue(":material_code", material);
     query.bindValue(":ep_amount", ep_amount);
-    query.bindValue(":relief", relief);
+    query.bindValue(":ep_relief", relief);
     query.bindValue(":inscription", inscription);
     query.bindValue(":mount", mount);
     query.bindValue(":provided", provided);
