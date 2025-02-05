@@ -362,19 +362,19 @@
      <item>
       <layout class="QHBoxLayout" name="ReductionsContainer">
        <item>
-        <widget class="QLabel" name="lblRedXY">
+        <widget class="QLabel" name="lblRedZ">
          <property name="font">
           <font>
            <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>Rid. XY:</string>
+          <string>Rid. Z:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="lblRedXYVal">
+        <widget class="QLabel" name="lblRedZVal">
          <property name="minimumSize">
           <size>
            <width>70</width>
@@ -414,19 +414,19 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="lblRedZ">
+        <widget class="QLabel" name="lblRedXY">
          <property name="font">
           <font>
            <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>Rid. Z:</string>
+          <string>Rid. XY:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="lblRedZVal">
+        <widget class="QLabel" name="lblRedXYVal">
          <property name="minimumSize">
           <size>
            <width>70</width>
