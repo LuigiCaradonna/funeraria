@@ -708,6 +708,7 @@ void TombUi::resetForm()
     this->ui.cbClient->setCurrentIndex(0);
     this->ui.leName->setText("");
     this->ui.leEngravedNames->setText("");
+    this->ui.lePrice->setText("");
     this->ui.chbPaid->setChecked(false);
     this->ui.chbAccessoriesMounted->setChecked(false);
     this->ui.cbMaterial->setCurrentIndex(0);
