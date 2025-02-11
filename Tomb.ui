@@ -2256,6 +2256,16 @@
         </spacer>
        </item>
        <item>
+        <widget class="QCheckBox" name="cbReload">
+         <property name="text">
+          <string>Aggiorna tabella</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="btnCompNotes">
          <property name="minimumSize">
           <size>
@@ -2331,6 +2341,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>leProgressive</tabstop>
+  <tabstop>btnMissing</tabstop>
   <tabstop>cbClient</tabstop>
   <tabstop>leName</tabstop>
   <tabstop>leEngravedNames</tabstop>
@@ -2384,11 +2395,11 @@
   <tabstop>leDeliveredAt</tabstop>
   <tabstop>btnDeliveredAt</tabstop>
   <tabstop>btnDelivered</tabstop>
+  <tabstop>btnDelete</tabstop>
+  <tabstop>cbReload</tabstop>
   <tabstop>btnCompNotes</tabstop>
   <tabstop>btnSave</tabstop>
   <tabstop>btnClose</tabstop>
-  <tabstop>btnDelete</tabstop>
-  <tabstop>btnMissing</tabstop>
  </tabstops>
  <resources/>
  <connections/>

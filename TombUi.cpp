@@ -96,6 +96,11 @@ void TombUi::setProgressive(const int& progressive)
     this->updateForm();
 }
 
+bool TombUi::doReload()
+{
+    return this->ui.cbReload->isChecked();
+}
+
 /********** PROTECTED SLOTS **********/
 
 void TombUi::slotCloseDialog()
@@ -747,6 +752,7 @@ void TombUi::resetForm()
     this->ui.leConfirmedAt->setText("");
     this->ui.leEngravedAt->setText("");
     this->ui.leDeliveredAt->setText("");
+    this->ui.cbReload->setChecked(true);
 }
 
 void TombUi::updateForm()

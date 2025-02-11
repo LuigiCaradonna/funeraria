@@ -441,26 +441,29 @@ void Funeraria::slotClientDetails()
 
 void Funeraria::slotClientOrders(int row)
 {
-    Tomb* tomb = new Tomb(this->db->db);
+    if (this->tomb_ui->doReload()) {
 
-    this->showTopBar("tomb");
+        Tomb* tomb = new Tomb(this->db->db);
 
-    int client_id = this->client->getId(this->cbClient->currentText());
-    int year;
-    QString name = this->leDeceased->text().trimmed();
+        this->showTopBar("tomb");
 
-    if (this->cbYear->currentText() == "Tutti") {
-        year = 0;
+        int client_id = this->client->getId(this->cbClient->currentText());
+        int year;
+        QString name = this->leDeceased->text().trimmed();
+
+        if (this->cbYear->currentText() == "Tutti") {
+            year = 0;
+        }
+        else {
+            year = this->cbYear->currentText().toInt();
+        }
+
+        QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->chbEngraved->isChecked(), name);
+
+        this->showClientOrders(tombs, row);
+
+        delete tomb;
     }
-    else {
-        year = this->cbYear->currentText().toInt();
-    }
-
-    QList<QMap<QString, QString>> tombs = tomb->getList(client_id, year, this->chbEngraved->isChecked(), name);
-
-    this->showClientOrders(tombs, row);
-
-    delete tomb;
 }
 
 void Funeraria::slotCrossDetails()

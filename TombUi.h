@@ -53,6 +53,13 @@ public:
      */
     void setProgressive(const int& progressive);
 
+    /*
+     * Says whether the tomb's data should be reloaded or not
+     * 
+     * @return  bool - True if the data should be reloaded, false otherwise
+     */
+    bool doReload();
+
 protected slots:
 
     /********** PROTECTED SLOTS **********/
