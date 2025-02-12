@@ -91,11 +91,12 @@ protected slots:
     /*
      * Shows the selected client's orders
      *
+     * @param bool reload - Whether to reload the client's orders list or not
      * @param int row - Row where to center the scroll view
      *
      * @return void
      */
-    void slotClientOrders(int row = 1);
+    void slotClientOrders(bool reload = true, int row = 1);
 
     /*
      * Shows a dialog window containing the selected cross's details
@@ -447,6 +448,8 @@ private:
     QColor tomb_to_engrave = QColor(180, 225, 235);
     QColor warning_bg = QColor(250, 200, 70);
 
+    // Whether a table should be reloaded or not
+    bool reload_table = true;
     // Whether the currently shown table is sortable or not
     bool is_table_sortable = true;
     // Last selected column to sort

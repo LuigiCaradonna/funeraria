@@ -439,9 +439,9 @@ void Funeraria::slotClientDetails()
     this->slotShowClients(row);
 }
 
-void Funeraria::slotClientOrders(int row)
+void Funeraria::slotClientOrders(bool reload, int row)
 {
-    if (this->tomb_ui->doReload()) {
+    if (reload) {
 
         Tomb* tomb = new Tomb(this->db->db);
 
@@ -1142,7 +1142,7 @@ void Funeraria::slotSetConfirmedTomb()
         delete tomb;
 
         // Reload the table
-        this->slotClientOrders(row);
+        this->slotClientOrders(true, row);
     }
 }
 
@@ -1168,7 +1168,7 @@ void Funeraria::slotSetDeliveredTomb()
         delete tomb;
 
         // Reload the table
-        this->slotClientOrders(row);
+        this->slotClientOrders(true, row);
     }
 }
 
@@ -1220,7 +1220,7 @@ void Funeraria::slotSetPaidTomb()
         delete tomb;
 
         // Reload the table
-        this->slotClientOrders(row);
+        this->slotClientOrders(true, row);
     }
 }
 
@@ -1847,8 +1847,7 @@ void Funeraria::slotTombDetails()
     this->tomb_ui->setModal(true);
     this->tomb_ui->exec();
 
-    // Reload the table when the popup is closed, the user could have made some changes
-    this->slotClientOrders(row);
+    this->slotClientOrders(this->tomb_ui->doReload(), row);
 }
 
 void Funeraria::slotTombFolder()
@@ -2500,7 +2499,7 @@ void Funeraria::initTombsTopBar()
     tombsTopBarLayout->addWidget(this->btnSearchByProgressive);
 
     // Connect the buttons to the relative slot
-    this->connect(btnSearch, &QPushButton::clicked, this, &Funeraria::slotClientOrders);
+    this->connect(btnSearch, SIGNAL(clicked()), this, SLOT(slotClientOrders(true, 1)));
     this->connect(btnSearchByProgressive, &QPushButton::clicked, this, &Funeraria::slotSearchByProgressive);
     // Connect the deceased line edit to the relative slot
     this->connect(this->leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
