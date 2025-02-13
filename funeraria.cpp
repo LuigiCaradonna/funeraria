@@ -441,6 +441,7 @@ void Funeraria::slotClientDetails()
 
 void Funeraria::slotClientOrders(bool reload, int row)
 {
+    qDebug() << "CLICK";
     if (reload) {
 
         Tomb* tomb = new Tomb(this->db->db);
@@ -2499,8 +2500,8 @@ void Funeraria::initTombsTopBar()
     tombsTopBarLayout->addWidget(this->btnSearchByProgressive);
 
     // Connect the buttons to the relative slot
-    this->connect(btnSearch, SIGNAL(clicked()), this, SLOT(slotClientOrders(true, 1)));
-    this->connect(btnSearchByProgressive, &QPushButton::clicked, this, &Funeraria::slotSearchByProgressive);
+    this->connect(this->btnSearch, &QPushButton::clicked, this, [this] { slotClientOrders(true, 1); });
+    this->connect(this->btnSearchByProgressive, &QPushButton::clicked, this, &Funeraria::slotSearchByProgressive);
     // Connect the deceased line edit to the relative slot
     this->connect(this->leDeceased, &QLineEdit::textChanged, this, &Funeraria::slotFilterClientOrders);
 
