@@ -81,7 +81,9 @@ QList<QMap<QString, QString>> Tomb::getAlike(
     }
 
     QString pit = "";
-    if (pits_amount == 1)
+    if (pits_amount == 0)
+        pit = " AND pit_one == 'NO'";
+    else if (pits_amount == 1)
         pit = " AND pit_one != 'NO' AND pit_two = 'NO'";
     else if (pits_amount == 2)
         pit = " AND pit_two != 'NO' AND pit_three = 'NO'";
