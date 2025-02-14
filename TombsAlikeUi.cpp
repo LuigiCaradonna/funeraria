@@ -105,6 +105,7 @@ void TombsAlikeUi::reset()
 
 void TombsAlikeUi::slotCloseDialog()
 {
+    // Returns 0 to the parent window
     this->reject();
 }
 
@@ -132,6 +133,7 @@ void TombsAlikeUi::slotValidateForm()
     }
 
     if (!errors)
+        // Returns 1 to the parent window
         this->accept();
 }
 
