@@ -923,10 +923,10 @@ void Funeraria::slotPrintToPayListPdf()
             else {
                 // Print the data of each row
                 html += "<tr><td width='80%'>" + this->ui.tableWidget->item(j, 2)->data(Qt::DisplayRole).toString() + " - "; // Material
-                html += this->ui.tableWidget->item(j, 5)->data(Qt::DisplayRole).toString() + "</td>"; // Notes
+                html += this->ui.tableWidget->item(j, 6)->data(Qt::DisplayRole).toString() + "</td>"; // Notes
             }
 
-            QString price = this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toString();
+            QString price = this->ui.tableWidget->item(j, 4)->data(Qt::DisplayRole).toString();
             // Number of spaces to add after the euro symbol, depending on the price's digits
             // price's max predicted digits are at most 4, thus at least 1 space will be added
             int num_spaces = 5 - price.size();
@@ -938,7 +938,7 @@ void Funeraria::slotPrintToPayListPdf()
 
             html += "<td align='right'> €" + spaces + price + "</td></tr>"; // Price
 
-            total += this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toDouble();
+            total += this->ui.tableWidget->item(j, 4)->data(Qt::DisplayRole).toDouble();
         }
     }
 
@@ -1018,12 +1018,12 @@ void Funeraria::slotPrintToPayListTxt() {
             else {
                 // Print the data
                 out << this->ui.tableWidget->item(j, 2)->data(Qt::DisplayRole).toString() + " "; // Material
-                out << this->ui.tableWidget->item(j, 5)->data(Qt::DisplayRole).toString() + " "; // Notes
+                out << this->ui.tableWidget->item(j, 6)->data(Qt::DisplayRole).toString() + " "; // Notes
             }
 
-            out << "€ " + this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toString() + "\n\n"; // Price
+            out << "€ " + this->ui.tableWidget->item(j, 4)->data(Qt::DisplayRole).toString() + "\n\n"; // Price
 
-            total += this->ui.tableWidget->item(j, 3)->data(Qt::DisplayRole).toDouble();
+            total += this->ui.tableWidget->item(j, 4)->data(Qt::DisplayRole).toDouble();
         }
     }
 
