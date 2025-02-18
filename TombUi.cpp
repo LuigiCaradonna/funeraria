@@ -328,15 +328,15 @@ void TombUi::slotUpdateNotes()
     if (this->ui.rbMProvYes->isChecked()) notes += "Materiale fornito - ";
 
     if (this->ui.rbMountYes->isChecked()) notes += "Montaggio - ";
-    /*
-    if (this->ui.cbType->currentIndex() != 0) notes += this->ui.cbType->currentText() + ", ";
-    if (this->ui.cbFormat->currentIndex() != 0) notes += this->ui.cbFormat->currentText() + ", ";
-    */
+    
     if (this->ui.rbEngraveYes->isChecked()) {
-        QString epigrafi = "Epigrafe";
-        if (this->ui.leEpigraphAmount->text().toInt() > 1) epigrafi = this->ui.leEpigraphAmount->text() + " " + "epigrafi";
-        if (this->ui.rbEpReliefYes->isChecked()) epigrafi += " a rilievo";
-        notes += epigrafi + " - ";
+        // A tomb can be engraved without an epigraph
+        if (this->ui.leEpigraphAmount->text().toInt() > 0) {
+            QString epigrafi = "Epigrafe";
+            if (this->ui.leEpigraphAmount->text().toInt() > 1) epigrafi = this->ui.leEpigraphAmount->text() + " " + "epigrafi";
+            if (this->ui.rbEpReliefYes->isChecked()) epigrafi += " a rilievo";
+            notes += epigrafi + " - ";
+        }
     }
     else if (this->ui.rbEngraveNo->isChecked()) notes += "Solo materiale - ";
     else if (this->ui.rbEngraveBronze->isChecked()) notes += "Bronzi applicati - ";
