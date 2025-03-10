@@ -1059,6 +1059,25 @@ bool Tomb::store(
                     "La procedura di inserimento nel database continuerà regolarmente.");
                 message.exec();
             }
+            else {
+                // If the folder has been created and the tomb has no engraving, add a file to it
+                if (engraved != 1) {
+                    QFile file(full_path + "/note.txt");
+                    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                        QMessageBox message;
+                        message.setWindowTitle("Funeraria");
+                        message.setIcon(QMessageBox::Warning);
+                        message.setText("Non è stato possibile creare il file relativo a questa lapide.\n"
+                            "La procedura di inserimento nel database continuerà regolarmente.");
+                        message.exec();
+                    }
+                    else {
+                        QTextStream out(&file);
+                        out << "Solo materiale";
+                        file.close();
+                    }
+                }
+            }
         }
         else {
             QMessageBox message;
