@@ -2125,12 +2125,14 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
 
     QTableWidgetItem* paid = new QTableWidgetItem("");
     paid->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    paid->setTextAlignment(Qt::AlignCenter);
 
     QTableWidgetItem* notes = new QTableWidgetItem(tomb["notes"]);
     notes->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QTableWidgetItem* accessories_mounted = new QTableWidgetItem("");
     accessories_mounted->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    accessories_mounted->setTextAlignment(Qt::AlignCenter);
     
     QString proof_date = Helpers::dateSqlToIta(tomb["proofed_at"]);
     QTableWidgetItem* proofed_at = new QTableWidgetItem(proof_date);
@@ -2184,12 +2186,26 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     this->paid_cell = this->row_bg;
     this->mounted_cell = this->row_bg;
 
-    if (tomb["paid"] == "0" && delivery_date != "" && tomb["price"] != "0") {
+    if (tomb["price"] == "0") {
+        paid->setText(this->sign_nd);
+    }
+    else if (tomb["paid"] == "1") {
+        paid->setText(this->sign_yes);
+    }
+    else if (delivery_date != "") {
         this->paid_cell = this->warning_bg;
+        paid->setText(this->sign_no);
     }
 
-    if (tomb["accessories_mounted"] == "0" && engrave_date != "") {
+    if (tomb["accessories_mounted"] == "1") {
+        accessories_mounted->setText(this->sign_yes);
+    }
+    else if (tomb["accessories_mounted"] == "-") {
+        accessories_mounted->setText(this->sign_nd);
+    }
+    else if (tomb["accessories_mounted"] == "0" && engrave_date != "") {
         this->mounted_cell = this->warning_bg;
+        accessories_mounted->setText(this->sign_no);
     }
 
     progressive->setBackground(QBrush(this->row_bg));

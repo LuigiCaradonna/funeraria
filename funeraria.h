@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <QtWidgets/QMainWindow>
 #include <QDesktopServices>
@@ -463,6 +463,10 @@ private:
     const QString css_folder = "assets/css/";
     const QString not_engraved = "No";
     const QString name_not_defined = "Non definito";
+
+    const QString sign_yes = "✓";
+    const QString sign_no = "X";
+    const QString sign_nd = "―";
 
     // Single table's row height
     const int row_height = 30;
