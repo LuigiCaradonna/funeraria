@@ -2117,8 +2117,8 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     QTableWidgetItem* material = new QTableWidgetItem(this->material->getNameFromCode(tomb["material_code"]));
     material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-    QTableWidgetItem* format = new QTableWidgetItem(this->tomb_format->getNameFromCode(tomb["format_code"]));
-    format->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    QTableWidgetItem* type = new QTableWidgetItem(this->tomb_type->getNameFromCode(tomb["type_code"]));
+    type->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QTableWidgetItem* price = new QTableWidgetItem(tomb["price"]);
     price->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -2134,10 +2134,6 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     accessories_mounted->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     accessories_mounted->setTextAlignment(Qt::AlignCenter);
     
-    QString proof_date = Helpers::dateSqlToIta(tomb["proofed_at"]);
-    QTableWidgetItem* proofed_at = new QTableWidgetItem(proof_date);
-    proofed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
     QString confirm_date = Helpers::dateSqlToIta(tomb["confirmed_at"]);
     QTableWidgetItem* confirmed_at = new QTableWidgetItem(confirm_date);
     confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -2215,8 +2211,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     paid->setBackground(QBrush(this->paid_cell));
     notes->setBackground(QBrush(this->row_bg));
     accessories_mounted->setBackground(QBrush(this->mounted_cell));
-    format->setBackground(QBrush(this->row_bg));
-    proofed_at->setBackground(QBrush(this->row_bg));
+    type->setBackground(QBrush(this->row_bg));
     confirmed_at->setBackground(QBrush(this->row_bg));
     engraved_at->setBackground(QBrush(this->row_bg));
     delivered_at->setBackground(QBrush(this->row_bg));
@@ -2224,19 +2219,18 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     this->ui.tableWidget->setItem(row, 0, progressive);
     this->ui.tableWidget->setItem(row, 1, name);
     this->ui.tableWidget->setItem(row, 2, material);
-    this->ui.tableWidget->setItem(row, 3, format);
+    this->ui.tableWidget->setItem(row, 3, type);
     this->ui.tableWidget->setItem(row, 4, price);
     this->ui.tableWidget->setItem(row, 5, paid);
     this->ui.tableWidget->setItem(row, 6, notes);
     this->ui.tableWidget->setItem(row, 7, accessories_mounted);
-    this->ui.tableWidget->setItem(row, 8, proofed_at);
-    this->ui.tableWidget->setItem(row, 9, confirmed_at);
-    this->ui.tableWidget->setItem(row, 10, engraved_at);
-    this->ui.tableWidget->setItem(row, 11, delivered_at);
-    this->ui.tableWidget->setCellWidget(row, 12, pb_details); // Details button
-    this->ui.tableWidget->setCellWidget(row, 13, pb_open_folder); // Open folder button
-    this->ui.tableWidget->setCellWidget(row, 14, pb_set_paid); // Paid tomb button
-    this->ui.tableWidget->setCellWidget(row, 15, pb_dynamic); // Dynamic tomb button
+    this->ui.tableWidget->setItem(row, 8, confirmed_at);
+    this->ui.tableWidget->setItem(row, 9, engraved_at);
+    this->ui.tableWidget->setItem(row, 10, delivered_at);
+    this->ui.tableWidget->setCellWidget(row, 11, pb_details); // Details button
+    this->ui.tableWidget->setCellWidget(row, 12, pb_open_folder); // Open folder button
+    this->ui.tableWidget->setCellWidget(row, 13, pb_set_paid); // Paid tomb button
+    this->ui.tableWidget->setCellWidget(row, 14, pb_dynamic); // Dynamic tomb button
 }
 
 void Funeraria::clearContainer(QBoxLayout* container)
@@ -2677,8 +2671,8 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
     // Reset the table's content
     this->clearTable();
 
-    QStringList headers{ "Numero", "Nome", "Materiale", "Formato", "€", "Pagata", "Note", "Accessori",
-        "Provino", "Conferma", "Incisione", "Consegna", "", "", "", "" };
+    QStringList headers{ "Numero", "Nome", "Materiale", "Tipologia", "€", "Pagata", "Note", "Accessori",
+        "Conferma", "Incisione", "Consegna", "", "", "", "" };
 
     this->ui.tableWidget->setRowCount(tombs_count);
     this->ui.tableWidget->setColumnCount(headers.size());
@@ -2687,19 +2681,18 @@ void Funeraria::setupClientOrdersTable(int tombs_count)
     this->ui.tableWidget->setColumnWidth(0, this->col_width_progressive);       // Progressive
     this->ui.tableWidget->setColumnWidth(1, this->col_width_ord_name);          // Name
     this->ui.tableWidget->setColumnWidth(2, this->col_width_ord_material);      // Material
-    this->ui.tableWidget->setColumnWidth(3, this->col_width_ord_format);        // Format
+    this->ui.tableWidget->setColumnWidth(3, this->col_width_ord_type);          // Type
     this->ui.tableWidget->setColumnWidth(4, this->col_width_ord_price);         // Price
     this->ui.tableWidget->setColumnWidth(5, this->col_width_ord_paid);          // Paid
     this->ui.tableWidget->setColumnWidth(6, this->col_width_ord_notes);         // Notes
     this->ui.tableWidget->setColumnWidth(7, this->col_width_ord_accessories);   // Accessories mounted
-    this->ui.tableWidget->setColumnWidth(8, this->col_width_ord_date);          // Proofed at
-    this->ui.tableWidget->setColumnWidth(9, this->col_width_ord_date);          // Confirmed at
-    this->ui.tableWidget->setColumnWidth(10, this->col_width_ord_date);         // Engraved at
-    this->ui.tableWidget->setColumnWidth(11, this->col_width_ord_date);         // Delivered at
-    this->ui.tableWidget->setColumnWidth(12, this->col_width_ord_btn);          // Details Button
-    this->ui.tableWidget->setColumnWidth(13, this->col_width_ord_btn);          // Open folder Button
-    this->ui.tableWidget->setColumnWidth(14, this->col_width_ord_btn);          // Set paid tomb button
-    this->ui.tableWidget->setColumnWidth(15, this->col_width_ord_btn);          // Dynamc Button, changes according to the tomb's status
+    this->ui.tableWidget->setColumnWidth(8, this->col_width_ord_date);          // Confirmed at
+    this->ui.tableWidget->setColumnWidth(9, this->col_width_ord_date);          // Engraved at
+    this->ui.tableWidget->setColumnWidth(10, this->col_width_ord_date);         // Delivered at
+    this->ui.tableWidget->setColumnWidth(11, this->col_width_ord_btn);          // Details Button
+    this->ui.tableWidget->setColumnWidth(12, this->col_width_ord_btn);          // Open folder Button
+    this->ui.tableWidget->setColumnWidth(13, this->col_width_ord_btn);          // Set paid tomb button
+    this->ui.tableWidget->setColumnWidth(14, this->col_width_ord_btn);          // Dynamc Button, changes according to the tomb's status
 }
 
 void Funeraria::setupTombsNotPaidTable(int tombs_count)

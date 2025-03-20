@@ -480,18 +480,18 @@ private:
     const int col_width_drawing_name = 300;
     const int col_width_email = 300;
     const int col_width_id = 60;
-    const int col_width_ord_accessories = 80;
+    const int col_width_ord_accessories = 65;
     const int col_width_ord_btn = 40;
     const int col_width_ord_date = 90;
-    const int col_width_ord_format = 90;
+    const int col_width_ord_type = 220;
     const int col_width_ord_material = 150;
     const int col_width_ord_name = 215;
-    const int col_width_ord_notes = 645;
-    const int col_width_ord_paid = 60;
+    const int col_width_ord_notes = 630;
+    const int col_width_ord_paid = 55;
     const int col_width_ord_price = 45;
     const int col_width_phone = 250;
     const int col_width_position = 80;
-    const int col_width_progressive = 60;
+    const int col_width_progressive = 55;
     const int col_width_size = 80;
 
     /* Top quick access bar elements */

@@ -468,4 +468,18 @@ private:
     Settings* settings;
 
     const QString not_engraved = "No";
+
+    /********** PRIVATE FUNCTIONS **********/
+
+    /*
+     * Gives the state of the accessories mounted on the tomb
+     *
+     * @param const QString& vase       - Vase's code
+     * @param const QString& lamp       - Lamp's code
+     * @param const QString& flame      - Flame's code
+     * @param const QString& mounted    - Whether the accessories are mounted or not
+     * 
+     * @returnn QString - The state of the accessories mounted. 1=yes, 0=no, -=no accessories required
+     */
+    QString accessoriesMountedState(const QString& vase, const QString& lamp, const QString& flame, const QString& mounted);
 };

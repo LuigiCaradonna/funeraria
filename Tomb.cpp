@@ -146,17 +146,12 @@ QList<QMap<QString, QString>> Tomb::getAlike(
     while (query.next()) {
         QMap<QString, QString> tomb;
 
-        QString accessories_mounted = "0";
-
-        // Accessories should result to be mounted also if the field is set to 0, but there were no accessories to be mounted
-        if (query.value("accessories_mounted").toString() == "1" ||
-            (query.value("vase_code").toString() == "NO" &&
-                query.value("lamp_code").toString() == "NO" &&
-                query.value("flame_code").toString() == "NO"
-                ))
-        {
-            accessories_mounted = "1";
-        }
+        QString accessories_mounted = this->accessoriesMountedState(
+            query.value("vase_code").toString(),
+            query.value("lamp_code").toString(),
+            query.value("flame_code").toString(),
+            query.value("accessories_mounted").toString()
+        );
 
         tomb["progressive"] = QString::number(query.value("progressive").toInt());
         tomb["client_id"] = query.value("client_id").toString();
@@ -226,16 +221,12 @@ QMap<QString, QString> Tomb::getByProgressive(const int progressive)
     }
 
     while (query.next()) {
-        QString accessories_mounted = "0";
-
-        // Accessories should result to be mounted also if the field is set to 0, but there were no accessories to be mounted
-        if (query.value("accessories_mounted").toString() == "1" ||
-            (query.value("vase_code").toString() == "NO" &&
-                query.value("lamp_code").toString() == "NO" &&
-                query.value("flame_code").toString() == "NO"
-                )) {
-            accessories_mounted = "1";
-        }
+        QString accessories_mounted = this->accessoriesMountedState(
+            query.value("vase_code").toString(),
+            query.value("lamp_code").toString(),
+            query.value("flame_code").toString(),
+            query.value("accessories_mounted").toString()
+        );
 
         tomb["progressive"] = QString::number(query.value("progressive").toInt());
         tomb["client_id"] = query.value("client_id").toString();
@@ -504,18 +495,12 @@ QList<QMap<QString, QString>> Tomb::getList(
     while (query.next()) {
         QMap<QString, QString> tomb;
 
-        QString accessories_mounted = "0";
-
-        // Accessories not required
-        if (query.value("vase_code").toString() == "NO" &&
-            query.value("lamp_code").toString() == "NO" &&
-            query.value("flame_code").toString() == "NO") {
-            accessories_mounted = "-";
-        }
-        else if (query.value("accessories_mounted").toString() == "1")
-        {
-            accessories_mounted = "1";
-        }
+        QString accessories_mounted = this->accessoriesMountedState(
+            query.value("vase_code").toString(),
+            query.value("lamp_code").toString(),
+            query.value("flame_code").toString(),
+            query.value("accessories_mounted").toString()
+        );
 
         tomb["progressive"] = QString::number(query.value("progressive").toInt());
         tomb["client_id"] = query.value("client_id").toString();
@@ -1319,4 +1304,20 @@ bool Tomb::update(
     message.setText("Dati aggiornati");
     message.exec();
     return true;
+}
+
+QString Tomb::accessoriesMountedState(const QString& vase, const QString& lamp, const QString& flame, const QString& mounted)
+{
+    QString accessories_state = "0";
+
+    // Accessories not required
+    if (vase == "NO" && lamp == "NO" && flame == "NO") {
+        accessories_state = "-";
+    }
+    else if (mounted == "1")
+    {
+        accessories_state = "1";
+    }
+
+    return accessories_state;
 }
