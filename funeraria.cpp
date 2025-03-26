@@ -2117,7 +2117,8 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     QTableWidgetItem* material = new QTableWidgetItem(this->material->getNameFromCode(tomb["material_code"]));
     material->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-    QTableWidgetItem* type = new QTableWidgetItem(this->tomb_type->getNameFromCode(tomb["type_code"]));
+    QString tomb_info = this->tomb_type->getNameFromCode(tomb["type_code"]) + " - " + this->tomb_format->getNameFromCode(tomb["format_code"]);
+    QTableWidgetItem* type = new QTableWidgetItem(tomb_info);
     type->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QTableWidgetItem* price = new QTableWidgetItem(tomb["price"]);
