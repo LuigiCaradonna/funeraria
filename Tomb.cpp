@@ -247,6 +247,7 @@ QMap<QString, QString> Tomb::getByProgressive(const int progressive)
         tomb["sculpture_code"] = query.value("sculpture_code").toString();
         tomb["sculpture_h"] = query.value("sculpture_h").toString();
         tomb["mounted"] = query.value("mounted").toString();
+        tomb["mat_provided"] = query.value("mat_provided").toString();
         tomb["ep_relief"] = query.value("ep_relief").toString();
         tomb["inscription"] = query.value("inscription").toString();
         tomb["pit_one"] = query.value("pit_one").toString();

@@ -243,6 +243,13 @@ protected slots:
     void slotSculptureDetails();
 
     /*
+     * Searches for tombs similar to the one provided. If an array of tombs is provided, the search is done on the first one.
+     *
+     * @return void
+     */
+    void slotSearchAlike();
+
+    /*
      * Shows an order given its progressive number
      *
      * @return void

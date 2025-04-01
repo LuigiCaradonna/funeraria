@@ -1093,6 +1093,87 @@ void Funeraria::slotSculptureDetails()
     this->slotShowSculptures(row);
 }
 
+void Funeraria::slotSearchAlike()
+{
+    QList<QTableWidgetItem*> items = this->ui.tableWidget->selectedItems();
+
+    if (items.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Information);
+        message.setText("Nessuna lapide selezionata");
+        message.exec();
+        return;
+    }
+
+    // Get the top left and bottom right index of any selection made on the table
+    QList<QTableWidgetSelectionRange> ranges = this->ui.tableWidget->selectedRanges();
+    
+    // If the user selected more than one row, get only the first one (ranges[0])
+    int progressive = this->ui.tableWidget->item(ranges[0].topRow(), 0)->data(Qt::DisplayRole).toInt();
+
+    Tomb* t = new Tomb(this->db->db);
+
+    QMap<QString, QString> tomb_data = t->getByProgressive(progressive);
+
+    if (tomb_data.isEmpty()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Nessuna lapide trovata con il numero progressivo selezionato");
+        message.exec();
+        return;
+    }
+    else {
+        int pits_amount = 0;
+        if (tomb_data["pit_six"] != "NO") {
+            pits_amount = 6;
+        }
+        else if (tomb_data["pit_five"] != "NO") {
+            pits_amount = 5;
+        }
+        else if (tomb_data["pit_four"] != "NO") {
+            pits_amount = 4;
+        }
+        else if (tomb_data["pit_three"] != "NO") {
+            pits_amount = 3;
+        }
+        else if (tomb_data["pit_two"] != "NO") {
+            pits_amount = 2;
+        }
+        else if (tomb_data["pit_one"] != "NO") {
+            pits_amount = 1;
+        }
+
+        bool ep_relief = tomb_data["ep_relief"] == "1";
+        bool inscription = tomb_data["inscription"] == "1";
+        bool mount = tomb_data["mounted"] == "1";
+        bool mat_provided = tomb_data["mat_provided"] == "1";
+        bool cross = tomb_data["cross_code"] != "NO";
+        bool drawing = tomb_data["drawing_code"] != "NO";
+        bool sculpture = tomb_data["sculpture_code"] != "NO";
+
+        QList<QMap<QString, QString>> tombs = t->getAlike(
+            tomb_data["client_id"].toInt(),
+            tomb_data["material_code"],
+            tomb_data["ep_amount"].toInt(),
+            pits_amount,
+            ep_relief,
+            inscription,
+            mount,
+            mat_provided,
+            cross,
+            drawing,
+            sculpture
+        );
+
+        delete t;
+
+        // Show the tombs found
+        this->showClientOrders(tombs);
+    }
+}
+
 void Funeraria::slotSearchByProgressive()
 {
     Tomb* tomb = new Tomb(this->db->db);
@@ -1352,18 +1433,21 @@ void Funeraria::slotShowContextMenu(const QPoint& pos) {
     this->context_menu->clear();
 
     // Create the actions according to what is the selection or the point where clicked
+    QAction* search_alike = this->context_menu->addAction("Cerca simili");
     QAction* sum_prices = this->context_menu->addAction("Somma i prezzi selezionati");
 
     QMenu* list = this->context_menu->addMenu("Genera lista");
     QAction* print_listTxt = list->addAction("Formato TXT");
     QAction* print_listPdf = list->addAction("Formato PDF");
 
+    search_alike->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::SystemSearch));
     sum_prices->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ZoomFitBest));
     list->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::Printer));
     print_listTxt->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentNew));
     print_listPdf->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentPrintPreview));
 
     // Connect actions to slots
+    connect(search_alike, &QAction::triggered, this, &Funeraria::slotSearchAlike);
     connect(sum_prices, &QAction::triggered, this, &Funeraria::slotSumSelectedPrices);
     connect(print_listTxt, &QAction::triggered, this, &Funeraria::slotPrintToPayListTxt);
     connect(print_listPdf, &QAction::triggered, this, &Funeraria::slotPrintToPayListPdf);
