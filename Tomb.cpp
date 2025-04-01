@@ -1048,7 +1048,8 @@ bool Tomb::store(
             else {
                 // If the folder has been created and the tomb has no engraving, add a file to it
                 if (engraved != 1) {
-                    QFile file(full_path + "/note.txt");
+                    QString filename = QString::number(progressive) + " - " + name.trimmed() + ".txt";
+                    QFile file(full_path + "/" + filename);
                     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
                         QMessageBox message;
                         message.setWindowTitle("Funeraria");
