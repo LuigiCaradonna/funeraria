@@ -2274,8 +2274,14 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
         paid->setText(this->sign_yes);
     }
     else if (delivery_date != "") {
-        this->paid_cell = this->warning_bg;
-        paid->setText(this->sign_no);
+        if (tomb["deposit"] != "0") {
+            this->paid_cell = this->warning_bg;
+            paid->setText(tomb["deposit"]);
+        }
+        else {
+            this->paid_cell = this->critical_bg;
+            paid->setText(this->sign_no);
+        }
     }
 
     if (tomb["accessories_mounted"] == "1") {

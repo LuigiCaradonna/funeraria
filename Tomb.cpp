@@ -160,6 +160,7 @@ QList<QMap<QString, QString>> Tomb::getAlike(
         tomb["ep_amount"] = query.value("ep_amount").toString();
         tomb["engraved"] = query.value("engraved").toString();
         tomb["price"] = query.value("price").toString();
+        tomb["deposit"] = query.value("deposit").toString();
         tomb["paid"] = query.value("paid").toString();
         tomb["material_code"] = query.value("material_code").toString();
         tomb["type_code"] = query.value("type_code").toString();
@@ -235,6 +236,7 @@ QMap<QString, QString> Tomb::getByProgressive(const int progressive)
         tomb["ep_amount"] = query.value("ep_amount").toString();
         tomb["engraved"] = query.value("engraved").toString();
         tomb["price"] = query.value("price").toString();
+        tomb["deposit"] = query.value("deposit").toString();
         tomb["paid"] = query.value("paid").toString();
         tomb["material_code"] = query.value("material_code").toString();
         tomb["type_code"] = query.value("type_code").toString();
@@ -283,7 +285,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
 
     query.prepare("SELECT "
         "tomb.progressive, tomb.client_id, client.name AS client_name, tomb.name, tomb.engraved_names,tomb.ep_amount, "
-        "tomb.engraved, tomb.price, tomb.paid, tomb.material_code, material.name AS material_name, "
+        "tomb.engraved, tomb.price, tomb.deposit, tomb.paid, tomb.material_code, material.name AS material_name, "
         "tomb.type_code, tomb_type.name AS type_name, tomb.format_code, tomb_format.name AS format_name, "
         "tomb.vase_code, vase.name AS vase_name, tomb.lamp_code, lamp.name AS lamp_name, tomb.flame_code, flame.name AS flame_name, "
         "tomb.cross_code, cross.name AS cross_name, tomb.drawing_code, drawing.name AS drawing_name, "
@@ -328,6 +330,7 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         tomb["ep_amount"] = query.value("ep_amount").toString();
         tomb["engraved"] = query.value("engraved").toString();
         tomb["price"] = query.value("price").toString();
+        tomb["deposit"] = query.value("deposit").toString();
         tomb["paid"] = query.value("paid").toString();
         tomb["material_code"] = query.value("material_code").toString();
         tomb["type_code"] = query.value("type_code").toString();
@@ -510,6 +513,7 @@ QList<QMap<QString, QString>> Tomb::getList(
         tomb["ep_amount"] = query.value("ep_amount").toString();
         tomb["engraved"] = query.value("engraved").toString();
         tomb["price"] = query.value("price").toString();
+        tomb["deposit"] = query.value("deposit").toString();
         tomb["paid"] = query.value("paid").toString();
         tomb["material_code"] = query.value("material_code").toString();
         tomb["type_code"] = query.value("type_code").toString();
@@ -979,6 +983,7 @@ bool Tomb::store(
     const int ep_amount,
     const int engraved,
     const double& price,
+    const double& deposit,
     const bool paid,
     const QString& material_code,
     const QString& tomb_type,
@@ -1083,16 +1088,16 @@ bool Tomb::store(
     
     query.prepare(
         "INSERT INTO " + this->table + " "
-        "(progressive, client_id, name, engraved_names, ep_amount, engraved, price, paid, material_code, type_code, format_code, "
+        "(progressive, client_id, name, engraved_names, ep_amount, engraved, price, deposit, paid, material_code, type_code, format_code, "
         "vase_code, lamp_code, flame_code, cross_code, drawing_code, sculpture_code, sculpture_h, mounted, mat_provided, "
         "ep_relief, inscription, "
         "pit_one, frame_one, pit_two, frame_two, pit_three, frame_three, "
         "pit_four, frame_four, pit_five, frame_five, pit_six, frame_six, "
         "notes, accessories_mounted, ordered_at, proofed_at, confirmed_at, engraved_at, delivered_at, "
         "created_at, edited_at) "
-        "VALUES (:progressive, :client_id, :name, :engraved_names, :ep_amount, :engraved, :price, :paid, :material_code, :type_code, :format_code, "
-        ":vase_code, :lamp_code, :flame_code, :cross_code, :drawing_code, :sculpture_code, :sculpture_h, :mounted, :mat_provided, "
-        ":ep_relief, :inscription, "
+        "VALUES (:progressive, :client_id, :name, :engraved_names, :ep_amount, :engraved, :price, :deposti, :paid, :material_code, :type_code, "
+        ":format_code, :vase_code, :lamp_code, :flame_code, :cross_code, :drawing_code, :sculpture_code, :sculpture_h, :mounted, "
+        ":mat_provided, :ep_relief, :inscription, "
         ":pit_one, :frame_one, :pit_two, :frame_two, :pit_three, :frame_three, "
         ":pit_four, :frame_four, :pit_five, :frame_five, :pit_six, :frame_six, "
         ":notes, :accessories_mounted, :ordered_at, :proofed_at, :confirmed_at, :engraved_at, :delivered_at, "
@@ -1105,6 +1110,7 @@ bool Tomb::store(
     query.bindValue(":ep_amount", ep_amount);
     query.bindValue(":engraved", engraved);
     query.bindValue(":price", price);
+    query.bindValue(":deposit", deposit);
     query.bindValue(":paid", paid);
     query.bindValue(":material_code", material_code);
     query.bindValue(":type_code", tomb_type);
@@ -1182,6 +1188,7 @@ bool Tomb::update(
     const int ep_amount,
     const int engraved,
     const double& price,
+    const double& deposit,
     const bool paid,
     const QString& material_code,
     const QString& tomb_type,
@@ -1222,7 +1229,7 @@ bool Tomb::update(
     query.prepare(
         "UPDATE " + this->table + " "
         "SET progressive = :progressive, client_id = :client_id, name = :name, engraved_names = :engraved_names, "
-        "ep_amount = :ep_amount, engraved = :engraved, price = :price, paid = :paid, material_code = :material_code, "
+        "ep_amount = :ep_amount, engraved = :engraved, price = :price, deposit = :deposit, paid = :paid, material_code = :material_code, "
         "type_code = :type_code, format_code = :format_code, vase_code = :vase_code, lamp_code = :lamp_code,  flame_code = :flame_code, "
         "cross_code = :cross_code, drawing_code = :drawing_code,  sculpture_code = :sculpture_code, sculpture_h = :sculpture_h, "
         "mounted = :mounted, mat_provided = :mat_provided, ep_relief = :ep_relief, inscription = :inscription, "
@@ -1241,6 +1248,7 @@ bool Tomb::update(
     query.bindValue(":ep_amount", ep_amount);
     query.bindValue(":engraved", engraved);
     query.bindValue(":price", price);
+    query.bindValue(":deposit", deposit);
     query.bindValue(":paid", paid);
     query.bindValue(":material_code", material_code);
     query.bindValue(":type_code", tomb_type);

@@ -180,6 +180,7 @@ void TombUi::slotSave()
             this->ui.leEpigraphAmount->text().toInt(),
             engraved,
             this->ui.lePrice->text().toDouble(),
+            this->ui.leDeposit->text().toDouble(),
             this->ui.chbPaid->isChecked(),
             this->material->getCode(this->ui.cbMaterial->currentText()),
             this->tomb_type->getCode(this->ui.cbType->currentText()),
@@ -234,6 +235,7 @@ void TombUi::slotSave()
             this->ui.leEpigraphAmount->text().toInt(),
             engraved,
             this->ui.lePrice->text().toDouble(),
+            this->ui.leDeposit->text().toDouble(),
             this->ui.chbPaid->isChecked(),
             this->material->getCode(this->ui.cbMaterial->currentText()),
             this->tomb_type->getCode(this->ui.cbType->currentText()),
@@ -1035,6 +1037,7 @@ void TombUi::updateForm()
         this->ui.leEpigraphAmount->setText(tomb_details["ep_amount"]);
         this->ui.leScHeight->setText(tomb_details["sculpture_h"]);
         this->ui.lePrice->setText(tomb_details["price"]);
+        this->ui.leDeposit->setText(tomb_details["deposit"]);
         this->ui.ptNote->setPlainText(tomb_details["notes"]);
         this->ui.leOrderedAt->setText(Helpers::dateSqlToIta(tomb_details["ordered_at"]));
         this->ui.leProofedAt->setText(Helpers::dateSqlToIta(tomb_details["proofed_at"]));

@@ -454,6 +454,7 @@ private:
     QColor tomb_delivered_even = QColor(180, 211, 180);
     QColor tomb_to_engrave = QColor(180, 225, 235);
     QColor warning_bg = QColor(250, 200, 70);
+    QColor critical_bg = QColor(255, 140, 140);
 
     // Whether a table should be reloaded or not
     bool reload_table = true;

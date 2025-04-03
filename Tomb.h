@@ -292,6 +292,7 @@ public:
      * @param const int ep_amount               - Amount of epigraphs engraved
      * @param const int engraved                - 0 not engraved, 1 engraved, 2 bronze
      * @param const double& price               - Price
+     * @param const double& deposit             - Deposit
      * @param const bool paid                   - Paid or not
      * @param const QString& material_code      - Material's code
      * @param const QString& tomb_type          - Tomb type
@@ -335,6 +336,7 @@ public:
         const int ep_amount,
         const int engraved,
         const double& price,
+        const double& deposit,
         const bool paid,
         const QString& material_code,
         const QString& tomb_type,
@@ -382,6 +384,7 @@ public:
      * @param const int ep_amount               - Amount of epigraphs engraved
      * @param const int engraved                - 0 not engraved, 1 engraved, 2 bronze
      * @param const double& price               - Price
+     * @param const double& deposit             - Deposit
      * @param const bool paid                   - Paid or not
      * @param const QString& material_code      - Material's code
      * @param const QString& tomb_type          - Tomb type
@@ -426,6 +429,7 @@ public:
         const int ep_amount,
         const int engraved,
         const double& price,
+        const double& deposit,
         const bool paid,
         const QString& material_code,
         const QString& tomb_type,
