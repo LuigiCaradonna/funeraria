@@ -172,7 +172,7 @@ Funeraria::Funeraria(QWidget* parent)
          * with the proper parameter
          */
         this->new_item_mapper = new QSignalMapper(this);
-        this->connect(this->ui.actionMNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
+        this->connect(this->ui.actionMtNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionVNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionLNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionFNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
@@ -180,7 +180,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionPitNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionTTNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
         this->connect(this->ui.actionTFNew, SIGNAL(triggered()), new_item_mapper, SLOT(map()));
-        new_item_mapper->setMapping(this->ui.actionMNew, "material");
+        new_item_mapper->setMapping(this->ui.actionMtNew, "material");
         new_item_mapper->setMapping(this->ui.actionVNew, "vase");
         new_item_mapper->setMapping(this->ui.actionLNew, "lamp");
         new_item_mapper->setMapping(this->ui.actionFNew, "flame");
@@ -195,7 +195,7 @@ Funeraria::Funeraria(QWidget* parent)
          * with the proper parameter
          */
         this->show_items_mapper = new QSignalMapper(this);
-        this->connect(this->ui.actionMList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
+        this->connect(this->ui.actionMtList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionVList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionLList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionFList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
@@ -203,7 +203,7 @@ Funeraria::Funeraria(QWidget* parent)
         this->connect(this->ui.actionPitList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionTTList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
         this->connect(this->ui.actionTFList, SIGNAL(triggered()), show_items_mapper, SLOT(map()));
-        show_items_mapper->setMapping(this->ui.actionMList, "material");
+        show_items_mapper->setMapping(this->ui.actionMtList, "material");
         show_items_mapper->setMapping(this->ui.actionVList, "vase");
         show_items_mapper->setMapping(this->ui.actionLList, "lamp");
         show_items_mapper->setMapping(this->ui.actionFList, "flame");
@@ -775,7 +775,15 @@ void Funeraria::slotNewItem(const QString& type)
 {
     this->current_table = type;
 
-    if (type == "vase") {
+    if (type == "material") {
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->css_folder, this->icons_folder, this);
+        material_ui->updateForm();
+        material_ui->setModal(true);
+        material_ui->exec();
+
+        delete material_ui;
+    }
+    else if (type == "vase") {
         AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vase", this->css_folder, this->icons_folder, this);
         vase_ui->updateForm();
         vase_ui->setModal(true);
