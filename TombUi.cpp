@@ -329,7 +329,7 @@ void TombUi::slotUpdateNotes()
 
     if (this->ui.rbMProvYes->isChecked()) notes += "Materiale fornito - ";
 
-    if (this->ui.rbMountYes->isChecked()) notes += "Montaggio - ";
+    if (this->ui.rbMountYes->isChecked()) notes += "Assemblaggio - ";
     
     if (this->ui.rbEngraveYes->isChecked()) {
         // A tomb can be engraved without an epigraph
