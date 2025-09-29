@@ -151,6 +151,23 @@ bool DrawingUi::checkForm()
 
         return false;
     }
+    else {
+        Drawing* drawing = new Drawing(this->db);
+        bool error = false;
+
+        if (drawing->getByCode(this->ui.leCode->text().trimmed()).size() > 0) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("Il codice indicato è già in uso.");
+            message.exec();
+            error = true;
+        }
+
+        delete drawing;
+
+        if (error) return false;
+    }
 
     if (this->ui.leName->text().trimmed() == "") {
         QMessageBox message;

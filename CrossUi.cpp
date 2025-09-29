@@ -151,6 +151,23 @@ bool CrossUi::checkForm()
 
         return false;
     }
+    else {
+        Cross* cross = new Cross(this->db);
+        bool error = false;
+
+        if (cross->getByCode(this->ui.leCode->text().trimmed()).size() > 0) {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("Il codice indicato è già in uso.");
+            message.exec();
+            error = true;
+        }
+
+        delete cross;
+
+        if (error) return false;
+    }
 
     if (this->ui.leName->text().trimmed() == "") {
         QMessageBox message;

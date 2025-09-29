@@ -31,7 +31,7 @@ void AccessoryUi::updateForm(const QString& code, const QString& name)
 {
     QString action = "";
     // No code means a new accessory to insert
-    if (code == "") {
+    if (code.trimmed() == "") {
         action = "Inserimento";
         this->ui.btnSave->setText("Salva");
         this->connect(this->ui.btnSave, &QPushButton::clicked, this, &AccessoryUi::slotSave);
@@ -157,6 +157,23 @@ bool AccessoryUi::checkForm()
         message.exec();
 
         return false;
+    }
+    else {
+        Accessory* accessory = new Accessory(this->db, this->table);
+        bool error = false;
+
+        if (accessory->getNameFromCode(this->ui.leCode->text().trimmed()) != "") {
+            QMessageBox message;
+            message.setWindowTitle("Funeraria");
+            message.setIcon(QMessageBox::Warning);
+            message.setText("Il codice indicato è già in uso.");
+            message.exec();
+            error = true;
+        }
+
+        delete accessory;
+
+        if (error) return false;
     }
 
     if (this->ui.leName->text().trimmed() == "") {
