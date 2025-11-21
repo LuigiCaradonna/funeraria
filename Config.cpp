@@ -173,7 +173,7 @@ QJsonObject Config::getConfigFileContent()
             return empty_object;
         }
 
-        // Get the main json content
+        // Create the json object
         QJsonObject obj = doc.object();
 
         return obj;
