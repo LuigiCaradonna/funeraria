@@ -563,7 +563,7 @@ bool DatabaseManager::solveDatabaseConnectionFailure()
         // Ask again to the user how to solve the problem
         return this->solveDatabaseConnectionFailure();
     }
-    if (message.clickedButton() == (QAbstractButton*)openBtn) {
+    else if (message.clickedButton() == (QAbstractButton*)openBtn) {
         // Prompt the user to select the db file
         this->db_file = QFileDialog::getOpenFileName(this->parent, "Apri", "./", "Database (*.db *.sqlite *.sqlite3)");
 
