@@ -182,6 +182,8 @@ void TombUi::slotSave()
             this->ui.lePrice->text().toDouble(),
             this->ui.leDeposit->text().toDouble(),
             this->ui.chbPaid->isChecked(),
+            this->ui.chbAccessoriesMounted->isChecked(),
+            this->ui.chbCanceled->isChecked(),
             this->material->getCode(this->ui.cbMaterial->currentText()),
             this->tomb_type->getCode(this->ui.cbType->currentText()),
             this->tomb_format->getCode(this->ui.cbFormat->currentText()),
@@ -209,7 +211,6 @@ void TombUi::slotSave()
             this->pit->getCode(this->ui.cbPitSix->currentText()),
             this->frame->getCode(this->ui.cbFrameSix->currentText()),
             this->ui.ptNote->toPlainText(),
-            this->ui.chbAccessoriesMounted->isChecked(),
             this->ui.leOrderedAt->text(),
             this->ui.leProofedAt->text(),
             this->ui.leConfirmedAt->text(),
@@ -237,6 +238,8 @@ void TombUi::slotSave()
             this->ui.lePrice->text().toDouble(),
             this->ui.leDeposit->text().toDouble(),
             this->ui.chbPaid->isChecked(),
+            this->ui.chbAccessoriesMounted->isChecked(),
+            this->ui.chbCanceled->isChecked(),
             this->material->getCode(this->ui.cbMaterial->currentText()),
             this->tomb_type->getCode(this->ui.cbType->currentText()),
             this->tomb_format->getCode(this->ui.cbFormat->currentText()),
@@ -264,7 +267,6 @@ void TombUi::slotSave()
             this->pit->getCode(this->ui.cbPitSix->currentText()),
             this->frame->getCode(this->ui.cbFrameSix->currentText()),
             this->ui.ptNote->toPlainText(),
-            this->ui.chbAccessoriesMounted->isChecked(),
             this->ui.leOrderedAt->text(),
             this->ui.leProofedAt->text(),
             this->ui.leConfirmedAt->text(),
@@ -1083,6 +1085,7 @@ void TombUi::updateForm()
         // Set checkboxes selection
         this->ui.chbPaid->setChecked(tomb_details["paid"] == "1");
         this->ui.chbAccessoriesMounted->setChecked(tomb_details["accessories_mounted"] == "1");
+        this->ui.chbCanceled->setChecked(tomb_details["canceled"] == "1");
         
         // Set the item to show inside the comboboxes
         this->ui.cbClient->setCurrentIndex(client_index);

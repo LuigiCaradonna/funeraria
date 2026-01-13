@@ -441,7 +441,6 @@ void Funeraria::slotClientDetails()
 
 void Funeraria::slotClientOrders(bool reload, int row)
 {
-    qDebug() << "CLICK";
     if (reload) {
 
         Tomb* tomb = new Tomb(this->db->db);
@@ -2270,6 +2269,9 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     }
     else if (tomb["engraved"].toInt() == 1 && confirm_date != "" && engrave_date == "") {
         this->row_bg = this->tomb_to_engrave;
+    }
+    else if (tomb["canceled"].toInt() == 1) {
+        this->row_bg = this->tomb_canceled;
     }
 
     this->paid_cell = this->row_bg;

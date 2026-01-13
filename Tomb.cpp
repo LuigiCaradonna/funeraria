@@ -284,19 +284,20 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
     QSqlQuery query = QSqlQuery(this->db);
 
     query.prepare("SELECT "
-        "tomb.progressive, tomb.client_id, client.name AS client_name, tomb.name, tomb.engraved_names,tomb.ep_amount, "
-        "tomb.engraved, tomb.price, tomb.deposit, tomb.paid, tomb.material_code, material.name AS material_name, "
-        "tomb.type_code, tomb_type.name AS type_name, tomb.format_code, tomb_format.name AS format_name, "
+        "tomb.progressive, tomb.client_id, client.name AS client_name, tomb.name, tomb.engraved_names, tomb.ep_amount, "
+        "tomb.engraved, tomb.price, tomb.deposit, tomb.paid, tomb.accessories_mounted, tomb.canceled, tomb.material_code, "
+        "material.name AS material_name, tomb.type_code, tomb_type.name AS type_name, tomb.format_code, tomb_format.name AS format_name, "
         "tomb.vase_code, vase.name AS vase_name, tomb.lamp_code, lamp.name AS lamp_name, tomb.flame_code, flame.name AS flame_name, "
         "tomb.cross_code, cross.name AS cross_name, tomb.drawing_code, drawing.name AS drawing_name, "
-        "tomb.sculpture_code, sculpture.name AS sculpture_name, tomb.sculpture_h, tomb.mounted, tomb.mat_provided, tomb.ep_relief, tomb.inscription, "
+        "tomb.sculpture_code, sculpture.name AS sculpture_name, tomb.sculpture_h, tomb.mounted, tomb.mat_provided, tomb.ep_relief, "
+        "tomb.inscription, "
         "tomb.pit_one, tomb.frame_one, "
         "tomb.pit_two, tomb.frame_two, "
         "tomb.pit_three, tomb.frame_three, "
         "tomb.pit_four, tomb.frame_four, "
         "tomb.pit_five, tomb.frame_five, "
         "tomb.pit_six, tomb.frame_six, "
-        "tomb.notes, tomb.accessories_mounted, "
+        "tomb.notes, "
         "tomb.ordered_at, tomb.proofed_at, tomb.confirmed_at, tomb.engraved_at, "
         "tomb.delivered_at, tomb.created_at, tomb.edited_at "
         "FROM " + this->table + " "
@@ -332,6 +333,8 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         tomb["price"] = query.value("price").toString();
         tomb["deposit"] = query.value("deposit").toString();
         tomb["paid"] = query.value("paid").toString();
+        tomb["accessories_mounted"] = query.value("accessories_mounted").toString();
+        tomb["canceled"] = query.value("canceled").toString();
         tomb["material_code"] = query.value("material_code").toString();
         tomb["type_code"] = query.value("type_code").toString();
         tomb["format_code"] = query.value("format_code").toString();
@@ -359,7 +362,6 @@ QMap<QString, QString> Tomb::getDetails(const int progressive)
         tomb["pit_six"] = query.value("pit_six").toString();
         tomb["frame_six"] = query.value("frame_six").toString();
         tomb["notes"] = query.value("notes").toString();
-        tomb["accessories_mounted"] = query.value("accessories_mounted").toString();
         tomb["ordered_at"] = query.value("ordered_at").toString();
         tomb["proofed_at"] = query.value("proofed_at").toString();
         tomb["confirmed_at"] = query.value("confirmed_at").toString();
@@ -515,6 +517,8 @@ QList<QMap<QString, QString>> Tomb::getList(
         tomb["price"] = query.value("price").toString();
         tomb["deposit"] = query.value("deposit").toString();
         tomb["paid"] = query.value("paid").toString();
+        tomb["accessories_mounted"] = accessories_mounted;
+        tomb["canceled"] = query.value("canceled").toString();
         tomb["material_code"] = query.value("material_code").toString();
         tomb["type_code"] = query.value("type_code").toString();
         tomb["format_code"] = query.value("format_code").toString();
@@ -541,7 +545,6 @@ QList<QMap<QString, QString>> Tomb::getList(
         tomb["pit_six"] = query.value("pit_six").toString();
         tomb["frame_six"] = query.value("frame_six").toString();
         tomb["notes"] = query.value("notes").toString();
-        tomb["accessories_mounted"] = accessories_mounted;
         tomb["ordered_at"] = query.value("ordered_at").toString();
         tomb["proofed_at"] = query.value("proofed_at").toString();
         tomb["confirmed_at"] = query.value("confirmed_at").toString();
@@ -985,6 +988,8 @@ bool Tomb::store(
     const double& price,
     const double& deposit,
     const bool paid,
+    const bool accessories_mounted,
+    const bool canceled,
     const QString& material_code,
     const QString& tomb_type,
     const QString& tomb_format,
@@ -1012,7 +1017,6 @@ bool Tomb::store(
     const QString& pit_six,
     const QString& frame_six,
     const QString& notes,
-    const bool accessories_mounted,
     const QString& ordered_at,
     const QString& proofed_at,
     const QString& confirmed_at,
@@ -1112,6 +1116,8 @@ bool Tomb::store(
     query.bindValue(":price", price);
     query.bindValue(":deposit", deposit);
     query.bindValue(":paid", paid);
+    query.bindValue(":accessories_mounted", accessories_mounted);
+    query.bindValue(":canceled", canceled);
     query.bindValue(":material_code", material_code);
     query.bindValue(":type_code", tomb_type);
     query.bindValue(":format_code", tomb_format);
@@ -1139,7 +1145,6 @@ bool Tomb::store(
     query.bindValue(":pit_six", pit_six);
     query.bindValue(":frame_six", frame_six);
     query.bindValue(":notes", notes.trimmed());
-    query.bindValue(":accessories_mounted", accessories_mounted);
     query.bindValue(":ordered_at", QDate::fromString(ordered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":proofed_at", QDate::fromString(proofed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":confirmed_at", QDate::fromString(confirmed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
@@ -1190,6 +1195,8 @@ bool Tomb::update(
     const double& price,
     const double& deposit,
     const bool paid,
+    const bool accessories_mounted,
+    const bool canceled,
     const QString& material_code,
     const QString& tomb_type,
     const QString& tomb_format,
@@ -1217,7 +1224,6 @@ bool Tomb::update(
     const QString& pit_six,
     const QString& frame_six,
     const QString& notes,
-    const bool accessories_mounted,
     const QString& ordered_at,
     const QString& proofed_at,
     const QString& confirmed_at,
@@ -1229,14 +1235,15 @@ bool Tomb::update(
     query.prepare(
         "UPDATE " + this->table + " "
         "SET progressive = :progressive, client_id = :client_id, name = :name, engraved_names = :engraved_names, "
-        "ep_amount = :ep_amount, engraved = :engraved, price = :price, deposit = :deposit, paid = :paid, material_code = :material_code, "
-        "type_code = :type_code, format_code = :format_code, vase_code = :vase_code, lamp_code = :lamp_code,  flame_code = :flame_code, "
+        "ep_amount = :ep_amount, engraved = :engraved, price = :price, deposit = :deposit, paid = :paid, "
+        "accessories_mounted = :accessories_mounted, canceled = :canceled, material_code = :material_code, "
+        "type_code = :type_code, format_code = :format_code, vase_code = :vase_code, lamp_code = :lamp_code, flame_code = :flame_code, "
         "cross_code = :cross_code, drawing_code = :drawing_code,  sculpture_code = :sculpture_code, sculpture_h = :sculpture_h, "
         "mounted = :mounted, mat_provided = :mat_provided, ep_relief = :ep_relief, inscription = :inscription, "
         "pit_one = :pit_one, frame_one = :frame_one, pit_two = :pit_two, frame_two = :frame_two, "
         "pit_three = :pit_three, frame_three = :frame_three, pit_four = :pit_four, frame_four = :frame_four, "
         "pit_five = :pit_five, frame_five = :frame_five, pit_six = :pit_six, frame_six = :frame_six, "
-        "notes = :notes, accessories_mounted = :accessories_mounted, "
+        "notes = :notes, "
         "ordered_at = :ordered_at, proofed_at = :proofed_at, confirmed_at = :confirmed_at, engraved_at = :engraved_at, "
         "delivered_at = :delivered_at, edited_at = :edited_at "
         "WHERE progressive = :old_progressive;"
@@ -1250,6 +1257,8 @@ bool Tomb::update(
     query.bindValue(":price", price);
     query.bindValue(":deposit", deposit);
     query.bindValue(":paid", paid);
+    query.bindValue(":accessories_mounted", accessories_mounted);
+    query.bindValue(":canceled", canceled);
     query.bindValue(":material_code", material_code);
     query.bindValue(":type_code", tomb_type);
     query.bindValue(":format_code", tomb_format);
@@ -1277,7 +1286,6 @@ bool Tomb::update(
     query.bindValue(":pit_six", pit_six);
     query.bindValue(":frame_six", frame_six);
     query.bindValue(":notes", notes.trimmed());
-    query.bindValue(":accessories_mounted", accessories_mounted);
     query.bindValue(":ordered_at", QDate::fromString(ordered_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":proofed_at", QDate::fromString(proofed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));
     query.bindValue(":confirmed_at", QDate::fromString(confirmed_at.trimmed(), "dd/MM/yyyy").toString("yyyy-MM-dd"));

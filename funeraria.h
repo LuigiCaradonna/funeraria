@@ -453,6 +453,7 @@ private:
     QColor tomb_delivered_odd = QColor(200, 240, 200);
     QColor tomb_delivered_even = QColor(180, 211, 180);
     QColor tomb_to_engrave = QColor(180, 225, 235);
+    QColor tomb_canceled = QColor(255, 140, 140);
     QColor warning_bg = QColor(250, 200, 70);
     QColor critical_bg = QColor(255, 140, 140);
 

@@ -294,6 +294,8 @@ public:
      * @param const double& price               - Price
      * @param const double& deposit             - Deposit
      * @param const bool paid                   - Paid or not
+     * @param const bool accessories_mounted    - Accessories mounted or not
+     * @param const bool canceled               - Whether the tomb was canceled or not
      * @param const QString& material_code      - Material's code
      * @param const QString& tomb_type          - Tomb type
      * @param const QString& tomb_format        - Tomb format
@@ -319,7 +321,6 @@ public:
      * @param const QString& pit_format_six     - Pit six format
      * @param const QString& pit_type_six       - Pit six type
      * @param const QString& notes              - Notes
-     * @param const bool accessories_mounted    - Accessories mounted or not
      * @param const QString& ordered_at         - Order date
      * @param const QString& proofed_at         - Proof date
      * @param const QString& confirmed_at       - Confirmation date
@@ -338,6 +339,8 @@ public:
         const double& price,
         const double& deposit,
         const bool paid,
+        const bool accessories_mounted,
+        const bool canceled,
         const QString& material_code,
         const QString& tomb_type,
         const QString& tomb_format,
@@ -365,7 +368,6 @@ public:
         const QString& pit_format_six,
         const QString& pit_type_six,
         const QString& notes,
-        const bool accessories_mounted,
         const QString& ordered_at,
         const QString& proofed_at,
         const QString& confirmed_at,
@@ -384,6 +386,8 @@ public:
      * @param const int ep_amount               - Amount of epigraphs engraved
      * @param const int engraved                - 0 not engraved, 1 engraved, 2 bronze
      * @param const double& price               - Price
+     * @param const bool accessories_mounted    - Accessories mounted or not
+     * @param const bool canceled               - Whether the tomb was canceled or not
      * @param const double& deposit             - Deposit
      * @param const bool paid                   - Paid or not
      * @param const QString& material_code      - Material's code
@@ -411,7 +415,6 @@ public:
      * @param const QString& pit_format_six     - Pit six format
      * @param const QString& pit_type_six       - Pit six type
      * @param const QString& notes              - Notes
-     * @param const bool accessories_mounted    - Accessories mounted or not
      * @param const QString& ordered_at         - Order date
      * @param const QString& proofed_at         - Proof date
      * @param const QString& confirmed_at       - Confirmation date
@@ -431,6 +434,8 @@ public:
         const double& price,
         const double& deposit,
         const bool paid,
+        const bool accessories_mounted,
+        const bool canceled,
         const QString& material_code,
         const QString& tomb_type,
         const QString& tomb_format,
@@ -458,7 +463,6 @@ public:
         const QString& pit_format_six,
         const QString& pit_type_six,
         const QString& notes,
-        const bool accessories_mounted,
         const QString& ordered_at,
         const QString& proofed_at,
         const QString& confirmed_at,
