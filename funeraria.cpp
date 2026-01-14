@@ -2272,6 +2272,8 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     }
     else if (tomb["canceled"].toInt() == 1) {
         this->row_bg = this->tomb_canceled;
+        // If a tomb is canceled, disable the dynamic button
+        pb_dynamic->setEnabled(false);
     }
 
     this->paid_cell = this->row_bg;
