@@ -33,10 +33,10 @@ Funeraria::Funeraria(QWidget* parent)
         this->ui.setupUi(this);
 
         // Sets an icon for the window
-        this->setWindowIcon(QIcon(this->icons_folder + "funeraria.png"));
+        this->setWindowIcon(QIcon(this->folder_icons + "funeraria.png"));
 
         // Load the stylesheet for the UI
-        QString style = Helpers::getStyle(this->css_folder);
+        QString style = Helpers::getStyle(this->folder_css);
 
         if (!style.isEmpty()) {
             this->setStyleSheet(style);
@@ -63,66 +63,66 @@ Funeraria::Funeraria(QWidget* parent)
         // Set icons for the menu items
 
         // File
-        this->ui.actionBackupCSV->setIcon(QIcon(this->icons_folder + "backup-50.png"));
-        this->ui.actionSettings->setIcon(QIcon(this->icons_folder + "settings-50.png"));
+        this->ui.actionBackupCSV->setIcon(QIcon(this->folder_icons + "backup-50.png"));
+        this->ui.actionSettings->setIcon(QIcon(this->folder_icons + "settings-50.png"));
         // Clienti
-        this->ui.actionCNew->setIcon(QIcon(this->icons_folder + "new-client-50.png"));
-        this->ui.actionCList->setIcon(QIcon(this->icons_folder + "client-list-48.png"));
+        this->ui.actionCNew->setIcon(QIcon(this->folder_icons + "new-client-50.png"));
+        this->ui.actionCList->setIcon(QIcon(this->folder_icons + "client-list-48.png"));
         // Materiali
-        this->ui.actionMtNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionMtList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.actionMtNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionMtList->setIcon(QIcon(this->folder_icons + "list-50.png"));
         // Sculture
-        this->ui.actionScNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionScList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.actionScNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionScList->setIcon(QIcon(this->folder_icons + "list-50.png"));
         // Decorazioni
-        this->ui.menuPits->setIcon(QIcon(this->icons_folder + "pit-50.png"));
-        this->ui.actionPitNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionPitList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuFrames->setIcon(QIcon(this->icons_folder + "frame-50.png"));
-        this->ui.actionFrNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionFrList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuCrosses->setIcon(QIcon(this->icons_folder + "cross-72.png"));
-        this->ui.actionCrNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionCrList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuDrawings->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
-        this->ui.actionImNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionImList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.menuPits->setIcon(QIcon(this->folder_icons + "pit-50.png"));
+        this->ui.actionPitNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionPitList->setIcon(QIcon(this->folder_icons + "list-50.png"));
+        this->ui.menuFrames->setIcon(QIcon(this->folder_icons + "frame-50.png"));
+        this->ui.actionFrNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionFrList->setIcon(QIcon(this->folder_icons + "list-50.png"));
+        this->ui.menuCrosses->setIcon(QIcon(this->folder_icons + "cross-72.png"));
+        this->ui.actionCrNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionCrList->setIcon(QIcon(this->folder_icons + "list-50.png"));
+        this->ui.menuDrawings->setIcon(QIcon(this->folder_icons + "jesus-50.png"));
+        this->ui.actionImNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionImList->setIcon(QIcon(this->folder_icons + "list-50.png"));
         // Accessori
-        this->ui.menuVases->setIcon(QIcon(this->icons_folder + "vase-50.png"));
-        this->ui.actionVNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionVList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuLamps->setIcon(QIcon(this->icons_folder + "lamp-50.png"));
-        this->ui.actionLNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionLList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuFlames->setIcon(QIcon(this->icons_folder + "flame-50.png"));
-        this->ui.actionFNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionFList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.menuVases->setIcon(QIcon(this->folder_icons + "vase-50.png"));
+        this->ui.actionVNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionVList->setIcon(QIcon(this->folder_icons + "list-50.png"));
+        this->ui.menuLamps->setIcon(QIcon(this->folder_icons + "lamp-50.png"));
+        this->ui.actionLNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionLList->setIcon(QIcon(this->folder_icons + "list-50.png"));
+        this->ui.menuFlames->setIcon(QIcon(this->folder_icons + "flame-50.png"));
+        this->ui.actionFNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionFList->setIcon(QIcon(this->folder_icons + "list-50.png"));
         // Lapidi
-        this->ui.actionTNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionTEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
-        this->ui.actionTPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
-        this->ui.actionMAccessories->setIcon(QIcon(this->icons_folder + "mount-50.png"));
-        this->ui.menuTypes->setIcon(QIcon(this->icons_folder + "tomb-64.png"));
-        this->ui.actionTTNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionTTList->setIcon(QIcon(this->icons_folder + "list-50.png"));
-        this->ui.menuFormats->setIcon(QIcon(this->icons_folder + "tomb-64.png"));
-        this->ui.actionTFNew->setIcon(QIcon(this->icons_folder + "add-50.png"));
-        this->ui.actionTFList->setIcon(QIcon(this->icons_folder + "list-50.png"));
+        this->ui.actionTNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionTEngrave->setIcon(QIcon(this->folder_icons + "engrave-64.png"));
+        this->ui.actionTPay->setIcon(QIcon(this->folder_icons + "moneybag-64.png"));
+        this->ui.actionMAccessories->setIcon(QIcon(this->folder_icons + "mount-50.png"));
+        this->ui.menuTypes->setIcon(QIcon(this->folder_icons + "tomb-64.png"));
+        this->ui.actionTTNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionTTList->setIcon(QIcon(this->folder_icons + "list-50.png"));
+        this->ui.menuFormats->setIcon(QIcon(this->folder_icons + "tomb-64.png"));
+        this->ui.actionTFNew->setIcon(QIcon(this->folder_icons + "add-50.png"));
+        this->ui.actionTFList->setIcon(QIcon(this->folder_icons + "list-50.png"));
 
         // Instantiate objects
         this->context_menu = new QMenu(this);
         this->client = new Client(this->db->db);
-        this->client_ui = new ClientUi(this->db->db, this->css_folder, this->icons_folder, this);
+        this->client_ui = new ClientUi(this->db->db, this->folder_css, this->folder_icons, this);
         this->sculpture = new Sculpture(this->db->db);
-        this->sculpture_ui = new SculptureUi(this->db->db, this->css_folder, this->icons_folder, this->images_folder, this);
+        this->sculpture_ui = new SculptureUi(this->db->db, this->folder_css, this->folder_icons, this->folder_images, this);
         this->cross = new Cross(this->db->db);
-        this->cross_ui = new CrossUi(this->db->db, this->css_folder, this->icons_folder, this->images_folder, this);
+        this->cross_ui = new CrossUi(this->db->db, this->folder_css, this->folder_icons, this->folder_images, this);
         this->drawing = new Drawing(this->db->db);
-        this->drawing_ui = new DrawingUi(this->db->db, this->css_folder, this->icons_folder, this->images_folder, this);
-        this->settings_ui = new SettingsUi(this->db->db, this->css_folder, this->icons_folder, this);
-        this->report_ui = new ReportUi(this->db->db, this->css_folder, this->icons_folder, this);
-        this->tomb_ui = new TombUi(this->db->db, this->css_folder, this->icons_folder, this);
-        this->tombsAlike_ui = new TombsAlikeUi(this->db->db, this->css_folder, this->icons_folder, this);
+        this->drawing_ui = new DrawingUi(this->db->db, this->folder_css, this->folder_icons, this->folder_images, this);
+        this->settings_ui = new SettingsUi(this->db->db, this->folder_css, this->folder_icons, this);
+        this->report_ui = new ReportUi(this->db->db, this->folder_css, this->folder_icons, this);
+        this->tomb_ui = new TombUi(this->db->db, this->folder_css, this->folder_icons, this);
+        this->tombsAlike_ui = new TombsAlikeUi(this->db->db, this->folder_css, this->folder_icons, this);
         this->vase = new Accessory(this->db->db, "vase");
         this->lamp = new Accessory(this->db->db, "lamp");
         this->flame = new Accessory(this->db->db, "flame");
@@ -590,7 +590,7 @@ void Funeraria::slotEditItem() {
     int row = this->ui.tableWidget->currentRow();
     // Set the name property of the Client object to the name present in the clicked row
     if (this->current_table == "vase") {
-        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vase", this->css_folder, this->icons_folder, this);
+        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vase", this->folder_css, this->folder_icons, this);
         vase_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -601,7 +601,7 @@ void Funeraria::slotEditItem() {
         delete vase_ui;
     }
     else if (this->current_table == "lamp") {
-        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamp", this->css_folder, this->icons_folder, this);
+        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamp", this->folder_css, this->folder_icons, this);
         lamp_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -612,7 +612,7 @@ void Funeraria::slotEditItem() {
         delete lamp_ui;
     }
     else if (this->current_table == "flame") {
-        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flame", this->css_folder, this->icons_folder, this);
+        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flame", this->folder_css, this->folder_icons, this);
         flame_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -623,7 +623,7 @@ void Funeraria::slotEditItem() {
         delete flame_ui;
     }
     else if (this->current_table == "frame") {
-        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, "frame", this->css_folder, this->icons_folder, this);
+        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, "frame", this->folder_css, this->folder_icons, this);
         frame_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -634,7 +634,7 @@ void Funeraria::slotEditItem() {
         delete frame_ui;
     }
     else if (this->current_table == "pit") {
-        AccessoryUi* pit_ui = new AccessoryUi(this->db->db, "pit", this->css_folder, this->icons_folder, this);
+        AccessoryUi* pit_ui = new AccessoryUi(this->db->db, "pit", this->folder_css, this->folder_icons, this);
         pit_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -645,7 +645,7 @@ void Funeraria::slotEditItem() {
         delete pit_ui;
     }
     else if (this->current_table == "material") {
-        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->css_folder, this->icons_folder, this);
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->folder_css, this->folder_icons, this);
         material_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -656,7 +656,7 @@ void Funeraria::slotEditItem() {
         delete material_ui;
     }
     else if (this->current_table == "tomb_type") {
-        AccessoryUi* tomb_type_ui = new AccessoryUi(this->db->db, "tomb_type", this->css_folder, this->icons_folder, this);
+        AccessoryUi* tomb_type_ui = new AccessoryUi(this->db->db, "tomb_type", this->folder_css, this->folder_icons, this);
         tomb_type_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -667,7 +667,7 @@ void Funeraria::slotEditItem() {
         delete tomb_type_ui;
     }
     else if (this->current_table == "tomb_format") {
-        AccessoryUi* tomb_format_ui = new AccessoryUi(this->db->db, "tomb_format", this->css_folder, this->icons_folder, this);
+        AccessoryUi* tomb_format_ui = new AccessoryUi(this->db->db, "tomb_format", this->folder_css, this->folder_icons, this);
         tomb_format_ui->updateForm(
             this->ui.tableWidget->item(row, 0)->text(),
             this->ui.tableWidget->item(row, 1)->text()
@@ -775,7 +775,7 @@ void Funeraria::slotNewItem(const QString& type)
     this->current_table = type;
 
     if (type == "material") {
-        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->css_folder, this->icons_folder, this);
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->folder_css, this->folder_icons, this);
         material_ui->updateForm();
         material_ui->setModal(true);
         material_ui->exec();
@@ -783,7 +783,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete material_ui;
     }
     else if (type == "vase") {
-        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vase", this->css_folder, this->icons_folder, this);
+        AccessoryUi* vase_ui = new AccessoryUi(this->db->db, "vase", this->folder_css, this->folder_icons, this);
         vase_ui->updateForm();
         vase_ui->setModal(true);
         vase_ui->exec();
@@ -791,7 +791,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete vase_ui;
     }
     else if (type == "lamp") {
-        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamp", this->css_folder, this->icons_folder, this);
+        AccessoryUi* lamp_ui = new AccessoryUi(this->db->db, "lamp", this->folder_css, this->folder_icons, this);
         lamp_ui->updateForm();
         lamp_ui->setModal(true);
         lamp_ui->exec();
@@ -799,7 +799,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete lamp_ui;
     }
     else if (type == "flame") {
-        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flame", this->css_folder, this->icons_folder, this);
+        AccessoryUi* flame_ui = new AccessoryUi(this->db->db, "flame", this->folder_css, this->folder_icons, this);
         flame_ui->updateForm();
         flame_ui->setModal(true);
         flame_ui->exec();
@@ -807,7 +807,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete flame_ui;
     }
     else if (type == "material") {
-        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->css_folder, this->icons_folder, this);
+        AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->folder_css, this->folder_icons, this);
         material_ui->updateForm();
         material_ui->setModal(true);
         material_ui->exec();
@@ -815,7 +815,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete material_ui;
     }
     else if (type == "frame") {
-        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, "frame", this->css_folder, this->icons_folder, this);
+        AccessoryUi* frame_ui = new AccessoryUi(this->db->db, "frame", this->folder_css, this->folder_icons, this);
         frame_ui->updateForm();
         frame_ui->setModal(true);
         frame_ui->exec();
@@ -823,7 +823,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete frame_ui;
     }
     else if (type == "pit") {
-        AccessoryUi* pit_ui = new AccessoryUi(this->db->db, "pit", this->css_folder, this->icons_folder, this);
+        AccessoryUi* pit_ui = new AccessoryUi(this->db->db, "pit", this->folder_css, this->folder_icons, this);
         pit_ui->updateForm();
         pit_ui->setModal(true);
         pit_ui->exec();
@@ -831,7 +831,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete pit_ui;
     }
     else if (type == "tomb_type") {
-        AccessoryUi* tomb_type_ui = new AccessoryUi(this->db->db, "tomb_type", this->css_folder, this->icons_folder, this);
+        AccessoryUi* tomb_type_ui = new AccessoryUi(this->db->db, "tomb_type", this->folder_css, this->folder_icons, this);
         tomb_type_ui->updateForm();
         tomb_type_ui->setModal(true);
         tomb_type_ui->exec();
@@ -839,7 +839,7 @@ void Funeraria::slotNewItem(const QString& type)
         delete tomb_type_ui;
     }
     else if (type == "tomb_format") {
-        AccessoryUi* tomb_format_ui = new AccessoryUi(this->db->db, "tomb_format", this->css_folder, this->icons_folder, this);
+        AccessoryUi* tomb_format_ui = new AccessoryUi(this->db->db, "tomb_format", this->folder_css, this->folder_icons, this);
         tomb_format_ui->updateForm();
         tomb_format_ui->setModal(true);
         tomb_format_ui->exec();
@@ -907,7 +907,7 @@ void Funeraria::slotPrintToPayListPdf()
     if (filename.trimmed() == "") return;
 
     // Load the font to be used inside the table
-    QString full_path_font(qApp->applicationDirPath() + "/" + this->fonts_folder + "cour.ttf");
+    QString full_path_font(qApp->applicationDirPath() + "/" + this->folder_fonts + "cour.ttf");
     int font_ID = QFontDatabase::addApplicationFont(full_path_font);
     QString font_family = QFontDatabase::applicationFontFamilies(font_ID).at(0);
 
@@ -1515,7 +1515,7 @@ void Funeraria::slotShowCrosses(int row)
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
         if (!img_file.exists() || crosses[i]["img"] == "") {
-            pic_path = this->images_folder + "notfound.jpg";
+            pic_path = this->folder_images + "notfound.jpg";
         }
 
         QPixmap pic(pic_path);
@@ -1634,7 +1634,7 @@ void Funeraria::slotShowDrawing(int row)
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
         if (!img_file.exists() || drawings[i]["img"] == "") {
-            pic_path = this->images_folder + "notfound.jpg";
+            pic_path = this->folder_images + "notfound.jpg";
         }
 
         QPixmap pic(pic_path);
@@ -1762,7 +1762,7 @@ void Funeraria::slotShowSculptures(int row)
         // Set the not found image if the provided one is missing
         QFile img_file(pic_path);
         if (!img_file.exists() || sculptures[i]["img"] == "") {
-            pic_path = this->images_folder + "notfound.jpg";
+            pic_path = this->folder_images + "notfound.jpg";
         }
 
         QPixmap pic(pic_path);
@@ -2150,12 +2150,12 @@ void Funeraria::slotTombByProgressive()
 void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int row)
 {
     QPushButton* pb_details = new QPushButton(this->ui.tableWidget);
-    pb_details->setIcon(QIcon(this->icons_folder + "detail-50.png"));
+    pb_details->setIcon(QIcon(this->folder_icons + this->icon_details));
     pb_details->setToolTip("Dettagli");
     this->connect(pb_details, &QPushButton::clicked, this, &Funeraria::slotTombDetails);
 
     QPushButton* pb_open_folder = new QPushButton(this->ui.tableWidget);
-    pb_open_folder->setIcon(QIcon(this->icons_folder + "open-folder-50.png"));
+    pb_open_folder->setIcon(QIcon(this->folder_icons + this->icon_open_folder));
     pb_open_folder->setToolTip("Apri");
     this->connect(pb_open_folder, &QPushButton::clicked, this, &Funeraria::slotTombFolder);
 
@@ -2163,12 +2163,12 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
 
     QPushButton* pb_set_paid = new QPushButton(this->ui.tableWidget);
     if (tomb_to_check->isPaid(tomb["progressive"].toInt())) {
-        pb_set_paid->setIcon(QIcon(this->icons_folder + "ok-64.png"));
+        pb_set_paid->setIcon(QIcon(this->folder_icons + this->icon_ok));
         pb_set_paid->setToolTip("Pagata");
         pb_set_paid->setEnabled(false);
     }
     else {
-        pb_set_paid->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
+        pb_set_paid->setIcon(QIcon(this->folder_icons + this->icon_to_pay));
         pb_set_paid->setToolTip("Conferma pagamento");
         this->connect(pb_set_paid, &QPushButton::clicked, this, &Funeraria::slotSetPaidTomb);
     }
@@ -2176,22 +2176,22 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     QPushButton* pb_dynamic = new QPushButton(this->ui.tableWidget);
 
     if (!tomb_to_check->isConfirmed(tomb["progressive"].toInt())) {
-        pb_dynamic->setIcon(QIcon(this->icons_folder + "approved-64.png"));
+        pb_dynamic->setIcon(QIcon(this->folder_icons + this->icon_approved));
         pb_dynamic->setToolTip("Imposta confermata");
         this->connect(pb_dynamic, &QPushButton::clicked, this, &Funeraria::slotSetConfirmedTomb);
     }
     else if (!tomb_to_check->isEngraved(tomb["progressive"].toInt())) {
-        pb_dynamic->setIcon(QIcon(this->icons_folder + "engraved-64.png"));
+        pb_dynamic->setIcon(QIcon(this->folder_icons + this->icon_engraved));
         pb_dynamic->setToolTip("Conferma incisione");
         this->connect(pb_dynamic, &QPushButton::clicked, this, &Funeraria::slotSetEngravedTomb);
     }
     else if (!tomb_to_check->isDelivered(tomb["progressive"].toInt())) {
-        pb_dynamic->setIcon(QIcon(this->icons_folder + "delivered-80.png"));
+        pb_dynamic->setIcon(QIcon(this->folder_icons + this->icon_delivered));
         pb_dynamic->setToolTip("Conferma consegna");
         this->connect(pb_dynamic, &QPushButton::clicked, this, &Funeraria::slotSetDeliveredTomb);
     }
     else if (tomb_to_check->isDelivered(tomb["progressive"].toInt())) {
-        pb_dynamic->setIcon(QIcon(this->icons_folder + "ok-64.png"));
+        pb_dynamic->setIcon(QIcon(this->folder_icons + this->icon_ok));
         pb_dynamic->setToolTip("Ordine completo");
         pb_dynamic->setEnabled(false);
     }
@@ -2629,7 +2629,7 @@ void Funeraria::initTopBarQuickAccess()
     // Reports button
     this->btnQuickReports = new QPushButton();
     this->btnQuickReports->setMinimumSize(QSize(48, 48));
-    this->btnQuickReports->setIcon(QIcon(this->icons_folder + "report-64.png"));
+    this->btnQuickReports->setIcon(QIcon(this->folder_icons + "report-64.png"));
     this->btnQuickReports->setIconSize(QSize(32, 32));
     this->btnQuickReports->setToolTip("Reports");
     this->btnQuickReports->setToolTipDuration(tooltip_duration);
@@ -2637,7 +2637,7 @@ void Funeraria::initTopBarQuickAccess()
     // Clients button
     this->btnQuickClients = new QPushButton();
     this->btnQuickClients->setMinimumSize(QSize(48, 48));
-    this->btnQuickClients->setIcon(QIcon(this->icons_folder + "client-list-48.png"));
+    this->btnQuickClients->setIcon(QIcon(this->folder_icons + "client-list-48.png"));
     this->btnQuickClients->setIconSize(QSize(32, 32));
     this->btnQuickClients->setToolTip("Clienti");
     this->btnQuickClients->setToolTipDuration(tooltip_duration);
@@ -2645,7 +2645,7 @@ void Funeraria::initTopBarQuickAccess()
     // Sculpture button
     this->btnQuickSculptures = new QPushButton();
     this->btnQuickSculptures->setMinimumSize(QSize(48, 48));
-    this->btnQuickSculptures->setIcon(QIcon(this->icons_folder + "sculpture-48.png"));
+    this->btnQuickSculptures->setIcon(QIcon(this->folder_icons + "sculpture-48.png"));
     this->btnQuickSculptures->setIconSize(QSize(32, 32));
     this->btnQuickSculptures->setToolTip("Sculture");
     this->btnQuickSculptures->setToolTipDuration(tooltip_duration);
@@ -2653,7 +2653,7 @@ void Funeraria::initTopBarQuickAccess()
     // Sculpture button
     this->btnQuickCrosses = new QPushButton();
     this->btnQuickCrosses->setMinimumSize(QSize(48, 48));
-    this->btnQuickCrosses->setIcon(QIcon(this->icons_folder + "cross-72.png"));
+    this->btnQuickCrosses->setIcon(QIcon(this->folder_icons + "cross-72.png"));
     this->btnQuickCrosses->setIconSize(QSize(32, 32));
     this->btnQuickCrosses->setToolTip("Croci");
     this->btnQuickCrosses->setToolTipDuration(tooltip_duration);
@@ -2661,7 +2661,7 @@ void Funeraria::initTopBarQuickAccess()
     // Drawing button
     this->btnQuickDrawing = new QPushButton();
     this->btnQuickDrawing->setMinimumSize(QSize(48, 48));
-    this->btnQuickDrawing->setIcon(QIcon(this->icons_folder + "jesus-50.png"));
+    this->btnQuickDrawing->setIcon(QIcon(this->folder_icons + "jesus-50.png"));
     this->btnQuickDrawing->setIconSize(QSize(32, 32));
     this->btnQuickDrawing->setToolTip("Disegni");
     this->btnQuickDrawing->setToolTipDuration(tooltip_duration);
@@ -2669,7 +2669,7 @@ void Funeraria::initTopBarQuickAccess()
     // Tombs to engrave button
     this->btnQuickToEngrave = new QPushButton();
     this->btnQuickToEngrave->setMinimumSize(QSize(48, 48));
-    this->btnQuickToEngrave->setIcon(QIcon(this->icons_folder + "engrave-64.png"));
+    this->btnQuickToEngrave->setIcon(QIcon(this->folder_icons + "engrave-64.png"));
     this->btnQuickToEngrave->setIconSize(QSize(32, 32));
     this->btnQuickToEngrave->setToolTip("Lapidi da incidere");
     this->btnQuickToEngrave->setToolTipDuration(tooltip_duration);
@@ -2677,7 +2677,7 @@ void Funeraria::initTopBarQuickAccess()
     // Tombs to mount button
     this->btnQuickToMount = new QPushButton();
     this->btnQuickToMount->setMinimumSize(QSize(48, 48));
-    this->btnQuickToMount->setIcon(QIcon(this->icons_folder + "mount-50.png"));
+    this->btnQuickToMount->setIcon(QIcon(this->folder_icons + "mount-50.png"));
     this->btnQuickToMount->setIconSize(QSize(32, 32));
     this->btnQuickToMount->setToolTip("Lapidi da montare");
     this->btnQuickToMount->setToolTipDuration(tooltip_duration);
@@ -2685,7 +2685,7 @@ void Funeraria::initTopBarQuickAccess()
     // Tombs to pay button
     this->btnQuickToPay = new QPushButton();
     this->btnQuickToPay->setMinimumSize(QSize(48, 48));
-    this->btnQuickToPay->setIcon(QIcon(this->icons_folder + "moneybag-64.png"));
+    this->btnQuickToPay->setIcon(QIcon(this->folder_icons + "moneybag-64.png"));
     this->btnQuickToPay->setIconSize(QSize(32, 32));
     this->btnQuickToPay->setToolTip("Lapidi da saldare");
     this->btnQuickToPay->setToolTipDuration(tooltip_duration);
@@ -2693,7 +2693,7 @@ void Funeraria::initTopBarQuickAccess()
     // Search similar tomb button
     this->btnQuickTombsAlike = new QPushButton();
     this->btnQuickTombsAlike->setMinimumSize(QSize(48, 48));
-    this->btnQuickTombsAlike->setIcon(QIcon(this->icons_folder + "detail-50.png"));
+    this->btnQuickTombsAlike->setIcon(QIcon(this->folder_icons + "detail-50.png"));
     this->btnQuickTombsAlike->setIconSize(QSize(32, 32));
     this->btnQuickTombsAlike->setToolTip("Cerca lapidi simili");
     this->btnQuickTombsAlike->setToolTipDuration(tooltip_duration);
@@ -2701,7 +2701,7 @@ void Funeraria::initTopBarQuickAccess()
     // New tomb button
     this->btnQuickNewTomb = new QPushButton();
     this->btnQuickNewTomb->setMinimumSize(QSize(48, 48));
-    this->btnQuickNewTomb->setIcon(QIcon(this->icons_folder + "add-50.png"));
+    this->btnQuickNewTomb->setIcon(QIcon(this->folder_icons + "add-50.png"));
     this->btnQuickNewTomb->setIconSize(QSize(32, 32));
     this->btnQuickNewTomb->setToolTip("Nuova lapide");
     this->btnQuickNewTomb->setToolTipDuration(tooltip_duration);

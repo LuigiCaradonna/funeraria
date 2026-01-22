@@ -466,22 +466,28 @@ private:
     // Direction to use to sort the selected table's column (ASC/DESC)
     QString sort_column_direction = "";
 
-    const QString fonts_folder = "assets/fonts/";
-    const QString icons_folder = "assets/icons/";
-    const QString images_folder = "assets/img/";
-    const QString css_folder = "assets/css/";
-    const QString not_engraved = "No";
+    const QString folder_fonts = "assets/fonts/";
+    const QString folder_icons = "assets/icons/";
+    const QString folder_images = "assets/img/";
+    const QString folder_css = "assets/css/";
+    const QString icon_approved = "approved-64.png";
+    const QString icon_delivered = "delivered-80.png";
+    const QString icon_details = "detail-50.png";
+    const QString icon_engraved = "engraved-64.png";
+    const QString icon_ok = "ok-64.png";
+    const QString icon_open_folder = "open-folder-50.png";
+    const QString icon_to_pay = "moneybag-64.png";
     const QString name_not_defined = "Non definito";
+    const QString not_engraved = "No";
 
     const QString sign_yes = "✓";
     const QString sign_no = "X";
     const QString sign_nd = "―";
 
-    // Single table's row height
+    // Table's row height
     const int row_height = 30;
 
-    /* Tables' columns width */
-
+    // Tables' columns width
     const int col_width_acc_name = 200;
     const int col_width_action = 90;
     const int col_width_client_name = 200;
@@ -503,8 +509,7 @@ private:
     const int col_width_progressive = 55;
     const int col_width_size = 80;
 
-    /* Top quick access bar elements */
-
+    // Top quick access bar elements
     QPushButton* btnQuickReports;
     QPushButton* btnQuickClients;
     QPushButton* btnQuickSculptures;
