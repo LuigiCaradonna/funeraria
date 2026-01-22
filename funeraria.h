@@ -29,6 +29,23 @@
 #include "AccessoryUi.h"
 #include "Accessory.h"
 #include "Helpers.h"
+#include <qlist.h>
+#include <qmap.h>
+#include <qpoint.h>
+#include <qsignalmapper.h>
+#include <qstring.h>
+#include <qtmetamacros.h>
+#include <qcolor.h>
+#include <qboxlayout.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qlabel.h>
+#include <qlayoutitem.h>
+#include <qlineedit.h>
+#include <qmainwindow.h>
+#include <qmenu.h>
+#include <qpushbutton.h>
+#include <qwidget.h>
 
 class Funeraria : public QMainWindow
 {
