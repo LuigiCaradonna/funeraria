@@ -43,8 +43,8 @@ Funeraria::Funeraria(QWidget* parent)
         }
 
         // Set the font for the table
-        QFont font("Calibri", 12);
-        this->ui.tableWidget->setFont(font);
+        this->table_font = QFont("Calibri", 12);
+        this->ui.tableWidget->setFont(this->table_font);
         this->connect(
             this->ui.tableWidget->horizontalHeader(), 
             &QHeaderView::sectionClicked, 
@@ -733,8 +733,6 @@ void Funeraria::slotFilterSculptures()
 
 void Funeraria::slotNewClient()
 {
-    this->current_table = "client";
-
     // Set the name property of the Client object to an empty string
     this->client_ui->setName("");
     this->client_ui->setModal(true);
@@ -746,8 +744,6 @@ void Funeraria::slotNewClient()
 
 void Funeraria::slotNewCross()
 {
-    this->current_table = "cross";
-
     // Set the id property of the Cross object to 0
     this->cross_ui->setCode("0");
     this->cross_ui->setModal(true);
@@ -759,8 +755,6 @@ void Funeraria::slotNewCross()
 
 void Funeraria::slotNewDrawing()
 {
-    this->current_table = "drawing";
-
     // Set the id property of the Drawing object to 0
     this->drawing_ui->setCode("0");
     this->drawing_ui->setModal(true);
@@ -772,8 +766,6 @@ void Funeraria::slotNewDrawing()
 
 void Funeraria::slotNewItem(const QString& type)
 {
-    this->current_table = type;
-
     if (type == "material") {
         AccessoryUi* material_ui = new AccessoryUi(this->db->db, "material", this->folder_css, this->folder_icons, this);
         material_ui->updateForm();
@@ -851,13 +843,11 @@ void Funeraria::slotNewItem(const QString& type)
         return;
     }
 
-    this->slotShowItems(this->current_table);
+    this->slotShowItems(type);
 }
 
 void Funeraria::slotNewSculpture()
 {
-    this->current_table = "sculpture";
-
     // Set the id property of the Sculpture object to 0
     this->sculpture_ui->setCode("0");
     this->sculpture_ui->setModal(true);
@@ -869,8 +859,6 @@ void Funeraria::slotNewSculpture()
 
 void Funeraria::slotNewTomb()
 {
-    this->current_table = "tomb";
-
     // Set the name property of the Client object to an empty string
     this->tomb_ui->setProgressive(0);
     this->tomb_ui->setModal(true);
@@ -2198,11 +2186,22 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
 
     delete tomb_to_check;
 
+    if (tomb["canceled"].toInt() == 1) {
+        this->table_font.setStrikeOut(true);
+        // If a tomb is canceled, disable the dynamic and the set paid buttons
+        pb_dynamic->setEnabled(false);
+        pb_set_paid->setEnabled(false);
+    }
+    else {
+        this->table_font.setStrikeOut(false);
+    }
+
     // Generate the cells' content and set them as not editable
     QTableWidgetItem* progressive = new QTableWidgetItem(tomb["progressive"]);
     progressive->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QTableWidgetItem* name = new QTableWidgetItem(tomb["name"]);
+    name->setFont(this->table_font);
     name->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QTableWidgetItem* material = new QTableWidgetItem(this->material->getNameFromCode(tomb["material_code"]));
@@ -2220,6 +2219,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     paid->setTextAlignment(Qt::AlignCenter);
 
     QTableWidgetItem* notes = new QTableWidgetItem(tomb["notes"]);
+    notes->setFont(this->table_font);
     notes->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QTableWidgetItem* accessories_mounted = new QTableWidgetItem("");
@@ -2228,6 +2228,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     
     QString confirm_date = Helpers::dateSqlToIta(tomb["confirmed_at"]);
     QTableWidgetItem* confirmed_at = new QTableWidgetItem(confirm_date);
+    confirmed_at->setFont(this->table_font);
     confirmed_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QString engrave_date;
@@ -2239,6 +2240,7 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     }
 
     QTableWidgetItem* engraved_at = new QTableWidgetItem(engrave_date);
+    engraved_at->setFont(this->table_font);
     engraved_at->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QString delivery_date;
@@ -2269,11 +2271,6 @@ void Funeraria::addClientOrdersTableRow(const QMap<QString, QString>& tomb, int 
     }
     else if (tomb["engraved"].toInt() == 1 && confirm_date != "" && engrave_date == "") {
         this->row_bg = this->tomb_to_engrave;
-    }
-    else if (tomb["canceled"].toInt() == 1) {
-        this->row_bg = this->tomb_canceled;
-        // If a tomb is canceled, disable the dynamic button
-        pb_dynamic->setEnabled(false);
     }
 
     this->paid_cell = this->row_bg;

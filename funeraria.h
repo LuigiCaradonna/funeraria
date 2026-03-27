@@ -470,7 +470,6 @@ private:
     QColor tomb_delivered_odd = QColor(200, 240, 200);
     QColor tomb_delivered_even = QColor(180, 211, 180);
     QColor tomb_to_engrave = QColor(180, 225, 235);
-    QColor tomb_canceled = QColor(255, 140, 140);
     QColor warning_bg = QColor(250, 200, 70);
     QColor critical_bg = QColor(255, 140, 140);
 
@@ -500,6 +499,8 @@ private:
     const QString sign_yes = "✓";
     const QString sign_no = "X";
     const QString sign_nd = "―";
+
+    QFont table_font;
 
     // Table's row height
     const int row_height = 30;
