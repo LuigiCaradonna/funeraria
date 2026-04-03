@@ -2277,6 +2277,12 @@
       <layout class="QHBoxLayout" name="Buttons">
        <item>
         <widget class="QPushButton" name="btnDelete">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <pointsize>12</pointsize>
@@ -2287,6 +2293,19 @@
          </property>
          <property name="autoDefault">
           <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnDuplicate">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Duplica</string>
          </property>
         </widget>
        </item>
@@ -2318,6 +2337,12 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
            <height>30</height>
           </size>
          </property>

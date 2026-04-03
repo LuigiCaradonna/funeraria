@@ -79,6 +79,13 @@ protected slots:
     void slotDelete();
 
     /*
+     * Closes the current tomb details' window and opens a new one to create a new tomb with the same properties
+     *
+     * @return  void
+     */
+    void slotDuplicate();
+
+    /*
      * Replaces the tomb's progressive number with the one selected among those not in use
      *
      * @return  void

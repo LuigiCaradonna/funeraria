@@ -67,6 +67,7 @@ TombUi::TombUi(const QSqlDatabase& db, const QString& css_folder, const QString&
     this->connect(this->ui.btnNoEngraving, &QPushButton::clicked, this, &TombUi::slotSetNoEngraving);
     this->connect(this->ui.btnDelivered, &QPushButton::clicked, this, &TombUi::slotSetDelivered);
     this->connect(this->ui.btnDelete, &QPushButton::clicked, this, &TombUi::slotDelete);
+    this->connect(this->ui.btnDuplicate, &QPushButton::clicked, this, &TombUi::slotDuplicate);
 }
 
 /********** DESTRUCTOR **********/
@@ -123,6 +124,30 @@ void TombUi::slotDelete()
     }
 
     this->close();
+}
+
+void TombUi::slotDuplicate()
+{
+    // Set the window's title
+    this->setWindowTitle("Crea nuova");
+
+    // Update the progressive number
+    this->ui.leProgressive->setText(QString::number(this->tomb->getLastProgresive() + 1));
+    // Reset the form fields that must not be duplicated
+    this->ui.leName->setText("");
+    this->ui.leEngravedNames->setText("");
+    this->ui.lePrice->setText("");
+    this->ui.chbPaid->setChecked(false);
+    this->ui.chbAccessoriesMounted->setChecked(false);
+    this->ui.ptNote->setPlainText("");
+    this->ui.leOrderedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
+    this->ui.leProofedAt->setText(QDate::currentDate().toString("dd/MM/yyyy"));
+    this->ui.leConfirmedAt->setText("");
+    this->ui.leEngravedAt->setText("");
+    this->ui.leDeliveredAt->setText("");
+
+    // Set the save button text
+    this->ui.btnSave->setText(this->btn_create_text);
 }
 
 void TombUi::slotNotInUseProgressives()
