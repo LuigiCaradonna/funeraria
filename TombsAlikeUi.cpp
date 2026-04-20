@@ -19,7 +19,8 @@ TombsAlikeUi::TombsAlikeUi(const QSqlDatabase& db, const QString& css_folder, co
 
     this->init();
 
-    this->connect(this->ui.btnSearch, &QPushButton::clicked, this, &TombsAlikeUi::slotValidateForm);
+    this->connect(this->ui.btnSearchAlike, &QPushButton::clicked, this, &TombsAlikeUi::slotValidateAlike);
+    this->connect(this->ui.btnSearchByType, &QPushButton::clicked, this, &TombsAlikeUi::slotValidateByType);
     this->connect(this->ui.btnClose, &QPushButton::clicked, this, &TombsAlikeUi::slotCloseDialog);
 }
 
@@ -86,6 +87,16 @@ bool TombsAlikeUi::getSculpture()
     return this->ui.chbSculpture->isChecked();
 }
 
+QString TombsAlikeUi::getToSearch()
+{
+    return this->to_search;
+}
+
+QString TombsAlikeUi::getType()
+{
+    return this->ui.cbTypes->currentText();
+}
+
 void TombsAlikeUi::reset()
 {
     this->ui.cbClient->setCurrentIndex(0);
@@ -109,9 +120,10 @@ void TombsAlikeUi::slotCloseDialog()
     this->reject();
 }
 
-void TombsAlikeUi::slotValidateForm()
+void TombsAlikeUi::slotValidateAlike()
 {
     bool errors = false;
+    this->to_search = "";
 
     if (!Helpers::isInt(this->ui.leEpigraphs->text()) || this->ui.leEpigraphs->text().toInt() < 0) {
         QMessageBox message;
@@ -133,8 +145,17 @@ void TombsAlikeUi::slotValidateForm()
     }
 
     if (!errors)
-        // Returns 1 to the parent window
-        this->accept();
+        // Sets the type of search to perfom to "alike"
+        this->to_search = "alike";
+    
+    this->close();
+}
+
+void TombsAlikeUi::slotValidateByType()
+{
+    // Sets the type of search to perfom to "bytype"
+    this->to_search = "bytype";
+    this->close();
 }
 
 /********** PRIVATE FUNCTIONS **********/
@@ -148,4 +169,8 @@ void TombsAlikeUi::init()
     Accessory* material = new Accessory(this->db, "material");
     QList<QString> material_names = material->getNames();
     this->ui.cbMaterial->addItems(material_names);
+
+    TombType* tomb_type = new TombType(this->db);
+    QList<QString> tomb_type_names = tomb_type->getNames();
+    this->ui.cbTypes->addItems(tomb_type_names);
 }

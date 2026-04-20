@@ -753,6 +753,16 @@ private:
         int client_id,const QString& material, int ep_amount, int pits_amount, 
         bool relief, bool inscription, bool mount, bool provided, bool cross, bool drawing, bool sculpture);
 
+
+    /*
+     * Shows the list of tombs of the given type
+     *
+     * @param const QString& type - type's code
+     *
+     * @return void
+     */
+    void tombsByType(const QString& type);
+
     /*
      * Updates the combobox containing the clients.
      *

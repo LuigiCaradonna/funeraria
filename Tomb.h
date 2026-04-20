@@ -71,6 +71,15 @@ public:
     );
 
     /*
+     * Gets all the tombs matching the given type
+     *
+     * @param const QString& type   - Type's code
+     *
+     * @return  QList<QMap<QString, QString>> - A list containing the Tombs' details
+     */
+    QList<QMap<QString, QString>> getByType(const QString& material);
+
+    /*
      * Gets the tombs matching the given progressive number
      *
      * @param const int progressive     - Progressive number

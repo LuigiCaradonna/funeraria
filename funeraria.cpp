@@ -1950,7 +1950,9 @@ void Funeraria::slotTombsAlike()
 {
     this->tombsAlike_ui->reset();
     this->tombsAlike_ui->setModal(true);
-    if (this->tombsAlike_ui->exec() == 1) {
+    this->tombsAlike_ui->exec();
+
+    if (this->tombsAlike_ui->getToSearch() == "alike") {
         this->tombsAlike(
             this->client->getId(this->tombsAlike_ui->getClient()),
             this->material->getCode(this->tombsAlike_ui->getMaterial()),
@@ -1964,6 +1966,9 @@ void Funeraria::slotTombsAlike()
             this->tombsAlike_ui->getDrawing(),
             this->tombsAlike_ui->getSculpture()
         );
+    }
+    else if (this->tombsAlike_ui->getToSearch() == "bytype") {
+        this->tombsByType(this->tombsAlike_ui->getType());
     }
 }
 
@@ -3035,6 +3040,21 @@ void Funeraria::tombsAlike(
     QList<QMap<QString, QString>> tombs = tomb->getAlike(
         client_id, material, ep_amount, pits_amount, relief, inscription, mount, provided, cross, drawing, sculpture
     );
+
+    delete tomb;
+
+    this->showClientOrders(tombs);
+}
+
+void Funeraria::tombsByType(const QString& type)
+{
+    Tomb* tomb = new Tomb(this->db->db);
+
+    this->showTopBar("tomb");
+
+    QString tomb_type = this->tomb_type->getCode(type);
+
+    QList<QMap<QString, QString>> tombs = tomb->getByType(tomb_type);
 
     delete tomb;
 

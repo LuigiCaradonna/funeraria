@@ -8,6 +8,7 @@
 #include "Helpers.h"
 #include "Client.h"
 #include "Accessory.h"
+#include "TombType.h"
 
 class TombsAlikeUi : public QDialog
 {
@@ -113,6 +114,20 @@ public:
     bool getSculpture();
 
     /*
+     * Gets the search type
+     *
+     * @return  QString the type of search to perform
+     */
+    QString getToSearch();
+
+    /*
+     * Gets the type's name
+     *
+     * @return  QString the tomb's type
+     */
+    QString getType();
+
+    /*
      * Resets the form to the default selections
      *
      * @return  void
@@ -131,11 +146,18 @@ protected slots:
     void slotCloseDialog();
 
     /*
-     * Validates the form
+     * Validates the "Alike" form
      *
      * @return  void
      */
-    void slotValidateForm();
+    void slotValidateAlike();
+
+    /*
+     * Validates the "ByType" form
+     *
+     * @return  void
+     */
+    void slotValidateByType();
 
 private:
     Ui::TombsAlikeClass ui;
@@ -143,6 +165,7 @@ private:
     QWidget* parent;
     const QString css_folder;
     const QString icons_folder;
+    QString to_search;
 
     /********** PRIVATE FUNCTIONS **********/
 

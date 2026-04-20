@@ -203,6 +203,86 @@ QList<QMap<QString, QString>> Tomb::getAlike(
     return list;
 }
 
+QList<QMap<QString, QString>> Tomb::getByType(const QString& type)
+{
+    QList<QMap<QString, QString>> list{};
+    QSqlQuery query = QSqlQuery(this->db);
+
+    QString query_string = "SELECT * FROM " + this->table +
+        " WHERE type_code = :type ORDER BY progressive ASC";
+
+    query.prepare(query_string);
+    query.bindValue(":type", type);
+
+    if (!query.exec()) {
+        QMessageBox message;
+        message.setWindowTitle("Funeraria");
+        message.setIcon(QMessageBox::Critical);
+        message.setText("Tomb: " + query.lastError().text());
+        message.exec();
+        return list;
+    }
+
+    while (query.next()) {
+        QMap<QString, QString> tomb;
+
+        QString accessories_mounted = this->accessoriesMountedState(
+            query.value("vase_code").toString(),
+            query.value("lamp_code").toString(),
+            query.value("flame_code").toString(),
+            query.value("accessories_mounted").toString()
+        );
+
+        tomb["progressive"] = QString::number(query.value("progressive").toInt());
+        tomb["client_id"] = query.value("client_id").toString();
+        tomb["name"] = query.value("name").toString();
+        tomb["engraved_names"] = query.value("engraved_names").toString();
+        tomb["ep_amount"] = query.value("ep_amount").toString();
+        tomb["engraved"] = query.value("engraved").toString();
+        tomb["price"] = query.value("price").toString();
+        tomb["deposit"] = query.value("deposit").toString();
+        tomb["paid"] = query.value("paid").toString();
+        tomb["material_code"] = query.value("material_code").toString();
+        tomb["type_code"] = query.value("type_code").toString();
+        tomb["format_code"] = query.value("format_code").toString();
+        tomb["vase_code"] = query.value("vase_code").toString();
+        tomb["lamp_code"] = query.value("lamp_code").toString();
+        tomb["flame_code"] = query.value("flame_code").toString();
+        tomb["cross_code"] = query.value("cross_code").toString();
+        tomb["drawing_code"] = query.value("drawing_code").toString();
+        tomb["sculpture_code"] = query.value("sculpture_code").toString();
+        tomb["sculpture_h"] = query.value("sculpture_h").toString();
+        tomb["mounted"] = query.value("mounted").toString();
+        tomb["ep_relief"] = query.value("ep_relief").toString();
+        tomb["inscription"] = query.value("inscription").toString();
+        tomb["pit_one"] = query.value("pit_one").toString();
+        tomb["frame_one"] = query.value("frame_one").toString();
+        tomb["pit_two"] = query.value("pit_two").toString();
+        tomb["frame_two"] = query.value("frame_two").toString();
+        tomb["pit_three"] = query.value("pit_three").toString();
+        tomb["frame_three"] = query.value("frame_three").toString();
+        tomb["pit_four"] = query.value("pit_four").toString();
+        tomb["frame_four"] = query.value("frame_four").toString();
+        tomb["pit_five"] = query.value("pit_five").toString();
+        tomb["frame_five"] = query.value("frame_five").toString();
+        tomb["pit_six"] = query.value("pit_six").toString();
+        tomb["frame_six"] = query.value("frame_six").toString();
+        tomb["notes"] = query.value("notes").toString();
+        tomb["accessories_mounted"] = accessories_mounted;
+        tomb["ordered_at"] = query.value("ordered_at").toString();
+        tomb["proofed_at"] = query.value("proofed_at").toString();
+        tomb["confirmed_at"] = query.value("confirmed_at").toString();
+        tomb["engraved_at"] = query.value("engraved_at").toString();
+        tomb["delivered_at"] = query.value("delivered_at").toString();
+        tomb["created_at"] = query.value("created_at").toString();
+        tomb["edited_at"] = query.value("edited_at").toString();
+
+        list.append(tomb);
+    }
+
+    return list;
+}
+
 QMap<QString, QString> Tomb::getByProgressive(const int progressive)
 {
     QMap<QString, QString> tomb;
